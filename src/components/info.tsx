@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Select } from '@mantine/core';
 
 import {
   Text,
@@ -31,11 +32,19 @@ const useStyles = createStyles((theme) => ({
 
 }));
 
+const delivery = [
+  { value: 'Amaru Express 2.00 EUR', label: 'Amaru Express 2.00 EUR'},
+  { value: 'New Express 5.00 EUR', label: 'New Express 5.00 EUR' }
+]
+
 export function Demo() {
   
   const { classes, theme } = useStyles();
 
   const [next, setNext] = useState(false);
+
+  const [service, setService ] = useState('')
+
   const [done, setDone] = useState(false);
 
   const form = useForm({
@@ -43,15 +52,11 @@ export function Demo() {
     initialValues: {
       contact: '',
       address: '',
-      delivery: {
-        service: '',
-        amount: ''
-      }
+      delivery: ''
     },
 
   });
-  
-  const delivery = {amount: '0.00', coin: 'EUR', service: 'Amaru Express'};
+
   
   return (
     <Box sx={{ maxWidth: 500, height: '100%'}} mx="auto">
@@ -90,27 +95,15 @@ export function Demo() {
           </Group>  
         </Card>
 
-        {/* <TextInput
-          label="Contact"
-          placeholder="Elizabeth Williams"
-          {...form.getInputProps('contact')}
-        />
-
-        <TextInput
-          label="Address"
-          placeholder="15329 Huston 21st"
-          {...form.getInputProps('address')}
-        /> */}
-
         {!next ? <></> :
           <Card withBorder  className={classes.steps}>
             <Group position="apart">
               <Group>
                 <Text className={classes.subtitle}>Delivery</Text>
-                <Text className={classes.subtitle}>{delivery.service}</Text>
+                <Text className={classes.subtitle}>{service}</Text>
               </Group>
               
-              <Text className={classes.subtitle}>{delivery.amount} {delivery.coin}</Text>
+              <Text className={classes.subtitle}>Edit</Text>
             </Group>  
           </Card>
         }
@@ -123,13 +116,12 @@ export function Demo() {
               className={classes.title}
             >Delivery</Text>
 
-            <Card withBorder>
-              <Group position="apart">
-                <Text className={classes.subtitle}>{delivery.service}</Text>
-                
-                <Text className={classes.subtitle}>{delivery.amount} {delivery.coin}</Text>
-              </Group>  
-            </Card>
+            <Select
+              data={delivery}
+              placeholder='Pick one'
+              onChange={e => e ? setService(e) : setService('')}
+            />
+
             <Group position="right" mt="md">
               <Button onClick={() => {
                 setNext(!next)
@@ -156,3 +148,7 @@ export function Demo() {
     </Box>
   );
 }
+function value(value: any): void {
+  throw new Error('Function not implemented.');
+}
+

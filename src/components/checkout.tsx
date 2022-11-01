@@ -10,7 +10,7 @@ export function Checkout() {
           <Demo></Demo>
         </Grid.Col>
 
-        <Grid.Col xs={5}>
+        <Grid.Col xs={5} style={{ marginTop: 20 }}>
           <FeaturesCard></FeaturesCard>
         </Grid.Col>
       </Grid>

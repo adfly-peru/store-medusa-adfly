@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   Card,
   Image,
@@ -6,7 +8,6 @@ import {
   createStyles,
   Center
 } from '@mantine/core';
-import { useState } from 'react';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -72,7 +73,6 @@ export function FeaturesCard() {
 
       <Group position="apart" mt="md">
         <Text
-          style={{ marginTop: 20 }}
           className={classes.title}
         >Order Summary</Text>
         <Text className={ classes.subtitle }>1 item</Text>
