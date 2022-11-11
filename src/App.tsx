@@ -13,6 +13,7 @@ import { CartDropdownProvider } from './lib/context/cart-dropdown-context';
 import { ProductsPage } from './pages/ProductsPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { OrderConfirmPage } from './pages/order/OrderConfirmed';
+import { LoginPage } from './pages/LoginPage';
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
                   <Route path='/checkout' element={<CheckoutPage />} />
                   <Route path='/products/:handle' element={<ProductsPage />} />
                   <Route path='/order/confirm/:order' element={<OrderConfirmPage />} />
+                  <Route path='/login' element={<LoginPage />} />
                 </Routes>
               </Router>
             </StoreProvider>
