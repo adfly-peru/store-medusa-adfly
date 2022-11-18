@@ -1,8 +1,10 @@
-import { Text, Group, Image, Container, Tabs, createStyles, Autocomplete } from '@mantine/core';
+import { Text, Group, Image, Container, Tabs, createStyles, Autocomplete, Grid, Avatar, Stack, Badge, Title } from '@mantine/core';
 
-import { IconSearch, IconShoppingCart } from '@tabler/icons';
+import { IconSearch, IconShoppingCart, IconStar } from '@tabler/icons';
 
 import { useViewportSize } from '@mantine/hooks';
+import DatosPersonalesComponent from '../components/datosPersonalesComponent';
+import SeguridadComponent from '../components/seguridadComponent';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -11,7 +13,7 @@ const useStyles = createStyles((theme) => ({
         borderBottom: `1px solid ${
           theme.colorScheme === 'dark' ? 'transparent' : theme.colors.gray[2]
         }`,
-        marginBottom: 120,
+        marginBottom: 50,
       },
 
     mainSection: {
@@ -53,9 +55,17 @@ const useStyles = createStyles((theme) => ({
 
 
 const Home = () => {
+
+    /* Lógica provisional */
+    let step1Completed = false;
+
+    const { height, width } = useViewportSize();
     const { classes, theme } = useStyles();
+
     let tabs = ['Menú', 'Ofertas del día', 'Envío Gratis', 'Entrega en Centro de Trabajo'];
+    
     let nombre = 'Colaborador'
+    
     const items = tabs.map((tab) => (
         <Tabs.Tab value={tab} key={tab}>
           {tab}
@@ -110,6 +120,35 @@ const Home = () => {
         </Container>
       </header>
 
+      <Grid>
+            <Grid.Col
+                span={3}
+                sx={({ display: 'flex', paddingLeft: 30 })}
+            >
+                <Avatar radius='xl' size='xl'/>
+                <Stack spacing="xs" align="center" justify="flex-start">
+                    <Badge size='md'>
+                        <IconStar size={15} /> 210 Estrellas
+                    </Badge>
+                    <Title order={3}>Nombre</Title>
+                    <Text>Empresa (*)</Text>
+                </Stack>
+
+
+            </Grid.Col>
+
+            <Grid.Col
+                span={9}
+                sx={({ height: height, display: "flex", justifyContent: "center", alignItems: "flex-start" })}
+            >
+              {step1Completed ? 
+                <SeguridadComponent /> : 
+                <DatosPersonalesComponent />
+              }
+
+
+            </Grid.Col>
+        </Grid>
 
       </>
     )
