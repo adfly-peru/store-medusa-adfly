@@ -1,9 +1,11 @@
-import { Text, Group, Image, Container, Tabs, createStyles, Autocomplete, Grid, Title, Center } from '@mantine/core';
+import { Text, Group, Image, Container, Tabs, createStyles, Autocomplete, Grid, Avatar, Stack, Badge, Title } from '@mantine/core';
 
 import { IconSearch, IconShoppingCart, IconStar } from '@tabler/icons';
 
 import { useViewportSize } from '@mantine/hooks';
-import AccountLayout from '../modules/account/templates/account-layout';
+import DatosPersonalesComponent from '../../components/datosPersonalesComponent';
+import SeguridadComponent from '../../components/seguridadComponent';
+import AccountLayout from '../../modules/account/templates/account-layout';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -53,7 +55,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-const Home = () => {
+const Proffile = () => {
 
     /* Lógica provisional */
     let step1Completed = false;
@@ -72,7 +74,7 @@ const Home = () => {
       ));
 
     return (
-      <AccountLayout>
+      <>
       <header className={classes.header}>
         <Container className={classes.mainSection}>
             <Group position='apart'>
@@ -119,15 +121,39 @@ const Home = () => {
         </Container>
       </header>
 
-      <Center>
-        <Title>
-          Bienvenido {nombre}
-        </Title>  
-      </Center>
+      <Grid>
+            <Grid.Col
+                span={3}
+                sx={({ display: 'flex', paddingLeft: 30 })}
+            >
+                <Avatar radius='xl' size='xl'/>
+                <Stack spacing="xs" align="center" justify="flex-start">
+                    <Badge size='md'>
+                        <IconStar size={15} /> 210 Estrellas
+                    </Badge>
+                    <Title order={3}>Nombre</Title>
+                    <Text>Empresa (*)</Text>
+                </Stack>
 
-      </AccountLayout>
+
+            </Grid.Col>
+
+            <Grid.Col
+                span={9}
+                sx={({ height: height, display: "flex", justifyContent: "center", alignItems: "flex-start" })}
+            >
+              {step1Completed ? 
+                <SeguridadComponent /> : 
+                <DatosPersonalesComponent />
+              }
+
+
+            </Grid.Col>
+        </Grid>
+
+      </>
     )
   }
   
-  export default Home
+  export default Proffile
   

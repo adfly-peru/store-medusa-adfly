@@ -1,6 +1,7 @@
 import { BackgroundImage, Center, Text, Grid, Group, Stack, Button, TextInput, PasswordInput, Box, Anchor, Image, Space, Title } from '@mantine/core'
 import { useViewportSize } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
+import { useRouter } from 'next/router';
 
 
 const Login = () => {
@@ -11,6 +12,7 @@ const Login = () => {
             password: '',
         },
     });
+    const router = useRouter()
 
     return (
       <>
@@ -40,7 +42,7 @@ const Login = () => {
                         alt="Random unsplash image"
                         sx={({ padding: 30 })}
                     />
-                    <form onSubmit={form.onSubmit((values) => console.log(values))}>
+                    <form onSubmit={form.onSubmit((values) => router.push("/home"))}>
                         <Stack spacing="xl">
                             <TextInput
                             placeholder="Correo electrónico / DNI"

@@ -1,6 +1,7 @@
 import { Text, Stack, Button, TextInput, Box, Space, Title, Divider, Select, Radio, Avatar, Badge, PasswordInput } from '@mantine/core'
 import { useViewportSize } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
+import { ACCOUNT_STEPS, useAccount } from '../context/account-context';
 
 
 const SeguridadComponent = () => {
@@ -12,11 +13,13 @@ const SeguridadComponent = () => {
             workplace: ''
         },
     });
+    
+    const { updateStep } = useAccount()
 
     return (
         <Box sx={({ width: width/3 })}>
 
-            <form onSubmit={form.onSubmit((values) => console.log(values))}>
+            <form onSubmit={form.onSubmit((values) => updateStep(ACCOUNT_STEPS.COMPLETED))}>
                 <Stack spacing="xs">
 
                     <Text>Seguridad</Text>

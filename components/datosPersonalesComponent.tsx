@@ -1,6 +1,8 @@
 import { Text, Stack, Button, TextInput, Box, Space, Title, Divider, Select, Radio, Avatar, Badge } from '@mantine/core'
 import { useViewportSize } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
+import { useRouter } from 'next/router';
+import { ACCOUNT_STEPS, useAccount } from '../context/account-context';
 
 
 const DatosPersonalesComponent = () => {
@@ -13,10 +15,12 @@ const DatosPersonalesComponent = () => {
         },
     });
 
+    const { updateStep } = useAccount()
+
     return (
         <Box sx={({ width: width/3 })}>
 
-            <form onSubmit={form.onSubmit((values) => console.log(values))}>
+            <form onSubmit={form.onSubmit((values) => updateStep(ACCOUNT_STEPS.PROFFILECOMPLETED))}>
                 <Stack spacing="xs">
 
                     <Text>Perfil</Text>
