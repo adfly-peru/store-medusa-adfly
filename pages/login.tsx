@@ -21,7 +21,7 @@ const Login = () => {
             <BackgroundImage
                 src="https://rdb.rw/wp-content/uploads/2018/01/default-placeholder.png"
                 radius="xs"
-                sx={({ height: height, display: "flex", justifyContent: "center", alignItems: "center" })}
+                sx={({ height: height - 8, display: "flex", justifyContent: "center", alignItems: "center" })}
             >
                 <Stack align="center" justify="flex-end">
                     <Title order={3}>Bienvenido(a) a:</Title>
@@ -31,7 +31,7 @@ const Login = () => {
             </Grid.Col>
             <Grid.Col
                 span={6}
-                sx={({ height: height, display: "flex", justifyContent: "center", alignItems: "center" })}
+                sx={({ height: height - 8, display: "flex", justifyContent: "center", alignItems: "center" })}
             >
                 <Box sx={({ width: width/3 })}>
                     <Image
