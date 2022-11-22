@@ -1,4 +1,4 @@
-import { Text, Stack, Button, TextInput, Box, Space, Title, Divider, Select, Radio, Avatar, Badge } from '@mantine/core'
+import { Text, Stack, Button, TextInput, Box, Space, Title, Divider, Select, Radio, Avatar, Badge, Checkbox } from '@mantine/core'
 import { useViewportSize } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { useRouter } from 'next/router';
@@ -9,10 +9,21 @@ const DatosPersonalesComponent = () => {
     const { height, width } = useViewportSize();
     const form = useForm({
         initialValues: {
+            collaborator: 'Colaborador Colaborador',
+            documentKind: 'DNI',
+            document: '77777777',
             email: '',
-            cellphone: '',
-            workplace: ''
+            cellPhone: '',
+            workPlace: '',
+            workAddress: 'Jr. Dirección N°251',
+            termsOfService: false,
+            acceptPublicity: false
         },
+        validate: {
+            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+            cellPhone: (value) => (value.length > 0 ? null : 'Invalid Cellphone'),
+            workPlace: (value) => (value != '' ? null : 'This field is necessary'),
+        }
     });
 
     const { updateStep } = useAccount()
@@ -28,30 +39,33 @@ const DatosPersonalesComponent = () => {
                     <Text>Datos Personales</Text>
                     
                     <TextInput
-                        placeholder="Colaborador Colaborador"
+                        placeholder="Nombre Completo"
                         label="Nombre Completo"
                         radius="xs"
                         size="sm"
                         disabled
                         withAsterisk
+                        {...form.getInputProps('collaborator')}
                     />
 
                     <TextInput
-                        placeholder="DNI"
+                        placeholder="Tipo Documento"
                         label="Tipo Documento"
                         radius="xs"
                         size="sm"
                         disabled
                         withAsterisk
+                        {...form.getInputProps('documentKind')}
                     />
 
                     <TextInput
-                        placeholder="77777777"
+                        placeholder="Nro. Documento"
                         label="Nro. Documento"
                         radius="xs"
                         size="sm"
                         disabled
                         withAsterisk
+                        {...form.getInputProps('document')}
                     />
 
                     <TextInput
@@ -60,6 +74,7 @@ const DatosPersonalesComponent = () => {
                         radius="xs"
                         size="sm"
                         withAsterisk
+                        {...form.getInputProps('email')}
                     />
 
                     <TextInput
@@ -68,6 +83,7 @@ const DatosPersonalesComponent = () => {
                         radius="xs"
                         size="sm"
                         withAsterisk
+                        {...form.getInputProps('cellPhone')}
                     />
 
                 <Space h="md" />
@@ -83,25 +99,28 @@ const DatosPersonalesComponent = () => {
                             {value: 'Sede3', label: 'Sede3'}
                         ]}
                         withAsterisk
+                        {...form.getInputProps('workPlace')}
                     />
 
                     <TextInput
-                        placeholder="Jr. Dirección N°251"
+                        placeholder="Dirección de Sede"
                         label="Dirección de Sede"
                         radius="xs"
                         size="sm"
                         disabled
+                        {...form.getInputProps('workAddress')}
                     />
 
                     <Space h="md" />
 
-
-                    <Radio
-                        label='Acepto los términos y condiciones' 
+                    <Checkbox
+                        label='Acepto los términos y condiciones'
+                        {...form.getInputProps('termsOfService', { type: 'checkbox' })}
                     />
 
-                    <Radio
+                    <Checkbox
                         label='Acepto recibir publicidad' 
+                        {...form.getInputProps('acceptPublicity', { type: 'checkbox' })}
                     />
                     
                 </Stack>
