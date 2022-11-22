@@ -57,9 +57,6 @@ const useStyles = createStyles((theme) => ({
 
 const Proffile = () => {
 
-    /* Lógica provisional */
-    let step1Completed = false;
-
     const { height, width } = useViewportSize();
     const { classes, theme } = useStyles();
 
