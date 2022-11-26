@@ -5,6 +5,9 @@ import { IconSearch, IconShoppingCart, IconStar } from '@tabler/icons';
 import { useViewportSize } from '@mantine/hooks';
 import AccountLayout from '../modules/account/templates/account-layout';
 
+import CardComponent from '../components/cardComponent';
+import Product from '../interfaces/productInterface';
+
 const useStyles = createStyles((theme) => ({
     header: {
         paddingTop: theme.spacing.sm,
@@ -52,6 +55,62 @@ const useStyles = createStyles((theme) => ({
 
 }));
 
+const productsList: Product[] = [
+  {
+    discount: 50,
+    imgUrl: '',
+    brand: 'Marca1',
+    name: 'Producto1',
+    originalPrice: 30,
+    finalPrice: 15,
+    starts: 5,
+  },
+  {
+    discount: 30,
+    imgUrl: '',
+    brand: 'Marca2',
+    name: 'Producto2',
+    originalPrice: 40,
+    finalPrice: 15,
+    starts: 5,
+  },
+  {
+    discount: 60,
+    imgUrl: '',
+    brand: 'Marca3',
+    name: 'Producto3',
+    originalPrice: 35,
+    finalPrice: 15,
+    starts: 5,
+  },
+  {
+    discount: 20,
+    imgUrl: '',
+    brand: 'Marca4',
+    name: 'Producto4',
+    originalPrice: 25,
+    finalPrice: 15,
+    starts: 5,
+  },
+  {
+    discount: 30,
+    imgUrl: '',
+    brand: 'Marca5',
+    name: 'Producto5',
+    originalPrice: 30,
+    finalPrice: 15,
+    starts: 5,
+  },
+  {
+    discount: 60,
+    imgUrl: '',
+    brand: 'Marca6',
+    name: 'Producto6',
+    originalPrice: 80,
+    finalPrice: 15,
+    starts: 5,
+  }
+];
 
 const Home = () => {
 
@@ -61,6 +120,12 @@ const Home = () => {
     let tabs = ['Menú', 'Ofertas del día', 'Envío Gratis', 'Entrega en Centro de Trabajo'];
     
     let nombre = 'Colaborador'
+
+    let cardProducts = productsList.map( ( prod ): any =>
+      <Grid.Col xs={4}>
+        <CardComponent product={prod}/>
+      </Grid.Col>
+    )
     
     const items = tabs.map((tab) => (
         <Tabs.Tab value={tab} key={tab}>
@@ -121,6 +186,17 @@ const Home = () => {
           Bienvenido {nombre}
         </Title>  
       </Center>
+
+      <Container my='md'>
+
+        <Grid mt={20}>
+
+              {cardProducts}
+
+        </Grid>
+      
+      </Container>
+
 
       </AccountLayout>
     )
