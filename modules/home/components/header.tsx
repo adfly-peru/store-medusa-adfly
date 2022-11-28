@@ -6,6 +6,7 @@ import { useViewportSize } from '@mantine/hooks';
 import { useProduct } from '../../../context/product-context';
 import { useState } from 'react';
 import { useAccount } from '../../../context/account-context';
+import CartDrawer from './cart-drawer';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -71,12 +72,12 @@ const HomeHeader = () => {
         <Drawer
           opened={opened}
           onClose={() => setOpened(false)}
-          title="Register"
+          title={<Title order={2}>Mi carrito</Title>}
           padding="xl"
           size="xl"
           position="right"
         >
-          {/* Drawer content */}
+          <CartDrawer></CartDrawer>
         </Drawer>
         <Grid justify="center" align="center">
           <Grid.Col span={1}>
