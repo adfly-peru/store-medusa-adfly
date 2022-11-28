@@ -1,6 +1,6 @@
-import { Text, Group, Image, Container, Tabs, createStyles, Autocomplete, Grid, Title, Center, Menu, Button, UnstyledButton, Drawer, ActionIcon } from '@mantine/core';
+import { Text, Group, Image, Container, Tabs, createStyles, Autocomplete, Grid, Title, Center, Menu, Button, UnstyledButton, Drawer, ActionIcon, Space } from '@mantine/core';
 
-import { IconArrowsLeftRight, IconMessageCircle, IconPhoto, IconSearch, IconSettings, IconShoppingCart, IconStar, IconTrash } from '@tabler/icons';
+import { IconBasket, IconSearch, IconSettings, IconShoppingCart, IconStar, IconTransferOut, IconTrash, IconUser, IconUserCircle } from '@tabler/icons';
 
 import { useViewportSize } from '@mantine/hooks';
 import { useProduct } from '../../../context/product-context';
@@ -108,7 +108,7 @@ const HomeHeader = () => {
               </Menu.Dropdown>
             </Menu>
           </Grid.Col>
-          <Grid.Col span={8}>
+          <Grid.Col span={9}>
             <Autocomplete
               className={classes.search}
               placeholder="Search"
@@ -118,16 +118,36 @@ const HomeHeader = () => {
             />
           </Grid.Col>
           <Grid.Col span={1}>
-            <Text>Hola, {currentCustomer.name}</Text>
+            <Button.Group>
+              <Menu position="bottom-end" shadow="md" width={200}>
+                <Menu.Target>
+                  <ActionIcon size="lg">
+                    <IconUser
+                      size={30}
+                      stroke={1.5}
+                    />
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Label sx={{ fontSize: 16 }}>Hola, {currentCustomer.name}</Menu.Label>
+                  <Menu.Item icon={<IconUserCircle size={14} />}>Mi cuenta</Menu.Item>
+                  <Menu.Item icon={<IconBasket size={14} />}>Mis compras</Menu.Item>
+                  <Menu.Item icon={<IconSettings size={14} />}>Settings</Menu.Item>
+                  <Menu.Item icon={<IconTransferOut size={14} />}>Cerrar sesión</Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+              <Space w="md" />
+              <ActionIcon onClick={() => setOpened(true)} size="lg">
+                <IconShoppingCart
+                  size={30}
+                  stroke={1.5}
+                />
+              </ActionIcon>
+            </Button.Group>
+            {/* <Text>Hola, {currentCustomer.name}</Text> */}
           </Grid.Col>
-          <Grid.Col span={1}>
-            <ActionIcon onClick={() => setOpened(true)}>
-              <IconShoppingCart
-                size={30}
-                stroke={1.5}
-              />
-            </ActionIcon>
-          </Grid.Col>
+          {/* <Grid.Col span={1}>
+          </Grid.Col> */}
         </Grid>
         <Group position="apart" grow>
           <Tabs
