@@ -5,7 +5,7 @@ interface Product {
     name: string,
     originalPrice: number,
     finalPrice: number,
-    starts: number
+    stars: number
 }
 
 export default Product

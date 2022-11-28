@@ -1,7 +1,6 @@
 import { useRouter } from "next/router"
 import React, { createContext, useCallback, useContext, useState } from "react"
-import { Product } from "./product-context"
-
+import Product from "../interfaces/productInterface"
 interface ProductCart {
   product: Product
   quantity: number

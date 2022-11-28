@@ -1,13 +1,7 @@
 import { IconBrandAndroid, IconBrandAppleArcade, IconBuildingCarousel, IconStethoscope, IconToolsKitchen2 } from "@tabler/icons"
 import { useRouter } from "next/router"
 import React, { createContext, useCallback, useContext, useState } from "react"
-
-export interface Product {
-  identifier: String
-  name: String
-  price: number
-  categories: String[]
-}
+import Product from "../interfaces/productInterface"
 
 interface Category {
   identifier: String
@@ -29,8 +23,60 @@ interface ProductProviderProps {
 export const ProductProvider = ({ children }: ProductProviderProps) => {
 
   const products: Product[] = [
-    { identifier: 'milk', name: 'Leche', price: 10.0, categories: ['food'] },
-    { identifier: 'bread', name: 'Pan', price: 8.5, categories: ['food'] },
+    {
+      discount: 50,
+      imgUrl: '',
+      brand: 'Marca1',
+      name: 'Producto1',
+      originalPrice: 30,
+      finalPrice: 15,
+      stars: 5,
+    },
+    {
+      discount: 30,
+      imgUrl: '',
+      brand: 'Marca2',
+      name: 'Producto2',
+      originalPrice: 40,
+      finalPrice: 15,
+      stars: 5,
+    },
+    {
+      discount: 60,
+      imgUrl: '',
+      brand: 'Marca3',
+      name: 'Producto3',
+      originalPrice: 35,
+      finalPrice: 15,
+      stars: 5,
+    },
+    {
+      discount: 20,
+      imgUrl: '',
+      brand: 'Marca4',
+      name: 'Producto4',
+      originalPrice: 25,
+      finalPrice: 15,
+      stars: 5,
+    },
+    {
+      discount: 30,
+      imgUrl: '',
+      brand: 'Marca5',
+      name: 'Producto5',
+      originalPrice: 30,
+      finalPrice: 15,
+      stars: 5,
+    },
+    {
+      discount: 60,
+      imgUrl: '',
+      brand: 'Marca6',
+      name: 'Producto6',
+      originalPrice: 80,
+      finalPrice: 15,
+      stars: 5,
+    }
   ]
 
   const categories: Category[] = [

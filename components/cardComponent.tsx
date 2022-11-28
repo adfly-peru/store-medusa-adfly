@@ -73,7 +73,7 @@ const CardComponent = ({ product } : {product: Product}) => {
           <Text fz="sm" td="line-through">S/. {product.originalPrice}</Text>
           <Text c="red">S/. {finalPrice}</Text>
         </Group>
-        <Text fz="sm" c="dimmed">(o {product.starts} estrellas)</Text>
+        <Text fz="sm" c="dimmed">(o {product.stars} estrellas)</Text>
         <Text fz="sm" c="red">Ahorro estimado S/. {ahorro}</Text>
         <Button variant="light" color="blue" fullWidth mt="md" radius="md">
           Vendido por Partner
