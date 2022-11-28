@@ -63,7 +63,7 @@ const CardComponent = ({ product } : {product: Product}) => {
       </Card.Section>
 
       <Card.Section mt="sm" p={10}>
-        <Image src="" alt={product.imgUrl}/>
+        <Image src={product.imgUrl} alt={product.imgUrl} height={200} fit="contain" withPlaceholder/>
       </Card.Section>
 
       <Card.Section withBorder inheritPadding mt="sm" pb="md">

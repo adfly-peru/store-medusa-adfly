@@ -26,7 +26,7 @@ interface AccountProviderProps {
 }
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
-  const [ accountStep, setStep ] = useState<ACCOUNT_STEPS>(ACCOUNT_STEPS.UNCOMPLETE)
+  const [ accountStep, setStep ] = useState<ACCOUNT_STEPS>(ACCOUNT_STEPS.COMPLETED)
   const [ currentCustomer, setCustomer ] = useState<Customer>(
     {
       name: 'Juan Vargas',
