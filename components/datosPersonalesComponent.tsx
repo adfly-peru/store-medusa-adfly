@@ -1,11 +1,13 @@
 import { Text, Stack, Button, TextInput, Box, Space, Title, Divider, Select, Radio, Avatar, Badge, Checkbox } from '@mantine/core'
 import { useViewportSize } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import { useRouter } from 'next/router';
 import { ACCOUNT_STEPS, useAccount } from '../context/account-context';
+import Customer from "../interfaces/customerInterface"
+import { useRouter } from 'next/router';
 
 
 const DatosPersonalesComponent = () => {
+    const router = useRouter()
     const { height, width } = useViewportSize();
     const { currentCustomer } = useAccount();
     const form = useForm({
@@ -13,12 +15,12 @@ const DatosPersonalesComponent = () => {
             collaborator: currentCustomer.name,
             documentKind: currentCustomer.documentKind,
             document: currentCustomer.document,
-            email: '',
-            cellPhone: '',
-            workPlace: '',
-            workAddress: 'Jr. Dirección N°251',
+            email: currentCustomer.email,
+            cellPhone: currentCustomer.cellPhone,
+            workPlace: currentCustomer.workPlace,
+            workAddress: currentCustomer.workAddress,
             termsOfService: false,
-            acceptPublicity: false
+            acceptPublicity: currentCustomer.acceptPublicity
         },
         validate: {
             email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
@@ -27,12 +29,29 @@ const DatosPersonalesComponent = () => {
         }
     });
 
-    const { updateStep } = useAccount()
+    const { updateStep, updateCustomer, accountStep } = useAccount()
 
     return (
         <Box sx={({ width: width/3 })}>
 
-            <form onSubmit={form.onSubmit((values) => updateStep(ACCOUNT_STEPS.PROFFILECOMPLETED))}>
+            <form onSubmit={form.onSubmit((values) => {
+                const newCustomer: Customer = {
+                    name: values.collaborator,
+                    documentKind: values.documentKind,
+                    document: values.document,
+                    email: values.email,
+                    cellPhone: values.cellPhone,
+                    workPlace: values.workPlace,
+                    workAddress: values.workAddress,
+                    acceptPublicity: currentCustomer.acceptPublicity
+                }
+                updateCustomer(newCustomer)
+                if (accountStep == ACCOUNT_STEPS.UNCOMPLETE) {
+                    updateStep(ACCOUNT_STEPS.PROFFILECOMPLETED)
+                } else if (accountStep == ACCOUNT_STEPS.PROFFILECOMPLETED) {
+                    router.push("/home")
+                }
+            })}>
                 <Stack spacing="xs">
 
                     <Text>Perfil</Text>

@@ -1,17 +1,12 @@
 import { useRouter } from "next/router"
 import React, { createContext, useCallback, useContext, useState } from "react"
+import Customer from "../interfaces/customerInterface"
 
 export enum ACCOUNT_STEPS {
     UNCOMPLETE,
     PROFFILECOMPLETED,
     VERIFIED,
     COMPLETED,    
-}
-
-export interface Customer {
-  name: String
-  documentKind: String,
-  document: String,
 }
 
 interface AccountContext {
@@ -21,6 +16,7 @@ interface AccountContext {
   checkSession: () => void
   handleLogout: () => void
   currentCustomer: Customer
+  updateCustomer: (customer: Customer) => void
 }
 
 const AccountContext = createContext<AccountContext | null>(null)
@@ -31,6 +27,19 @@ interface AccountProviderProps {
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
   const [ accountStep, setStep ] = useState<ACCOUNT_STEPS>(ACCOUNT_STEPS.UNCOMPLETE)
+  const [ currentCustomer, setCustomer ] = useState<Customer>(
+    {
+      name: 'Juan Vargas',
+      documentKind: 'DNI',
+      document: '77777777',
+      email: 'example@mail.com',
+      cellPhone: '',
+      workPlace: '',
+      workAddress: 'Jr. Dirección N°251',
+      acceptPublicity: false
+    }
+  )
+  console.log("Create new account provider")
   const isLogged = useState<boolean>(false)
 
   const router = useRouter()
@@ -50,10 +59,8 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     router.push("/")
   }
 
-  const currentCustomer: Customer = {
-    name: 'Juan Vargas',
-    documentKind: 'DNI',
-    document: '77777777',
+  const updateCustomer = (customer: Customer) => {
+    setCustomer(customer)
   }
 
   return (
@@ -65,6 +72,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         checkSession,
         handleLogout,
         currentCustomer,
+        updateCustomer,
       }}
     >
       {children}
