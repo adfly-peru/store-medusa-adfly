@@ -1,130 +1,49 @@
-import { Text, Group, Image, Container, Tabs, createStyles, Autocomplete, Grid, Title, Center } from '@mantine/core';
-
-import { IconSearch, IconShoppingCart, IconStar } from '@tabler/icons';
-
-import { useViewportSize } from '@mantine/hooks';
+import { AppShell, Text, Header, Navbar, BackgroundImage, Stack, Title, ActionIcon, Group, Space } from "@mantine/core"
+import { useProduct } from "../context/product-context";
+import HomeHeader from "../modules/home/components/header"
 import AccountLayout from '../modules/account/templates/account-layout';
-
-const useStyles = createStyles((theme) => ({
-    header: {
-        paddingTop: theme.spacing.sm,
-        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-        borderBottom: `1px solid ${
-          theme.colorScheme === 'dark' ? 'transparent' : theme.colors.gray[2]
-        }`,
-        marginBottom: 50,
-      },
-
-    mainSection: {
-        paddingBottom: theme.spacing.sm,
-      },
-    
-    search: {
-        [theme.fn.smallerThan('xs')]: {
-            display: 'none',
-        },
-    },
-
-    tabs: {
-        [theme.fn.smallerThan('sm')]: {
-            display: 'none.'
-        },
-    },
-
-    tabsList: {
-        borderBottom: '0 !important',
-    },
-
-    tab: {
-        fontWeight: 500,
-        height: 38,
-        backgroundColor: 'transparent',
-    
-        '&:hover': {
-          backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
-        },
-    
-        '&[data-active]': {
-          backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
-          borderColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2],
-        },
-      },
-
-}));
-
 
 const Home = () => {
 
-    const { height, width } = useViewportSize();
-    const { classes, theme } = useStyles();
+  const { categories } = useProduct();
 
-    let tabs = ['Menú', 'Ofertas del día', 'Envío Gratis', 'Entrega en Centro de Trabajo'];
-    
-    let nombre = 'Colaborador'
-    
-    const items = tabs.map((tab) => (
-        <Tabs.Tab value={tab} key={tab}>
-          {tab}
-        </Tabs.Tab>
-      ));
-
-    return (
-      <AccountLayout>
-      <header className={classes.header}>
-        <Container className={classes.mainSection}>
-            <Group position='apart'>
-            <Image
-                radius="md"
-                height={50}
-                width='inherit'
-                fit="contain"
-                src="https://www.cbvj.org.br/index/wp-content/uploads/2017/10/default-logo.png"
-                alt="Random unsplash image"
-                sx={({ padding: 10 })}
-            />
-
-            <Text>Menú</Text>
-
-            <Autocomplete
-                className={classes.search}
-                placeholder="Search"
-                icon={<IconSearch size={16} stroke={1.5} />}
-                data={['Tienda1', 'Tienda2', 'Producto1', 'Producto2']}
-            />
-
-            <Text>Hola, {nombre}</Text>
-
-            <IconShoppingCart
-                size={30}
-                stroke={1.5}
-            />
-
-            </Group>
-        </Container>
-        <Container>
-            <Tabs
-            defaultValue="Home"
-            variant="outline"
-            classNames={{
-                root: classes.tabs,
-                tabsList: classes.tabsList,
-                tab: classes.tab,
-            }}
-            >
-            <Tabs.List>{items}</Tabs.List>
-            </Tabs>
-        </Container>
-      </header>
-
-      <Center>
-        <Title>
-          Bienvenido {nombre}
-        </Title>  
-      </Center>
-
-      </AccountLayout>
-    )
-  }
+  return (
+    <AccountLayout>
+      <AppShell
+      padding={0}
+      header={<Header height={120} p="xs"><HomeHeader/></Header>}
+      styles={(theme) => ({
+        main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
+      })}
+      >
+        <BackgroundImage
+          src="https://rdb.rw/wp-content/uploads/2018/01/default-placeholder.png"
+          radius="xs"
+          sx={({ height:300, width:'100%', display: "flex", justifyContent: "center", alignItems: "center" })}
+        >
+          <Stack align="center" justify="flex-end">
+            <Title order={3}>Bienvenido(a) a:</Title>
+            <Title order={3}>Tu tienda de Beneficios (*)</Title>
+          </Stack>
+        </BackgroundImage>
+        <Stack align="center" justify="flex-end" spacing="xl">
+          <Space/>
+          <Title>¡Descubre nuestras categorías! (*)</Title>
+          <Group spacing={50}>
+          {
+            categories.map((category)=>(
+              <ActionIcon size={60} radius="xl" variant="filled">
+                {category.icon}
+              </ActionIcon>
+            ))
+          }
+          </Group>
+          <Title>Productos Destacados (*)</Title>
+        </Stack>
+      </AppShell>
+    </AccountLayout>
+  )
+}
   
-  export default Home
+export default Home
   

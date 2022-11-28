@@ -7,11 +7,12 @@ import { ACCOUNT_STEPS, useAccount } from '../context/account-context';
 
 const DatosPersonalesComponent = () => {
     const { height, width } = useViewportSize();
+    const { currentCustomer } = useAccount();
     const form = useForm({
         initialValues: {
-            collaborator: 'Colaborador Colaborador',
-            documentKind: 'DNI',
-            document: '77777777',
+            collaborator: currentCustomer.name,
+            documentKind: currentCustomer.documentKind,
+            document: currentCustomer.document,
             email: '',
             cellPhone: '',
             workPlace: '',

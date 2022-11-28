@@ -8,6 +8,11 @@ export enum ACCOUNT_STEPS {
     COMPLETED,    
 }
 
+export interface Customer {
+  name: String
+  documentKind: String,
+  document: String,
+}
 
 interface AccountContext {
   accountStep: ACCOUNT_STEPS
@@ -15,6 +20,7 @@ interface AccountContext {
   isLogged: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
   checkSession: () => void
   handleLogout: () => void
+  currentCustomer: Customer
 }
 
 const AccountContext = createContext<AccountContext | null>(null)
@@ -44,6 +50,12 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     router.push("/")
   }
 
+  const currentCustomer: Customer = {
+    name: 'Juan Vargas',
+    documentKind: 'DNI',
+    document: '77777777',
+  }
+
   return (
     <AccountContext.Provider
       value={{
@@ -52,6 +64,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         isLogged,
         checkSession,
         handleLogout,
+        currentCustomer,
       }}
     >
       {children}
