@@ -27,20 +27,19 @@ interface AccountProviderProps {
 }
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
-  const [ accountStep, setStep ] = useState<ACCOUNT_STEPS>(ACCOUNT_STEPS.COMPLETED)
+  const [ accountStep, setStep ] = useState<ACCOUNT_STEPS>(ACCOUNT_STEPS.UNCOMPLETE)
   const [ currentCustomer, setCustomer ] = useState<Customer>(
     {
       name: 'Juan Vargas',
       documentKind: 'DNI',
       document: '77777777',
-      email: 'example@mail.com',
+      email: '',
       cellPhone: '',
       workPlace: '',
       workAddress: 'Jr. Dirección N°251',
       acceptPublicity: false
     }
   )
-  console.log("Create new account provider")
   const isLogged = useState<boolean>(false)
   const [ authorized, setAuthorized ] = isLogged
 
@@ -48,6 +47,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
   const updateStep = ( nextStep : ACCOUNT_STEPS ) => {
     setStep(nextStep)
+    localStorage.setItem("adfly_account", JSON.stringify({ currentStep: nextStep, currentCustomer: currentCustomer }))
     router.push("/home")
   }
 
@@ -58,18 +58,29 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
   const handleLogout = () => {
     setAuthorized(false)
+    setStep(ACCOUNT_STEPS.UNCOMPLETE)
     localStorage.removeItem("login_token")
+    localStorage.removeItem("adfly_account")
   }
 
   const updateCustomer = (customer: Customer) => {
     setCustomer(customer)
+    localStorage.setItem("adfly_account", JSON.stringify({ currentStep: accountStep, currentCustomer: customer }))
   }
 
   const checkSession = () => {
-    console.log("check")
     if (authorized) return true
     return false
   }
+
+  useEffect(() => {
+    const accountInfo = localStorage.getItem("adfly_account")
+    if (accountInfo) {
+      const accountJson = (JSON.parse(accountInfo) as { currentStep: ACCOUNT_STEPS, currentCustomer: Customer })
+      setStep(accountJson.currentStep)
+      setCustomer(accountJson.currentCustomer)
+    }
+  }, []);
 
   useEffect(() => {
     const loggedToken = localStorage.getItem("login_token")
