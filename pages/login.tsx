@@ -2,6 +2,8 @@ import { BackgroundImage, Center, Text, Grid, Group, Stack, Button, TextInput, P
 import { useViewportSize } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { useRouter } from 'next/router';
+import { useAccount } from '../context/account-context';
+import { useEffect } from 'react';
 
 
 const Login = () => {
@@ -13,6 +15,13 @@ const Login = () => {
         },
     });
     const router = useRouter()
+    const { handleLogin, checkSession } = useAccount()
+
+    useEffect(() => {
+        if (checkSession()) {
+            router.push("/home")
+        }
+    });
 
     return (
       <>
@@ -42,7 +51,7 @@ const Login = () => {
                         alt="Random unsplash image"
                         sx={({ padding: 30 })}
                     />
-                    <form onSubmit={form.onSubmit((values) => router.push("/home"))}>
+                    <form onSubmit={form.onSubmit((values) => handleLogin())}>
                         <Stack spacing="xl">
                             <TextInput
                             placeholder="Correo electrónico / DNI"

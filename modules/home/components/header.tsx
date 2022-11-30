@@ -65,7 +65,7 @@ const HomeHeader = () => {
 
     const [opened, setOpened] = useState(false);
 
-    const { currentCustomer } = useAccount();
+    const { currentCustomer, handleLogout } = useAccount();
 
     return (
       <>
@@ -134,7 +134,7 @@ const HomeHeader = () => {
                   <Menu.Item icon={<IconUserCircle size={14} />}>Mi cuenta</Menu.Item>
                   <Menu.Item icon={<IconBasket size={14} />}>Mis compras</Menu.Item>
                   <Menu.Item icon={<IconSettings size={14} />}>Settings</Menu.Item>
-                  <Menu.Item icon={<IconTransferOut size={14} />}>Cerrar sesión</Menu.Item>
+                  <Menu.Item onClick={()=>handleLogout()} icon={<IconTransferOut size={14} />}>Cerrar sesión</Menu.Item>
                 </Menu.Dropdown>
               </Menu>
               <Space w="md" />
