@@ -1,7 +1,7 @@
-import { Card, Group, Text, Menu, ActionIcon, Image, SimpleGrid, Badge, Button, Container, createStyles, Flex, TextInput, Box } from '@mantine/core';
+import { Card, Group, Text, Menu, ActionIcon, Image, SimpleGrid, Badge, Button, Container, createStyles, Flex, TextInput, Box, NumberInput, NumberInputHandlers } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconMinus, IconEye, IconFileZip, IconTrash, IconPlus } from '@tabler/icons';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Product from '../interfaces/productInterface';
 
 const useStyles = createStyles((theme) => ({
@@ -30,7 +30,8 @@ const CardComponent = ({ product } : {product: Product}) => {
   const { classes } = useStyles();
 
   const [showBuy, setShowBuy] = useState(false);
-  const [cant, setCant] = useState(0);
+  const [value, setValue] = useState(0);
+  const handlers = useRef<NumberInputHandlers>();
 
   const form = useForm({
     initialValues: {
@@ -51,8 +52,6 @@ const CardComponent = ({ product } : {product: Product}) => {
       radius="md"
       mt={20}
       className={classes.card}
-      onMouseEnter={() => setShowBuy(true)}
-      onMouseLeave={() => {setShowBuy(false); setCant(0)}}
     >
       <Card.Section withBorder inheritPadding py="xs">
         <Group position="apart">
@@ -75,35 +74,45 @@ const CardComponent = ({ product } : {product: Product}) => {
         </Group>
         <Text fz="sm" c="dimmed">(o {product.stars} estrellas)</Text>
         <Text fz="sm" c="red">Ahorro estimado S/. {ahorro}</Text>
-        <Button variant="light" color="blue" fullWidth mt="md" radius="md">
-          Vendido por Partner
-        </Button>
-        
-        { showBuy && (
-          <Box mx="auto" className={classes.info}>
-            <form onSubmit={form.onSubmit((values) => console.log(values))}>
-              <Group position='center'>
-                <ActionIcon color="blue" variant="filled" size="lg" onClick={() => setCant(1)}>
-                  <IconMinus></IconMinus>
-                </ActionIcon>
-                <TextInput
-                  value={cant} 
-                  {...form.getInputProps('cant')}
-                  style={{ width: 50, textAlign: 'center' }}
-                />
-                <ActionIcon color="blue" variant="filled" size="lg">
-                  <IconPlus></IconPlus>
-                </ActionIcon>
 
-              </Group>
+        { showBuy ?
+          <Group
+            spacing={5}
+            position="center"
+            style={{ marginTop: 15 }}
+          >
+          <ActionIcon size={36} variant="default" onClick={() => handlers.current?.decrement()}>
+            –
+          </ActionIcon>
     
-              <Group position="center" mt="md">
-                <Button type="submit">Agregar al carrito</Button>
-              </Group>
-            </form>
-          </Box>
-          )
+          <NumberInput
+            hideControls
+            value={value}
+            onChange={(val: number) => setValue(val)}
+            handlersRef={handlers}
+            max={10}
+            min={0}
+            step={1}
+            styles={{ input: { width: 70, textAlign: 'center' } }}
+          />
+    
+          <ActionIcon size={36} variant="default" onClick={() => handlers.current?.increment()}>
+            +
+          </ActionIcon>
+        </Group>
+          :
+          <Button
+            variant="light"
+            color="blue"
+            fullWidth
+            mt="md"
+            radius="md"
+            onClick={() => setShowBuy(true)}
+          >
+            Agregar
+          </Button>
         }
+        
       </Card.Section>
     </Card>
   )

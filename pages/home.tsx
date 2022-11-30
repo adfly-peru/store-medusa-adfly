@@ -45,7 +45,7 @@ const Home = () => {
           <Grid mt={20}>
             {
               products.map( ( prod ): any =>
-                <Grid.Col xs={4}>
+                <Grid.Col xs={3}>
                   <CardComponent product={prod}/>
                 </Grid.Col>
               )
