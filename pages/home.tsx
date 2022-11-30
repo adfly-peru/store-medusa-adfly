@@ -34,8 +34,8 @@ const Home = () => {
           <Title>¡Descubre nuestras categorías! (*)</Title>
           <Group spacing={50}>
           {
-            categories.map((category)=>(
-              <ActionIcon size={60} radius="xl" variant="filled">
+            categories.map((category, i)=>(
+              <ActionIcon key={i} size={60} radius="xl" variant="filled">
                 {category.icon}
               </ActionIcon>
             ))
@@ -44,8 +44,8 @@ const Home = () => {
           <Title>Productos Destacados (*)</Title>
           <Grid mt={20}>
             {
-              products.map( ( prod ): any =>
-                <Grid.Col xs={3}>
+              products.map( ( prod, i ): any =>
+                <Grid.Col key={i} xs={3}>
                   <CardComponent product={prod}/>
                 </Grid.Col>
               )
