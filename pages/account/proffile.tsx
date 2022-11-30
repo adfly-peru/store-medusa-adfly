@@ -1,4 +1,4 @@
-import { Text, Group, Image, Container, Tabs, createStyles, Autocomplete, Grid, Avatar, Stack, Badge, Title } from '@mantine/core';
+import { Text, Group, Image, Container, Tabs, createStyles, Autocomplete, Grid, Avatar, Stack, Badge, Title, Header } from '@mantine/core';
 
 import { IconSearch, IconShoppingCart, IconStar } from '@tabler/icons';
 
@@ -6,6 +6,7 @@ import { useViewportSize } from '@mantine/hooks';
 import DatosPersonalesComponent from '../../components/datosPersonalesComponent';
 import SeguridadComponent from '../../components/seguridadComponent';
 import AccountLayout from '../../modules/account/templates/account-layout';
+import HomeHeader from '../../modules/home/components/header';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -75,51 +76,7 @@ const Proffile = () => {
 
     return (
       <>
-      <header className={classes.header}>
-        <Container className={classes.mainSection}>
-            <Group position='apart'>
-            <Image
-                radius="md"
-                height={50}
-                width='inherit'
-                fit="contain"
-                src="https://www.cbvj.org.br/index/wp-content/uploads/2017/10/default-logo.png"
-                alt="Random unsplash image"
-                sx={({ padding: 10 })}
-            />
-
-            <Text>Menú</Text>
-
-            <Autocomplete
-                className={classes.search}
-                placeholder="Search"
-                icon={<IconSearch size={16} stroke={1.5} />}
-                data={['Tienda1', 'Tienda2', 'Producto1', 'Producto2']}
-            />
-
-            <Text>Hola, {nombre}</Text>
-
-            <IconShoppingCart
-                size={30}
-                stroke={1.5}
-            />
-
-            </Group>
-        </Container>
-        <Container>
-            <Tabs
-            defaultValue="Home"
-            variant="outline"
-            classNames={{
-                root: classes.tabs,
-                tabsList: classes.tabsList,
-                tab: classes.tab,
-            }}
-            >
-            <Tabs.List>{items}</Tabs.List>
-            </Tabs>
-        </Container>
-      </header>
+      <Header height={120} p="xs"><HomeHeader/></Header>
 
       <Grid>
             <Grid.Col

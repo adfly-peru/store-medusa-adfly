@@ -9,13 +9,9 @@ interface AccountProviderProps {
   }  
 
 const AccountLayout: React.FC<AccountProviderProps> = ({ children }) => {
-  const { accountStep, updateStep, isLogged, checkSession, currentCustomer } = useAccount()
+  const { accountStep, updateStep, isLogged, currentCustomer } = useAccount()
 
   const router = useRouter()
-  
-  useEffect(() => {
-    checkSession()
-  }, [checkSession])
 
   if (!isLogged) {
     return (
