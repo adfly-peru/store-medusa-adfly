@@ -102,8 +102,8 @@ const HomeHeader = () => {
               <Menu.Dropdown>
                 <Menu.Label>Categorías</Menu.Label>
                 {
-                  categories.map((category)=>(
-                    <Menu.Item icon={category.icon} >{category.name}</Menu.Item>
+                  categories.map((category, id)=>(
+                    <Menu.Item key={id} icon={category.icon} >{category.name}</Menu.Item>
                   ))
                 }
               </Menu.Dropdown>
