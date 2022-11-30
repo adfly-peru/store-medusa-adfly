@@ -75,7 +75,7 @@ const CardComponent = ({ product } : {product: Product}) => {
         <Text fz="sm" c="dimmed">(o {product.stars} estrellas)</Text>
         <Text fz="sm" c="red">Ahorro estimado S/. {ahorro}</Text>
 
-        { showBuy ?
+        { ( showBuy && value ) ?
           <Group
             spacing={5}
             position="center"
@@ -107,7 +107,7 @@ const CardComponent = ({ product } : {product: Product}) => {
             fullWidth
             mt="md"
             radius="md"
-            onClick={() => setShowBuy(true)}
+            onClick={() => {setShowBuy(true); setValue(1)}}
           >
             Agregar
           </Button>
