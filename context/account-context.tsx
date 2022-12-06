@@ -1,3 +1,4 @@
+import { signIn, signOut, useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react"
 import Customer from "../interfaces/customerInterface"
@@ -12,9 +13,8 @@ export enum ACCOUNT_STEPS {
 interface AccountContext {
   accountStep: ACCOUNT_STEPS
   updateStep: (nextStep: ACCOUNT_STEPS) => void
-  isLogged: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
   checkSession: () => boolean
-  handleLogin: () => void
+  handleLogin: (values: { email: string, password: string }) => void
   handleLogout: () => void
   currentCustomer: Customer
   updateCustomer: (customer: Customer) => void
@@ -27,6 +27,7 @@ interface AccountProviderProps {
 }
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
+  const { status } = useSession();
   const [ accountStep, setStep ] = useState<ACCOUNT_STEPS>(ACCOUNT_STEPS.UNCOMPLETE)
   const [ currentCustomer, setCustomer ] = useState<Customer>(
     {
@@ -40,8 +41,6 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       acceptPublicity: false
     }
   )
-  const isLogged = useState<boolean>(false)
-  const [ authorized, setAuthorized ] = isLogged
 
   const router = useRouter()
 
@@ -51,15 +50,20 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     router.push("/home")
   }
 
-  const handleLogin = () => {
-    setAuthorized(true)
-    localStorage.setItem("login_token", "logged")
+  const handleLogin = (values: { email: string, password: string }) => {
+    signIn(
+      'credentials',
+      { redirect: false, username: values.email, password: values.password },
+    )
+    // setAuthorized(true)
+    // localStorage.setItem("login_token", "logged")
   }
 
   const handleLogout = () => {
-    setAuthorized(false)
+    signOut()
+    // setAuthorized(false)
     setStep(ACCOUNT_STEPS.UNCOMPLETE)
-    localStorage.removeItem("login_token")
+    // localStorage.removeItem("login_token")
     localStorage.removeItem("adfly_account")
   }
 
@@ -69,7 +73,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   }
 
   const checkSession = () => {
-    if (authorized) return true
+    if (status == "authenticated") return true
     return false
   }
 
@@ -83,20 +87,20 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   }, []);
 
   useEffect(() => {
-    const loggedToken = localStorage.getItem("login_token")
-    if (loggedToken) {
-      setAuthorized(true)
-    } else {
+    // const loggedToken = localStorage.getItem("login_token")
+    // if (status == 'authenticated') {
+    //   setAuthorized(true)
+    // } else 
+    if (status == 'unauthenticated') {
       router.push("/login")
     }
-  }, [authorized]);
+  }, [status]);
 
   return (
     <AccountContext.Provider
       value={{
         accountStep,
         updateStep,
-        isLogged,
         checkSession,
         handleLogin,
         handleLogout,

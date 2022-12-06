@@ -7,6 +7,7 @@ import { useProduct } from '../../../context/product-context';
 import { useState } from 'react';
 import { useAccount } from '../../../context/account-context';
 import CartDrawer from './cart-drawer';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -58,6 +59,7 @@ const useStyles = createStyles((theme) => ({
 
 const HomeHeader = () => {
     const { classes } = useStyles();
+    const { data: session, status } = useSession();
 
     let tabs = ['Menú', 'Ofertas del día', 'Envío Gratis', 'Entrega en Centro de Trabajo'];
     
@@ -131,9 +133,11 @@ const HomeHeader = () => {
                 </Menu.Target>
                 <Menu.Dropdown>
                   <Menu.Label sx={{ fontSize: 16 }}>Hola, {currentCustomer.name}</Menu.Label>
-                  <Menu.Item icon={<IconUserCircle size={14} />}>Mi cuenta</Menu.Item>
-                  <Menu.Item icon={<IconBasket size={14} />}>Mis compras</Menu.Item>
-                  <Menu.Item icon={<IconSettings size={14} />}>Settings</Menu.Item>
+                  <Menu.Item onClick={()=>signIn('credentials', { redirect: false, password: 'password' })} icon={<IconUserCircle size={14} />}>Mi cuenta</Menu.Item>
+                  <Menu.Item onClick={()=>signOut()} icon={<IconBasket size={14} />}>Mis compras</Menu.Item>
+                  <Menu.Item icon={<IconSettings size={14} />}>{status}</Menu.Item>
+                  <Menu.Item icon={<IconSettings size={14} />}>{session?.user?.name}</Menu.Item>
+                  <Menu.Item icon={<IconSettings size={14} />}>{session?.user?.email}</Menu.Item>
                   <Menu.Item onClick={()=>handleLogout()} icon={<IconTransferOut size={14} />}>Cerrar sesión</Menu.Item>
                 </Menu.Dropdown>
               </Menu>
