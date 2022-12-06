@@ -133,11 +133,10 @@ const HomeHeader = () => {
                 </Menu.Target>
                 <Menu.Dropdown>
                   <Menu.Label sx={{ fontSize: 16 }}>Hola, {currentCustomer.name}</Menu.Label>
-                  <Menu.Item onClick={()=>signIn('credentials', { redirect: false, password: 'password' })} icon={<IconUserCircle size={14} />}>Mi cuenta</Menu.Item>
-                  <Menu.Item onClick={()=>signOut()} icon={<IconBasket size={14} />}>Mis compras</Menu.Item>
-                  <Menu.Item icon={<IconSettings size={14} />}>{status}</Menu.Item>
-                  <Menu.Item icon={<IconSettings size={14} />}>{session?.user?.name}</Menu.Item>
-                  <Menu.Item icon={<IconSettings size={14} />}>{session?.user?.email}</Menu.Item>
+                  <Menu.Label sx={{ fontSize: 12 }}>{session?.user?.email}</Menu.Label>
+                  <Menu.Item icon={<IconUserCircle size={14} />}>Mi cuenta</Menu.Item>
+                  <Menu.Item icon={<IconBasket size={14} />}>Mis compras</Menu.Item>
+                  <Menu.Item icon={<IconSettings size={14} />}>Configuracion</Menu.Item>
                   <Menu.Item onClick={()=>handleLogout()} icon={<IconTransferOut size={14} />}>Cerrar sesión</Menu.Item>
                 </Menu.Dropdown>
               </Menu>

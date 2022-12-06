@@ -9,17 +9,9 @@ interface AccountProviderProps {
   }  
 
 const AccountLayout: React.FC<AccountProviderProps> = ({ children }) => {
-  const { accountStep, updateStep, isLogged, currentCustomer } = useAccount()
+  const { accountStep, updateStep, currentCustomer } = useAccount()
 
   const router = useRouter()
-
-  if (!isLogged) {
-    return (
-      <Center>
-        <Loader />
-      </Center>
-    )
-  }
 
   const handleStepper = (stepIndex: number) => {
     if (stepIndex == 0 && accountStep == ACCOUNT_STEPS.UNCOMPLETE) {
