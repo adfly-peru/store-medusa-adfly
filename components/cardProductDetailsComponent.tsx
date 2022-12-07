@@ -1,6 +1,7 @@
 import { createStyles, Text, Card, Group, CardSection, Badge, Image, Grid, ActionIcon, NumberInput, Button, NumberInputHandlers } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useRef, useState } from 'react';
+import Product from '../interfaces/productInterface';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -8,20 +9,8 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-interface ProductDetails {
-  discount: number;
-  imgUrl: string[],
-  brand: string,
-  name: string,
-  originalPrice: number,
-  finalPrice: number,
-  stars: number,
-  stock: number,
-  expirationDate: string,
-  details: string,
-}
 
-export function CardProductDetails(product: ProductDetails) {
+export function CardProductDetails({ product } : {product: Product}) {
   const { classes, theme } = useStyles();
 
   // Calculo de precio final
@@ -78,8 +67,8 @@ export function CardProductDetails(product: ProductDetails) {
         <Text fz="sm">(o {product.stars} estrellas)</Text>
         <Text fz="sm" c="red">Ahorro estimado S/. {ahorro}</Text>
         <Text fz="sm">Vendido por Partner</Text>
-        <Text fz="sm">Stock: {product.stock} Unidad(es)</Text>
-        <Text fz="sm">Fecha de Vencimiento: {product.expirationDate}</Text>
+        <Text fz="sm">Stock: {product.details.stock} Unidad(es)</Text>
+        <Text fz="sm">Fecha de Vencimiento: {product.details.expirationDate}</Text>
         
 
 
@@ -123,8 +112,8 @@ export function CardProductDetails(product: ProductDetails) {
       </CardSection>
       
       <CardSection>
-        <Text>Detalle del Producto</Text>
-        <Text>{product.details}</Text>
+        <Text>Detalles del Producto</Text>
+        <Text>{product.details.details}</Text>
 
       </CardSection>
 

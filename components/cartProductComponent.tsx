@@ -17,7 +17,7 @@ const CartProduct = ({ product } : {product: Product}) => {
     <Container>
         <Grid justify="center" align="center" sx={{ paddingBottom: 20, paddingTop: 20 }} grow>
             <Grid.Col span={6}>
-                <Image src={product.imgUrl} alt={product.imgUrl} height={80} fit="contain" withPlaceholder/>
+                <Image src={product.imgUrl[0]} alt={product.imgUrl[0]} height={80} fit="contain" withPlaceholder/>
             </Grid.Col>
             <Grid.Col span={6}>
                 <Stack spacing={5}>
