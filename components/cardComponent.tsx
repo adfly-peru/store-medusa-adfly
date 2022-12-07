@@ -1,8 +1,10 @@
 import { Card, Group, Text, Menu, ActionIcon, Image, SimpleGrid, Badge, Button, Container, createStyles, Flex, TextInput, Box, NumberInput, NumberInputHandlers } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconMinus, IconEye, IconFileZip, IconTrash, IconPlus } from '@tabler/icons';
+import Link from 'next/link';
 import { useRef, useState } from 'react';
 import Product from '../interfaces/productInterface';
+
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -62,7 +64,10 @@ const CardComponent = ({ product } : {product: Product}) => {
       </Card.Section>
 
       <Card.Section mt="sm" p={10}>
-        <Image src={product.imgUrl} alt={product.imgUrl} height={200} fit="contain" withPlaceholder/>
+        <Link href={'/product/'+product.id}>
+          <Image src={product.imgUrl[0]} alt={product.imgUrl[0]} height={200} fit="contain" withPlaceholder
+          />
+        </Link>
       </Card.Section>
 
       <Card.Section withBorder inheritPadding mt="sm" pb="md">

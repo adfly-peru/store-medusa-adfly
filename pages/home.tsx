@@ -4,7 +4,6 @@ import HomeHeader from "../modules/home/components/header"
 import AccountLayout from '../modules/account/templates/account-layout';
 
 import CardComponent from '../components/cardComponent';
-import Product from '../interfaces/productInterface';
 
 const Home = () => {
 
