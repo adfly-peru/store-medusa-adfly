@@ -7,6 +7,7 @@ import DatosPersonalesComponent from '../../components/datosPersonalesComponent'
 import SeguridadComponent from '../../components/seguridadComponent';
 import AccountLayout from '../../modules/account/templates/account-layout';
 import HomeHeader from '../../modules/home/components/header';
+import AuthLayout from '../../modules/account/templates/authentication-layout';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -75,7 +76,7 @@ const Proffile = () => {
       ));
 
     return (
-      <>
+      <AuthLayout>
       <Header height={120} p="xs"><HomeHeader/></Header>
 
       <Grid>
@@ -108,7 +109,7 @@ const Proffile = () => {
             </Grid.Col>
         </Grid>
 
-      </>
+      </AuthLayout>
     )
   }
   
