@@ -4,12 +4,14 @@ import HomeHeader from "../modules/home/components/header"
 import AccountLayout from '../modules/account/templates/account-layout';
 
 import CardComponent from '../components/cardComponent';
+import AuthLayout from "../modules/account/templates/authentication-layout";
 
 const Home = () => {
 
   const { categories, products } = useProduct();
 
   return (
+  <AuthLayout>
     <AccountLayout>
       <AppShell
       padding={0}
@@ -53,6 +55,7 @@ const Home = () => {
         </Stack>
       </AppShell>
     </AccountLayout>
+  </AuthLayout>
   )
 }
   

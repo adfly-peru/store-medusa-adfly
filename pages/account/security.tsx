@@ -6,6 +6,7 @@ import { useViewportSize } from '@mantine/hooks';
 import DatosPersonalesComponent from '../../components/datosPersonalesComponent';
 import SeguridadComponent from '../../components/seguridadComponent';
 import AccountLayout from '../../modules/account/templates/account-layout';
+import AuthLayout from '../../modules/account/templates/authentication-layout';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -71,7 +72,7 @@ const Proffile = () => {
       ));
 
     return (
-      <>
+      <AuthLayout>
       <header className={classes.header}>
         <Container className={classes.mainSection}>
             <Group position='apart'>
@@ -144,7 +145,7 @@ const Proffile = () => {
             </Grid.Col>
         </Grid>
 
-      </>
+      </AuthLayout>
     )
   }
   

@@ -9,6 +9,7 @@ import { AppShell, Container, Grid, Header, Loader, Stack } from "@mantine/core"
 import CardComponent from "../../components/cardComponent";
 import AccountLayout from "../../modules/account/templates/account-layout";
 import { useProduct } from "../../context/product-context";
+import AuthLayout from "../../modules/account/templates/authentication-layout";
 
 export default function ProductInfo() {
     const router = useRouter();
@@ -24,6 +25,7 @@ export default function ProductInfo() {
     }
 
     return (
+    <AuthLayout>
       <AccountLayout>
         <AppShell
         padding={0}
@@ -52,5 +54,6 @@ export default function ProductInfo() {
           </Stack>
         </AppShell>
       </AccountLayout>
+    </AuthLayout>
     );
 }

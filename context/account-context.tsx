@@ -18,6 +18,7 @@ interface AccountContext {
   handleLogout: () => void
   currentCustomer: Customer
   updateCustomer: (customer: Customer) => void
+  status: string
 }
 
 const AccountContext = createContext<AccountContext | null>(null)
@@ -55,15 +56,11 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       'credentials',
       { redirect: false, username: values.email, password: values.password },
     )
-    // setAuthorized(true)
-    // localStorage.setItem("login_token", "logged")
   }
 
   const handleLogout = () => {
     signOut()
-    // setAuthorized(false)
     setStep(ACCOUNT_STEPS.UNCOMPLETE)
-    // localStorage.removeItem("login_token")
     localStorage.removeItem("adfly_account")
   }
 
@@ -86,16 +83,6 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     }
   }, []);
 
-  useEffect(() => {
-    // const loggedToken = localStorage.getItem("login_token")
-    // if (status == 'authenticated') {
-    //   setAuthorized(true)
-    // } else 
-    if (status == 'unauthenticated') {
-      router.push("/login")
-    }
-  }, [status]);
-
   return (
     <AccountContext.Provider
       value={{
@@ -106,6 +93,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         handleLogout,
         currentCustomer,
         updateCustomer,
+        status,
       }}
     >
       {children}

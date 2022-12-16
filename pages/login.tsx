@@ -1,4 +1,4 @@
-import { BackgroundImage, Center, Text, Grid, Group, Stack, Button, TextInput, PasswordInput, Box, Anchor, Image, Space, Title } from '@mantine/core'
+import { BackgroundImage, Center, Text, Grid, Group, Stack, Button, TextInput, PasswordInput, Box, Anchor, Image, Space, Title, LoadingOverlay } from '@mantine/core'
 import { useViewportSize } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ const Login = () => {
         },
     });
     const router = useRouter()
-    const { handleLogin, checkSession } = useAccount()
+    const { handleLogin, checkSession, status } = useAccount()
 
     useEffect(() => {
         if (checkSession()) {
@@ -25,6 +25,7 @@ const Login = () => {
 
     return (
       <>
+      <LoadingOverlay visible={status != "unauthenticated"} overlayBlur={2} overlayOpacity={0.9}/>
       <Grid>
             <Grid.Col span={6} sx={({ padding: 0 })} >
             <BackgroundImage
