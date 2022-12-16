@@ -48,46 +48,50 @@ const SearchBar = ({ searchable }: { searchable: string }) => {
               position="center"
               value={[...category, ...brand, ...seller, ...delivery]}
             >
-              {category.map((e) => (
+              {category.map((e, idx) => (
                 <Chip
                   value={e}
                   onClick={() =>
                     setCategory(category.filter((value) => value != e))
                   }
+                  key={idx}
                 >
                   {e}
                 </Chip>
               ))}
               {/* </Chip.Group>
             <Chip.Group position="center" value={brand}> */}
-              {brand.map((e) => (
+              {brand.map((e, idx) => (
                 <Chip
                   value={e}
                   onClick={() => setBrand(brand.filter((value) => value != e))}
+                  key={idx}
                 >
                   {e}
                 </Chip>
               ))}
               {/* </Chip.Group>
             <Chip.Group position="center" value={seller}> */}
-              {seller.map((e) => (
+              {seller.map((e, idx) => (
                 <Chip
                   value={e}
                   onClick={() =>
                     setSeller(seller.filter((value) => value != e))
                   }
+                  key={idx}
                 >
                   {e}
                 </Chip>
               ))}
               {/* </Chip.Group>
             <Chip.Group position="center" value={delivery}> */}
-              {delivery.map((e) => (
+              {delivery.map((e, idx) => (
                 <Chip
                   value={e}
                   onClick={() =>
                     setDelivery(delivery.filter((value) => value != e))
                   }
+                  key={idx}
                 >
                   {e}
                 </Chip>

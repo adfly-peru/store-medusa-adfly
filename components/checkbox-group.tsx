@@ -16,8 +16,8 @@ const CheckGroup = ({
       orientation="vertical"
       spacing="md"
     >
-      {Array.from(values.entries()).map((entry) => (
-        <Checkbox value={entry[0]} label={entry[1]}></Checkbox>
+      {Array.from(values.entries()).map((entry, idx) => (
+        <Checkbox key={idx} value={entry[0]} label={entry[1]}></Checkbox>
       ))}
     </Checkbox.Group>
   );

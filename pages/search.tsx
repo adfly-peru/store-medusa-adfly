@@ -85,13 +85,6 @@ export default function Search() {
                 <Space h="md" />
                 <Divider size="sm" />
                 <FilteredCard />
-                {/* <Grid>
-                  {products.map((prod, i): any => (
-                    <Grid.Col key={i} xs={3}>
-                      <CardComponent product={prod} />
-                    </Grid.Col>
-                  ))}
-                </Grid> */}
               </Grid.Col>
             </Grid>
           </AppShell>
