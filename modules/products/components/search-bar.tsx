@@ -34,7 +34,10 @@ const SearchBar = ({ searchable }: { searchable: string }) => {
   return (
     <Container p={0}>
       <Center p={15}>
-        <Title>{searchable}</Title>
+        <Title>
+          {searchable.charAt(0).toUpperCase() +
+            searchable.slice(1).toLowerCase()}
+        </Title>
       </Center>
       {category.length > 0 ||
       brand.length > 0 ||

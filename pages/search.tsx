@@ -9,10 +9,8 @@ import {
   Text,
 } from "@mantine/core";
 import { useRouter } from "next/router";
-import CardComponent from "../components/cardComponent";
 import FilteredCard from "../components/filtered-card-component";
 import { FilterProvider } from "../context/filter-context";
-import { useProduct } from "../context/product-context";
 import AccountLayout from "../modules/account/templates/account-layout";
 import AuthLayout from "../modules/account/templates/authentication-layout";
 import HomeHeader from "../modules/home/components/header";
@@ -21,11 +19,6 @@ import SearchBar from "../modules/products/components/search-bar";
 export default function Search() {
   const router = useRouter();
   const searchable = router.query.data;
-  const { getProductsByFilter } = useProduct();
-  const products = getProductsByFilter(
-    typeof searchable == "string" ? searchable : ""
-  );
-
   return (
     <FilterProvider filter={typeof searchable == "string" ? searchable : ""}>
       <AuthLayout>
@@ -34,6 +27,7 @@ export default function Search() {
             padding={0}
             styles={(theme) => ({
               main: {
+                minHeight: 1000,
                 backgroundColor:
                   theme.colorScheme === "dark"
                     ? theme.colors.dark[8]

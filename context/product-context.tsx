@@ -2,6 +2,7 @@ import {
   IconBrandAndroid,
   IconBrandAppleArcade,
   IconBuildingCarousel,
+  IconDogBowl,
   IconStethoscope,
   IconToolsKitchen2,
 } from "@tabler/icons";
@@ -194,6 +195,7 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
       icon: <IconBrandAndroid />,
     },
     { identifier: "gaming", name: "Juegos", icon: <IconBrandAppleArcade /> },
+    { identifier: "pets", name: "Mascotas", icon: <IconDogBowl /> },
   ];
 
   const subCategories: string[] = [
@@ -209,7 +211,19 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
   const brands: string[] = ["Gloria", "Donofrio", "MiMaskot", "Marca6"];
 
   const getProduct = (id: string) => {
+    const foundCategorie = categories.find((obj) => obj.name == id);
+    const foundSubcategorie = subCategories.find((obj) => obj == id);
     for (var product of products) {
+      if (typeof foundCategorie != "undefined") {
+        if (product.category == foundCategorie.identifier) {
+          return product;
+        }
+      }
+      if (typeof foundSubcategorie != "undefined") {
+        if (product.subCategory == foundSubcategorie) {
+          return product;
+        }
+      }
       if (product.id == id) {
         return product;
       }
@@ -218,9 +232,31 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
   };
 
   const getProductsByFilter = (filter: string) => {
-    return products.filter((product) =>
-      product.name.toLowerCase().includes(filter.toLowerCase())
+    const foundCategorie = categories.find(
+      (obj) => obj.name.toLocaleLowerCase() == filter.toLowerCase()
     );
+    const foundSubcategorie = subCategories.find(
+      (obj) => obj.toLocaleLowerCase() == filter.toLocaleLowerCase()
+    );
+    return products.filter((product) => {
+      if (typeof foundCategorie != "undefined") {
+        if (
+          product.category.toLocaleLowerCase() ==
+          foundCategorie.identifier.toLocaleLowerCase()
+        ) {
+          return true;
+        }
+      }
+      if (typeof foundSubcategorie != "undefined") {
+        if (
+          product.subCategory.toLocaleLowerCase() ==
+          foundSubcategorie.toLocaleLowerCase()
+        ) {
+          return true;
+        }
+      }
+      return product.name.toLowerCase().includes(filter.toLowerCase());
+    });
   };
 
   return (
