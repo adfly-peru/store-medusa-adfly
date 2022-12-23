@@ -14,6 +14,7 @@ import {
   Space,
   SelectItemProps,
   Indicator,
+  UnstyledButton,
 } from "@mantine/core";
 
 import {
@@ -116,6 +117,13 @@ const HomeHeader = () => {
     });
     setSearchable("");
   };
+  const searchProductByCategorie = (categorieToSearch: string) => {
+    router.push({
+      pathname: "/search",
+      query: { data: categorieToSearch },
+    });
+    setSearchable("");
+  };
 
   return (
     <>
@@ -131,15 +139,17 @@ const HomeHeader = () => {
       </Drawer>
       <Grid justify="center" align="center">
         <Grid.Col span={1}>
-          <Image
-            radius="md"
-            height={50}
-            width="inherit"
-            fit="contain"
-            src="https://www.cbvj.org.br/index/wp-content/uploads/2017/10/default-logo.png"
-            alt="Random unsplash image"
-            sx={{ padding: 10 }}
-          />
+          <UnstyledButton onClick={() => router.push("/")}>
+            <Image
+              radius="md"
+              height={50}
+              width="inherit"
+              fit="contain"
+              src="https://www.cbvj.org.br/index/wp-content/uploads/2017/10/default-logo.png"
+              alt="Random unsplash image"
+              sx={{ padding: 10 }}
+            />
+          </UnstyledButton>
         </Grid.Col>
         <Grid.Col span={1}>
           <Menu
@@ -154,11 +164,14 @@ const HomeHeader = () => {
                 Menú
               </Button>
             </Menu.Target>
-
             <Menu.Dropdown>
               <Menu.Label>Categorías</Menu.Label>
               {categories.map((category, id) => (
-                <Menu.Item key={id} icon={category.icon}>
+                <Menu.Item
+                  key={id}
+                  icon={category.icon}
+                  onClick={() => searchProductByCategorie(category.name)}
+                >
                   {category.name}
                 </Menu.Item>
               ))}
