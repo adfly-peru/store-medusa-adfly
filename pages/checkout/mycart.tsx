@@ -66,8 +66,8 @@ const MyCartPage = () => {
                   type="auto"
                   offsetScrollbars
                 >
-                  {products.map((prod): any => (
-                    <div>
+                  {products.map((prod, id): any => (
+                    <div key={id}>
                       <ProductCartView productCart={prod} />
                       <Divider />
                     </div>
