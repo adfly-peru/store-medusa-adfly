@@ -2,21 +2,18 @@ import {
   Text,
   Group,
   Image,
-  Container,
   Tabs,
   createStyles,
   Autocomplete,
   Grid,
   Title,
-  Center,
   Menu,
   Button,
-  UnstyledButton,
   Drawer,
   ActionIcon,
   Space,
-  AutocompleteItem,
   SelectItemProps,
+  Indicator,
 } from "@mantine/core";
 
 import {
@@ -24,21 +21,19 @@ import {
   IconSearch,
   IconSettings,
   IconShoppingCart,
-  IconStar,
   IconTransferOut,
-  IconTrash,
   IconUser,
   IconUserCircle,
 } from "@tabler/icons";
 
-import { useViewportSize } from "@mantine/hooks";
 import { useProduct } from "../../../context/product-context";
 import { forwardRef, useState } from "react";
 import { useAccount } from "../../../context/account-context";
 import CartDrawer from "./cart-drawer";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useForm } from "@mantine/form";
+import { useCart } from "../../../context/cart-context";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -105,6 +100,7 @@ const HomeHeader = () => {
   const { currentCustomer, handleLogout } = useAccount();
   const [searchable, setSearchable] = useState("");
   const form = useForm();
+  const { length } = useCart();
 
   let tabs = [
     "Menú",
@@ -221,9 +217,18 @@ const HomeHeader = () => {
               </Menu.Dropdown>
             </Menu>
             <Space w="md" />
-            <ActionIcon onClick={() => setOpened(true)} size="lg">
-              <IconShoppingCart size={30} stroke={1.5} />
-            </ActionIcon>
+            <Indicator
+              showZero={false}
+              dot={false}
+              label={length}
+              overflowCount={10}
+              inline
+              size={22}
+            >
+              <ActionIcon onClick={() => setOpened(true)} size="lg">
+                <IconShoppingCart size={30} stroke={1.5} />
+              </ActionIcon>
+            </Indicator>
           </Button.Group>
         </Grid.Col>
       </Grid>
