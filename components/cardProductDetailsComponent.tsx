@@ -22,6 +22,7 @@ import {
   Anchor,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { IconCircleMinus, IconCirclePlus } from "@tabler/icons";
 import { useRef, useState } from "react";
 import { useCart } from "../context/cart-context";
 import Product from "../interfaces/productInterface";
@@ -44,7 +45,7 @@ export function CardProductDetails({ product }: { product: Product }) {
 
   const [showBuy, setShowBuy] = useState(false);
   const [value, setValue] = useState(0);
-  const { addProduct } = useCart();
+  const { editProduct } = useCart();
   const handlers = useRef<NumberInputHandlers>();
 
   const form = useForm({
@@ -135,7 +136,7 @@ export function CardProductDetails({ product }: { product: Product }) {
                 variant="default"
                 onClick={() => handlers.current?.decrement()}
               >
-                –
+                <IconCircleMinus stroke={1.5} size={34} />
               </ActionIcon>
               <NumberInput
                 hideControls
@@ -152,7 +153,7 @@ export function CardProductDetails({ product }: { product: Product }) {
                 variant="default"
                 onClick={() => handlers.current?.increment()}
               >
-                +
+                <IconCirclePlus stroke={1.5} size={34} />
               </ActionIcon>
               <Space />
               <Text fz="xs" c="dimmed">
@@ -165,7 +166,7 @@ export function CardProductDetails({ product }: { product: Product }) {
               fullWidth
               mt="md"
               radius="md"
-              onClick={() => addProduct(product, value)}
+              onClick={() => (value == 0 ? null : editProduct(product, value))}
             >
               Agregar
             </Button>
