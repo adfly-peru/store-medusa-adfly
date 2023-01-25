@@ -160,7 +160,6 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
       id: "donofrio2",
       discount: 20,
       imgUrl: [
-        "https://wongfood.vteximg.com.br/arquivos/ids/511162-750-750/frontal-5653.jpg?v=637777246844830000",
         "https://d20f60vzbd93dl.cloudfront.net/uploads/tienda_003842/tienda_003842_7e17eddf806b48cbd00065a60019c38a5b193230_producto_large_85.png",
         "https://wongfood.vtexassets.com/arquivos/ids/474916/Helado-de-Crema-Caf-de-Chanchamayo-Frio-Rico-Crocante-D-Onofrio-Pote-930-ml-1-171681496.jpg?v=637686202850730000",
       ],

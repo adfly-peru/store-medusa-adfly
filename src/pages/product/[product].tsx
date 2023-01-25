@@ -1,19 +1,10 @@
 import React from "react";
 import { useRouter } from "next/router";
-import HomeHeader from "@modules/home/components/header";
 import { CardProductDetails } from "@components/cardProductDetailsComponent";
-import {
-  AppShell,
-  Container,
-  Grid,
-  Header,
-  Loader,
-  Stack,
-} from "@mantine/core";
+import { Container, Grid, Loader, Stack } from "@mantine/core";
 import CardComponent from "@components/cardComponent";
-import AccountLayout from "@modules/account/templates/account-layout";
 import { useProduct } from "@context/product-context";
-import AuthLayout from "@modules/account/templates/authentication-layout";
+import Layout from "@modules/layout/templates";
 
 export default function ProductInfo() {
   const router = useRouter();
@@ -26,39 +17,20 @@ export default function ProductInfo() {
   }
 
   return (
-    <AuthLayout>
-      <AccountLayout>
-        <AppShell
-          padding={0}
-          header={
-            <Header height={120} p="xs">
-              <HomeHeader />
-            </Header>
-          }
-          styles={(theme) => ({
-            main: {
-              backgroundColor:
-                theme.colorScheme === "dark"
-                  ? theme.colors.dark[8]
-                  : theme.colors.gray[0],
-            },
-          })}
-        >
-          <Container mt={20}>
-            <CardProductDetails product={showProduct} />
-          </Container>
+    <Layout>
+      <Container mt={20}>
+        <CardProductDetails product={showProduct} />
+      </Container>
 
-          <Stack align="center" justify="flex-end" spacing="xl">
-            <Grid>
-              {products.map((prod, i): any => (
-                <Grid.Col key={i} xs={3}>
-                  <CardComponent product={prod} />
-                </Grid.Col>
-              ))}
-            </Grid>
-          </Stack>
-        </AppShell>
-      </AccountLayout>
-    </AuthLayout>
+      <Stack align="center" justify="flex-end" spacing="xl">
+        <Grid w="100%">
+          {products.map((prod, i): any => (
+            <Grid.Col key={i} xs={3}>
+              <CardComponent product={prod} />
+            </Grid.Col>
+          ))}
+        </Grid>
+      </Stack>
+    </Layout>
   );
 }
