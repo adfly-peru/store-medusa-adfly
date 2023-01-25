@@ -1,14 +1,8 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import Address from "../interfaces/address-interface";
-import Customer from "../interfaces/customerInterface";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import Address from "@interfaces/address-interface";
+import Customer from "@interfaces/customerInterface";
 
 export enum ACCOUNT_STEPS {
   UNCOMPLETE,

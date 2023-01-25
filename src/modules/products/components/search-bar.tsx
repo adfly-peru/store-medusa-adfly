@@ -10,8 +10,8 @@ import {
   Container,
 } from "@mantine/core";
 import { useState } from "react";
-import CheckGroup from "../../../components/checkbox-group";
-import { useFilter } from "../../../context/filter-context";
+import CheckGroup from "@components/checkbox-group";
+import { useFilter } from "@context/filter-context";
 
 const SearchBar = ({ searchable }: { searchable: string }) => {
   const minPrice = 0;

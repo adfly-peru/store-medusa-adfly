@@ -13,8 +13,8 @@ import {
 import { IconCirclePlus, IconCircleMinus } from "@tabler/icons";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { useCart } from "../context/cart-context";
-import Product from "../interfaces/productInterface";
+import { useCart } from "@context/cart-context";
+import Product from "@interfaces/productInterface";
 
 const useStyles = createStyles((theme) => ({
   card: {

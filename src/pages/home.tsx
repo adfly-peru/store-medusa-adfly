@@ -1,8 +1,6 @@
 import {
   AppShell,
-  Text,
   Header,
-  Navbar,
   BackgroundImage,
   Stack,
   Title,
@@ -10,15 +8,14 @@ import {
   Group,
   Space,
   Grid,
-  Button,
   Tooltip,
 } from "@mantine/core";
-import { useProduct } from "../context/product-context";
-import HomeHeader from "../modules/home/components/header";
-import AccountLayout from "../modules/account/templates/account-layout";
+import { useProduct } from "@context/product-context";
+import HomeHeader from "@modules/home/components/header";
+import AccountLayout from "@modules/account/templates/account-layout";
 
-import CardComponent from "../components/cardComponent";
-import AuthLayout from "../modules/account/templates/authentication-layout";
+import CardComponent from "@components/cardComponent";
+import AuthLayout from "@modules/account/templates/authentication-layout";
 import router from "next/router";
 
 const Home = () => {

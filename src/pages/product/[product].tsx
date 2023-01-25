@@ -1,10 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
-
-import HomeHeader from "../../modules/home/components/header";
-import Product from "../../interfaces/productInterface";
-import { CardProductDetails } from "../../components/cardProductDetailsComponent";
-import { title } from "process";
+import HomeHeader from "@modules/home/components/header";
+import { CardProductDetails } from "@components/cardProductDetailsComponent";
 import {
   AppShell,
   Container,
@@ -13,10 +10,10 @@ import {
   Loader,
   Stack,
 } from "@mantine/core";
-import CardComponent from "../../components/cardComponent";
-import AccountLayout from "../../modules/account/templates/account-layout";
-import { useProduct } from "../../context/product-context";
-import AuthLayout from "../../modules/account/templates/authentication-layout";
+import CardComponent from "@components/cardComponent";
+import AccountLayout from "@modules/account/templates/account-layout";
+import { useProduct } from "@context/product-context";
+import AuthLayout from "@modules/account/templates/authentication-layout";
 
 export default function ProductInfo() {
   const router = useRouter();

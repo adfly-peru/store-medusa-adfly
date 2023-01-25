@@ -7,10 +7,10 @@ import {
   Text,
 } from "@mantine/core";
 
-import CartProduct from "../../../components/cartProductComponent";
+import CartProduct from "@components/cartProductComponent";
 import { IconShoppingCart, IconShoppingCartOff } from "@tabler/icons";
 import { useRouter } from "next/router";
-import { useCart } from "../../../context/cart-context";
+import { useCart } from "@context/cart-context";
 import { useViewportSize } from "@mantine/hooks";
 
 const CartDrawer = () => {

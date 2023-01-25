@@ -1,10 +1,8 @@
 import { ActionIcon, Drawer, Indicator, Title } from "@mantine/core";
-
 import { IconShoppingCart } from "@tabler/icons";
 import { useState } from "react";
-
-import { useCart } from "../../../context/cart-context";
-import CartDrawer from "./cart-drawer";
+import { useCart } from "@context/cart-context";
+import CartDrawer from "@modules/home/components/cart-drawer";
 
 const CartIndicator = () => {
   const { products } = useCart();

@@ -1,6 +1,6 @@
 import { Grid } from "@mantine/core";
-import { useFilter } from "../context/filter-context";
-import CardComponent from "./cardComponent";
+import { useFilter } from "@context/filter-context";
+import CardComponent from "@components/cardComponent";
 
 const FilteredCard = () => {
   const { filteredProducts, category, brand } = useFilter();

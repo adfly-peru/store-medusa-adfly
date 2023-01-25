@@ -1,7 +1,7 @@
 import { Button, Group, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useAccount } from "../../../context/account-context";
-import Address from "../../../interfaces/address-interface";
+import { useAccount } from "@context/account-context";
+import Address from "@interfaces/address-interface";
 
 const AddressForm = ({
   index,

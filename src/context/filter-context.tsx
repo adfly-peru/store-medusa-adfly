@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
-import Product from "../interfaces/productInterface";
-import { useProduct } from "./product-context";
+import Product from "@interfaces/productInterface";
+import { useProduct } from "@context/product-context";
 
 interface FilterContext {
   filters: string[];

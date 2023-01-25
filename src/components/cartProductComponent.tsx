@@ -11,7 +11,7 @@ import {
   ActionIcon,
 } from "@mantine/core";
 import { IconCircleMinus, IconCirclePlus, IconTrash } from "@tabler/icons";
-import { ProductCart, useCart } from "../context/cart-context";
+import { ProductCart, useCart } from "@context/cart-context";
 
 const CartProduct = ({
   productCart,

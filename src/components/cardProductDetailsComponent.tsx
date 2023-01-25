@@ -6,14 +6,11 @@ import {
   CardSection,
   Badge,
   Image,
-  Grid,
   ActionIcon,
   NumberInput,
   Button,
   NumberInputHandlers,
   Stack,
-  SimpleGrid,
-  Center,
   Flex,
   Title,
   Divider,
@@ -24,8 +21,8 @@ import {
 import { useForm } from "@mantine/form";
 import { IconCircleMinus, IconCirclePlus } from "@tabler/icons";
 import { useRef, useState } from "react";
-import { useCart } from "../context/cart-context";
-import Product from "../interfaces/productInterface";
+import { useCart } from "@context/cart-context";
+import Product from "@interfaces/productInterface";
 
 const useStyles = createStyles((theme) => ({
   card: {

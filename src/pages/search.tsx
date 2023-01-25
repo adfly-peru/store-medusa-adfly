@@ -9,12 +9,12 @@ import {
   Text,
 } from "@mantine/core";
 import { useRouter } from "next/router";
-import FilteredCard from "../components/filtered-card-component";
-import { FilterProvider } from "../context/filter-context";
-import AccountLayout from "../modules/account/templates/account-layout";
-import AuthLayout from "../modules/account/templates/authentication-layout";
-import HomeHeader from "../modules/home/components/header";
-import SearchBar from "../modules/products/components/search-bar";
+import FilteredCard from "@components/filtered-card-component";
+import { FilterProvider } from "@context/filter-context";
+import AccountLayout from "@modules/account/templates/account-layout";
+import AuthLayout from "@modules/account/templates/authentication-layout";
+import HomeHeader from "@modules/home/components/header";
+import SearchBar from "@modules/products/components/search-bar";
 
 export default function Search() {
   const router = useRouter();

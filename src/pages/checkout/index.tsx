@@ -18,10 +18,10 @@ import {
 import { useViewportSize } from "@mantine/hooks";
 import { IconShoppingCart } from "@tabler/icons";
 import { useState } from "react";
-import AuthLayout from "../../modules/account/templates/authentication-layout";
-import InformationForm from "../../modules/checkout/components/information-form";
-import ShippingInformation from "../../modules/checkout/components/shipping-information";
-import HomeHeader from "../../modules/home/components/header";
+import AuthLayout from "@modules/account/templates/authentication-layout";
+import InformationForm from "@modules/checkout/components/information-form";
+import ShippingInformation from "@modules/checkout/components/shipping-information";
+import HomeHeader from "@modules/home/components/header";
 
 const CheckoutPage = () => {
   const { width, height } = useViewportSize();

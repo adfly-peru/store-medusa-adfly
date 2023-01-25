@@ -1,9 +1,6 @@
 import { Text, Group, Stack, Image, Checkbox } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { useState } from "react";
-import { useAccount } from "../../../context/account-context";
-import { ProductCart } from "../../../context/cart-context";
-import Address from "../../../interfaces/address-interface";
+import { ProductCart } from "@context/cart-context";
 
 const ShipmentCard = ({ index, total }: { index: number; total: number }) => {
   const products: ProductCart[] = [

@@ -21,7 +21,7 @@ import {
   IconX,
 } from "@tabler/icons";
 import { useRef } from "react";
-import { ProductCart, useCart } from "../../../context/cart-context";
+import { ProductCart, useCart } from "@context/cart-context";
 
 const ProductCartView = ({ productCart }: { productCart: ProductCart }) => {
   const { editProduct, removeProduct } = useCart();

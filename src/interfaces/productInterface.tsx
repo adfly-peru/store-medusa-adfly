@@ -1,4 +1,4 @@
-import ProductDetails from "./productDetails";
+import ProductDetails from "@interfaces/productDetails";
 
 interface Product {
   id: string;

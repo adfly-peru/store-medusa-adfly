@@ -2,7 +2,6 @@ import {
   Text,
   Group,
   Stack,
-  TextInput,
   Checkbox,
   Divider,
   ActionIcon,
@@ -13,10 +12,9 @@ import {
 } from "@mantine/core";
 import { IconEdit } from "@tabler/icons";
 import { useState } from "react";
-import { useAccount } from "../../../context/account-context";
-import Address from "../../../interfaces/address-interface";
-import AddressForm from "./address-form";
-import ShipmentCard from "./shipment-card";
+import { useAccount } from "@context/account-context";
+import AddressForm from "@modules/checkout/components/address-form";
+import ShipmentCard from "@modules/checkout/components/shipment-card";
 
 const ShippingInformation = () => {
   const { addresses } = useAccount();

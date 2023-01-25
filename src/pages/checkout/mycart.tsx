@@ -17,10 +17,10 @@ import {
 import { useViewportSize } from "@mantine/hooks";
 import { IconShoppingCart, IconShoppingCartOff } from "@tabler/icons";
 import { useRouter } from "next/router";
-import { useCart } from "../../context/cart-context";
-import AuthLayout from "../../modules/account/templates/authentication-layout";
-import HomeHeader from "../../modules/home/components/header";
-import ProductCartView from "../../modules/my-cart/components/product-cart-view";
+import { useCart } from "@context/cart-context";
+import AuthLayout from "@modules/account/templates/authentication-layout";
+import HomeHeader from "@modules/home/components/header";
+import ProductCartView from "@modules/my-cart/components/product-cart-view";
 
 const MyCartPage = () => {
   const { products } = useCart();

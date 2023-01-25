@@ -6,9 +6,8 @@ import {
   IconStethoscope,
   IconToolsKitchen2,
 } from "@tabler/icons";
-import { useRouter } from "next/router";
-import React, { createContext, useCallback, useContext, useState } from "react";
-import Product from "../interfaces/productInterface";
+import React, { createContext, useContext } from "react";
+import Product from "@interfaces/productInterface";
 
 interface Category {
   identifier: string;

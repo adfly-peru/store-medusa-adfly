@@ -16,7 +16,6 @@ import {
   Indicator,
   UnstyledButton,
 } from "@mantine/core";
-
 import {
   IconBasket,
   IconSearch,
@@ -26,15 +25,14 @@ import {
   IconUser,
   IconUserCircle,
 } from "@tabler/icons";
-
-import { useProduct } from "../../../context/product-context";
+import { useProduct } from "@context/product-context";
 import { forwardRef, useState } from "react";
-import { useAccount } from "../../../context/account-context";
+import { useAccount } from "@context/account-context";
 import CartDrawer from "./cart-drawer";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useForm } from "@mantine/form";
-import { useCart } from "../../../context/cart-context";
+import { useCart } from "@context/cart-context";
 
 const useStyles = createStyles((theme) => ({
   header: {
