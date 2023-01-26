@@ -38,7 +38,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const CardComponent = ({ product }: { product: Product }) => {
+const ProductCard = ({ product }: { product: Product }) => {
   const { classes } = useStyles();
   const [showBuy, setShowBuy] = useState(false);
   const handlers = useRef<NumberInputHandlers>();
@@ -146,4 +146,4 @@ const CardComponent = ({ product }: { product: Product }) => {
   );
 };
 
-export default CardComponent;
+export default ProductCard;

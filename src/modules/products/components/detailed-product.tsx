@@ -18,7 +18,6 @@ import {
   Breadcrumbs,
   Anchor,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { IconCircleMinus, IconCirclePlus } from "@tabler/icons";
 import { useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
@@ -31,8 +30,8 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function CardProductDetails({ product }: { product: Product }) {
-  const { classes, theme } = useStyles();
+export function DetailedProduct({ product }: { product: Product }) {
+  const { classes } = useStyles();
   const [imgIdx, setIdx] = useState(0);
 
   // Calculo de precio final
@@ -40,17 +39,9 @@ export function CardProductDetails({ product }: { product: Product }) {
     product.originalPrice - (product.originalPrice * product.discount) / 100;
   let ahorro = product.originalPrice - product.finalPrice;
 
-  const [showBuy, setShowBuy] = useState(false);
   const [value, setValue] = useState(0);
   const { editProduct } = useCart();
   const handlers = useRef<NumberInputHandlers>();
-
-  const form = useForm({
-    initialValues: {
-      cant: 0,
-      productName: "",
-    },
-  });
 
   return (
     <Card withBorder py="xl" px="xl" radius="md" className={classes.card}>

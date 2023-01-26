@@ -13,7 +13,7 @@ import {
 import { IconCircleMinus, IconCirclePlus, IconTrash } from "@tabler/icons";
 import { ProductCart, useCart } from "@context/cart-context";
 
-const CartProduct = ({
+const ProductCartView = ({
   productCart,
   id,
 }: {
@@ -84,4 +84,4 @@ const CartProduct = ({
   );
 };
 
-export default CartProduct;
+export default ProductCartView;

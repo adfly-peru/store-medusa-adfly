@@ -23,7 +23,11 @@ import {
 import { useRef } from "react";
 import { ProductCart, useCart } from "@context/cart-context";
 
-const ProductCartView = ({ productCart }: { productCart: ProductCart }) => {
+const DetailedProductCartView = ({
+  productCart,
+}: {
+  productCart: ProductCart;
+}) => {
   const { editProduct, removeProduct } = useCart();
   const product = productCart.product;
   const handlers = useRef<NumberInputHandlers>();
@@ -129,4 +133,4 @@ const ProductCartView = ({ productCart }: { productCart: ProductCart }) => {
   );
 };
 
-export default ProductCartView;
+export default DetailedProductCartView;

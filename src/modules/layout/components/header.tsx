@@ -28,7 +28,7 @@ import {
 import { useProduct } from "@context/product-context";
 import { forwardRef, useState } from "react";
 import { useAccount } from "@context/account-context";
-import CartDrawer from "./cart-drawer";
+import CartDrawer from "@modules/layout/components/cart-drawer";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useForm } from "@mantine/form";

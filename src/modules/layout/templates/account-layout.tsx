@@ -15,10 +15,10 @@ const AccountLayout: React.FC<AccountProviderProps> = ({ children }) => {
 
   const handleStepper = (stepIndex: number) => {
     if (stepIndex == 0 && accountStep == ACCOUNT_STEPS.UNCOMPLETE) {
-      router.push("/account/proffile");
+      router.push("/account/profile");
     } else if (
       stepIndex == 1 &&
-      accountStep == ACCOUNT_STEPS.PROFFILECOMPLETED
+      accountStep == ACCOUNT_STEPS.PROFILECOMPLETED
     ) {
       updateStep(ACCOUNT_STEPS.VERIFIED);
     } else if (stepIndex == 2 && accountStep == ACCOUNT_STEPS.VERIFIED) {
@@ -67,7 +67,7 @@ const AccountLayout: React.FC<AccountProviderProps> = ({ children }) => {
           </Text>
         </Center>
         <Space h="md" />
-        {accountStep == ACCOUNT_STEPS.PROFFILECOMPLETED && (
+        {accountStep == ACCOUNT_STEPS.PROFILECOMPLETED && (
           <Center>
             <Text sx={{ width: "75%" }} size="lg" align="justify">
               Hemos enviado un correo de verificación a {currentCustomer.email},
@@ -75,7 +75,7 @@ const AccountLayout: React.FC<AccountProviderProps> = ({ children }) => {
               <Text
                 span
                 c="blue"
-                onClick={() => router.push("/account/proffile")}
+                onClick={() => router.push("/account/profile")}
                 inherit
               >
                 aquí

@@ -6,7 +6,7 @@ import Customer from "@interfaces/customerInterface";
 
 export enum ACCOUNT_STEPS {
   UNCOMPLETE,
-  PROFFILECOMPLETED,
+  PROFILECOMPLETED,
   VERIFIED,
   COMPLETED,
 }

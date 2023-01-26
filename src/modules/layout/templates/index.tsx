@@ -1,5 +1,5 @@
 import { AppShell, Header, Text } from "@mantine/core";
-import HomeHeader from "@modules/home/components/header";
+import HomeHeader from "@modules/layout/components/header";
 import React from "react";
 import FooterComponent from "@modules/layout/components/footer";
 import AccountLayout from "@modules/layout/templates/account-layout";
@@ -10,7 +10,6 @@ const Layout: React.FC<{ children?: React.ReactNode; allow?: boolean }> = ({
   children,
   allow,
 }) => {
-  console.log(allow);
   const { height } = useViewportSize();
   if (allow) {
     return (
@@ -30,7 +29,7 @@ const Layout: React.FC<{ children?: React.ReactNode; allow?: boolean }> = ({
                 ? theme.colors.dark[8]
                 : theme.colors.gray[0],
             main: {
-              paddingTop: 120,
+              paddingTop: 140,
               minHeight: height - 120,
             },
           })}

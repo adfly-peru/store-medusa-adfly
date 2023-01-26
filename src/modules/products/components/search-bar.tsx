@@ -10,7 +10,7 @@ import {
   Container,
 } from "@mantine/core";
 import { useState } from "react";
-import CheckGroup from "@components/checkbox-group";
+import CheckGroup from "@modules/common/components/checkbox-group";
 import { useFilter } from "@context/filter-context";
 
 const SearchBar = ({ searchable }: { searchable: string }) => {

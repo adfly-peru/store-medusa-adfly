@@ -15,9 +15,9 @@ import { ACCOUNT_STEPS, useAccount } from "@context/account-context";
 import Customer from "@interfaces/customerInterface";
 import { useRouter } from "next/router";
 
-const DatosPersonalesComponent = () => {
+const PersonalDataForm = () => {
   const router = useRouter();
-  const { height, width } = useViewportSize();
+  const { width } = useViewportSize();
   const { currentCustomer } = useAccount();
   const form = useForm({
     initialValues: {
@@ -56,8 +56,8 @@ const DatosPersonalesComponent = () => {
           };
           updateCustomer(newCustomer);
           if (accountStep == ACCOUNT_STEPS.UNCOMPLETE) {
-            updateStep(ACCOUNT_STEPS.PROFFILECOMPLETED);
-          } else if (accountStep == ACCOUNT_STEPS.PROFFILECOMPLETED) {
+            updateStep(ACCOUNT_STEPS.PROFILECOMPLETED);
+          } else if (accountStep == ACCOUNT_STEPS.PROFILECOMPLETED) {
             router.push("/home");
           }
         })}
@@ -163,4 +163,4 @@ const DatosPersonalesComponent = () => {
   );
 };
 
-export default DatosPersonalesComponent;
+export default PersonalDataForm;

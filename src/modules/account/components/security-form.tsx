@@ -55,7 +55,7 @@ const getStrength = (password: string) => {
   return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
 };
 
-const SeguridadComponent = () => {
+const SecurityForm = () => {
   const [popoverOpened, setPopoverOpened] = useState(false);
   const [value, setValue] = useState("");
   const checks = requirements.map((requirement, index) => (
@@ -69,7 +69,7 @@ const SeguridadComponent = () => {
   const strength = getStrength(value);
   const color = strength === 100 ? "teal" : strength > 50 ? "yellow" : "red";
 
-  const { height, width } = useViewportSize();
+  const { width } = useViewportSize();
   const form = useForm({
     initialValues: {
       currentPassword: "",
@@ -93,12 +93,6 @@ const SeguridadComponent = () => {
       } else {
         setValidPassword({ valido: true });
       }
-    }
-  };
-
-  const showError = () => {
-    if (password2.campo.length > 0) {
-      validation();
     }
   };
 
@@ -186,4 +180,4 @@ const SeguridadComponent = () => {
   );
 };
 
-export default SeguridadComponent;
+export default SecurityForm;

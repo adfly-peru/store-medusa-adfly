@@ -1,8 +1,8 @@
 import { Grid } from "@mantine/core";
 import { useFilter } from "@context/filter-context";
-import CardComponent from "@components/cardComponent";
+import ProductCard from "@modules/products/components/product-card";
 
-const FilteredCard = () => {
+const FilteredProducts = () => {
   const { filteredProducts, category, brand } = useFilter();
 
   return (
@@ -10,14 +10,14 @@ const FilteredCard = () => {
       {category.length == 0 && brand.length == 0
         ? filteredProducts.map((prod, i): any => (
             <Grid.Col key={i} xs={3}>
-              <CardComponent product={prod} />
+              <ProductCard product={prod} />
             </Grid.Col>
           ))
         : filteredProducts.map((prod, i): any =>
             category.includes(prod.subCategory) ||
             brand.includes(prod.brand) ? (
               <Grid.Col key={i} xs={3}>
-                <CardComponent product={prod} />
+                <ProductCard product={prod} />
               </Grid.Col>
             ) : null
           )}
@@ -25,4 +25,4 @@ const FilteredCard = () => {
   );
 };
 
-export default FilteredCard;
+export default FilteredProducts;

@@ -7,11 +7,11 @@ import {
   Text,
 } from "@mantine/core";
 
-import CartProduct from "@components/cartProductComponent";
 import { IconShoppingCart, IconShoppingCartOff } from "@tabler/icons";
 import { useRouter } from "next/router";
 import { useCart } from "@context/cart-context";
 import { useViewportSize } from "@mantine/hooks";
+import ProductCartView from "@modules/products/components/product-cart-view";
 
 const CartDrawer = () => {
   const router = useRouter();
@@ -39,7 +39,7 @@ const CartDrawer = () => {
     <>
       <ScrollArea style={{ height: "80%" }}>
         {products.map((prod, id): any => (
-          <CartProduct productCart={prod} id={id} />
+          <ProductCartView productCart={prod} id={id} />
         ))}
       </ScrollArea>
       <Center sx={{ height: "15%" }}>
