@@ -21,7 +21,9 @@
       "@interfaces/*": ["interfaces/*"],
       "@components/*": ["components/*"],
       "@pages/*": ["pages/*"],
-      "@styles/*": ["styles/*"]
+      "@styles/*": ["styles/*"],
+      "@graphql/*": ["graphql/*"],
+      "@lib/*": ["lib/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
