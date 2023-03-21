@@ -1,29 +1,23 @@
-import {
-  IconBrandAndroid,
-  IconBrandAppleArcade,
-  IconBuildingCarousel,
-  IconDogBowl,
-  IconStethoscope,
-  IconToolsKitchen2,
-} from "@tabler/icons";
 import React, { createContext, useContext } from "react";
 import { Product } from "@interfaces/productInterface";
 import { useQuery } from "@apollo/client";
 import { GET_PRODUCTS } from "@graphql/products/queries";
-
-interface Category {
-  identifier: string;
-  name: string;
-  icon?: React.ReactNode;
-}
+import { Brand, Category, Department, Subcategory } from "@interfaces/category";
+import {
+  GET_BRANDS,
+  GET_CATEGORIES,
+  GET_DEPARTMENTS,
+  GET_SUBCATEGORIES,
+} from "@graphql/categories/queries";
 
 interface ProductContext {
   products: Product[];
+  departments: Department[];
   categories: Category[];
+  subCategories: Subcategory[];
   getProduct: (id: string) => Product | undefined;
   getProductsByFilter: (filter: string) => Product[];
-  subCategories: string[];
-  brands: string[];
+  brands: Brand[];
 }
 
 const ProductContext = createContext<ProductContext | null>(null);
@@ -33,44 +27,25 @@ interface ProductProviderProps {
 }
 
 export const ProductProvider = ({ children }: ProductProviderProps) => {
-  const { data } = useQuery<{ products: Product[] }>(GET_PRODUCTS);
-
-  const categories: Category[] = [
-    { identifier: "food", name: "Comida", icon: <IconToolsKitchen2 /> },
-    {
-      identifier: "entertainment",
-      name: "Entretenimiento",
-      icon: <IconBuildingCarousel />,
-    },
-    { identifier: "health", name: "Salud", icon: <IconStethoscope /> },
-    {
-      identifier: "technology",
-      name: "Tecnología",
-      icon: <IconBrandAndroid />,
-    },
-    { identifier: "gaming", name: "Juegos", icon: <IconBrandAppleArcade /> },
-    { identifier: "pets", name: "Mascotas", icon: <IconDogBowl /> },
-  ];
-
-  const subCategories: string[] = [
-    "Helados y Postres",
-    "no category",
-    "Comida para mascotas",
-    "Mermeladas y Mieles",
-    "Mantequillas y Margarinas",
-    "Panes",
-    "Lácteos",
-  ];
-
-  const brands: string[] = ["Gloria", "Donofrio", "MiMaskot", "Marca6"];
+  const { data: products } = useQuery<{ products: Product[] }>(GET_PRODUCTS);
+  const { data: departments } = useQuery<{ departments: Department[] }>(
+    GET_DEPARTMENTS
+  );
+  const { data: categories } = useQuery<{ categories: Category[] }>(
+    GET_CATEGORIES
+  );
+  const { data: subcategories } = useQuery<{ subcategories: Subcategory[] }>(
+    GET_SUBCATEGORIES
+  );
+  const { data: brands } = useQuery<{ brands: Brand[] }>(GET_BRANDS);
 
   const getProduct = (id: string) => {
-    return data?.products.find((product) => product.uuidProduct === id);
+    return products?.products.find((product) => product.uuidProduct === id);
   };
 
   const getProductsByFilter = (filter: string) => {
     return (
-      data?.products.filter((product) => {
+      products?.products.filter((product) => {
         if (product.department.name.toLocaleLowerCase().includes(filter)) {
           return true;
         }
@@ -88,12 +63,13 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
   return (
     <ProductContext.Provider
       value={{
-        products: data?.products ?? [],
-        categories,
+        products: products?.products ?? [],
+        departments: departments?.departments ?? [],
+        categories: categories?.categories ?? [],
+        subCategories: subcategories?.subcategories ?? [],
+        brands: brands?.brands ?? [],
         getProduct,
         getProductsByFilter,
-        subCategories,
-        brands,
       }}
     >
       {children}

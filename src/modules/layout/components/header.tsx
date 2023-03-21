@@ -94,7 +94,7 @@ const HomeHeader = () => {
   const router = useRouter();
   const { classes } = useStyles();
   const { data: session } = useSession();
-  const { categories } = useProduct();
+  const { departments } = useProduct();
   const [opened, setOpened] = useState(false);
   const { currentCustomer, handleLogout } = useAccount();
   const [searchable, setSearchable] = useState("");
@@ -164,10 +164,10 @@ const HomeHeader = () => {
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Label>Categorías</Menu.Label>
-              {categories.map((category, id) => (
+              {departments.map((category, id) => (
                 <Menu.Item
                   key={id}
-                  icon={category.icon}
+                  icon={<Image src={category.image} width={30} />}
                   onClick={() => searchProductByCategorie(category.name)}
                 >
                   {category.name}

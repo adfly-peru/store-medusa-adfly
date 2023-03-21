@@ -1,9 +1,10 @@
 import { useProduct } from "@context/product-context";
-import { Title, Group, Tooltip, ActionIcon } from "@mantine/core";
+import { Title, Group, Tooltip, ActionIcon, Image } from "@mantine/core";
 import router from "next/router";
 
 const CategorySection = () => {
-  const { categories, products } = useProduct();
+  const { departments } = useProduct();
+  console.log(departments);
   const searchProductByCategorie = (categorieToSearch: string) => {
     router.push({
       pathname: "/search",
@@ -14,7 +15,7 @@ const CategorySection = () => {
     <>
       <Title>¡Descubre nuestras categorías! (*)</Title>
       <Group spacing={50}>
-        {categories.map((category, i) => (
+        {departments.map((category, i) => (
           <Tooltip
             withArrow
             transition="fade"
@@ -29,7 +30,11 @@ const CategorySection = () => {
               variant="filled"
               onClick={() => searchProductByCategorie(category.name)}
             >
-              {category.icon}
+              <Image
+                src={category.image}
+                alt={category.name}
+                style={{ filter: "invert(1)" }}
+              />
             </ActionIcon>
           </Tooltip>
         ))}
