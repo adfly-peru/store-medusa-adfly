@@ -1,4 +1,4 @@
-import Product from "@interfaces/productInterface";
+import { Product } from "@interfaces/productInterface";
 import { Container, Stack } from "@mantine/core";
 import SimilarProducts from "@modules/products/components/similar-products";
 import { DetailedProduct } from "@modules/products/components/detailed-product";

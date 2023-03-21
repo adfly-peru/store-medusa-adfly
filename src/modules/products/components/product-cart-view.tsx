@@ -20,8 +20,13 @@ const ProductCartView = ({
   productCart: ProductCart;
   id: number | undefined;
 }) => {
-  const { editProduct, removeProduct } = useCart();
   const product = productCart.product;
+  const firstVariant = product.variant.at(0);
+  if (!firstVariant) {
+    return <></>;
+  }
+
+  const { editProduct, removeProduct } = useCart();
 
   return (
     <Container key={id}>
@@ -33,8 +38,8 @@ const ProductCartView = ({
       >
         <Grid.Col span={6}>
           <Image
-            src={product.imgUrl[0]}
-            alt={product.imgUrl[0]}
+            src={firstVariant.imageURL}
+            alt={firstVariant.imageURL}
             height={140}
             fit="contain"
             withPlaceholder
@@ -42,8 +47,8 @@ const ProductCartView = ({
         </Grid.Col>
         <Grid.Col span={6}>
           <Stack spacing={5}>
-            <Title order={4}>{product.name}</Title>
-            <Text fw={500}>{product.brand}</Text>
+            <Title order={4}>{product.productName}</Title>
+            <Text fw={500}>{product.brand.name}</Text>
             <Group position="apart">
               <Text>Cantidad: {productCart.quantity}</Text>
               <ActionIcon

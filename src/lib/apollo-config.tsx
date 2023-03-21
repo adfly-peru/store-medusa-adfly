@@ -2,7 +2,10 @@ import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = new HttpLink({
-  uri: "https://your-graphql-server.com/graphql",
+  uri: "http://localhost:8080/query",
+  fetchOptions: {
+    method: 'POST', // o 'POST'
+  },
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -11,7 +14,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      // authorization: token ? `Bearer ${token}` : "",
     },
   };
 });

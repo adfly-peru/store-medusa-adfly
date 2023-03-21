@@ -21,7 +21,7 @@ import {
 import { IconCircleMinus, IconCirclePlus } from "@tabler/icons";
 import { useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
-import Product from "@interfaces/productInterface";
+import { Product } from "@interfaces/productInterface";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -31,17 +31,23 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function DetailedProduct({ product }: { product: Product }) {
+  const firstVariant = product.variant.at(0);
+  if (!firstVariant) {
+    return <></>;
+  }
   const { classes } = useStyles();
   const [imgIdx, setIdx] = useState(0);
-
-  // Calculo de precio final
-  let finalPrice =
-    product.originalPrice - (product.originalPrice * product.discount) / 100;
-  let ahorro = product.originalPrice - product.finalPrice;
-
   const [value, setValue] = useState(0);
   const { editProduct } = useCart();
   const handlers = useRef<NumberInputHandlers>();
+  const allImages = product.variant.map((variant) => variant.imageURL);
+
+  // Calculo de precio final
+  let discount =
+    ((firstVariant.refPrice - firstVariant.adflyPrice) /
+      firstVariant.refPrice) *
+    100;
+  let ahorro = firstVariant.refPrice - firstVariant.adflyPrice;
 
   return (
     <Card withBorder py="xl" px="xl" radius="md" className={classes.card}>
@@ -51,9 +57,9 @@ export function DetailedProduct({ product }: { product: Product }) {
             Inicio
           </Anchor>
           <Anchor fw={500} color="dark" href={"/home"}>
-            {product.brand}
+            {product.brand.name}
           </Anchor>
-          <Text>{product.name}</Text>
+          <Text>{product.productName}</Text>
         </Breadcrumbs>
       </CardSection>
 
@@ -61,26 +67,20 @@ export function DetailedProduct({ product }: { product: Product }) {
         <Group align="start" position="apart" grow>
           <Stack spacing="xs">
             <div style={{ width: 70 }}>
-              <Badge
-                size="lg"
-                color="red"
-                radius="xs"
-                variant="filled"
-                fullWidth
-              >
-                -{product.discount}%
+              <Badge size="lg" color="red" radius="xs" variant="filled">
+                -{discount.toFixed(2)}%
               </Badge>
             </div>
             <Space h="lg" />
             <Image
-              src={product.imgUrl[imgIdx]}
-              alt={product.imgUrl[imgIdx]}
+              src={allImages[imgIdx]}
+              alt={allImages[imgIdx]}
               height={200}
               fit="contain"
               withPlaceholder
             />
             <Flex>
-              {product.imgUrl.map((img, idx) => (
+              {allImages.map((img, idx) => (
                 <Image
                   onClick={() => setIdx(idx)}
                   key={idx}
@@ -94,17 +94,17 @@ export function DetailedProduct({ product }: { product: Product }) {
             </Flex>
           </Stack>
           <Stack spacing="xs">
-            <Title order={1}>{product.name}</Title>
-            <Text fw={500}>Marca: {product.brand}</Text>
+            <Title order={1}>{product.productName}</Title>
+            <Text fw={500}>Marca: {product.brand.name}</Text>
             <Group>
               <Text c="dimmed" fw={100} fz="sm" td="line-through">
-                S/. {product.originalPrice}
+                S/. {firstVariant.refPrice}
               </Text>
               <Text c="red" fw={700}>
-                S/. {finalPrice}
+                S/. {firstVariant.adflyPrice}
               </Text>
             </Group>
-            <Text fw={450}>o {product.stars} estrellas ⭐</Text>
+            <Text fw={450}>o 5 estrellas ⭐</Text>
             <Text fz="xs">(Ahorro estimado S/. {ahorro})</Text>
             <Divider my="sm" />
             <Text>
@@ -114,10 +114,8 @@ export function DetailedProduct({ product }: { product: Product }) {
               </Text>
             </Text>
             <Divider my="sm" />
-            <Text fz="xs">Stock: {product.details.stock} Unidad(es)</Text>
-            <Text fz="xs">
-              Fecha de Vencimiento: {product.details.expirationDate}
-            </Text>
+            <Text fz="xs">Stock: {firstVariant.stock} Unidad(es)</Text>
+            <Text fz="xs">Fecha de Vencimiento: null</Text>
             <Group spacing={5}>
               <ActionIcon
                 size={36}
@@ -164,7 +162,7 @@ export function DetailedProduct({ product }: { product: Product }) {
 
       <CardSection inheritPadding withBorder py="xs">
         <Text>Detalles del Producto</Text>
-        <Text>{product.details.details}</Text>
+        <Text>{product.description}</Text>
       </CardSection>
     </Card>
   );

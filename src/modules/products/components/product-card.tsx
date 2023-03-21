@@ -9,12 +9,13 @@ import {
   createStyles,
   NumberInput,
   NumberInputHandlers,
+  Stack,
 } from "@mantine/core";
 import { IconCirclePlus, IconCircleMinus } from "@tabler/icons";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
-import Product from "@interfaces/productInterface";
+import { Product } from "@interfaces/productInterface";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -39,11 +40,15 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const ProductCard = ({ product }: { product: Product }) => {
+  const firstVariant = product.variant.at(0);
+  if (!firstVariant) {
+    return <></>;
+  }
   const { classes } = useStyles();
   const [showBuy, setShowBuy] = useState(false);
   const handlers = useRef<NumberInputHandlers>();
   const { editProduct, getProductById, removeProduct } = useCart();
-  const productCart = getProductById(product.id);
+  const productCart = getProductById(product.uuidProduct);
   const quantity = productCart?.quantity ?? 0;
   const setZero = () => {
     setShowBuy(false);
@@ -51,9 +56,11 @@ const ProductCard = ({ product }: { product: Product }) => {
   };
 
   // Calculo de precio final
-  let finalPrice =
-    product.originalPrice - (product.originalPrice * product.discount) / 100;
-  let ahorro = product.originalPrice - product.finalPrice;
+  let discount =
+    ((firstVariant.refPrice - firstVariant.adflyPrice) /
+      firstVariant.refPrice) *
+    100;
+  let ahorro = firstVariant.refPrice - firstVariant.adflyPrice;
 
   return (
     <Card
@@ -64,35 +71,35 @@ const ProductCard = ({ product }: { product: Product }) => {
       mt={20}
       className={classes.card}
     >
-      <Card.Section withBorder inheritPadding py="xs">
+      <Card.Section inheritPadding py="xs">
         <Group position="apart">
-          <Badge color="red">-{product.discount}%</Badge>
+          <Badge color="red">-{discount.toFixed(2)}%</Badge>
         </Group>
       </Card.Section>
-      <Card.Section mt="sm" p={10}>
-        <Link href={"/product/" + product.id}>
+      <Card.Section p={10} withBorder>
+        <Link href={"/product/" + product.uuidProduct}>
           <Image
-            src={product.imgUrl[0]}
-            alt={product.imgUrl[0]}
+            src={firstVariant.imageURL}
+            alt={firstVariant.imageURL}
             height={200}
             fit="contain"
             withPlaceholder
           />
         </Link>
       </Card.Section>
-      <Card.Section withBorder inheritPadding mt="sm" pb="md">
-        <Text mt={5}>{product.brand}</Text>
-        <Text fz="xl" fw={700}>
-          {product.name}
+      <Card.Section inheritPadding mt="sm" pb="md">
+        <Text mt={5}>{product.brand.name}</Text>
+        <Text fz="xl" fw={700} lineClamp={1}>
+          {product.productName}
         </Text>
         <Group>
           <Text fz="sm" td="line-through">
-            S/. {product.originalPrice}
+            S/. {firstVariant.refPrice}
           </Text>
-          <Text c="red">S/. {finalPrice}</Text>
+          <Text c="red">S/. {firstVariant.adflyPrice}</Text>
         </Group>
         <Text fz="sm" c="dimmed">
-          (o {product.stars} estrellas)
+          (o 5 estrellas)
         </Text>
         <Text fz="sm" c="red">
           Ahorro estimado S/. {ahorro}
@@ -131,7 +138,6 @@ const ProductCard = ({ product }: { product: Product }) => {
             variant="light"
             color="blue"
             fullWidth
-            mt="md"
             radius="md"
             onClick={() => {
               setShowBuy(true);

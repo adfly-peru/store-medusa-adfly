@@ -14,8 +14,8 @@ const FilteredProducts = () => {
             </Grid.Col>
           ))
         : filteredProducts.map((prod, i): any =>
-            category.includes(prod.subCategory) ||
-            brand.includes(prod.brand) ? (
+            category.includes(prod.subCategory.name) ||
+            brand.includes(prod.brand.name) ? (
               <Grid.Col key={i} xs={3}>
                 <ProductCard product={prod} />
               </Grid.Col>

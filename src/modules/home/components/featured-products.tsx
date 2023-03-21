@@ -1,19 +1,19 @@
 import ProductCard from "@modules/products/components/product-card";
 import { useProduct } from "@context/product-context";
-import { Title, Grid } from "@mantine/core";
+import { Title, Grid, SimpleGrid } from "@mantine/core";
 
 const FeaturedProducts = () => {
   const { products } = useProduct();
   return (
     <>
       <Title>Productos Destacados (*)</Title>
-      <Grid w="100%" mt={20}>
+      <SimpleGrid w="80%" cols={4} spacing="xl">
         {products.map((prod, i): any => (
-          <Grid.Col key={i} xs={3}>
+          <div key={i}>
             <ProductCard product={prod} />
-          </Grid.Col>
+          </div>
         ))}
-      </Grid>
+      </SimpleGrid>
     </>
   );
 };

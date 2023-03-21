@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import Product from "@interfaces/productInterface";
+import { Product } from "@interfaces/productInterface";
 import { useProduct } from "@context/product-context";
 
 interface FilterContext {
@@ -42,8 +42,11 @@ export const FilterProvider = ({ children, filter }: FilterProviderProps) => {
   const categories: Map<string, number> = new Map<string, number>();
   const brands: Map<string, number> = new Map<string, number>();
   filteredProducts.map((p) => {
-    categories.set(p.subCategory, (categories.get(p.subCategory) ?? 0) + 1);
-    brands.set(p.brand, (brands.get(p.brand) ?? 0) + 1);
+    categories.set(
+      p.subCategory.name,
+      (categories.get(p.subCategory.name) ?? 0) + 1
+    );
+    brands.set(p.brand.name, (brands.get(p.brand.name) ?? 0) + 1);
   });
 
   const [category, setCategory] = useState<string[]>([]);

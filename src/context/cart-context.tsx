@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import Product from "@interfaces/productInterface";
+import { Product } from "@interfaces/productInterface";
 export interface ProductCart {
   product: Product;
   quantity: number;
@@ -27,7 +27,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
   const addProduct = (product: Product, quantity: number) => {
     const found = products.find((obj) => {
-      return obj.product.id == product.id;
+      return obj.product.uuidProduct == product.uuidProduct;
     });
     if (typeof found == "undefined") {
       const newState = products;
@@ -40,7 +40,9 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   };
 
   const removeProduct = (product: Product) => {
-    const newState = products.filter((obj) => obj.product.id != product.id);
+    const newState = products.filter(
+      (obj) => obj.product.uuidProduct != product.uuidProduct
+    );
     if (newState.length == products.length) {
       return false;
     }
@@ -52,7 +54,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const editProduct = (product: Product, quantity: number) => {
     var exist = false;
     const newState = products.map((obj) => {
-      if (obj.product.id == product.id) {
+      if (obj.product.uuidProduct == product.uuidProduct) {
         exist = true;
         return { product: product, quantity: quantity };
       }
@@ -67,7 +69,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
   const getProductById = (id: string) => {
     const found = products.find((obj) => {
-      return obj.product.id == id;
+      return obj.product.uuidProduct == id;
     });
     return found;
   };

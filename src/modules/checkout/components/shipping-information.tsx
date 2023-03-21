@@ -69,7 +69,7 @@ const ShippingInformation = () => {
         <Divider />
         {orders.map((_, index) => (
           <>
-            <ShipmentCard index={index} total={orders.length} />
+            <ShipmentCard index={index} total={orders.length} products={[]} />
             <Space h="xl" />
           </>
         ))}

@@ -28,16 +28,20 @@ const DetailedProductCartView = ({
 }: {
   productCart: ProductCart;
 }) => {
-  const { editProduct, removeProduct } = useCart();
   const product = productCart.product;
+  const firstVariant = product.variant.at(0);
+  if (!firstVariant) {
+    return <></>;
+  }
+  const { editProduct, removeProduct } = useCart();
   const handlers = useRef<NumberInputHandlers>();
 
   return (
     <Grid my={5}>
       <Grid.Col span={3}>
         <Image
-          src={product.imgUrl[0]}
-          alt={product.imgUrl[0]}
+          src={firstVariant.imageURL}
+          alt={firstVariant.imageURL}
           height={300}
           fit="contain"
           withPlaceholder
