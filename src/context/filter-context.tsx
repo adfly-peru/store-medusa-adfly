@@ -29,7 +29,7 @@ interface FilterProviderProps {
 export const FilterProvider = ({ children, filter }: FilterProviderProps) => {
   const { getProductsByFilter } = useProduct();
   const filteredProducts = getProductsByFilter(
-    typeof filter == "string" ? filter : ""
+    typeof filter == "string" ? filter.toLowerCase() : ""
   );
   const filters: string[] = [];
   const [rangePrices, setRangePrices] = useState<[number, number]>([0, 1000]);

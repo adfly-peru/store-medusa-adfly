@@ -44,15 +44,16 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
   };
 
   const getProductsByFilter = (filter: string) => {
+    console.log("f", filter);
     return (
       products?.products.filter((product) => {
-        if (product.department.name.toLocaleLowerCase().includes(filter)) {
+        if (product.department.name.toLowerCase().includes(filter)) {
           return true;
         }
-        if (product.category.name.toLocaleLowerCase().includes(filter)) {
+        if (product.category.name.toLowerCase().includes(filter)) {
           return true;
         }
-        if (product.subCategory.name.toLocaleLowerCase().includes(filter)) {
+        if (product.subCategory.name.toLowerCase().includes(filter)) {
           return true;
         }
         return product.productName.toLowerCase().includes(filter);

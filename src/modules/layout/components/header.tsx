@@ -15,12 +15,15 @@ import {
   SelectItemProps,
   Indicator,
   UnstyledButton,
+  useMantineColorScheme,
 } from "@mantine/core";
 import {
   IconBasket,
+  IconMoon,
   IconSearch,
   IconSettings,
   IconShoppingCart,
+  IconSun,
   IconTransferOut,
   IconUser,
   IconUserCircle,
@@ -100,6 +103,7 @@ const HomeHeader = () => {
   const [searchable, setSearchable] = useState("");
   const form = useForm();
   const { length } = useCart();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   let tabs = [
     "Menú",
@@ -167,7 +171,15 @@ const HomeHeader = () => {
               {departments.map((category, id) => (
                 <Menu.Item
                   key={id}
-                  icon={<Image src={category.image} width={30} />}
+                  icon={
+                    <Image
+                      src={category.image}
+                      width={30}
+                      style={{
+                        filter: colorScheme === "dark" ? "invert(1)" : "none",
+                      }}
+                    />
+                  }
                   onClick={() => searchProductByCategorie(category.name)}
                 >
                   {category.name}
@@ -197,7 +209,12 @@ const HomeHeader = () => {
         </Grid.Col>
         <Grid.Col span={1}>
           <Button.Group>
-            <Menu position="bottom-end" shadow="md" width={200}>
+            <Menu
+              closeOnItemClick={false}
+              position="bottom-end"
+              shadow="md"
+              width={200}
+            >
               <Menu.Target>
                 <ActionIcon size="lg">
                   <IconUser size={30} stroke={1.5} />
@@ -215,6 +232,18 @@ const HomeHeader = () => {
                 </Menu.Item>
                 <Menu.Item icon={<IconBasket size={14} />}>
                   Mis compras
+                </Menu.Item>
+                <Menu.Item
+                  onClick={() => toggleColorScheme()}
+                  icon={
+                    colorScheme === "dark" ? (
+                      <IconSun size={14} />
+                    ) : (
+                      <IconMoon size={14} />
+                    )
+                  }
+                >
+                  Modo {colorScheme === "dark" ? "Claro" : "Oscuro"}
                 </Menu.Item>
                 <Menu.Item icon={<IconSettings size={14} />}>
                   Configuracion

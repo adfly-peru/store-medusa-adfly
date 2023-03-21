@@ -1,10 +1,18 @@
 import { useProduct } from "@context/product-context";
-import { Title, Group, Tooltip, ActionIcon, Image } from "@mantine/core";
+import {
+  Title,
+  Group,
+  Tooltip,
+  ActionIcon,
+  Image,
+  useMantineColorScheme,
+} from "@mantine/core";
 import router from "next/router";
 
 const CategorySection = () => {
   const { departments } = useProduct();
-  console.log(departments);
+  const { colorScheme } = useMantineColorScheme();
+
   const searchProductByCategorie = (categorieToSearch: string) => {
     router.push({
       pathname: "/search",
@@ -27,13 +35,15 @@ const CategorySection = () => {
               key={`${i}action`}
               size={60}
               radius="xl"
-              variant="filled"
+              variant="outline"
               onClick={() => searchProductByCategorie(category.name)}
             >
               <Image
                 src={category.image}
                 alt={category.name}
-                style={{ filter: "invert(1)" }}
+                style={{
+                  filter: colorScheme === "dark" ? "invert(1)" : "none",
+                }}
               />
             </ActionIcon>
           </Tooltip>

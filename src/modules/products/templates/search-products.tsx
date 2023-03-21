@@ -14,8 +14,6 @@ const SearchProducts = ({
           span={2}
           sx={{
             borderRightStyle: "groove",
-            borderColor: "white",
-            background: "white",
           }}
         >
           <SearchBar

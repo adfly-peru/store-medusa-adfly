@@ -7,22 +7,42 @@ import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import client from "lib/apollo-config";
 import { ApolloProvider } from "@apollo/client";
+import { useState } from "react";
+import {
+  ColorScheme,
+  ColorSchemeProvider,
+  MantineProvider,
+} from "@mantine/core";
 
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
+  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
   return (
     <ApolloProvider client={client}>
-      <SessionProvider session={session}>
-        <AccountProvider>
-          <ProductProvider>
-            <CartProvider>
-              <Component {...pageProps} />
-            </CartProvider>
-          </ProductProvider>
-        </AccountProvider>
-      </SessionProvider>
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
+      >
+        <MantineProvider
+          theme={{ colorScheme }}
+          withGlobalStyles
+          withNormalizeCSS
+        >
+          <SessionProvider session={session}>
+            <AccountProvider>
+              <ProductProvider>
+                <CartProvider>
+                  <Component {...pageProps} />
+                </CartProvider>
+              </ProductProvider>
+            </AccountProvider>
+          </SessionProvider>
+        </MantineProvider>
+      </ColorSchemeProvider>
     </ApolloProvider>
   );
 }
