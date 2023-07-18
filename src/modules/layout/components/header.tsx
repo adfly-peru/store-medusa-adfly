@@ -136,6 +136,15 @@ const HomeHeader = () => {
     }
   }, [cart]);
 
+  const AutoCompleteItem = forwardRef<HTMLDivElement, SelectItemProps>(
+    ({ value, ...others }: SelectItemProps, ref) => (
+      <div ref={ref} {...others}>
+        <Text>{`Buscar '${value}' en la tienda.`}</Text>
+      </div>
+    )
+  );
+  AutoCompleteItem.displayName = "AutoCompleteItem";
+
   return (
     <>
       <Drawer
@@ -207,13 +216,7 @@ const HomeHeader = () => {
               onChange={setSearchable}
               data={(searchable.length ?? 0) > 0 ? [searchable] : []}
               onItemSubmit={(_) => searchProduct()}
-              itemComponent={forwardRef<HTMLDivElement, SelectItemProps>(
-                ({ value, ...others }: SelectItemProps, ref) => (
-                  <div ref={ref} {...others}>
-                    <Text>Buscar '{value}' en la tienda.</Text>
-                  </div>
-                )
-              )}
+              itemComponent={AutoCompleteItem}
             />
           </form>
         </Grid.Col>

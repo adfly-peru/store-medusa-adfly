@@ -32,15 +32,16 @@ const useStyles = createStyles((theme) => ({
 
 export function DetailedProduct({ product }: { product: Product }) {
   const firstVariant = product.variant.at(0);
-  if (!firstVariant) {
-    return <></>;
-  }
   const { classes } = useStyles();
   const [imgIdx, setIdx] = useState(0);
   const [value, setValue] = useState(0);
   const { addProduct } = useCart();
   const handlers = useRef<NumberInputHandlers>();
   const allImages = product.variant.map((variant) => variant.imageURL);
+
+  if (!firstVariant) {
+    return <></>;
+  }
 
   // Calculo de precio final
   let discount =

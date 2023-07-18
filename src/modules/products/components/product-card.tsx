@@ -42,9 +42,6 @@ const useStyles = createStyles((theme) => ({
 
 const ProductCard = ({ product }: { product: Product }) => {
   const firstVariant = product.variant.at(0);
-  if (!firstVariant) {
-    return <></>;
-  }
   const { classes } = useStyles();
   const [cartItem, setCartItem] = useState<CartItem | null>(null);
   const [showBuy, setShowBuy] = useState(false);
@@ -57,13 +54,6 @@ const ProductCard = ({ product }: { product: Product }) => {
     }
   };
 
-  // Calculo de precio final
-  let discount =
-    ((firstVariant.refPrice - firstVariant.adflyPrice) /
-      firstVariant.refPrice) *
-    100;
-  let ahorro = firstVariant.refPrice - firstVariant.adflyPrice;
-
   useEffect(() => {
     const itemGetted = getProductById(
       product.uuidProduct,
@@ -74,6 +64,17 @@ const ProductCard = ({ product }: { product: Product }) => {
       setShowBuy(true);
     }
   }, []);
+
+  if (!firstVariant) {
+    return <></>;
+  }
+
+  // Calculo de precio final
+  let discount =
+    ((firstVariant.refPrice - firstVariant.adflyPrice) /
+      firstVariant.refPrice) *
+    100;
+  let ahorro = firstVariant.refPrice - firstVariant.adflyPrice;
 
   return (
     <Card
