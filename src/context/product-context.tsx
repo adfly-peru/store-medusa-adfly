@@ -20,6 +20,11 @@ interface ProductContext {
   brands: Brand[];
 }
 
+interface ProductResult {
+  products: Product[];
+  totalProducts: number;
+}
+
 const ProductContext = createContext<ProductContext | null>(null);
 
 interface ProductProviderProps {
@@ -27,7 +32,9 @@ interface ProductProviderProps {
 }
 
 export const ProductProvider = ({ children }: ProductProviderProps) => {
-  const { data: products } = useQuery<{ products: Product[] }>(GET_PRODUCTS);
+  const { data: productsQuery } = useQuery<{ products: ProductResult }>(
+    GET_PRODUCTS
+  );
   const { data: departments } = useQuery<{ departments: Department[] }>(
     GET_DEPARTMENTS
   );
@@ -40,13 +47,14 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
   const { data: brands } = useQuery<{ brands: Brand[] }>(GET_BRANDS);
 
   const getProduct = (id: string) => {
-    return products?.products.find((product) => product.uuidProduct === id);
+    return productsQuery?.products?.products.find(
+      (product) => product.uuidProduct === id
+    );
   };
 
   const getProductsByFilter = (filter: string) => {
-    console.log("f", filter);
     return (
-      products?.products.filter((product) => {
+      productsQuery?.products?.products.filter((product) => {
         if (product.department.name.toLowerCase().includes(filter)) {
           return true;
         }
@@ -64,7 +72,7 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
   return (
     <ProductContext.Provider
       value={{
-        products: products?.products ?? [],
+        products: productsQuery?.products?.products ?? [],
         departments: departments?.departments ?? [],
         categories: categories?.categories ?? [],
         subCategories: subcategories?.subcategories ?? [],

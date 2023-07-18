@@ -11,25 +11,36 @@ import {
   ActionIcon,
 } from "@mantine/core";
 import { IconCircleMinus, IconCirclePlus, IconTrash } from "@tabler/icons";
-import { ProductCart, useCart } from "@context/cart-context";
+import { useCart } from "@context/cart-context";
+import { CartItem } from "@interfaces/cart";
+import { useState } from "react";
 
 const ProductCartView = ({
-  productCart,
-  id,
+  cartItem,
+  uuidbusiness,
+  businessName,
 }: {
-  productCart: ProductCart;
-  id: number | undefined;
+  cartItem: CartItem;
+  uuidbusiness: string;
+  businessName: string;
 }) => {
-  const product = productCart.product;
-  const firstVariant = product.variant.at(0);
-  if (!firstVariant) {
-    return <></>;
-  }
-
   const { editProduct, removeProduct } = useCart();
+  const [updating, setUpdating] = useState(false);
+
+  const handleEditProduct = async (delta: number) => {
+    setUpdating(true);
+    await editProduct(cartItem, uuidbusiness, cartItem.quantity + delta);
+    setUpdating(false);
+  };
+
+  const handleRemoveProduct = async () => {
+    setUpdating(true);
+    await removeProduct(cartItem.uuidcartitem, uuidbusiness);
+    setUpdating(false);
+  };
 
   return (
-    <Container key={id}>
+    <Container>
       <Grid
         justify="center"
         align="center"
@@ -38,8 +49,8 @@ const ProductCartView = ({
       >
         <Grid.Col span={6}>
           <Image
-            src={firstVariant.imageURL}
-            alt={firstVariant.imageURL}
+            src={cartItem.variant.imageURL}
+            alt={cartItem.variant.imageURL}
             height={140}
             fit="contain"
             withPlaceholder
@@ -47,29 +58,23 @@ const ProductCartView = ({
         </Grid.Col>
         <Grid.Col span={6}>
           <Stack spacing={5}>
-            <Title order={4}>{product.productName}</Title>
-            <Text fw={500}>{product.brand.name}</Text>
+            <Title order={4}>{cartItem.variant.product.productName}</Title>
+            <Text fw={500}>{businessName}</Text>
             <Group position="apart">
-              <Text>Cantidad: {productCart.quantity}</Text>
+              <Text>Cantidad: {cartItem.quantity}</Text>
               <ActionIcon
                 color="gray"
                 size={34}
-                onClick={() =>
-                  productCart.quantity > 1
-                    ? editProduct(product, productCart.quantity - 1)
-                    : null
-                }
+                disabled={updating || cartItem.quantity <= 1}
+                onClick={() => handleEditProduct(-1)}
               >
                 <IconCircleMinus stroke={1.5} size={34} />
               </ActionIcon>
               <ActionIcon
                 color="gray"
                 size={34}
-                onClick={() =>
-                  productCart.quantity < 10
-                    ? editProduct(product, productCart.quantity + 1)
-                    : null
-                }
+                disabled={updating || cartItem.quantity >= 10}
+                onClick={() => handleEditProduct(1)}
               >
                 <IconCirclePlus stroke={1.5} size={34} />
               </ActionIcon>
@@ -77,7 +82,8 @@ const ProductCartView = ({
             <Button
               color="gray"
               leftIcon={<IconTrash />}
-              onClick={() => removeProduct(product)}
+              disabled={updating}
+              onClick={handleRemoveProduct}
             >
               Eliminar
             </Button>

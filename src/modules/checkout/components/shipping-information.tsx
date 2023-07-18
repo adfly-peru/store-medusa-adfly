@@ -15,13 +15,14 @@ import { useState } from "react";
 import { useAccount } from "@context/account-context";
 import AddressForm from "@modules/checkout/components/address-form";
 import ShipmentCard from "@modules/checkout/components/shipment-card";
+import { useCart } from "@context/cart-context";
 
 const ShippingInformation = () => {
   const { addresses } = useAccount();
+  const { cart } = useCart();
   const [opened, setOpened] = useState(false);
   const [select, setSelect] = useState<number>(-1);
   const [address, setAddress] = useState<number | null>(null);
-  const orders = ["order1", "order2"];
   return (
     <Center>
       <Modal opened={opened} onClose={() => setOpened(false)}>
@@ -35,7 +36,7 @@ const ShippingInformation = () => {
         <Divider />
         <Stack>
           {addresses.map((value, id) => (
-            <Group position="apart">
+            <Group key={id} position="apart">
               <Checkbox
                 checked={select == id}
                 onChange={(_) => setSelect(id)}
@@ -67,11 +68,15 @@ const ShippingInformation = () => {
         <Space h="lg" />
         <Text fw={700}>Datos de Envío</Text>
         <Divider />
-        {orders.map((_, index) => (
-          <>
-            <ShipmentCard index={index} total={orders.length} products={[]} />
+        {cart?.suborders.map((suborder, index) => (
+          <div key={suborder.uuidcartsuborder}>
+            <ShipmentCard
+              index={index}
+              total={cart.suborders.length}
+              suborder={suborder}
+            />
             <Space h="xl" />
-          </>
+          </div>
         ))}
         <Divider />
       </Stack>

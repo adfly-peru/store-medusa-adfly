@@ -2,9 +2,9 @@ import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:8080/query",
+  uri: process.env.NEXT_PUBLIC_BACKEND_GRAPHQL_URL,
   fetchOptions: {
-    method: 'POST', // o 'POST'
+    method: "POST", // o 'POST'
   },
 });
 

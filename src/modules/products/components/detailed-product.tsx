@@ -38,7 +38,7 @@ export function DetailedProduct({ product }: { product: Product }) {
   const { classes } = useStyles();
   const [imgIdx, setIdx] = useState(0);
   const [value, setValue] = useState(0);
-  const { editProduct } = useCart();
+  const { addProduct } = useCart();
   const handlers = useRef<NumberInputHandlers>();
   const allImages = product.variant.map((variant) => variant.imageURL);
 
@@ -152,7 +152,15 @@ export function DetailedProduct({ product }: { product: Product }) {
               fullWidth
               mt="md"
               radius="md"
-              onClick={() => (value == 0 ? null : editProduct(product, value))}
+              onClick={() =>
+                value == 0
+                  ? null
+                  : addProduct(
+                      product.variant.at(0)?.uuidVariant!,
+                      product.business.uuidbusiness,
+                      value
+                    )
+              }
             >
               Agregar
             </Button>

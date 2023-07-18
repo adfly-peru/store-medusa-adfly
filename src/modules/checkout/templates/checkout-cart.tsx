@@ -13,31 +13,30 @@ import {
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import CartView from "@modules/my-cart/templates/cart-view";
-import { IconShoppingCart, IconShoppingCartOff } from "@tabler/icons";
+import { IconShoppingCart } from "@tabler/icons";
 import { useRouter } from "next/router";
+import EmptyCart from "../components/empty-cart";
 
 const CheckoutCart = () => {
-  const { products } = useCart();
-  const { width, height } = useViewportSize();
+  const { cart } = useCart();
   const router = useRouter();
-  if (products.length == 0) {
-    return (
-      <Center h={height / 1.5}>
-        <Stack align="center">
-          <ActionIcon variant="transparent" disabled size={width / 8}>
-            <IconShoppingCartOff size={width / 8} />
-          </ActionIcon>
-          <Text fw={500} fz={24}>
-            Tu carrito está vacío
-          </Text>
-        </Stack>
-      </Center>
-    );
+
+  if (!cart) {
+    return <EmptyCart />;
   }
+
+  const GoToPay = () => {
+    router.push("/checkout");
+  };
+
+  if (cart.suborders.length == 0) {
+    return <EmptyCart />;
+  }
+
   return (
     <Grid w="100%" mt={20}>
       <Grid.Col span="auto" px="xl">
-        <CartView products={products} />
+        <CartView cart={cart} />
       </Grid.Col>
       <Grid.Col span={3}>
         <Stack align="flex-start">
@@ -46,7 +45,7 @@ const CheckoutCart = () => {
             <Group position="apart">
               <Text>Subtotal:</Text>
               <Text>
-                S/.160{" "}
+                S/.{cart.total}
                 <Text fz="md" c="dimmed" span inherit>
                   (1600 estrellas)
                 </Text>
@@ -62,7 +61,7 @@ const CheckoutCart = () => {
                 leftIcon={<IconShoppingCart />}
                 variant="light"
                 radius="xs"
-                onClick={() => router.push("/checkout")}
+                onClick={GoToPay}
               >
                 Finalizar Compra
               </Button>

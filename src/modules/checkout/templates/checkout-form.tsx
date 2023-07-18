@@ -3,6 +3,7 @@ import { useViewportSize } from "@mantine/hooks";
 import { useState } from "react";
 import InformationForm from "@modules/checkout/components/information-form";
 import ShippingInformation from "@modules/checkout/components/shipping-information";
+import PaymentButton from "../components/payment-button";
 
 const CheckoutForm = () => {
   const { height } = useViewportSize();
@@ -25,16 +26,18 @@ const CheckoutForm = () => {
           </ScrollArea>
         </Stepper.Step>
         <Stepper.Step label="Pago" allowStepSelect={active > 2}>
-          Step 3 content: Get full access
+          <PaymentButton />
         </Stepper.Step>
       </Stepper>
       <Group px={70} position="apart" grow mt="xl">
         <Button variant="light" onClick={prevStep}>
           {active == 0 ? "Regresar a Carrito" : "Retroceder"}
         </Button>
-        <Button variant="light" onClick={nextStep}>
-          Continuar
-        </Button>
+        {active != 2 && (
+          <Button variant="light" onClick={nextStep}>
+            Continuar
+          </Button>
+        )}
       </Group>
     </>
   );

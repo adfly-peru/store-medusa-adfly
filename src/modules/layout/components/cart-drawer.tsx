@@ -15,10 +15,14 @@ import ProductCartView from "@modules/products/components/product-cart-view";
 
 const CartDrawer = () => {
   const router = useRouter();
-  const { products } = useCart();
+  const { cart } = useCart();
   const { height, width } = useViewportSize();
 
-  if (products.length == 0) {
+  if (!cart) {
+    return <div></div>;
+  }
+
+  if (cart.suborders.length == 0) {
     return (
       <>
         <Center h={height / 1.5}>
@@ -38,8 +42,18 @@ const CartDrawer = () => {
   return (
     <>
       <ScrollArea style={{ height: "80%" }}>
-        {products.map((prod, id): any => (
-          <ProductCartView productCart={prod} id={id} />
+        {cart.suborders.map((suborder) => (
+          <div key={suborder.uuidcartsuborder}>
+            <Text>{suborder.businessName}</Text>
+            {suborder.items.map((item) => (
+              <ProductCartView
+                cartItem={item}
+                uuidbusiness={suborder.uuidbusiness}
+                businessName={suborder.businessName}
+                key={item.uuidcartitem}
+              />
+            ))}
+          </div>
         ))}
       </ScrollArea>
       <Center sx={{ height: "15%" }}>

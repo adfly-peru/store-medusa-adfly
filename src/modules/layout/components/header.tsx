@@ -29,7 +29,7 @@ import {
   IconUserCircle,
 } from "@tabler/icons";
 import { useProduct } from "@context/product-context";
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useAccount } from "@context/account-context";
 import CartDrawer from "@modules/layout/components/cart-drawer";
 import { useSession } from "next-auth/react";
@@ -102,7 +102,8 @@ const HomeHeader = () => {
   const { currentCustomer, handleLogout } = useAccount();
   const [searchable, setSearchable] = useState("");
   const form = useForm();
-  const { length } = useCart();
+  const [cartLength, setCartLength] = useState(0);
+  const { cart } = useCart();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   let tabs = [
@@ -126,6 +127,14 @@ const HomeHeader = () => {
     });
     setSearchable("");
   };
+
+  useEffect(() => {
+    if (cart) {
+      let tempsize = 0;
+      cart.suborders.forEach((suborder) => (tempsize += suborder.items.length));
+      setCartLength(tempsize);
+    }
+  }, [cart]);
 
   return (
     <>
@@ -173,6 +182,7 @@ const HomeHeader = () => {
                   key={id}
                   icon={
                     <Image
+                      alt={category.name}
                       src={category.image}
                       width={30}
                       style={{
@@ -260,7 +270,7 @@ const HomeHeader = () => {
             <Indicator
               showZero={false}
               dot={false}
-              label={length}
+              label={cartLength}
               overflowCount={10}
               inline
               size={22}

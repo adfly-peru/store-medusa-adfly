@@ -13,6 +13,7 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
+import { OrderProvider } from "@context/order-context";
 
 export default function App({
   Component,
@@ -36,7 +37,9 @@ export default function App({
             <AccountProvider>
               <ProductProvider>
                 <CartProvider>
-                  <Component {...pageProps} />
+                  <OrderProvider>
+                    <Component {...pageProps} />
+                  </OrderProvider>
                 </CartProvider>
               </ProductProvider>
             </AccountProvider>

@@ -1,56 +1,76 @@
 import { gql } from "@apollo/client";
 
 const GET_PRODUCTS = gql`
-  query getProducts {
+  query products {
     products {
-      uuidProduct
-      productName
-      description
-      type
-      productAttributes {
-        attributeName
-        attribute {
-          attributeName
-          values
+      totalProducts
+      products {
+        uuidProduct
+        productName
+        brand {
+          name
+          id
         }
-      }
-      variant {
-        attributes {
+        productAttributes {
+          attribute {
+            attributeName
+            values
+          }
           attributeName
-          value
         }
-        currency
-        stock
-        refPrice
-        adflyPrice
-        imageURL
+        department {
+          id
+          name
+        }
+        category {
+          uuidCategory
+          name
+        }
+        subCategory {
+          uuidSubCategory
+          name
+        }
+        business {
+          uuidbusiness
+          businessname
+        }
+        productAttributes {
+          attribute {
+            attributeName
+            values
+          }
+          attributeName
+        }
+        variant {
+          uuidVariant
+          currency
+          refPrice
+          adflyPrice
+          offerPrice
+          maxQuantity
+          sku
+          stock
+          imageURL
+          attributes {
+            attributeName
+            value
+          }
+        }
+        description
+        type
+        productModel
+        specification
+        condition
+        conditionDetails
+        productWarranty
+        sellerWarranty
+        included
+        width
+        height
+        weight
+        length
+        status
       }
-      creationDate
-      updateDate
-      brand {
-        name
-      }
-      productModel
-      department {
-        name
-      }
-      category {
-        name
-      }
-      subCategory {
-        name
-      }
-      tags
-      specification
-      condition
-      conditionDetails
-      productWarranty
-      sellerWarranty
-      included
-      width
-      height
-      weight
-      length
     }
   }
 `;

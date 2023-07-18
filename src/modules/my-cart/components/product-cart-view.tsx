@@ -21,18 +21,18 @@ import {
   IconX,
 } from "@tabler/icons";
 import { useRef } from "react";
-import { ProductCart, useCart } from "@context/cart-context";
+import { useCart } from "@context/cart-context";
+import { CartItem } from "@interfaces/cart";
 
 const DetailedProductCartView = ({
-  productCart,
+  item,
+  businessid,
+  businessName,
 }: {
-  productCart: ProductCart;
+  item: CartItem;
+  businessid: string;
+  businessName: string;
 }) => {
-  const product = productCart.product;
-  const firstVariant = product.variant.at(0);
-  if (!firstVariant) {
-    return <></>;
-  }
   const { editProduct, removeProduct } = useCart();
   const handlers = useRef<NumberInputHandlers>();
 
@@ -40,8 +40,8 @@ const DetailedProductCartView = ({
     <Grid my={5}>
       <Grid.Col span={3}>
         <Image
-          src={firstVariant.imageURL}
-          alt={firstVariant.imageURL}
+          src={item.variant.imageURL}
+          alt={item.variant.imageURL}
           height={300}
           fit="contain"
           withPlaceholder
@@ -49,19 +49,19 @@ const DetailedProductCartView = ({
       </Grid.Col>
       <Grid.Col span={8}>
         <Stack h="100%" justify="space-around">
-          <Group position="apart">
+          <Group position="apart" grow>
             <Stack>
-              <Title order={3}>Nombre</Title>
+              <Title order={3}>{item.variant.product.productName}</Title>
               <Space h="lg" />
               <Text c="green">Stock disponible</Text>
-              <Text>Vendido por Partner</Text>
+              <Text>Vendido por {businessName}</Text>
             </Stack>
-            <Stack spacing={0}>
+            <Stack spacing={0} align="flex-end">
               <Text size="xl">
                 <Text fz="md" c="dimmed" span td="line-through" inherit>
-                  S/.100
+                  S/.{item.variant.refPrice}
                 </Text>{" "}
-                S/.80
+                S/.{item.variant.adflyPrice}
               </Text>
               <Text c="dimmed">o 800 estrellas</Text>
               <Space h="md" />
@@ -100,8 +100,8 @@ const DetailedProductCartView = ({
               </ActionIcon>
               <NumberInput
                 hideControls
-                value={productCart.quantity}
-                onChange={(val) => editProduct(product, val ?? 0)}
+                value={item.quantity}
+                onChange={(val) => editProduct(item, businessid, val ?? 0)}
                 handlersRef={handlers}
                 max={10}
                 min={1}
@@ -121,7 +121,7 @@ const DetailedProductCartView = ({
             <Button
               color="dark"
               variant="subtle"
-              onClick={() => removeProduct(product)}
+              onClick={() => removeProduct(item.uuidcartitem, businessid)}
             >
               Eliminar
             </Button>

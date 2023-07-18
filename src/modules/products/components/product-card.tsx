@@ -13,9 +13,10 @@ import {
 } from "@mantine/core";
 import { IconCirclePlus, IconCircleMinus } from "@tabler/icons";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
 import { Product } from "@interfaces/productInterface";
+import { CartItem } from "@interfaces/cart";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -45,14 +46,15 @@ const ProductCard = ({ product }: { product: Product }) => {
     return <></>;
   }
   const { classes } = useStyles();
+  const [cartItem, setCartItem] = useState<CartItem | null>(null);
   const [showBuy, setShowBuy] = useState(false);
   const handlers = useRef<NumberInputHandlers>();
-  const { editProduct, getProductById, removeProduct } = useCart();
-  const productCart = getProductById(product.uuidProduct);
-  const quantity = productCart?.quantity ?? 0;
+  const { addProduct, editProduct, removeProduct, getProductById } = useCart();
   const setZero = () => {
-    setShowBuy(false);
-    removeProduct(product);
+    if (cartItem) {
+      setShowBuy(false);
+      removeProduct(cartItem.uuidcartitem, product.business.uuidbusiness);
+    }
   };
 
   // Calculo de precio final
@@ -61,6 +63,17 @@ const ProductCard = ({ product }: { product: Product }) => {
       firstVariant.refPrice) *
     100;
   let ahorro = firstVariant.refPrice - firstVariant.adflyPrice;
+
+  useEffect(() => {
+    const itemGetted = getProductById(
+      product.uuidProduct,
+      product.business.uuidbusiness
+    );
+    if (itemGetted) {
+      setCartItem(itemGetted);
+      setShowBuy(true);
+    }
+  }, []);
 
   return (
     <Card
@@ -104,7 +117,7 @@ const ProductCard = ({ product }: { product: Product }) => {
         <Text fz="sm" c="red">
           Ahorro estimado S/. {ahorro}
         </Text>
-        {showBuy && quantity ? (
+        {showBuy && cartItem ? (
           <Group spacing={5} position="center" style={{ marginTop: 15 }}>
             <ActionIcon
               color="gray"
@@ -115,9 +128,11 @@ const ProductCard = ({ product }: { product: Product }) => {
             </ActionIcon>
             <NumberInput
               hideControls
-              value={quantity}
+              value={cartItem.quantity}
               onChange={(val: number) =>
-                val == 0 ? setZero() : editProduct(product, val)
+                val == 0
+                  ? setZero()
+                  : editProduct(cartItem, product.business.uuidbusiness, val)
               }
               handlersRef={handlers}
               max={10}
@@ -141,7 +156,11 @@ const ProductCard = ({ product }: { product: Product }) => {
             radius="md"
             onClick={() => {
               setShowBuy(true);
-              editProduct(product, 1);
+              addProduct(
+                product.variant.at(0)?.uuidVariant!,
+                product.business.uuidbusiness,
+                1
+              );
             }}
           >
             Agregar
