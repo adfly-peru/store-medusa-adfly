@@ -1,65 +1,65 @@
-import { createToken } from "@modules/checkout/components/payment-button";
-import { createOrder } from "api/order";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+
+interface AdflyResponse {
+  success: boolean;
+  message: string;
+  token: string;
+  data: any;
+}
 
 export default async function handler(req: any, res: any) {
   if (req.method === "POST") {
     const { transactionToken } = req.body;
     const { purchaseNumber, amount } = req.query;
 
-    let accessToken = await createToken();
-
-    const authorizationResponse = await axios.post(
-      `https://apisandbox.vnforappstest.com/api.authorization/v3/authorization/ecommerce/456879852`,
-      {
-        channel: "web",
-        captureType: "manual",
-        countable: true,
-        order: {
-          tokenId: transactionToken,
-          purchaseNumber: purchaseNumber,
-          amount: amount,
-          currency: "PEN",
+    try {
+      const response: AxiosResponse<AdflyResponse> = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/store/order`,
+        {
+          transactiontoken: transactionToken,
+          purchasenumber: purchaseNumber,
+          amount: Number(amount),
         },
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: accessToken,
-        },
-      }
-    );
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    if (authorizationResponse.status == 200) {
-      const authBody = {
-        purchasenumber: authorizationResponse.data.order.purchaseNumber,
-        amount: authorizationResponse.data.order.amount,
-        installment: authorizationResponse.data.order.installment,
-        currency: authorizationResponse.data.order.currency,
-        authorizedamount: authorizationResponse.data.order.authorizedAmount,
-        transactionid: authorizationResponse.data.dataMap.TRANSACTION_ID,
-        transactiondate: authorizationResponse.data.dataMap.TRANSACTION_DATE,
-        status: authorizationResponse.data.dataMap.STATUS,
-      };
-      const response = await createOrder(authBody);
-      if (response == null) {
+      if (response.status >= 200 && response.status < 300) {
         res
           .status(302)
-          .setHeader(
-            "Location",
-            `/error?message=${encodeURIComponent("Error creating order")}`
-          );
+          .setHeader("Location", `/orders/${response.data.data.data}`);
         res.end();
       } else {
-        res.status(302).setHeader("Location", `/orders/${response}`);
-        res.end();
+        // La solicitud fue exitosa, pero el código de estado indica un problema
+        console.error(`Error: ${response.data.message}`);
+        if (response.data.data) {
+          res
+            .status(302)
+            .setHeader(
+              "Location",
+              `/error?message=${encodeURIComponent(response.data.data.data)}`
+            );
+          res.end();
+        }
       }
-    } else {
+    } catch (error) {
+      const axiosError = error as AxiosError<AdflyResponse>;
+      let errorToSend = `Error al hacer la solicitud: ${error}`;
+      if (axiosError && axiosError.response) {
+        errorToSend = `Error: ${axiosError.response.data}`;
+        if (axiosError.response.data.data.data) {
+          errorToSend = `${axiosError.response.data.data.data}`;
+        }
+      }
+      console.error(errorToSend);
       res
         .status(302)
         .setHeader(
           "Location",
-          `/error?message=${encodeURIComponent("Error in Niubiz Transaction")}`
+          `/error?message=${encodeURIComponent(errorToSend)}`
         );
       res.end();
     }
