@@ -1,10 +1,18 @@
 import axios from "axios";
 
-export const createOrder = async (body: {}): Promise<string | null> => {
+export const createOrder = async (
+  transactiontoken: string,
+  purchasenumber: string,
+  amount: string
+): Promise<string | null> => {
   try {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_API}/store/order`,
-      body,
+      {
+        transactiontoken: transactiontoken,
+        purchasenumber: purchasenumber,
+        amount: amount,
+      },
       {
         headers: {
           "Content-Type": "application/json",

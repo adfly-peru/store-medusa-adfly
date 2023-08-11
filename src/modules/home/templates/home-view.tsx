@@ -1,12 +1,15 @@
-import { BackgroundImage, Stack, Title, Space } from "@mantine/core";
+import { BackgroundImage, Stack, Title, Space, Box } from "@mantine/core";
 import CategorySection from "@modules/home/components/category-section";
 import FeaturedProducts from "../components/featured-products";
+import { useAccount } from "@context/account-context";
 
 const HomeView = () => {
+  const { homeDesign } = useAccount();
+  console.log(homeDesign);
   return (
     <>
       <BackgroundImage
-        src="https://rdb.rw/wp-content/uploads/2018/01/default-placeholder.png"
+        src={homeDesign?.bannerurl ?? ""}
         radius="xs"
         sx={{
           height: 300,

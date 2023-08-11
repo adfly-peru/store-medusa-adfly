@@ -1,24 +1,29 @@
-import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { useQuery } from "@apollo/client";
+import { GET_COLLABORATOR } from "@graphql/collaborator/queries";
+import {
+  Collaborator,
+  IToken,
+  ProfileForm,
+  SecurityForm,
+} from "@interfaces/collaborator";
+import jwtDecode from "jwt-decode";
 import Address from "@interfaces/address-interface";
-import Customer from "@interfaces/customerInterface";
-
-export enum ACCOUNT_STEPS {
-  UNCOMPLETE,
-  PROFILECOMPLETED,
-  VERIFIED,
-  COMPLETED,
-}
+import { DesignConfig } from "@interfaces/design";
+import { GET_HOME_DESIGN } from "@graphql/design/queries";
+import { verifyAccount } from "api/verify";
 
 interface AccountContext {
-  accountStep: ACCOUNT_STEPS;
-  updateStep: (nextStep: ACCOUNT_STEPS) => void;
-  checkSession: () => boolean;
-  handleLogin: (values: { email: string; password: string }) => void;
-  handleLogout: () => void;
-  currentCustomer: Customer;
-  updateCustomer: (customer: Customer) => void;
+  login: (values: { email: string; password: string }) => void;
+  logout: () => void;
+  verify: (
+    profileForm?: ProfileForm,
+    securityForm?: SecurityForm
+  ) => Promise<string | null>;
+  collaborator: Collaborator | undefined;
+  homeDesign: DesignConfig | null;
   status: string;
   addresses: Address[];
   editAddresses: (newAddresses: Address[]) => void;
@@ -31,89 +36,191 @@ interface AccountProviderProps {
 }
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
-  const { status } = useSession();
-  const [accountStep, setStep] = useState<ACCOUNT_STEPS>(
-    ACCOUNT_STEPS.UNCOMPLETE
-  );
-  const [currentCustomer, setCustomer] = useState<Customer>({
-    name: "Juan Vargas",
-    documentKind: "DNI",
-    document: "77777777",
-    email: "",
-    cellPhone: "",
-    workPlace: "",
-    workAddress: "Jr. Dirección N°251",
-    acceptPublicity: false,
-  });
-  const [addresses, setAddresses] = useState<Address[]>([]);
-
   const router = useRouter();
+  const [collaborator, setCollaborator] = useState<Collaborator | undefined>(
+    undefined
+  );
+  const [homeDesign, setHomeDesign] = useState<DesignConfig | null>(null);
+  const [subdomain, setSubdomain] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [status, setStatus] = useState<string>("initial");
+  const [userId, setUserId] = useState<string | null>(null);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const { data, refetch, error } = useQuery<{
+    collaborator: Collaborator;
+  }>(GET_COLLABORATOR, {
+    variables: { uuidcollaborator: userId },
+    skip: !userId,
+  });
+  const { data: dataDesign, refetch: refetchDesign } = useQuery<{
+    homeDesign: DesignConfig;
+  }>(GET_HOME_DESIGN, {
+    variables: { uuidcollaborator: userId },
+    skip: !userId,
+  });
 
-  const updateStep = (nextStep: ACCOUNT_STEPS) => {
-    setStep(nextStep);
-    localStorage.setItem(
-      "adfly_account",
-      JSON.stringify({
-        currentStep: nextStep,
-        currentCustomer: currentCustomer,
-      })
-    );
-    router.push("/home");
+  const fetchCollaborator = async () => {
+    if (data) {
+      setCollaborator(data.collaborator);
+    }
+  };
+  const fetchHomeDesign = async () => {
+    if (dataDesign) {
+      setHomeDesign(dataDesign.homeDesign);
+    }
   };
 
-  const handleLogin = (values: { email: string; password: string }) => {
-    signIn("credentials", {
-      redirect: false,
-      username: values.email,
-      password: values.password,
-    });
-  };
+  useEffect(() => {
+    fetchCollaborator();
+  }, [data]);
+  useEffect(() => {
+    fetchHomeDesign();
+  }, [dataDesign]);
 
-  const handleLogout = () => {
-    signOut();
-    setStep(ACCOUNT_STEPS.UNCOMPLETE);
-    localStorage.removeItem("adfly_account");
-  };
+  useEffect(() => {
+    if (error) {
+      console.error("Error al obtener los datos del usuario:", error);
+    }
+  }, [error]);
 
-  const updateCustomer = (customer: Customer) => {
-    setCustomer(customer);
-    localStorage.setItem(
-      "adfly_account",
-      JSON.stringify({ currentStep: accountStep, currentCustomer: customer })
-    );
-  };
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const storedToken = localStorage.getItem("collaboratortoken");
+        if (storedToken) {
+          setStatus("authenticated");
+          setToken(storedToken);
+          const decodedToken: IToken = jwtDecode(storedToken);
+          const decodeduserid = decodedToken.uuid_collaborator;
+          setUserId(decodeduserid);
+        } else {
+          setStatus("unauthenticated");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus("unauthenticated");
+    }
+  }, []);
 
-  const checkSession = () => {
-    if (status == "authenticated") return true;
-    return false;
-  };
+  useEffect(() => {
+    const obtenerSubDominio = () => {
+      const { hostname } = window.location;
+      const partes = hostname.split(".");
+      if (partes.length > 2) {
+        setSubdomain(partes[0]);
+      }
+    };
+    obtenerSubDominio();
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      const decodedToken: IToken = jwtDecode(token);
+      const expirationDate = new Date(decodedToken.exp * 1000);
+      const timeoutId = setTimeout(() => {
+        logout();
+      }, expirationDate.getTime() - new Date().getTime());
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [token]);
 
   const editAddresses = (newAddress: Address[]) => {
     setAddresses(newAddress);
   };
 
-  useEffect(() => {
-    const accountInfo = localStorage.getItem("adfly_account");
-    if (accountInfo) {
-      const accountJson = JSON.parse(accountInfo) as {
-        currentStep: ACCOUNT_STEPS;
-        currentCustomer: Customer;
-      };
-      setStep(accountJson.currentStep);
-      setCustomer(accountJson.currentCustomer);
+  const login = async (values: { email: string; password: string }) => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/auth/signin`,
+        {
+          credential: values.email,
+          password: values.password,
+          sub_domain: subdomain,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const { data } = response.data;
+      const authToken = data["data"].token;
+      if (typeof window !== "undefined") {
+        localStorage.setItem("collaboratortoken", authToken);
+        const decodedToken: IToken = jwtDecode(authToken);
+        const decodeduserid = decodedToken.uuid_collaborator;
+        setUserId(decodeduserid);
+      }
+      setToken(authToken);
+      setStatus("authenticated");
+      router.push("/");
+      refetch();
+      refetchDesign();
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
     }
-  }, []);
+  };
+
+  const logout = () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("collaboratortoken");
+    }
+    setUserId(null);
+    setToken(null);
+    setStatus("unauthenticated");
+  };
+
+  useEffect(() => {
+    const requestInterceptor = axios.interceptors.request.use((config) => {
+      if (!(config.method === "put")) {
+        if (token) {
+          config.headers["Authorization"] = token;
+        }
+      }
+      return config;
+    });
+
+    const responseInterceptor = axios.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const originalRequest = error.config;
+
+        if (error.response.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          logout();
+        }
+
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axios.interceptors.request.eject(requestInterceptor);
+      axios.interceptors.response.eject(responseInterceptor);
+    };
+  }, [token, logout]);
+
+  const verify = async (
+    profileForm?: ProfileForm,
+    securityForm?: SecurityForm
+  ) => {
+    const response = await verifyAccount(profileForm, securityForm);
+    if (response == null) {
+      refetch();
+    }
+    return response;
+  };
 
   return (
     <AccountContext.Provider
       value={{
-        accountStep,
-        updateStep,
-        checkSession,
-        handleLogin,
-        handleLogout,
-        currentCustomer,
-        updateCustomer,
+        collaborator,
+        verify,
+        homeDesign,
+        login,
+        logout,
         status,
         addresses,
         editAddresses,

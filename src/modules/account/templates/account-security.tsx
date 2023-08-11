@@ -3,26 +3,18 @@ import { Text, Grid, Avatar, Stack, Badge, Title } from "@mantine/core";
 import { IconStar } from "@tabler/icons";
 import { useViewportSize } from "@mantine/hooks";
 import SecurityForm from "../components/security-form";
+import InformationBox from "../components/information-box";
 
 const AccountSecurity = () => {
   const { height } = useViewportSize();
 
   return (
-    <Grid w="100%">
-      <Grid.Col span={3} sx={{ display: "flex", paddingLeft: 30 }}>
-        <Avatar radius="xl" size="xl" />
-        <Stack spacing="xs" align="center" justify="flex-start">
-          <Badge size="md">
-            <IconStar size={15} /> 210 Estrellas
-          </Badge>
-          <Title order={3}>Nombre</Title>
-          <Text>Empresa (*)</Text>
-          <Text>Seguridad (*)</Text>
-        </Stack>
+    <Grid p={20} w="100%" justify="space-around">
+      <Grid.Col span={4}>
+        <InformationBox />
       </Grid.Col>
-
       <Grid.Col
-        span={9}
+        span={6}
         sx={{
           height: height,
           display: "flex",

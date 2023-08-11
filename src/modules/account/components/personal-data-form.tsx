@@ -6,77 +6,107 @@ import {
   Box,
   Space,
   Divider,
-  Select,
   Checkbox,
+  Group,
+  Title,
+  FileInput,
+  Alert,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import { ACCOUNT_STEPS, useAccount } from "@context/account-context";
-import Customer from "@interfaces/customerInterface";
-import { useRouter } from "next/router";
+import { useAccount } from "@context/account-context";
+import { ProfileForm } from "@interfaces/collaborator";
+import { useState } from "react";
+
+interface FormValues {
+  name: string;
+  lastname: string;
+  documenttype: string;
+  documentnumber: string;
+  email: string;
+  cellPhone: string;
+  termsOfService: boolean;
+  imgprofile: File | null;
+}
 
 const PersonalDataForm = () => {
-  const router = useRouter();
   const { width } = useViewportSize();
-  const { currentCustomer } = useAccount();
-  const form = useForm({
+  const { collaborator, verify } = useAccount();
+  const [message, setMessage] = useState("");
+  const form = useForm<FormValues>({
     initialValues: {
-      collaborator: currentCustomer.name,
-      documentKind: currentCustomer.documentKind,
-      document: currentCustomer.document,
-      email: currentCustomer.email,
-      cellPhone: currentCustomer.cellPhone,
-      workPlace: currentCustomer.workPlace,
-      workAddress: currentCustomer.workAddress,
+      name: collaborator?.name ?? "",
+      lastname: collaborator?.lastname ?? "",
+      documenttype: collaborator?.documenttype ?? "",
+      documentnumber: collaborator?.documentnumber ?? "",
+      email: collaborator?.email ?? "",
+      cellPhone: collaborator?.phonenumber ?? "",
       termsOfService: false,
-      acceptPublicity: currentCustomer.acceptPublicity,
+      imgprofile: null,
     },
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      cellPhone: (value) => (value.length > 0 ? null : "Invalid Cellphone"),
-      workPlace: (value) => (value != "" ? null : "This field is necessary"),
+      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
+      cellPhone: (val) => (val.length > 0 ? null : "Invalid Cellphone"),
+      imgprofile: (val: any) =>
+        val != null && val != undefined ? null : "Este campo es requerido",
     },
   });
 
-  const { updateStep, updateCustomer, accountStep } = useAccount();
+  const handleUpdate = () => {
+    form.validate();
+    if (form.isValid()) {
+      const profileform: ProfileForm = {
+        email: form.values.email,
+        phone: form.values.cellPhone,
+        image: form.values.imgprofile ?? undefined,
+      };
+      verify(profileform).then((res) => {
+        setMessage(res ?? "success");
+      });
+    }
+  };
 
   return (
     <Box sx={{ width: width / 3 }}>
-      <form
-        onSubmit={form.onSubmit((values) => {
-          const newCustomer: Customer = {
-            name: values.collaborator,
-            documentKind: values.documentKind,
-            document: values.document,
-            email: values.email,
-            cellPhone: values.cellPhone,
-            workPlace: values.workPlace,
-            workAddress: values.workAddress,
-            acceptPublicity: currentCustomer.acceptPublicity,
-          };
-          updateCustomer(newCustomer);
-          if (accountStep == ACCOUNT_STEPS.UNCOMPLETE) {
-            updateStep(ACCOUNT_STEPS.PROFILECOMPLETED);
-          } else if (accountStep == ACCOUNT_STEPS.PROFILECOMPLETED) {
-            router.push("/home");
-          }
-        })}
-      >
-        <Stack spacing="xs">
-          <Text>Perfil</Text>
-          <Divider></Divider>
-          <Text>Datos Personales</Text>
+      <Stack spacing="xs">
+        {message != "" && (
+          <Alert
+            title={message == "success" ? "Felicidades!" : "Error!"}
+            color={message == "success" ? "green" : "red"}
+            onClose={() => setMessage("")}
+            my="lg"
+            withCloseButton
+          >
+            {message == "success"
+              ? "Se ha actualizado el perfil de manera exitosa"
+              : message}
+          </Alert>
+        )}
+        <Title>Perfil</Title>
+        <Divider></Divider>
+        <Title order={3}>Datos Personales</Title>
 
+        <Group grow>
           <TextInput
-            placeholder="Nombre Completo"
-            label="Nombre Completo"
+            placeholder="Nombres (*)"
+            label="Nombres"
             radius="xs"
             size="sm"
             disabled
             withAsterisk
-            {...form.getInputProps("collaborator")}
+            {...form.getInputProps("name")}
           />
-
+          <TextInput
+            placeholder="Apellidos (*)"
+            label="Apellidos"
+            radius="xs"
+            size="sm"
+            disabled
+            withAsterisk
+            {...form.getInputProps("lastname")}
+          />
+        </Group>
+        <Group grow>
           <TextInput
             placeholder="Tipo Documento"
             label="Tipo Documento"
@@ -84,9 +114,8 @@ const PersonalDataForm = () => {
             size="sm"
             disabled
             withAsterisk
-            {...form.getInputProps("documentKind")}
+            {...form.getInputProps("documenttype")}
           />
-
           <TextInput
             placeholder="Nro. Documento"
             label="Nro. Documento"
@@ -94,71 +123,51 @@ const PersonalDataForm = () => {
             size="sm"
             disabled
             withAsterisk
-            {...form.getInputProps("document")}
+            {...form.getInputProps("documentnumber")}
           />
-
-          <TextInput
-            placeholder=""
-            label="Correo Electrónico"
-            radius="xs"
-            size="sm"
-            withAsterisk
-            {...form.getInputProps("email")}
-          />
-
-          <TextInput
-            placeholder=""
-            label="Celular"
-            radius="xs"
-            size="sm"
-            withAsterisk
-            {...form.getInputProps("cellPhone")}
-          />
-
-          <Space h="md" />
-
-          <Text>Dirección de Centro de Trabajo</Text>
-
-          <Select
-            label="Sede de Trabajo"
-            placeholder="Seleccione uno"
-            data={[
-              { value: "Sede1", label: "Sede1" },
-              { value: "Sede2", label: "Sede2" },
-              { value: "Sede3", label: "Sede3" },
-            ]}
-            withAsterisk
-            {...form.getInputProps("workPlace")}
-          />
-
-          <TextInput
-            placeholder="Dirección de Sede"
-            label="Dirección de Sede"
-            radius="xs"
-            size="sm"
-            disabled
-            {...form.getInputProps("workAddress")}
-          />
-
-          <Space h="md" />
-
-          <Checkbox
-            label="Acepto los términos y condiciones"
-            {...form.getInputProps("termsOfService", { type: "checkbox" })}
-          />
-
-          <Checkbox
-            label="Acepto recibir publicidad"
-            {...form.getInputProps("acceptPublicity", { type: "checkbox" })}
-          />
-        </Stack>
-
+        </Group>
+        <TextInput
+          placeholder=""
+          label="Correo Electrónico"
+          radius="xs"
+          size="sm"
+          withAsterisk
+          {...form.getInputProps("email")}
+        />
+        <TextInput
+          placeholder=""
+          label="Celular"
+          radius="xs"
+          size="sm"
+          withAsterisk
+          {...form.getInputProps("cellPhone")}
+        />
+        <FileInput
+          label="Imagen de Perfil"
+          withAsterisk
+          clearable
+          sx={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            maxWidth: "420px",
+          }}
+          {...form.getInputProps("imgprofile")}
+        />
         <Space h="md" />
-
-        <Button color="gray" fullWidth size="lg" type="submit">
-          Actualizar
-        </Button>
-      </form>
+        <Checkbox
+          label="Acepto los términos y condiciones"
+          {...form.getInputProps("termsOfService", { type: "checkbox" })}
+        />
+        <Checkbox
+          label="Acepto recibir publicidad"
+          {...form.getInputProps("acceptPublicity", { type: "checkbox" })}
+        />
+      </Stack>
+      <Space h="md" />
+      <Button color="gray" fullWidth size="lg" onClick={handleUpdate}>
+        Actualizar
+      </Button>
     </Box>
   );
 };

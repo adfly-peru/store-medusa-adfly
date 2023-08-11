@@ -32,7 +32,6 @@ import { useProduct } from "@context/product-context";
 import { forwardRef, useEffect, useState } from "react";
 import { useAccount } from "@context/account-context";
 import CartDrawer from "@modules/layout/components/cart-drawer";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useForm } from "@mantine/form";
 import { useCart } from "@context/cart-context";
@@ -96,10 +95,9 @@ const useStyles = createStyles((theme) => ({
 const HomeHeader = () => {
   const router = useRouter();
   const { classes } = useStyles();
-  const { data: session } = useSession();
   const { departments } = useProduct();
   const [opened, setOpened] = useState(false);
-  const { currentCustomer, handleLogout } = useAccount();
+  const { collaborator, logout } = useAccount();
   const [searchable, setSearchable] = useState("");
   const form = useForm();
   const [cartLength, setCartLength] = useState(0);
@@ -235,10 +233,10 @@ const HomeHeader = () => {
               </Menu.Target>
               <Menu.Dropdown>
                 <Menu.Label sx={{ fontSize: 16 }}>
-                  Hola, {currentCustomer.name}
+                  Hola, {collaborator?.name}
                 </Menu.Label>
                 <Menu.Label sx={{ fontSize: 12 }}>
-                  {session?.user?.email}
+                  {collaborator?.email}
                 </Menu.Label>
                 <Menu.Item icon={<IconUserCircle size={14} />}>
                   Mi cuenta
@@ -262,7 +260,7 @@ const HomeHeader = () => {
                   Configuracion
                 </Menu.Item>
                 <Menu.Item
-                  onClick={() => handleLogout()}
+                  onClick={logout}
                   icon={<IconTransferOut size={14} />}
                 >
                   Cerrar sesión

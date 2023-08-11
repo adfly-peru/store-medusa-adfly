@@ -3,7 +3,7 @@ import AccountProfile from "@modules/account/templates/account-profile";
 
 const ProfilePage = () => {
   return (
-    <Layout allow>
+    <Layout>
       <AccountProfile />
     </Layout>
   );
