@@ -11,6 +11,7 @@ import {
   Title,
   FileInput,
   Alert,
+  Anchor,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
@@ -49,6 +50,10 @@ const PersonalDataForm = () => {
       cellPhone: (val) => (val.length > 0 ? null : "Invalid Cellphone"),
       imgprofile: (val: any) =>
         val != null && val != undefined ? null : "Este campo es requerido",
+      termsOfService: (val: boolean) =>
+        val == true
+          ? null
+          : "Es obligatorio aceptar los Términos y Condiciones",
     },
   });
 
@@ -156,12 +161,19 @@ const PersonalDataForm = () => {
         />
         <Space h="md" />
         <Checkbox
-          label="Acepto los términos y condiciones"
-          {...form.getInputProps("termsOfService", { type: "checkbox" })}
+          label={
+            <>
+              Acepto los{" "}
+              <Anchor href="/terms" target="_blank">
+                Términos y Condiciones
+              </Anchor>
+            </>
+          }
+          {...form.getInputProps("termsOfService")}
         />
         <Checkbox
           label="Acepto recibir publicidad"
-          {...form.getInputProps("acceptPublicity", { type: "checkbox" })}
+          {...form.getInputProps("acceptPublicity")}
         />
       </Stack>
       <Space h="md" />

@@ -123,7 +123,10 @@ const SimpleHeader = () => {
                 <Menu.Label sx={{ fontSize: 12 }}>
                   {collaborator?.email}
                 </Menu.Label>
-                <Menu.Item icon={<IconUserCircle size={14} />}>
+                <Menu.Item
+                  icon={<IconUserCircle size={14} />}
+                  onClick={() => router.push("/account/profile")}
+                >
                   Mi cuenta
                 </Menu.Item>
                 <Menu.Item icon={<IconBasket size={14} />}>

@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useCart } from "@context/cart-context";
-import { Button, Center } from "@mantine/core";
+import { Anchor, Button, Center, Checkbox, Stack, Text } from "@mantine/core";
 import { IconCreditCard } from "@tabler/icons";
 
 declare global {
@@ -37,6 +37,8 @@ const createSessionToken = async (
 
 const PaymentButton = () => {
   const { cart } = useCart();
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
+
   const payment = async () => {
     if (!cart) return;
     const totalAmount = parseFloat(cart.total.toFixed(2));
@@ -69,16 +71,38 @@ const PaymentButton = () => {
   }
 
   return (
-    <Center>
-      <Button
-        leftIcon={<IconCreditCard />}
-        onClick={payment}
-        size="xl"
-        radius="xl"
-        uppercase
-      >
-        Total a Pagar: S/.{cart.total.toFixed(2)}
-      </Button>
+    <Center py="md" px="lg">
+      <Stack>
+        <Text>
+          El pedido equivale a {(cart.total / 0.1).toFixed(2)} Estrellas. Sin
+          embargo, en caso tenga un costo de delivery, este deberá ser pagado
+          por separado utilizando alguna otra de las alternativas. Además, si la
+          cantidad de estrellas que tiene no alcanza para todo el pedido, esa
+          diferencia también tendrá que pagarla con otro medio de pago.
+        </Text>
+        <Checkbox
+          label={
+            <>
+              He leído y acepto los{" "}
+              <Anchor href="/terms" target="_blank">
+                Términos y Condiciones
+              </Anchor>{" "}
+              de este sitio
+            </>
+          }
+          checked={hasAcceptedTerms}
+          onChange={(e) => setHasAcceptedTerms(e.currentTarget.checked)}
+        />
+        <Button
+          leftIcon={<IconCreditCard />}
+          onClick={payment}
+          radius="xl"
+          uppercase
+          disabled={!hasAcceptedTerms}
+        >
+          Pagar: S/.{cart.total.toFixed(2)}
+        </Button>
+      </Stack>
     </Center>
   );
 };
