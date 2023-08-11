@@ -1,9 +1,16 @@
-import { Product } from "@interfaces/productInterface";
-import { Container, Stack } from "@mantine/core";
+import { Container, Loader, Stack } from "@mantine/core";
 import SimilarProducts from "@modules/products/components/similar-products";
 import { DetailedProduct } from "@modules/products/components/detailed-product";
+import { useProduct } from "@context/product-context";
 
-const ProductInfo = ({ product }: { product: Product }) => {
+const ProductInfo = ({ productId }: { productId: string }) => {
+  const { getProduct } = useProduct();
+  const product = getProduct(productId);
+
+  if (product == null) {
+    return <Loader />;
+  }
+
   return (
     <>
       <Container mt={20}>

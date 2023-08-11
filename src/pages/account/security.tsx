@@ -3,7 +3,7 @@ import AccountSecurity from "@modules/account/templates/account-security";
 
 const SecurityPage = () => {
   return (
-    <Layout allow>
+    <Layout>
       <AccountSecurity />
     </Layout>
   );
