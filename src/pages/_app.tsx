@@ -9,12 +9,12 @@ import { useState } from "react";
 import {
   ColorScheme,
   ColorSchemeProvider,
+  LoadingOverlay,
   MantineProvider,
 } from "@mantine/core";
 import { OrderProvider } from "@context/order-context";
 import { DesignProvider } from "@context/design-context";
 import RegistrationStepsModal from "@modules/layout/templates/registration-steps-modal";
-import { useRouter } from "next/router";
 
 export default function App({
   Component,
@@ -52,17 +52,19 @@ const ResourcesProvider: React.FC<{ children?: React.ReactNode }> = ({
 }) => {
   const { status, collaborator } = useAccount();
 
-  if (status == "authenticated" && collaborator?.status == "ACTIVE") {
-    return (
-      <ProductProvider>
-        <CartProvider>
-          <OrderProvider>{children}</OrderProvider>
-        </CartProvider>
-      </ProductProvider>
-    );
-  }
-
   if (status == "authenticated") {
+    if (!collaborator) {
+      return <LoadingOverlay visible={true} />;
+    }
+    if (collaborator.status == "ACTIVE") {
+      return (
+        <ProductProvider>
+          <CartProvider>
+            <OrderProvider>{children}</OrderProvider>
+          </CartProvider>
+        </ProductProvider>
+      );
+    }
     return <RegistrationStepsModal>{children}</RegistrationStepsModal>;
   }
 
