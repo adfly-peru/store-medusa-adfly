@@ -97,7 +97,7 @@ const HomeHeader = () => {
   const { classes } = useStyles();
   const { departments } = useProduct();
   const [opened, setOpened] = useState(false);
-  const { collaborator, logout } = useAccount();
+  const { collaborator, logout, homeDesign } = useAccount();
   const [searchable, setSearchable] = useState("");
   const form = useForm();
   const [cartLength, setCartLength] = useState(0);
@@ -163,7 +163,7 @@ const HomeHeader = () => {
               height={50}
               width="inherit"
               fit="contain"
-              src="https://www.cbvj.org.br/index/wp-content/uploads/2017/10/default-logo.png"
+              src={homeDesign?.logourl}
               alt="Random unsplash image"
               sx={{ padding: 10 }}
             />

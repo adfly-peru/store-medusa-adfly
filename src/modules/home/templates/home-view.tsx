@@ -5,7 +5,6 @@ import { useAccount } from "@context/account-context";
 
 const HomeView = () => {
   const { homeDesign } = useAccount();
-  console.log(homeDesign);
   return (
     <>
       <BackgroundImage
