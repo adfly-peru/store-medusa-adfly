@@ -1,23 +1,25 @@
+import { useAccount } from "@context/account-context";
 import { Text, Group, Stack, TextInput, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
 
 const InformationForm = () => {
   const [checked, setChecked] = useState(false);
+  const { collaborator } = useAccount();
   const form = useForm({
     initialValues: {
       personalInformation: {
-        name: "Alonso",
-        lastName: "Ferreyros Belmont",
-        docType: "DNI",
-        doc: "72306782",
-        email: "ferreyrosalonso@gmail.com",
-        phone: "989621629",
+        name: collaborator?.name,
+        lastName: collaborator?.lastname,
+        docType: collaborator?.documenttype,
+        doc: collaborator?.documentnumber,
+        email: collaborator?.email,
+        phone: collaborator?.phonenumber,
       },
       billInformation: {
-        ruc: "20602968970",
-        socialReason: "ADFLY S.A.C.",
-        address: "Calle Los Jades 160, Santiago de Surco",
+        ruc: "",
+        socialReason: "",
+        address: "",
       },
     },
   });
