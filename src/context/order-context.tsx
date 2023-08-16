@@ -3,6 +3,7 @@ import { GET_ORDERS } from "@graphql/order/queries";
 import { Cart } from "@interfaces/cart";
 import { Order } from "@interfaces/order";
 import { createContext, useState, useContext, useEffect } from "react";
+import { useAccount } from "./account-context";
 
 interface OrderContext {
   orders: Order[] | null;
@@ -13,6 +14,7 @@ interface OrderContext {
 const OrderContext = createContext<OrderContext | null>(null);
 
 export const OrderProvider = ({ children }: { children?: React.ReactNode }) => {
+  const { collaborator } = useAccount();
   const [collaboratorId, setCollaboratorId] = useState<string | null>(null);
   const [orders, setOrders] = useState<Order[] | null>(null);
   const { error, loading, refetch } = useQuery<{ getOrders: Order[] }>(
@@ -31,10 +33,9 @@ export const OrderProvider = ({ children }: { children?: React.ReactNode }) => {
   }, [error]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setCollaboratorId("a34091f1-ad3a-4409-93f2-cbd25d7ec373");
-    }
-  }, []);
+    if (collaborator?.uuidcollaborator)
+      setCollaboratorId(collaborator?.uuidcollaborator);
+  }, [collaborator]);
 
   return (
     <OrderContext.Provider value={{ orders, loading, refetch }}>

@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/client";
 import { GET_CART } from "@graphql/cart/queries";
 import { createCart, manageItem } from "api/cart";
 import { Cart, CartItem } from "@interfaces/cart";
+import { useAccount } from "./account-context";
 
 interface CartContext {
   cart: Cart | null;
@@ -30,6 +31,7 @@ interface CartProviderProps {
 }
 
 export const CartProvider = ({ children }: CartProviderProps) => {
+  const { collaborator } = useAccount();
   const [collaboratorId, setCollaboratorId] = useState<string | null>(null);
   const [cart, setCart] = useState<Cart | null>(null);
   const { data, error, loading, refetch } = useQuery<{ getCart: Cart }>(
@@ -56,13 +58,9 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   }, [error]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      // const token = localStorage.getItem("partnertoken");
-      // if (token) {
-      // }
-      setCollaboratorId("a34091f1-ad3a-4409-93f2-cbd25d7ec373");
-    }
-  }, []);
+    if (collaborator?.uuidcollaborator)
+      setCollaboratorId(collaborator?.uuidcollaborator);
+  }, [collaborator]);
 
   const addProduct = async (
     uuidvariant: string,
