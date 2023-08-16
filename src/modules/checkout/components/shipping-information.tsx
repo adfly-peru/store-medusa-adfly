@@ -16,6 +16,7 @@ import { useAccount } from "@context/account-context";
 import AddressForm from "@modules/checkout/components/address-form";
 import ShipmentCard from "@modules/checkout/components/shipment-card";
 import { useCart } from "@context/cart-context";
+import { LoadScript } from "@react-google-maps/api";
 
 const ShippingInformation = () => {
   const { addresses } = useAccount();
@@ -24,63 +25,67 @@ const ShippingInformation = () => {
   const [select, setSelect] = useState<number>(-1);
   const [address, setAddress] = useState<number | null>(null);
   return (
-    <Center>
-      <Modal opened={opened} onClose={() => setOpened(false)}>
-        <AddressForm
-          index={address}
-          onSubmit={() => setOpened(false)}
-        ></AddressForm>
-      </Modal>
-      <Stack px={60} spacing="xs" w="80%">
-        <Text fw={700}>Direcciones de Envío</Text>
-        <Divider />
-        <Stack>
-          {addresses.map((value, id) => (
-            <Group key={id} position="apart">
-              <Checkbox
-                checked={select == id}
-                onChange={(_) => setSelect(id)}
-                radius="lg"
-                value={id}
-                label={value.address}
-              />
-              <ActionIcon
-                onClick={() => {
-                  setAddress(id);
-                  setOpened(true);
-                }}
-              >
-                <IconEdit size={30} />
-              </ActionIcon>
-            </Group>
-          ))}
-        </Stack>
-        <Button
-          onClick={() => {
-            setAddress(null);
-            setOpened(true);
-          }}
-          variant="default"
-          color="dark"
-        >
-          Agregar Dirección
-        </Button>
-        <Space h="lg" />
-        <Text fw={700}>Datos de Envío</Text>
-        <Divider />
-        {cart?.suborders.map((suborder, index) => (
-          <div key={suborder.uuidcartsuborder}>
-            <ShipmentCard
-              index={index}
-              total={cart.suborders.length}
-              suborder={suborder}
-            />
-            <Space h="xl" />
-          </div>
-        ))}
-        <Divider />
-      </Stack>
-    </Center>
+    <>
+      <LoadScript
+        googleMapsApiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
+        libraries={["places"]}
+      >
+        <Center>
+          <Modal size="xl" opened={opened} onClose={() => setOpened(false)}>
+            <AddressForm index={address} onSubmit={() => setOpened(false)} />
+          </Modal>
+          <Stack px={60} spacing="xs" w="80%">
+            <Text fw={700}>Direcciones de Envío</Text>
+            <Divider />
+            <Stack>
+              {addresses.map((value, id) => (
+                <Group key={id} position="apart">
+                  <Checkbox
+                    checked={select == id}
+                    onChange={(_) => setSelect(id)}
+                    radius="lg"
+                    value={id}
+                    label={value.address}
+                  />
+                  <ActionIcon
+                    onClick={() => {
+                      setAddress(id);
+                      setOpened(true);
+                    }}
+                  >
+                    <IconEdit size={30} />
+                  </ActionIcon>
+                </Group>
+              ))}
+            </Stack>
+            <Button
+              onClick={() => {
+                setAddress(null);
+                setOpened(true);
+              }}
+              variant="default"
+              color="dark"
+            >
+              Agregar Dirección
+            </Button>
+            <Space h="lg" />
+            <Text fw={700}>Datos de Envío</Text>
+            <Divider />
+            {cart?.suborders.map((suborder, index) => (
+              <div key={suborder.uuidcartsuborder}>
+                <ShipmentCard
+                  index={index}
+                  total={cart.suborders.length}
+                  suborder={suborder}
+                />
+                <Space h="xl" />
+              </div>
+            ))}
+            <Divider />
+          </Stack>
+        </Center>
+      </LoadScript>
+    </>
   );
 };
 

@@ -2,6 +2,8 @@ import { Button, Group, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
 import Address from "@interfaces/address-interface";
+import { MapForm } from "@modules/common/components/map";
+import ubigeoPeru from "ubigeo-peru";
 
 const AddressForm = ({
   index,
@@ -37,13 +39,11 @@ const AddressForm = ({
       }
       editAddresses(newAddresses);
     }
-    console.log("ready");
   };
 
   const form = useForm({
     initialValues: {
-      address: address.address,
-      number: address.number,
+      name: "",
       department: address.department,
       province: address.province,
       district: address.district,
@@ -51,34 +51,53 @@ const AddressForm = ({
     },
   });
 
-  // const form = useForm({
-  //   initialValues: {
-  //     address: "Calle Los Jades 160, Santiago de Surco",
-  //     number: "160 Dpt 507",
-  //     department: "Lima",
-  //     province: "Lima",
-  //     district: "Barranco",
-  //     additional: "160 Dpt 507",
-  //   },
-  // });
   return (
-    <form onSubmit={form.onSubmit((values) => registerAddress(values))}>
+    <form onSubmit={form.onSubmit((values) => null)}>
       <Stack px="xl" spacing="sm">
         <TextInput
-          label="Dirección de envío"
-          {...form.getInputProps("address")}
+          label="Nombre de la Dirección"
+          {...form.getInputProps("name")}
+        />
+        <TextInput
+          label="Departamento:"
+          {...form.getInputProps("department")}
+          disabled
         />
         <Group position="apart" spacing="xl" grow>
-          <TextInput label="Número:" {...form.getInputProps("number")} />
           <TextInput
-            label="Departamento:"
-            {...form.getInputProps("department")}
+            label="Provincia:"
+            {...form.getInputProps("province")}
+            disabled
+          />
+          <TextInput
+            label="Distrito:"
+            {...form.getInputProps("district")}
+            disabled
           />
         </Group>
-        <Group position="apart" spacing="xl" grow>
-          <TextInput label="Provincia:" {...form.getInputProps("province")} />
-          <TextInput label="Distrito:" {...form.getInputProps("district")} />
-        </Group>
+        <MapForm
+          onSelectPlace={(place) => {
+            form.setFieldValue("district", place?.district.nombre ?? "");
+            form.setFieldValue(
+              "province",
+              ubigeoPeru.reniec.find(
+                (v) =>
+                  v.departamento == place?.district.departamento &&
+                  v.provincia == place.district.provincia &&
+                  v.distrito == "00"
+              )?.nombre ?? ""
+            );
+            form.setFieldValue(
+              "department",
+              ubigeoPeru.reniec.find(
+                (v) =>
+                  v.departamento == place?.district.departamento &&
+                  v.provincia == "00" &&
+                  v.distrito == "00"
+              )?.nombre ?? ""
+            );
+          }}
+        />
         <TextInput
           label="Información Adicional:"
           {...form.getInputProps("additional")}
