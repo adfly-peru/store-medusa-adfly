@@ -4,111 +4,119 @@ import { useAccount } from "@context/account-context";
 import Address from "@interfaces/address-interface";
 import { MapForm } from "@modules/common/components/map";
 import ubigeoPeru from "ubigeo-peru";
+import { useState } from "react";
 
-const AddressForm = ({
-  index,
-  onSubmit,
-}: {
-  index: number | null;
-  onSubmit: () => void;
-}) => {
-  const { addresses, editAddresses } = useAccount();
-  const address: Address =
-    index == null
-      ? {
-          address: "",
-          number: "",
-          department: "",
-          province: "",
-          district: "",
-          additional: "",
-        }
-      : addresses[index];
+interface AddressInfo {
+  address: string;
+  lat: number;
+  lng: number;
+  district: string;
+  province: string;
+  department: string;
+}
 
-  const registerAddress = (newAddress: Address) => {
-    if (index == null) {
-      editAddresses([...addresses, newAddress]);
-    } else {
-      const newAddresses: Address[] = [];
-      for (var i = 0; i < addresses.length; i++) {
-        if (i == index) {
-          newAddresses.push(newAddress);
-        } else {
-          newAddresses.push(addresses[i]);
-        }
-      }
-      editAddresses(newAddresses);
-    }
+const AddressForm = ({ onSubmit }: { onSubmit: () => void }) => {
+  const { addAddress } = useAccount();
+  const [address, setAddress] = useState<AddressInfo | null>(null);
+
+  const registerAddress = () => {
+    console.log("register");
+    form.validate();
+    if (!form.isValid()) return;
+    if (!address) return;
+
+    const newAddress: Address = {
+      alias: form.values.alias,
+      address: address.address,
+      lat: address.lat,
+      lng: address.lng,
+      district: address.district,
+      province: address.province,
+      department: address.department,
+      country: "pe",
+      additional: form.values.additional == "" ? null : form.values.additional,
+    };
+    addAddress(newAddress).then(() => onSubmit());
   };
 
   const form = useForm({
     initialValues: {
-      name: "",
-      department: address.department,
-      province: address.province,
-      district: address.district,
-      additional: address.additional,
+      alias: "",
+      additional: "",
+    },
+    validate: {
+      alias: (a) => (a.length > 0 ? null : "Este campo no puede ser nulo"),
     },
   });
 
   return (
-    <form onSubmit={form.onSubmit((values) => null)}>
-      <Stack px="xl" spacing="sm">
+    <Stack px="xl" spacing="sm">
+      <TextInput
+        label="Nombre de la Dirección"
+        {...form.getInputProps("alias")}
+      />
+      <TextInput
+        label="Departamento:"
+        value={
+          ubigeoPeru.reniec.find(
+            (v) =>
+              v.departamento == address?.department &&
+              v.provincia == "00" &&
+              v.distrito == "00"
+          )?.nombre ?? ""
+        }
+        disabled
+      />
+      <Group position="apart" spacing="xl" grow>
         <TextInput
-          label="Nombre de la Dirección"
-          {...form.getInputProps("name")}
-        />
-        <TextInput
-          label="Departamento:"
-          {...form.getInputProps("department")}
+          label="Provincia:"
+          value={
+            ubigeoPeru.reniec.find(
+              (v) =>
+                v.departamento == address?.department &&
+                v.provincia == address?.province &&
+                v.distrito == "00"
+            )?.nombre ?? ""
+          }
           disabled
         />
-        <Group position="apart" spacing="xl" grow>
-          <TextInput
-            label="Provincia:"
-            {...form.getInputProps("province")}
-            disabled
-          />
-          <TextInput
-            label="Distrito:"
-            {...form.getInputProps("district")}
-            disabled
-          />
-        </Group>
-        <MapForm
-          onSelectPlace={(place) => {
-            form.setFieldValue("district", place?.district.nombre ?? "");
-            form.setFieldValue(
-              "province",
-              ubigeoPeru.reniec.find(
-                (v) =>
-                  v.departamento == place?.district.departamento &&
-                  v.provincia == place.district.provincia &&
-                  v.distrito == "00"
-              )?.nombre ?? ""
-            );
-            form.setFieldValue(
-              "department",
-              ubigeoPeru.reniec.find(
-                (v) =>
-                  v.departamento == place?.district.departamento &&
-                  v.provincia == "00" &&
-                  v.distrito == "00"
-              )?.nombre ?? ""
-            );
-          }}
-        />
         <TextInput
-          label="Información Adicional:"
-          {...form.getInputProps("additional")}
+          label="Distrito:"
+          value={
+            ubigeoPeru.reniec.find(
+              (v) =>
+                v.departamento == address?.department &&
+                v.provincia == address?.province &&
+                v.distrito == address?.district
+            )?.nombre ?? ""
+          }
+          disabled
         />
-        <Group px={70} position="apart" grow mt="xl">
-          <Button type="submit" onClick={() => onSubmit()} variant="light">
-            Guardar
-          </Button>
-        </Group>
-      </Stack>
-    </form>
+      </Group>
+      <MapForm
+        onSelectPlace={(place) => {
+          if (place) {
+            setAddress({
+              address: place.name,
+              lat: place.location.lat,
+              lng: place.location.lng,
+              district: place.district.distrito,
+              province: place.district.provincia,
+              department: place.district.departamento,
+            });
+          }
+        }}
+      />
+      <TextInput
+        label="Información Adicional:"
+        {...form.getInputProps("additional")}
+      />
+      <Group px={70} position="apart" grow mt="xl">
+        <Button type="submit" onClick={registerAddress} variant="light">
+          Guardar
+        </Button>
+      </Group>
+    </Stack>
   );
 };
 

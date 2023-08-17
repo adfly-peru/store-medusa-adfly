@@ -18,4 +18,20 @@ const GET_COLLABORATOR = gql`
   }
 `;
 
-export { GET_COLLABORATOR };
+const GET_ADDRESSES = gql`
+  query getAddresses($uuidcollaborator: ID!) {
+    collaboratoraddresses(uuidcollaborator: $uuidcollaborator) {
+      alias
+      address
+      lat
+      lng
+      district
+      province
+      department
+      country
+      additional
+    }
+  }
+`;
+
+export { GET_COLLABORATOR, GET_ADDRESSES };

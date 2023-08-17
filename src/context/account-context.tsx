@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useQuery } from "@apollo/client";
-import { GET_COLLABORATOR } from "@graphql/collaborator/queries";
+import { GET_ADDRESSES, GET_COLLABORATOR } from "@graphql/collaborator/queries";
 import {
   Collaborator,
   IToken,
@@ -14,6 +14,7 @@ import Address from "@interfaces/address-interface";
 import { DesignConfig } from "@interfaces/design";
 import { GET_HOME_DESIGN } from "@graphql/design/queries";
 import { verifyAccount } from "api/verify";
+import { createAddress } from "api/delivery";
 
 interface AccountContext {
   login: (values: { email: string; password: string }) => void;
@@ -26,7 +27,7 @@ interface AccountContext {
   homeDesign: DesignConfig | null;
   status: string;
   addresses: Address[];
-  editAddresses: (newAddresses: Address[]) => void;
+  addAddress: (newAddress: Address) => Promise<string | null>;
 }
 
 const AccountContext = createContext<AccountContext | null>(null);
@@ -58,6 +59,12 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     variables: { uuidcollaborator: userId },
     skip: !userId,
   });
+  const { data: dataAddresses, refetch: refetchAddresses } = useQuery<{
+    collaboratoraddresses: Address[];
+  }>(GET_ADDRESSES, {
+    variables: { uuidcollaborator: userId },
+    skip: !userId,
+  });
 
   const fetchCollaborator = async () => {
     if (data) {
@@ -69,6 +76,11 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       setHomeDesign(dataDesign.homeDesign);
     }
   };
+  const fetchAddresses = async () => {
+    if (dataAddresses) {
+      setAddresses(dataAddresses.collaboratoraddresses);
+    }
+  };
 
   useEffect(() => {
     fetchCollaborator();
@@ -76,6 +88,9 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   useEffect(() => {
     fetchHomeDesign();
   }, [dataDesign]);
+  useEffect(() => {
+    fetchAddresses();
+  });
 
   useEffect(() => {
     if (error) {
@@ -126,8 +141,18 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     }
   }, [token]);
 
-  const editAddresses = (newAddress: Address[]) => {
-    setAddresses(newAddress);
+  const addAddress = async (newAddress: Address) => {
+    console.log("add", newAddress);
+    try {
+      if (userId) {
+        const resp = await createAddress(userId, newAddress);
+        refetchAddresses();
+        return resp;
+      }
+      return "Error: null collaborator id";
+    } catch (error) {
+      return `Error: ${error}`;
+    }
   };
 
   const login = async (values: { email: string; password: string }) => {
@@ -169,6 +194,9 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     }
     setUserId(null);
     setToken(null);
+    setCollaborator(undefined);
+    setHomeDesign(null);
+    setAddresses([]);
     setStatus("unauthenticated");
   };
 
@@ -223,7 +251,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         logout,
         status,
         addresses,
-        editAddresses,
+        addAddress,
       }}
     >
       {children}
