@@ -21,6 +21,7 @@ const GET_COLLABORATOR = gql`
 const GET_ADDRESSES = gql`
   query getAddresses($uuidcollaborator: ID!) {
     collaboratoraddresses(uuidcollaborator: $uuidcollaborator) {
+      uuidcollaboratoraddress
       alias
       address
       lat

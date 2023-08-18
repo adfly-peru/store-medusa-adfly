@@ -10,7 +10,7 @@ import {
   SecurityForm,
 } from "@interfaces/collaborator";
 import jwtDecode from "jwt-decode";
-import Address from "@interfaces/address-interface";
+import { Address } from "@interfaces/address-interface";
 import { DesignConfig } from "@interfaces/design";
 import { GET_HOME_DESIGN } from "@graphql/design/queries";
 import { verifyAccount } from "api/verify";
@@ -142,7 +142,6 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   }, [token]);
 
   const addAddress = async (newAddress: Address) => {
-    console.log("add", newAddress);
     try {
       if (userId) {
         const resp = await createAddress(userId, newAddress);

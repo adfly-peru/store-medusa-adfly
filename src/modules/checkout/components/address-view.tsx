@@ -1,6 +1,6 @@
 import { Group, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import Address from "@interfaces/address-interface";
+import { Address } from "@interfaces/address-interface";
 import ubigeoPeru from "ubigeo-peru";
 
 const AddressView = ({ address }: { address: Address }) => {

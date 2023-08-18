@@ -1,7 +1,7 @@
 import { Button, Group, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
-import Address from "@interfaces/address-interface";
+import { Address } from "@interfaces/address-interface";
 import { MapForm } from "@modules/common/components/map";
 import ubigeoPeru from "ubigeo-peru";
 import { useState } from "react";
@@ -20,7 +20,6 @@ const AddressForm = ({ onSubmit }: { onSubmit: () => void }) => {
   const [address, setAddress] = useState<AddressInfo | null>(null);
 
   const registerAddress = () => {
-    console.log("register");
     form.validate();
     if (!form.isValid()) return;
     if (!address) return;
@@ -35,6 +34,7 @@ const AddressForm = ({ onSubmit }: { onSubmit: () => void }) => {
       department: address.department,
       country: "pe",
       additional: form.values.additional == "" ? null : form.values.additional,
+      uuidcollaboratoraddress: "",
     };
     addAddress(newAddress).then(() => onSubmit());
   };

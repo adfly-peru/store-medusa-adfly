@@ -1,4 +1,5 @@
-interface Address {
+export interface Address {
+  uuidcollaboratoraddress: string;
   alias: string;
   address: string;
   lat: number;
@@ -10,4 +11,8 @@ interface Address {
   additional: string | null;
 }
 
-export default Address;
+export interface AddressInfoForm {
+  receivername: string;
+  receiverdocumentkind: string;
+  receiverdocumentnumber: string;
+}

@@ -38,11 +38,20 @@ const createSessionToken = async (
 const PaymentButton = () => {
   const { cart } = useCart();
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(0);
+  useEffect(() => {
+    if (!cart) return;
+    const totaldelivery = cart.suborders.reduce(
+      (acc, curr) => acc + (curr.deliveryprice ?? 0),
+      cart.total
+    );
+    setTotalAmount(totaldelivery);
+  }, [cart]);
 
   const payment = async () => {
     if (!cart) return;
-    const totalAmount = parseFloat(cart.total.toFixed(2));
-    const sessionToken = await createSessionToken(totalAmount);
+    const totalAmountFixed = parseFloat(totalAmount.toFixed(2));
+    const sessionToken = await createSessionToken(totalAmountFixed);
     if (!sessionToken) return;
     window.VisanetCheckout.configure({
       sessiontoken: `${sessionToken}`,
@@ -100,7 +109,7 @@ const PaymentButton = () => {
           uppercase
           disabled={!hasAcceptedTerms}
         >
-          Pagar: S/.{cart.total.toFixed(2)}
+          Pagar: S/.{totalAmount.toFixed(2)}
         </Button>
       </Stack>
     </Center>

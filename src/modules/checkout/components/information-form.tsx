@@ -1,28 +1,24 @@
-import { useAccount } from "@context/account-context";
+import { BillingForm } from "@interfaces/billing";
 import { Text, Group, Stack, TextInput, Checkbox } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { useState } from "react";
+import { UseFormReturnType } from "@mantine/form";
+import { useEffect, useState } from "react";
 
-const InformationForm = () => {
+const InformationForm = ({
+  form,
+}: {
+  form: UseFormReturnType<BillingForm>;
+}) => {
   const [checked, setChecked] = useState(false);
-  const { collaborator } = useAccount();
-  const form = useForm({
-    initialValues: {
-      personalInformation: {
-        name: collaborator?.name,
-        lastName: collaborator?.lastname,
-        docType: collaborator?.documenttype,
-        doc: collaborator?.documentnumber,
-        email: collaborator?.email,
-        phone: collaborator?.phonenumber,
-      },
-      billInformation: {
-        ruc: "",
-        socialReason: "",
-        address: "",
-      },
-    },
-  });
+  useEffect(() => {
+    if (
+      form.values.businessname ||
+      form.values.ruc ||
+      form.values.fiscaladdress
+    ) {
+      setChecked(true);
+    }
+  }, []);
+
   return (
     <div>
       <Stack px={60} spacing="xl">
@@ -32,36 +28,33 @@ const InformationForm = () => {
             <TextInput
               label="Nombre:"
               disabled
-              {...form.getInputProps("personalInformation.name")}
+              {...form.getInputProps("name")}
             />
             <TextInput
               label="Apellidos:"
               disabled
-              {...form.getInputProps("personalInformation.lastName")}
+              {...form.getInputProps("lastname")}
             />
           </Group>
           <Group position="apart" spacing="xl" grow>
             <TextInput
               label="Tipo de Documento:"
               disabled
-              {...form.getInputProps("personalInformation.docType")}
+              {...form.getInputProps("doctype")}
             />
             <TextInput
               label="N° Doc:"
               disabled
-              {...form.getInputProps("personalInformation.doc")}
+              {...form.getInputProps("doc")}
             />
           </Group>
           <Group position="apart" spacing="xl" grow>
             <TextInput
               label="Correo electrónico:"
               disabled
-              {...form.getInputProps("personalInformation.email")}
+              {...form.getInputProps("email")}
             />
-            <TextInput
-              label="Celular:"
-              {...form.getInputProps("personalInformation.phone")}
-            />
+            <TextInput label="Celular:" {...form.getInputProps("phone")} />
           </Group>
           <Checkbox
             label="Quiero Factura"
@@ -75,18 +68,15 @@ const InformationForm = () => {
             <Text>Datos de la Factura</Text>
             <Stack px="xl" spacing="sm">
               <Group position="apart" spacing="xl" grow>
-                <TextInput
-                  label="Ruc:"
-                  {...form.getInputProps("billInformation.ruc")}
-                />
+                <TextInput label="Ruc:" {...form.getInputProps("ruc")} />
                 <TextInput
                   label="Razón Social:"
-                  {...form.getInputProps("billInformation.socialReason")}
+                  {...form.getInputProps("businessname")}
                 />
               </Group>
               <TextInput
                 label="Dirección Fiscal:"
-                {...form.getInputProps("billInformation.address")}
+                {...form.getInputProps("fiscaladdress")}
               />
             </Stack>
           </div>

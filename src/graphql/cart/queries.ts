@@ -10,12 +10,41 @@ const GET_CART = gql`
       status
       expirationdate
       total
+      billingInfo {
+        phone
+        ruc
+        businessname
+        fiscaladdress
+      }
+      deliveryInfo {
+        collaboratoraddress {
+          uuidcollaboratoraddress
+        }
+        receivername
+        receiverdocumentkind
+        receiverdocumentnumber
+      }
       suborders {
         uuidcartsuborder
         uuidcart
         uuidbusiness
         businessName
         deliverymethod
+        deliveryprice
+        availableDeliveryMethods {
+          online
+          onhome
+          onstore
+          deliveryOnHome {
+            currency
+            price
+            timetodelivery
+            comments
+          }
+          deliveryOnStore {
+            department
+          }
+        }
         items {
           uuidcartitem
           uuidcartsuborder

@@ -8,6 +8,20 @@ export interface Cart {
   status: string;
   expirationdate?: string;
   total: number;
+  billingInfo?: {
+    phone: string;
+    ruc?: string;
+    businessname?: string;
+    fiscaladdress?: string;
+  };
+  deliveryInfo?: {
+    collaboratoraddress: {
+      uuidcollaboratoraddress: string;
+    };
+    receivername?: string;
+    receiverdocumentkind?: string;
+    receiverdocumentnumber?: string;
+  };
   suborders: CartSubOrder[];
   purchaseNumber: string;
 }
@@ -18,6 +32,13 @@ export interface CartSubOrder {
   uuidbusiness: string;
   businessName: string;
   deliverymethod?: string;
+  deliveryprice?: number;
+  availableDeliveryMethods: {
+    online: boolean;
+    onhome: boolean;
+    onstore: boolean;
+    deliveryOnHome: DeliveryHome;
+  };
   items: CartItem[];
 }
 
@@ -28,4 +49,11 @@ export interface CartItem {
   variant: VariantDetailed;
   quantity: number;
   subtotal: number;
+}
+
+interface DeliveryHome {
+  currency: string;
+  price: number;
+  timetodelivery: string;
+  comments?: string;
 }
