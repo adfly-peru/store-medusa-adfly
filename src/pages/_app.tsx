@@ -15,6 +15,7 @@ import {
 import { OrderProvider } from "@context/order-context";
 import { DesignProvider } from "@context/design-context";
 import RegistrationStepsModal from "@modules/layout/templates/registration-steps-modal";
+import { LoadScript } from "@react-google-maps/api";
 
 export default function App({
   Component,
@@ -37,7 +38,12 @@ export default function App({
           <DesignProvider>
             <AccountProvider>
               <ResourcesProvider>
-                <Component {...pageProps} />
+                <LoadScript
+                  googleMapsApiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
+                  libraries={["places"]}
+                >
+                  <Component {...pageProps} />
+                </LoadScript>
               </ResourcesProvider>
             </AccountProvider>
           </DesignProvider>
