@@ -5,7 +5,7 @@ import { ProductProvider } from "@context/product-context";
 import { CartProvider } from "@context/cart-context";
 import client from "lib/apollo-config";
 import { ApolloProvider } from "@apollo/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ColorScheme,
   ColorSchemeProvider,
@@ -21,9 +21,15 @@ export default function App({
   Component,
   pageProps: { ...pageProps },
 }: AppProps<{}>) {
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+  useEffect(() => {
+    if (window.google) {
+      setIsScriptLoaded(true);
+    }
+  }, []);
   return (
     <ApolloProvider client={client}>
       <ColorSchemeProvider
@@ -38,12 +44,17 @@ export default function App({
           <DesignProvider>
             <AccountProvider>
               <ResourcesProvider>
-                <LoadScript
-                  googleMapsApiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
-                  libraries={["places"]}
-                >
+                {isScriptLoaded ? (
                   <Component {...pageProps} />
-                </LoadScript>
+                ) : (
+                  <LoadScript
+                    googleMapsApiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
+                    libraries={["places"]}
+                    onLoad={() => setIsScriptLoaded(true)}
+                  >
+                    <Component {...pageProps} />
+                  </LoadScript>
+                )}
               </ResourcesProvider>
             </AccountProvider>
           </DesignProvider>
