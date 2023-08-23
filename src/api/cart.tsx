@@ -79,7 +79,7 @@ export const editBillingInfo = async (
           {
             uuidcollaborator: uuidcollaborator,
             uuidcart: uuidcart,
-            phone: billingform.phone,
+            phone: billingform.phone == "" ? null : billingform.phone,
             ruc: billingform.ruc == "" ? null : billingform.ruc,
             businessname:
               billingform.businessname == "" ? null : billingform.businessname,

@@ -1,8 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useCart } from "@context/cart-context";
-import { Anchor, Button, Center, Checkbox, Stack, Text } from "@mantine/core";
+import {
+  Accordion,
+  Anchor,
+  Button,
+  Center,
+  Checkbox,
+  Group,
+  Radio,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+  Image,
+} from "@mantine/core";
 import { IconCreditCard } from "@tabler/icons";
+import { UseFormReturnType } from "@mantine/form";
+import { BillingForm } from "@interfaces/billing";
 
 declare global {
   interface Window {
@@ -35,21 +50,22 @@ const createSessionToken = async (
   }
 };
 
-const PaymentButton = () => {
+const PaymentButton = ({
+  form,
+  submitInfo,
+}: {
+  form: UseFormReturnType<BillingForm>;
+  submitInfo: () => Promise<string | null>;
+}) => {
   const { cart } = useCart();
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
-  useEffect(() => {
-    if (!cart) return;
-    const totaldelivery = cart.suborders.reduce(
-      (acc, curr) => acc + (curr.deliveryprice ?? 0),
-      cart.total
-    );
-    setTotalAmount(totaldelivery);
-  }, [cart]);
+  const [checked, setChecked] = useState("ticket");
 
   const payment = async () => {
     if (!cart) return;
+    const infoerror = await submitInfo();
+    if (infoerror) return;
     const totalAmountFixed = parseFloat(totalAmount.toFixed(2));
     const sessionToken = await createSessionToken(totalAmountFixed);
     if (!sessionToken) return;
@@ -68,6 +84,25 @@ const PaymentButton = () => {
   };
 
   useEffect(() => {
+    if (
+      form.values.businessname ||
+      form.values.ruc ||
+      form.values.fiscaladdress
+    ) {
+      setChecked("bill");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!cart) return;
+    const totaldelivery = cart.suborders.reduce(
+      (acc, curr) => acc + (curr.deliveryprice ?? 0),
+      cart.total
+    );
+    setTotalAmount(totaldelivery);
+  }, [cart]);
+
+  useEffect(() => {
     const script = document.createElement("script");
     script.type = "text/javascript";
     script.src =
@@ -81,36 +116,82 @@ const PaymentButton = () => {
 
   return (
     <Center py="md" px="lg">
-      <Stack>
-        <Text>
+      <Stack w="100%">
+        <Title>Datos de facturación</Title>
+        <Radio.Group value={checked} onChange={setChecked} withAsterisk>
+          <Radio value="ticket" label="Boleta" />
+          <Radio value="bill" label="Factura" />
+        </Radio.Group>
+        {checked === "bill" ? (
+          <div>
+            <Stack px="xl" spacing="sm">
+              <Group position="apart" spacing="xl" grow>
+                <TextInput label="Ruc:" {...form.getInputProps("ruc")} />
+                <TextInput
+                  label="Razón Social:"
+                  {...form.getInputProps("businessname")}
+                />
+              </Group>
+              <TextInput
+                label="Dirección Fiscal:"
+                {...form.getInputProps("fiscaladdress")}
+              />
+            </Stack>
+          </div>
+        ) : null}
+        <Title>Métodos de Pago</Title>
+        {/* <Text>
           El pedido equivale a {(cart.total / 0.1).toFixed(2)} Estrellas. Sin
           embargo, en caso tenga un costo de delivery, este deberá ser pagado
           por separado utilizando alguna otra de las alternativas. Además, si la
           cantidad de estrellas que tiene no alcanza para todo el pedido, esa
           diferencia también tendrá que pagarla con otro medio de pago.
-        </Text>
-        <Checkbox
-          label={
-            <>
-              He leído y acepto los{" "}
-              <Anchor href="/terms" target="_blank">
-                Términos y Condiciones
-              </Anchor>{" "}
-              de este sitio
-            </>
-          }
-          checked={hasAcceptedTerms}
-          onChange={(e) => setHasAcceptedTerms(e.currentTarget.checked)}
-        />
-        <Button
-          leftIcon={<IconCreditCard />}
-          onClick={payment}
-          radius="xl"
-          uppercase
-          disabled={!hasAcceptedTerms}
-        >
-          Pagar: S/.{totalAmount.toFixed(2)}
-        </Button>
+        </Text> */}
+        <Accordion variant="separated">
+          <Accordion.Item value="online">
+            <Accordion.Control icon={<IconCreditCard />}>
+              Pago en Línea
+            </Accordion.Control>
+            <Accordion.Panel>
+              <Stack>
+                <Text>
+                  Paga en línea de manera simple, segura y rápida. Trabajamos
+                  con NIUBIZ para garantizar un pago exitoso. Aceptamos las
+                  siguientes tarjetas:
+                </Text>
+                <Image
+                  src="https://adfly.pe/Content/backend/img/payment/online.png"
+                  width="50%"
+                  fit="contain"
+                />
+                <Checkbox
+                  m="md"
+                  label={
+                    <>
+                      He leído y acepto los{" "}
+                      <Anchor href="/terms" target="_blank">
+                        Términos y Condiciones
+                      </Anchor>{" "}
+                      de este sitio
+                    </>
+                  }
+                  checked={hasAcceptedTerms}
+                  onChange={(e) => setHasAcceptedTerms(e.currentTarget.checked)}
+                />
+                <Stack align="flex-end">
+                  <Button
+                    leftIcon={<IconCreditCard />}
+                    onClick={payment}
+                    radius="md"
+                    disabled={!hasAcceptedTerms}
+                  >
+                    Pagar: S/.{totalAmount.toFixed(2)}
+                  </Button>
+                </Stack>
+              </Stack>
+            </Accordion.Panel>
+          </Accordion.Item>
+        </Accordion>
       </Stack>
     </Center>
   );

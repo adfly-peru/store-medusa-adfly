@@ -87,7 +87,10 @@ const CheckoutForm = () => {
           </ScrollArea>
         </Stepper.Step>
         <Stepper.Step label="Pago" allowStepSelect={active > 2}>
-          <PaymentButton />
+          <PaymentButton
+            form={billingform}
+            submitInfo={async () => await editBilling(billingform.values)}
+          />
         </Stepper.Step>
       </Stepper>
       <Group px={70} position="apart" grow mt="xl">
