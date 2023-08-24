@@ -2,7 +2,6 @@ import { useCart } from "@context/cart-context";
 import {
   Center,
   Stack,
-  ActionIcon,
   Text,
   Button,
   Card,
@@ -11,15 +10,33 @@ import {
   Space,
   Title,
 } from "@mantine/core";
-import { useViewportSize } from "@mantine/hooks";
 import CartView from "@modules/my-cart/templates/cart-view";
 import { IconShoppingCart } from "@tabler/icons";
 import { useRouter } from "next/router";
 import EmptyCart from "../components/empty-cart";
+import { useEffect, useState } from "react";
 
 const CheckoutCart = () => {
   const { cart } = useCart();
+  const [saving, setSaving] = useState(0);
   const router = useRouter();
+
+  const calculateTotalRefPrice = () => {
+    if (!cart) return 0;
+
+    return cart.suborders.reduce((suborderTotal, suborder) => {
+      return (
+        suborderTotal +
+        suborder.items.reduce((itemTotal, item) => {
+          return itemTotal + item.quantity * item.variant.refPrice;
+        }, 0)
+      );
+    }, 0);
+  };
+
+  useEffect(() => {
+    setSaving(calculateTotalRefPrice());
+  }, [cart]);
 
   if (!cart) {
     return <EmptyCart />;
@@ -53,7 +70,7 @@ const CheckoutCart = () => {
             </Group>
             <Group position="apart">
               <Text>Ahorro estimado:</Text>
-              <Text>S/.40</Text>
+              <Text>S/.{(saving - cart.total).toFixed(2)}</Text>
             </Group>
             <Space h="md" />
             <Center>
