@@ -9,6 +9,8 @@ interface SingleProductContext {
   relatedCount: number;
   fetchProduct: (id: string) => void;
   fetchRelatedProducts: (id: string, offset?: number) => void;
+  loadingProduct: boolean;
+  loadingRelateds: boolean;
 }
 
 const SingleProductContext = createContext<SingleProductContext | null>(null);
@@ -24,10 +26,14 @@ export const SingleProductProvider = ({
   const [relatedCount, setRelatedCount] = useState(0);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
 
-  const [getProduct, { data: productData }] = useLazyQuery<{
-    product: Product;
-  }>(GET_PRODUCT);
-  const [getRelatedProducts, { data: relatedProductsData }] = useLazyQuery<{
+  const [getProduct, { data: productData, loading: loadingProduct }] =
+    useLazyQuery<{
+      product: Product;
+    }>(GET_PRODUCT);
+  const [
+    getRelatedProducts,
+    { data: relatedProductsData, loading: loadingRelateds },
+  ] = useLazyQuery<{
     availableProducts: ProductResult;
   }>(GET_RELATED_PRODUCTS);
 
@@ -66,6 +72,8 @@ export const SingleProductProvider = ({
         relatedCount,
         fetchProduct,
         fetchRelatedProducts,
+        loadingProduct,
+        loadingRelateds,
       }}
     >
       {children}

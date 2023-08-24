@@ -1,6 +1,7 @@
 import { useCart } from "@context/cart-context";
 import { CartSubOrder } from "@interfaces/cart";
 import { Text, Group, Stack, Image, Checkbox, Grid } from "@mantine/core";
+import { useState } from "react";
 
 const ShipmentCard = ({
   index,
@@ -60,11 +61,7 @@ const ShipmentCard = ({
           {suborder.availableDeliveryMethods.deliveryOnHome && (
             <div>
               <Checkbox
-                checked={
-                  cart?.suborders.find(
-                    (s) => s.uuidcartsuborder === suborder.uuidcartsuborder
-                  )?.deliverymethod == "onhome"
-                }
+                checked={suborder.deliverymethod == "onhome"}
                 onChange={(_) => handleSelect("onhome")}
                 radius="lg"
                 value={0}
@@ -93,11 +90,7 @@ const ShipmentCard = ({
             </div>
           )}
           <Checkbox
-            checked={
-              cart?.suborders.find(
-                (s) => s.uuidcartsuborder === suborder.uuidcartsuborder
-              )?.deliverymethod == "pickup"
-            }
+            checked={suborder.deliverymethod == "pickup"}
             onChange={(_) => handleSelect("pickup")}
             radius="lg"
             value={1}

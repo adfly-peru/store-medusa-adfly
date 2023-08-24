@@ -1,9 +1,6 @@
-import { useProduct } from "@context/product-context";
-import { Department } from "@interfaces/category";
 import { Text, Grid, Space, Group, Select, Divider } from "@mantine/core";
 import FilteredProducts from "@modules/products/components/filtered-products";
 import SearchBar from "@modules/products/components/search-bar";
-import { useEffect, useState } from "react";
 
 const SearchProducts = ({
   searchable,

@@ -1,5 +1,5 @@
 import ProductCard from "@modules/products/components/product-card";
-import { Title, SimpleGrid } from "@mantine/core";
+import { Title, SimpleGrid, Center, Loader } from "@mantine/core";
 import { useFeaturedProducts } from "@context/featured-products-context";
 import { useEffect } from "react";
 
@@ -8,6 +8,16 @@ const FeaturedProducts = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+  if (products.length == 0) {
+    return (
+      <>
+        <Title>Productos Destacados (*)</Title>
+        <Center>
+          <Loader />
+        </Center>
+      </>
+    );
+  }
   return (
     <>
       <Title>Productos Destacados (*)</Title>

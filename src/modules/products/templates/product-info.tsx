@@ -5,8 +5,14 @@ import { useSingleProduct } from "@context/single-product-context";
 import { useEffect } from "react";
 
 const ProductInfo = ({ productId }: { productId: string }) => {
-  const { product, relatedProducts, fetchProduct, fetchRelatedProducts } =
-    useSingleProduct();
+  const {
+    product,
+    relatedProducts,
+    fetchProduct,
+    fetchRelatedProducts,
+    loadingProduct,
+    loadingRelateds,
+  } = useSingleProduct();
 
   useEffect(() => {
     fetchProduct(productId);
@@ -18,8 +24,12 @@ const ProductInfo = ({ productId }: { productId: string }) => {
     }
   }, [product]);
 
-  if (product == null) {
-    return <Loader />;
+  if (product == null || loadingProduct) {
+    return (
+      <Center>
+        <Loader />
+      </Center>
+    );
   }
 
   return (
@@ -30,7 +40,7 @@ const ProductInfo = ({ productId }: { productId: string }) => {
         </Center>
       </Container>
       <Stack align="center" justify="flex-end" spacing="xl">
-        <SimilarProducts products={relatedProducts} />
+        <SimilarProducts products={relatedProducts} loading={loadingRelateds} />
       </Stack>
     </>
   );

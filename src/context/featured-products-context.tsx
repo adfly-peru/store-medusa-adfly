@@ -7,6 +7,7 @@ interface FeaturedProductsContext {
   products: Product[];
   count: number;
   fetchProducts: (offset?: number) => void;
+  loading: boolean;
 }
 
 const FeaturedProductsContext = createContext<FeaturedProductsContext | null>(
@@ -23,7 +24,7 @@ export const FeaturedProductsProvider = ({
   const [count, setCount] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
 
-  const [getProducts, { data: productsData }] = useLazyQuery<{
+  const [getProducts, { data: productsData, loading }] = useLazyQuery<{
     availableProducts: ProductResult;
   }>(GET_PRODUCTS);
 
@@ -44,6 +45,7 @@ export const FeaturedProductsProvider = ({
         products,
         count,
         fetchProducts,
+        loading,
       }}
     >
       {children}

@@ -5,11 +5,7 @@ import ProductCard from "@modules/products/components/product-card";
 const FilteredProducts = () => {
   const { products, loading } = useFilteredProducts();
 
-  if (!products) {
-    return <></>;
-  }
-
-  if (loading) {
+  if (loading || !products) {
     return (
       <Center h="90%">
         <Loader />

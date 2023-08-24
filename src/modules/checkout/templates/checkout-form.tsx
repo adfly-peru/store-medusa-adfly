@@ -68,6 +68,8 @@ const CheckoutForm = () => {
         opened={loadingEvent}
         withCloseButton={false}
         onClose={() => null}
+        closeOnClickOutside={false}
+        closeOnEscape={false}
         centered
         size="xl"
       >

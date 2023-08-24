@@ -16,6 +16,10 @@ import {
   useFilteredProducts,
 } from "@context/filtered-products-context";
 
+const capitalizeText = (text: string) => {
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+};
+
 const SearchBar = ({
   searchable,
   departmentName,
@@ -51,8 +55,11 @@ const SearchBar = ({
     <Container p={0}>
       <Center p={15}>
         <Title>
-          {searchable.charAt(0).toUpperCase() +
-            searchable.slice(1).toLowerCase()}
+          {searchable != ""
+            ? capitalizeText(searchable)
+            : departmentName != ""
+            ? capitalizeText(departmentName)
+            : "Departamento"}
         </Title>
       </Center>
       {category.length > 0 ||
