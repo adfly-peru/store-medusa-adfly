@@ -142,7 +142,7 @@ export function DetailedProduct({ product }: { product: Product }) {
             </Flex>
           </Stack>
           <Divider orientation="vertical" size="xs" />
-          <Stack spacing="xs">
+          <Stack spacing="xs" w="40%">
             <Title order={1}>{product.productName}</Title>
             <Text fw={500}>Marca: {product.brand.name}</Text>
             <Group>
