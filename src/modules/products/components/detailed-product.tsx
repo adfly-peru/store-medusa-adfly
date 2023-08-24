@@ -1,5 +1,4 @@
 import {
-  createStyles,
   Text,
   Card,
   Group,
@@ -17,41 +16,79 @@ import {
   Space,
   Breadcrumbs,
   Anchor,
+  SegmentedControl,
+  List,
+  Center,
 } from "@mantine/core";
-import { IconCircleMinus, IconCirclePlus } from "@tabler/icons";
-import { useRef, useState } from "react";
+import {
+  IconCaretLeft,
+  IconCaretRight,
+  IconCircleMinus,
+  IconCirclePlus,
+} from "@tabler/icons";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
 import { Product } from "@interfaces/productInterface";
 
-const useStyles = createStyles((theme) => ({
-  card: {
-    backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-  },
-}));
-
 export function DetailedProduct({ product }: { product: Product }) {
-  const firstVariant = product.variant.at(0);
-  const { classes } = useStyles();
-  const [imgIdx, setIdx] = useState(0);
+  const defaultAttributeSelections: Record<string, string> = {};
+  if (product.variant[0]) {
+    product.variant[0].attributes.forEach((attr) => {
+      defaultAttributeSelections[attr.attributeName] = attr.value;
+    });
+  }
+  const [attributeSelections, setAttributeSelections] = useState<
+    Record<string, string>
+  >(defaultAttributeSelections);
+
+  const handleAttributeSelection = (attributeName: string, value: string) => {
+    setAttributeSelections((prev) => ({ ...prev, [attributeName]: value }));
+  };
+  const [selectedVariant, setSelectedVariant] = useState(product.variant[0]);
+  const [imgIdx, setImgIdx] = useState(0);
   const [value, setValue] = useState(0);
   const { addProduct } = useCart();
+  const [thumbnailStartIdx, setThumbnailStartIdx] = useState(0);
+  const displayedThumbnails = 3;
+
+  const navigateThumbnails = (direction: "left" | "right") => {
+    if (direction === "left" && thumbnailStartIdx > 0) {
+      setThumbnailStartIdx(thumbnailStartIdx - 1);
+    }
+    if (
+      direction === "right" &&
+      thumbnailStartIdx < allImages.length - displayedThumbnails
+    ) {
+      setThumbnailStartIdx(thumbnailStartIdx + 1);
+    }
+  };
   const handlers = useRef<NumberInputHandlers>();
-  const allImages = product.variant.map((variant) => variant.imageURL);
-
-  if (!firstVariant) {
-    return <></>;
-  }
-
-  // Calculo de precio final
+  const allImages = product.variant.map((v) => v.imageURL);
   let discount =
-    ((firstVariant.refPrice - firstVariant.adflyPrice) /
-      firstVariant.refPrice) *
+    ((selectedVariant.refPrice - selectedVariant.adflyPrice) /
+      selectedVariant.refPrice) *
     100;
-  let ahorro = firstVariant.refPrice - firstVariant.adflyPrice;
+  let ahorro = (selectedVariant.refPrice - selectedVariant.adflyPrice).toFixed(
+    2
+  );
+
+  if (!selectedVariant) {
+    return null;
+  }
+  useEffect(() => {
+    const matchingVariant = product.variant.find((variant) =>
+      variant.attributes.every(
+        (attr) => attributeSelections[attr.attributeName] === attr.value
+      )
+    );
+
+    if (matchingVariant) {
+      setSelectedVariant(matchingVariant);
+    }
+  }, [attributeSelections, product.variant]);
 
   return (
-    <Card withBorder py="xl" px="xl" radius="md" className={classes.card}>
+    <Card withBorder py="xl" px="xl" radius="md">
       <CardSection inheritPadding withBorder py="xs">
         <Breadcrumbs separator="→">
           <Anchor fw={500} color="dark" href={"/home"}>
@@ -65,8 +102,8 @@ export function DetailedProduct({ product }: { product: Product }) {
       </CardSection>
 
       <CardSection inheritPadding py="xl">
-        <Group align="start" position="apart" grow>
-          <Stack spacing="xs">
+        <Group align="start" position="apart">
+          <Stack spacing="xs" w="35%">
             <div style={{ width: 70 }}>
               <Badge size="lg" color="red" radius="xs" variant="filled">
                 -{discount.toFixed(2)}%
@@ -76,46 +113,95 @@ export function DetailedProduct({ product }: { product: Product }) {
             <Image
               src={allImages[imgIdx]}
               alt={allImages[imgIdx]}
-              height={200}
               fit="contain"
               withPlaceholder
             />
-            <Flex>
-              {allImages.map((img, idx) => (
-                <Image
-                  onClick={() => setIdx(idx)}
-                  key={idx}
-                  src={img}
-                  alt={img}
-                  height={100}
-                  fit="contain"
-                  withPlaceholder
-                />
-              ))}
+            <Flex align="center">
+              <ActionIcon onClick={() => navigateThumbnails("left")}>
+                <IconCaretLeft />
+              </ActionIcon>
+              {allImages
+                .slice(
+                  thumbnailStartIdx,
+                  thumbnailStartIdx + displayedThumbnails
+                )
+                .map((img, idx) => (
+                  <Image
+                    onClick={() => setImgIdx(thumbnailStartIdx + idx)}
+                    key={thumbnailStartIdx + idx}
+                    src={img}
+                    alt={img}
+                    height={100}
+                    fit="contain"
+                    withPlaceholder
+                  />
+                ))}
+              <ActionIcon onClick={() => navigateThumbnails("right")}>
+                <IconCaretRight />
+              </ActionIcon>
             </Flex>
           </Stack>
+          <Divider orientation="vertical" size="xs" />
           <Stack spacing="xs">
             <Title order={1}>{product.productName}</Title>
             <Text fw={500}>Marca: {product.brand.name}</Text>
             <Group>
               <Text c="dimmed" fw={100} fz="sm" td="line-through">
-                S/. {firstVariant.refPrice}
+                S/. {selectedVariant.refPrice}
               </Text>
               <Text c="red" fw={700}>
-                S/. {firstVariant.adflyPrice}
+                S/. {selectedVariant.adflyPrice}
               </Text>
             </Group>
             <Text fw={450}>o 5 estrellas ⭐</Text>
             <Text fz="xs">(Ahorro estimado S/. {ahorro})</Text>
             <Divider my="sm" />
-            <Text>
-              Vendido por{" "}
-              <Text span fw={500} inherit>
-                Partner
-              </Text>
-            </Text>
+            {product.productAttributes.map((productAttr, index) => {
+              const validVariants = product.variant.filter((variant) =>
+                Object.entries(attributeSelections).every(
+                  ([key, value]) =>
+                    key === productAttr.attributeName ||
+                    variant.attributes.some(
+                      (attr) =>
+                        attr.attributeName === key && attr.value === value
+                    )
+                )
+              );
+              const validValues = [
+                ...validVariants.flatMap((variant) =>
+                  variant.attributes
+                    .filter(
+                      (attr) => attr.attributeName === productAttr.attributeName
+                    )
+                    .map((attr) => attr.value)
+                ),
+              ];
+              return (
+                <div key={index}>
+                  <Text>
+                    <Text span fw="bold">
+                      {productAttr.attribute.attributeName}
+                    </Text>
+                  </Text>
+                  <SegmentedControl
+                    data={validValues.map((value) => ({ value, label: value }))}
+                    value={
+                      attributeSelections[
+                        productAttr.attribute.attributeName
+                      ] || ""
+                    }
+                    onChange={(val) =>
+                      handleAttributeSelection(
+                        productAttr.attribute.attributeName,
+                        val ?? ""
+                      )
+                    }
+                  />
+                </div>
+              );
+            })}
             <Divider my="sm" />
-            <Text fz="xs">Stock: {firstVariant.stock} Unidad(es)</Text>
+            <Text fz="xs">Stock: {selectedVariant.stock} Unidad(es)</Text>
             <Text fz="xs">Fecha de Vencimiento: null</Text>
             <Group spacing={5}>
               <ActionIcon
@@ -157,7 +243,7 @@ export function DetailedProduct({ product }: { product: Product }) {
                 value == 0
                   ? null
                   : addProduct(
-                      product.variant.at(0)?.uuidVariant!,
+                      selectedVariant.uuidVariant,
                       product.business.uuidbusiness,
                       value
                     )
@@ -165,6 +251,25 @@ export function DetailedProduct({ product }: { product: Product }) {
             >
               Agregar
             </Button>
+          </Stack>
+          <Stack w="20%">
+            <Center>
+              <Card w={200} shadow="sm" p="lg" radius="sm" withBorder>
+                <Text>
+                  <Text span fw="bold">
+                    Vendido y despachado por:
+                  </Text>
+                  {` ${product.business.businessname}`}
+                </Text>
+                <Divider my="md" />
+                <Text fw="bold">Tipo de Entrega:</Text>
+                <List spacing="xs" size="sm" center>
+                  <List.Item>Entrega en domicilio</List.Item>
+                  <List.Item>Recojo en tienda</List.Item>
+                  <List.Item>Entrega en centro de trabajo</List.Item>
+                </List>
+              </Card>
+            </Center>
           </Stack>
         </Group>
       </CardSection>
