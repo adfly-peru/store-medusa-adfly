@@ -71,10 +71,6 @@ export function DetailedProduct({ product }: { product: Product }) {
   let ahorro = (selectedVariant.refPrice - selectedVariant.adflyPrice).toFixed(
     2
   );
-
-  if (!selectedVariant) {
-    return null;
-  }
   useEffect(() => {
     const matchingVariant = product.variant.find((variant) =>
       variant.attributes.every(
@@ -86,6 +82,10 @@ export function DetailedProduct({ product }: { product: Product }) {
       setSelectedVariant(matchingVariant);
     }
   }, [attributeSelections, product.variant]);
+
+  if (!selectedVariant) {
+    return null;
+  }
 
   return (
     <Card withBorder py="xl" px="xl" radius="md">
