@@ -132,7 +132,7 @@ const SimpleHeader = () => {
                 <Menu.Item icon={<IconBasket size={14} />}>
                   Mis compras
                 </Menu.Item>
-                <Menu.Item
+                {/* <Menu.Item
                   onClick={() => toggleColorScheme()}
                   icon={
                     colorScheme === "dark" ? (
@@ -143,7 +143,7 @@ const SimpleHeader = () => {
                   }
                 >
                   Modo {colorScheme === "dark" ? "Claro" : "Oscuro"}
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item icon={<IconSettings size={14} />}>
                   Configuracion
                 </Menu.Item>
