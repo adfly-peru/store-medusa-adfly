@@ -24,9 +24,9 @@ const InformationBox = () => {
         py="xs"
         sx={{ display: "flex", justifyContent: "flex-end" }}
       >
-        <Badge size="md">
+        {/* <Badge size="md">
           <IconStar size={15} /> 210 Estrellas
-        </Badge>
+        </Badge> */}
       </Card.Section>
       <Card.Section p="md">
         <Group>

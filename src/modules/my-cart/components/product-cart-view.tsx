@@ -65,7 +65,7 @@ const DetailedProductCartView = ({
                 </Text>{" "}
                 S/.{item.variant.adflyPrice}
               </Text>
-              <Text c="dimmed">o 800 estrellas</Text>
+              {/* <Text c="dimmed">o 800 estrellas</Text> */}
               <Space h="md" />
               <List spacing={2} size="sm" center>
                 <List.Item

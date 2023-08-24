@@ -156,7 +156,7 @@ export function DetailedProduct({ product }: { product: Product }) {
                 S/. {selectedVariant.adflyPrice}
               </Text>
             </Group>
-            <Text fw={450}>o 5 estrellas ⭐</Text>
+            {/* <Text fw={450}>o 5 estrellas ⭐</Text> */}
             <Text fz="xs">(Ahorro estimado S/. {ahorro})</Text>
             <Divider my="sm" />
             {product.productAttributes.map((productAttr, index) => {

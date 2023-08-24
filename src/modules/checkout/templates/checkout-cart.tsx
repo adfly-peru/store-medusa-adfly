@@ -63,9 +63,9 @@ const CheckoutCart = () => {
               <Text>Subtotal:</Text>
               <Text>
                 S/.{cart.total}
-                <Text fz="md" c="dimmed" span inherit>
+                {/* <Text fz="md" c="dimmed" span inherit>
                   (1600 estrellas)
-                </Text>
+                </Text> */}
               </Text>
             </Group>
             <Group position="apart">

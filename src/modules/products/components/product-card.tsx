@@ -41,8 +41,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const ProductCard = ({ product }: { product: Product }) => {
-  const firstVariant = product.variant.at(0);
   const { classes } = useStyles();
+  const [selectedVariant, setSelectedVariant] = useState(product.variant[0]);
   const [cartItem, setCartItem] = useState<CartItem | null>(null);
   const [showBuy, setShowBuy] = useState(false);
   const handlers = useRef<NumberInputHandlers>();
@@ -53,6 +53,14 @@ const ProductCard = ({ product }: { product: Product }) => {
       removeProduct(cartItem.uuidcartitem, product.business.uuidbusiness);
     }
   };
+
+  let discount =
+    ((selectedVariant.refPrice - selectedVariant.adflyPrice) /
+      selectedVariant.refPrice) *
+    100;
+  let ahorro = (selectedVariant.refPrice - selectedVariant.adflyPrice).toFixed(
+    2
+  );
 
   useEffect(() => {
     const itemGetted = getProductById(
@@ -65,16 +73,9 @@ const ProductCard = ({ product }: { product: Product }) => {
     }
   }, []);
 
-  if (!firstVariant) {
+  if (!selectedVariant) {
     return <></>;
   }
-
-  // Calculo de precio final
-  let discount =
-    ((firstVariant.refPrice - firstVariant.adflyPrice) /
-      firstVariant.refPrice) *
-    100;
-  let ahorro = firstVariant.refPrice - firstVariant.adflyPrice;
 
   return (
     <Card
@@ -93,8 +94,8 @@ const ProductCard = ({ product }: { product: Product }) => {
       <Card.Section p={10} withBorder>
         <Link href={"/product/" + product.uuidProduct}>
           <Image
-            src={firstVariant.imageURL}
-            alt={firstVariant.imageURL}
+            src={selectedVariant.imageURL}
+            alt={selectedVariant.imageURL}
             height={200}
             fit="contain"
             withPlaceholder
@@ -108,13 +109,13 @@ const ProductCard = ({ product }: { product: Product }) => {
         </Text>
         <Group>
           <Text fz="sm" td="line-through">
-            S/. {firstVariant.refPrice}
+            S/. {selectedVariant.refPrice}
           </Text>
-          <Text c="red">S/. {firstVariant.adflyPrice}</Text>
+          <Text c="red">S/. {selectedVariant.adflyPrice}</Text>
         </Group>
-        <Text fz="sm" c="dimmed">
+        {/* <Text fz="sm" c="dimmed">
           (o 5 estrellas)
-        </Text>
+        </Text> */}
         <Text fz="sm" c="red">
           Ahorro estimado S/. {ahorro}
         </Text>
