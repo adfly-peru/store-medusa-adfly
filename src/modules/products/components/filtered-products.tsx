@@ -1,26 +1,28 @@
-import { Grid } from "@mantine/core";
-import { useFilter } from "@context/filter-context";
+import { useFilteredProducts } from "@context/filtered-products-context";
+import { Center, Grid, Loader } from "@mantine/core";
 import ProductCard from "@modules/products/components/product-card";
 
 const FilteredProducts = () => {
-  const { filteredProducts, category, brand } = useFilter();
+  const { products, loading } = useFilteredProducts();
 
+  if (!products) {
+    return <></>;
+  }
+
+  if (loading) {
+    return (
+      <Center h="90%">
+        <Loader />
+      </Center>
+    );
+  }
   return (
     <Grid>
-      {category.length == 0 && brand.length == 0
-        ? filteredProducts.map((prod, i): any => (
-            <Grid.Col key={i} xs={3}>
-              <ProductCard product={prod} />
-            </Grid.Col>
-          ))
-        : filteredProducts.map((prod, i): any =>
-            category.includes(prod.subCategory.name) ||
-            brand.includes(prod.brand.name) ? (
-              <Grid.Col key={i} xs={3}>
-                <ProductCard product={prod} />
-              </Grid.Col>
-            ) : null
-          )}
+      {products.products.map((prod, i): any => (
+        <Grid.Col key={i} xs={3}>
+          <ProductCard product={prod} />
+        </Grid.Col>
+      ))}
     </Grid>
   );
 };

@@ -1,11 +1,22 @@
 import { Center, Container, Loader, Stack } from "@mantine/core";
 import SimilarProducts from "@modules/products/components/similar-products";
 import { DetailedProduct } from "@modules/products/components/detailed-product";
-import { useProduct } from "@context/product-context";
+import { useSingleProduct } from "@context/single-product-context";
+import { useEffect } from "react";
 
 const ProductInfo = ({ productId }: { productId: string }) => {
-  const { getProduct } = useProduct();
-  const product = getProduct(productId);
+  const { product, relatedProducts, fetchProduct, fetchRelatedProducts } =
+    useSingleProduct();
+
+  useEffect(() => {
+    fetchProduct(productId);
+  }, []);
+
+  useEffect(() => {
+    if (product) {
+      fetchRelatedProducts(productId);
+    }
+  }, [product]);
 
   if (product == null) {
     return <Loader />;
@@ -19,7 +30,7 @@ const ProductInfo = ({ productId }: { productId: string }) => {
         </Center>
       </Container>
       <Stack align="center" justify="flex-end" spacing="xl">
-        <SimilarProducts />
+        <SimilarProducts products={relatedProducts} />
       </Stack>
     </>
   );

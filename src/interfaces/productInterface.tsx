@@ -81,5 +81,24 @@ export interface Product {
   business: {
     uuidbusiness: string;
     businessname: string;
+    deliveryMethods: {
+      deliveryonline: boolean;
+      deliveryonhome: boolean;
+      deliveryonstore: boolean;
+    };
   };
+}
+
+export interface ProductResult {
+  brandCounts?: FieldCount[];
+  categoryCounts?: FieldCount[];
+  subcategoryCounts?: FieldCount[];
+  products: Product[];
+  totalProducts: number;
+}
+
+interface FieldCount {
+  uuid?: string;
+  name?: string;
+  count?: number;
 }

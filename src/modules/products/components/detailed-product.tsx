@@ -19,12 +19,15 @@ import {
   SegmentedControl,
   List,
   Center,
+  ThemeIcon,
 } from "@mantine/core";
 import {
   IconCaretLeft,
   IconCaretRight,
+  IconCheck,
   IconCircleMinus,
   IconCirclePlus,
+  IconX,
 } from "@tabler/icons";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
@@ -262,11 +265,61 @@ export function DetailedProduct({ product }: { product: Product }) {
                   {` ${product.business.businessname}`}
                 </Text>
                 <Divider my="md" />
-                <Text fw="bold">Tipo de Entrega:</Text>
+                <Text fw="bold" mb="xs">
+                  Tipo de Entrega:
+                </Text>
                 <List spacing="xs" size="sm" center>
-                  <List.Item>Entrega en domicilio</List.Item>
-                  <List.Item>Recojo en tienda</List.Item>
-                  <List.Item>Entrega en centro de trabajo</List.Item>
+                  <List.Item
+                    icon={
+                      <ThemeIcon
+                        color={
+                          product.business.deliveryMethods.deliveryonhome
+                            ? "green"
+                            : "red"
+                        }
+                        size={18}
+                        radius="xl"
+                      >
+                        {product.business.deliveryMethods.deliveryonhome ? (
+                          <IconCheck size="1rem" />
+                        ) : (
+                          <IconX size="1rem" />
+                        )}
+                      </ThemeIcon>
+                    }
+                  >
+                    Entrega en domicilio
+                  </List.Item>
+                  <List.Item
+                    icon={
+                      <ThemeIcon color="green" size={18} radius="xl">
+                        <IconCheck size="1rem" />
+                      </ThemeIcon>
+                    }
+                  >
+                    Recojo en tienda
+                  </List.Item>
+                  <List.Item
+                    icon={
+                      <ThemeIcon
+                        color={
+                          product.business.deliveryMethods.deliveryonhome
+                            ? "green"
+                            : "red"
+                        }
+                        size={18}
+                        radius="xl"
+                      >
+                        {product.business.deliveryMethods.deliveryonstore ? (
+                          <IconCheck size="1rem" />
+                        ) : (
+                          <IconX size="1rem" />
+                        )}
+                      </ThemeIcon>
+                    }
+                  >
+                    Entrega en centro de trabajo
+                  </List.Item>
                 </List>
               </Card>
             </Center>

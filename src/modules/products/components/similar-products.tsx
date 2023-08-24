@@ -1,11 +1,11 @@
 import ProductCard from "@modules/products/components/product-card";
-import { useProduct } from "@context/product-context";
-import { Grid } from "@mantine/core";
+import { Box, Grid, Title } from "@mantine/core";
+import { Product } from "@interfaces/productInterface";
 
-const SimilarProducts = () => {
-  const { products } = useProduct();
+const SimilarProducts = ({ products }: { products: Product[] }) => {
   return (
-    <>
+    <Box mt="xl" w="90%">
+      <Title>Productos Relacionados</Title>
       <Grid w="100%">
         {products.map((prod, i): any => (
           <Grid.Col key={i} xs={3}>
@@ -13,7 +13,7 @@ const SimilarProducts = () => {
           </Grid.Col>
         ))}
       </Grid>
-    </>
+    </Box>
   );
 };
 

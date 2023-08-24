@@ -9,27 +9,43 @@ import {
   RangeSlider,
   Container,
 } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CheckGroup from "@modules/common/components/checkbox-group";
-import { useFilter } from "@context/filter-context";
+import {
+  FilterOptions,
+  useFilteredProducts,
+} from "@context/filtered-products-context";
 
-const SearchBar = ({ searchable }: { searchable: string }) => {
+const SearchBar = ({
+  searchable,
+  departmentName,
+}: {
+  searchable: string;
+  departmentName: string;
+}) => {
+  const { fetchProducts, products } = useFilteredProducts();
+  const [category, setCategory] = useState<string[]>([]);
+  const [subcategory, setSubcategory] = useState<string[]>([]);
+  const [brand, setBrand] = useState<string[]>([]);
+  const [seller, setSeller] = useState<string[]>([]);
+  const [delivery, setDelivery] = useState<string[]>([]);
+
   const minPrice = 0;
   const maxPrice = 1000;
   const [minPriceSelected, setMin] = useState(minPrice);
   const [maxPriceSelected, setMax] = useState(maxPrice);
-  const {
-    category,
-    setCategory,
-    brand,
-    setBrand,
-    seller,
-    setSeller,
-    delivery,
-    setDelivery,
-    categories,
-    brands,
-  } = useFilter();
+
+  useEffect(() => {
+    const fetchOptions: FilterOptions = {};
+    if (searchable) fetchOptions.productSearch = searchable;
+    if (departmentName) fetchOptions.departmentName = departmentName;
+    if (category.length > 0) fetchOptions.categoryName = category.at(0);
+    if (subcategory.length > 0)
+      fetchOptions.subcategoryName = subcategory.at(0);
+    if (brand.length > 0) fetchOptions.brandName = brand.at(0);
+
+    fetchProducts(fetchOptions);
+  }, [searchable, departmentName, category, subcategory, brand]);
 
   return (
     <Container p={0}>
@@ -40,6 +56,7 @@ const SearchBar = ({ searchable }: { searchable: string }) => {
         </Title>
       </Center>
       {category.length > 0 ||
+      subcategory.length > 0 ||
       brand.length > 0 ||
       seller.length > 0 ||
       delivery.length > 0 ? (
@@ -49,7 +66,13 @@ const SearchBar = ({ searchable }: { searchable: string }) => {
             <Text>Filtros aplicados</Text>
             <Chip.Group
               position="center"
-              value={[...category, ...brand, ...seller, ...delivery]}
+              value={[
+                ...category,
+                ...subcategory,
+                ...brand,
+                ...seller,
+                ...delivery,
+              ]}
             >
               {category.map((e, idx) => (
                 <Chip
@@ -62,8 +85,17 @@ const SearchBar = ({ searchable }: { searchable: string }) => {
                   {e}
                 </Chip>
               ))}
-              {/* </Chip.Group>
-            <Chip.Group position="center" value={brand}> */}
+              {subcategory.map((e, idx) => (
+                <Chip
+                  value={e}
+                  onClick={() =>
+                    setSubcategory(subcategory.filter((value) => value != e))
+                  }
+                  key={idx}
+                >
+                  {e}
+                </Chip>
+              ))}
               {brand.map((e, idx) => (
                 <Chip
                   value={e}
@@ -73,8 +105,6 @@ const SearchBar = ({ searchable }: { searchable: string }) => {
                   {e}
                 </Chip>
               ))}
-              {/* </Chip.Group>
-            <Chip.Group position="center" value={seller}> */}
               {seller.map((e, idx) => (
                 <Chip
                   value={e}
@@ -86,8 +116,6 @@ const SearchBar = ({ searchable }: { searchable: string }) => {
                   {e}
                 </Chip>
               ))}
-              {/* </Chip.Group>
-            <Chip.Group position="center" value={delivery}> */}
               {delivery.map((e, idx) => (
                 <Chip
                   value={e}
@@ -115,11 +143,12 @@ const SearchBar = ({ searchable }: { searchable: string }) => {
             <CheckGroup
               values={
                 new Map<string, string>(
-                  Array.from(categories.entries()).map((entry) => [
-                    entry[0],
-                    `${entry[0]} (${entry[1]})`,
-                  ])
-                  // categories.map((category) => [category.name, category.name])
+                  Array.from(
+                    products?.categoryCounts?.map((c) => [
+                      c.name ?? "",
+                      `${c.name} (${c.count})`,
+                    ]) ?? []
+                  )
                 )
               }
               currentValues={category}
@@ -127,7 +156,27 @@ const SearchBar = ({ searchable }: { searchable: string }) => {
             />
           </Accordion.Panel>
         </Accordion.Item>
-
+        <Accordion.Item value="subcategory">
+          <Accordion.Control>
+            <Title order={5}>Subcategoría</Title>
+          </Accordion.Control>
+          <Accordion.Panel>
+            <CheckGroup
+              values={
+                new Map<string, string>(
+                  Array.from(
+                    products?.subcategoryCounts?.map((c) => [
+                      c.name ?? "",
+                      `${c.name} (${c.count})`,
+                    ]) ?? []
+                  )
+                )
+              }
+              currentValues={subcategory}
+              changeValues={setSubcategory}
+            />
+          </Accordion.Panel>
+        </Accordion.Item>
         <Accordion.Item value="brand">
           <Accordion.Control>
             <Title order={5}>Marca</Title>
@@ -136,10 +185,12 @@ const SearchBar = ({ searchable }: { searchable: string }) => {
             <CheckGroup
               values={
                 new Map<string, string>(
-                  Array.from(brands.entries()).map((entry) => [
-                    entry[0],
-                    `${entry[0]} (${entry[1]})`,
-                  ])
+                  Array.from(
+                    products?.brandCounts?.map((c) => [
+                      c.name ?? "",
+                      `${c.name} (${c.count})`,
+                    ]) ?? []
+                  )
                 )
               }
               currentValues={brand}

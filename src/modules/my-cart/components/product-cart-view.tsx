@@ -22,14 +22,16 @@ import {
 } from "@tabler/icons";
 import { useRef } from "react";
 import { useCart } from "@context/cart-context";
-import { CartItem } from "@interfaces/cart";
+import { CartItem, CartSubOrder } from "@interfaces/cart";
 
 const DetailedProductCartView = ({
   item,
+  suborder,
   businessid,
   businessName,
 }: {
   item: CartItem;
+  suborder: CartSubOrder;
   businessid: string;
   businessName: string;
 }) => {
@@ -65,22 +67,53 @@ const DetailedProductCartView = ({
               </Text>
               <Text c="dimmed">o 800 estrellas</Text>
               <Space h="md" />
-              <List
-                spacing={2}
-                size="sm"
-                center
-                icon={
-                  <ThemeIcon color="teal" size={24} radius="xl">
-                    <IconCheck size={16} />
-                  </ThemeIcon>
-                }
-              >
-                <List.Item>Envío a domicilio</List.Item>
-                <List.Item>Recojo en tienda</List.Item>
+              <List spacing={2} size="sm" center>
                 <List.Item
                   icon={
-                    <ThemeIcon color="red" size={24} radius="xl">
-                      <IconX size={16} />
+                    <ThemeIcon
+                      color={
+                        suborder.availableDeliveryMethods.onhome
+                          ? "green"
+                          : "red"
+                      }
+                      size={18}
+                      radius="xl"
+                    >
+                      {suborder.availableDeliveryMethods.onhome ? (
+                        <IconCheck size="1rem" />
+                      ) : (
+                        <IconX size="1rem" />
+                      )}
+                    </ThemeIcon>
+                  }
+                >
+                  Envío a domicilio
+                </List.Item>
+                <List.Item
+                  icon={
+                    <ThemeIcon color="green" size={18} radius="xl">
+                      <IconCheck size="1rem" />
+                    </ThemeIcon>
+                  }
+                >
+                  Recojo en tienda
+                </List.Item>
+                <List.Item
+                  icon={
+                    <ThemeIcon
+                      color={
+                        suborder.availableDeliveryMethods.onstore
+                          ? "green"
+                          : "red"
+                      }
+                      size={18}
+                      radius="xl"
+                    >
+                      {suborder.availableDeliveryMethods.onstore ? (
+                        <IconCheck size="1rem" />
+                      ) : (
+                        <IconX size="1rem" />
+                      )}
                     </ThemeIcon>
                   }
                 >

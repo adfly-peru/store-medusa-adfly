@@ -17,6 +17,7 @@ const CartView = ({ cart }: { cart: Cart }) => {
               <div key={iditem}>
                 <DetailedProductCartView
                   item={item}
+                  suborder={suborder}
                   businessid={suborder.uuidbusiness}
                   businessName={suborder.businessName}
                 />

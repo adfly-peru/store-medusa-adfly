@@ -1,11 +1,16 @@
+import { useProduct } from "@context/product-context";
+import { Department } from "@interfaces/category";
 import { Text, Grid, Space, Group, Select, Divider } from "@mantine/core";
 import FilteredProducts from "@modules/products/components/filtered-products";
 import SearchBar from "@modules/products/components/search-bar";
+import { useEffect, useState } from "react";
 
 const SearchProducts = ({
   searchable,
+  departmentName,
 }: {
-  searchable: string | string[] | undefined;
+  searchable: string;
+  departmentName: string;
 }) => {
   return (
     <>
@@ -16,11 +21,7 @@ const SearchProducts = ({
             borderRightStyle: "groove",
           }}
         >
-          <SearchBar
-            searchable={
-              typeof searchable == "string" ? searchable : "Departamento"
-            }
-          />
+          <SearchBar searchable={searchable} departmentName={departmentName} />
         </Grid.Col>
         <Grid.Col span="auto" px={15}>
           <Space h="xs" />
