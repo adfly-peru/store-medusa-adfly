@@ -42,6 +42,8 @@ export default async function handler(req: any, res: any) {
           uuidcollaborator: cartdata.uuidcollaborator,
           total: cartdata.total,
           uuidcart: cartdata.uuidcart,
+          amount: Number(amount),
+          transactionToken: transactionToken,
         },
         {
           headers: {
