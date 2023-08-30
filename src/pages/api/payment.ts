@@ -1,4 +1,17 @@
+import { GET_CART } from "@graphql/cart/queries";
+import { Cart } from "@interfaces/cart";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+
+const client = new ApolloClient({
+  link: new HttpLink({
+    uri: process.env.NEXT_PUBLIC_BACKEND_GRAPHQL_URL,
+    fetchOptions: {
+      method: "POST", // o 'POST'
+    },
+  }),
+  cache: new InMemoryCache(),
+});
 
 interface AdflyResponse {
   success: boolean;
@@ -10,15 +23,27 @@ interface AdflyResponse {
 export default async function handler(req: any, res: any) {
   if (req.method === "POST") {
     const { transactionToken } = req.body;
-    const { purchaseNumber, amount } = req.query;
+    const { purchaseNumber, amount, collaboratorid } = req.query;
 
     try {
+      const { collaboratorid } = req.query;
+
+      const { data } = await client.query<{ getCart: Cart }>({
+        query: GET_CART,
+        variables: { collaboratorId: collaboratorid },
+      });
+      const cartdata = data.getCart;
+
       const response: AxiosResponse<AdflyResponse> = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_API}/store/order`,
         {
-          transactiontoken: transactionToken,
-          purchasenumber: purchaseNumber,
+          purchaseNumber,
+          suborders: cartdata.suborders,
+          uuidcollaborator: cartdata.uuidcollaborator,
+          total: cartdata.total,
+          uuidcart: cartdata.uuidcart,
           amount: Number(amount),
+          transactionToken: transactionToken,
         },
         {
           headers: {

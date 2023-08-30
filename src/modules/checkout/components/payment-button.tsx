@@ -18,6 +18,7 @@ import {
 import { IconCreditCard } from "@tabler/icons";
 import { UseFormReturnType } from "@mantine/form";
 import { BillingForm } from "@interfaces/billing";
+import { useAccount } from "@context/account-context";
 
 declare global {
   interface Window {
@@ -58,6 +59,7 @@ const PaymentButton = ({
   submitInfo: () => Promise<string | null>;
 }) => {
   const { cart } = useCart();
+  const { collaborator } = useAccount();
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [checked, setChecked] = useState("ticket");
@@ -77,7 +79,7 @@ const PaymentButton = ({
       amount: totalAmount,
       expirationminutes: "20",
       timeouturl: "about:blank",
-      action: `api/payment?purchaseNumber=${cart.purchaseNumber}&amount=${totalAmount}`,
+      action: `api/payment?purchaseNumber=${cart.purchaseNumber}&amount=${totalAmount}&collaboratorid=${collaborator?.uuidcollaborator}`,
     });
 
     window.VisanetCheckout.open();
