@@ -28,6 +28,8 @@ interface AccountContext {
   status: string;
   addresses: Address[];
   addAddress: (newAddress: Address) => Promise<string | null>;
+  loading: boolean;
+  errorText: string;
 }
 
 const AccountContext = createContext<AccountContext | null>(null);
@@ -38,6 +40,8 @@ interface AccountProviderProps {
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [errorText, setErrorText] = useState("");
   const [collaborator, setCollaborator] = useState<Collaborator | undefined>(
     undefined
   );
@@ -156,6 +160,8 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
   const login = async (values: { email: string; password: string }) => {
     try {
+      setLoading(true);
+      setErrorText("");
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/auth/signin`,
         {
@@ -179,10 +185,20 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       }
       setToken(authToken);
       setStatus("authenticated");
-      router.push("/");
       refetch();
       refetchDesign();
-    } catch (error) {
+      setLoading(false);
+      router.push("/");
+    } catch (error: any) {
+      setLoading(false);
+      if (error.response && error.response.data) {
+        // Aquí se maneja el error específico de axios con mensaje desde el servidor
+        setErrorText(`Error al iniciar sesión: ${error.response.data.error}`);
+      } else {
+        // Aquí se manejan otros errores que pueden no ser específicos de axios
+        setErrorText(`Error al iniciar sesión: ${error}`);
+      }
+
       console.error("Error al iniciar sesión:", error);
     }
   };
@@ -251,6 +267,8 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         status,
         addresses,
         addAddress,
+        loading,
+        errorText,
       }}
     >
       {children}

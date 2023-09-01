@@ -12,31 +12,39 @@ import {
   Space,
   Title,
   LoadingOverlay,
+  Loader,
+  Alert,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { useRouter } from "next/router";
 import { useAccount } from "@context/account-context";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDesign } from "@context/design-context";
 
 const Login = () => {
+  const router = useRouter();
+  const [modalError, setModalError] = useState(false);
   const { height, width } = useViewportSize();
   const { loginDesign } = useDesign();
+  const { login, status, loading, errorText } = useAccount();
   const form = useForm({
     initialValues: {
       email: "",
       password: "",
     },
   });
-  const router = useRouter();
-  const { login, status } = useAccount();
 
   useEffect(() => {
     if (status == "authenticated") {
       router.push("/home");
     }
   });
+
+  useEffect(() => {
+    if (errorText) setModalError(true);
+    else setModalError(false);
+  }, [errorText]);
 
   return (
     <>
@@ -45,6 +53,7 @@ const Login = () => {
         overlayBlur={2}
         overlayOpacity={0.9}
       />
+
       <Grid
         sx={{
           backgroundColor: loginDesign?.backcolor,
@@ -89,6 +98,17 @@ const Login = () => {
               alt="Login Logo"
               sx={{ padding: 30 }}
             />
+            {modalError && (
+              <Alert
+                mb="xl"
+                withCloseButton
+                title="Error al ingresar!"
+                onClose={() => setModalError(false)}
+                color="red"
+              >
+                {errorText}
+              </Alert>
+            )}
             <form onSubmit={form.onSubmit((values) => login(values))}>
               <Stack spacing="xl">
                 <TextInput
@@ -103,8 +123,8 @@ const Login = () => {
                   size="lg"
                   {...form.getInputProps("password")}
                 />
-                <Button fullWidth size="lg" type="submit">
-                  Submit
+                <Button fullWidth size="lg" type="submit" disabled={loading}>
+                  {loading ? <Loader variant="dots" /> : <Text>Ingresar</Text>}
                 </Button>
               </Stack>
               <Space h="md" />
