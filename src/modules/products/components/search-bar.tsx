@@ -8,6 +8,7 @@ import {
   Chip,
   RangeSlider,
   Container,
+  Group,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import CheckGroup from "@modules/common/components/checkbox-group";
@@ -72,7 +73,6 @@ const SearchBar = ({
           <Stack px={20}>
             <Text>Filtros aplicados</Text>
             <Chip.Group
-              position="center"
               value={[
                 ...category,
                 ...subcategory,
@@ -81,59 +81,63 @@ const SearchBar = ({
                 ...delivery,
               ]}
             >
-              {category.map((e, idx) => (
-                <Chip
-                  value={e}
-                  onClick={() =>
-                    setCategory(category.filter((value) => value != e))
-                  }
-                  key={idx}
-                >
-                  {e}
-                </Chip>
-              ))}
-              {subcategory.map((e, idx) => (
-                <Chip
-                  value={e}
-                  onClick={() =>
-                    setSubcategory(subcategory.filter((value) => value != e))
-                  }
-                  key={idx}
-                >
-                  {e}
-                </Chip>
-              ))}
-              {brand.map((e, idx) => (
-                <Chip
-                  value={e}
-                  onClick={() => setBrand(brand.filter((value) => value != e))}
-                  key={idx}
-                >
-                  {e}
-                </Chip>
-              ))}
-              {seller.map((e, idx) => (
-                <Chip
-                  value={e}
-                  onClick={() =>
-                    setSeller(seller.filter((value) => value != e))
-                  }
-                  key={idx}
-                >
-                  {e}
-                </Chip>
-              ))}
-              {delivery.map((e, idx) => (
-                <Chip
-                  value={e}
-                  onClick={() =>
-                    setDelivery(delivery.filter((value) => value != e))
-                  }
-                  key={idx}
-                >
-                  {e}
-                </Chip>
-              ))}
+              <Group position="center">
+                {category.map((e, idx) => (
+                  <Chip
+                    value={e}
+                    onClick={() =>
+                      setCategory(category.filter((value) => value != e))
+                    }
+                    key={idx}
+                  >
+                    {e}
+                  </Chip>
+                ))}
+                {subcategory.map((e, idx) => (
+                  <Chip
+                    value={e}
+                    onClick={() =>
+                      setSubcategory(subcategory.filter((value) => value != e))
+                    }
+                    key={idx}
+                  >
+                    {e}
+                  </Chip>
+                ))}
+                {brand.map((e, idx) => (
+                  <Chip
+                    value={e}
+                    onClick={() =>
+                      setBrand(brand.filter((value) => value != e))
+                    }
+                    key={idx}
+                  >
+                    {e}
+                  </Chip>
+                ))}
+                {seller.map((e, idx) => (
+                  <Chip
+                    value={e}
+                    onClick={() =>
+                      setSeller(seller.filter((value) => value != e))
+                    }
+                    key={idx}
+                  >
+                    {e}
+                  </Chip>
+                ))}
+                {delivery.map((e, idx) => (
+                  <Chip
+                    value={e}
+                    onClick={() =>
+                      setDelivery(delivery.filter((value) => value != e))
+                    }
+                    key={idx}
+                  >
+                    {e}
+                  </Chip>
+                ))}
+              </Group>
             </Chip.Group>
           </Stack>
         </>

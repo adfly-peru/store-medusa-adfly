@@ -26,8 +26,7 @@ const CategorySection = () => {
         {departments.map((category, i) => (
           <Tooltip
             withArrow
-            transition="fade"
-            transitionDuration={200}
+            transitionProps={{ transition: "fade", duration: 200 }}
             key={`${i}tip`}
             label={category.name}
           >

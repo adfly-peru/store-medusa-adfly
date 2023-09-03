@@ -15,7 +15,7 @@ import {
   IconBrandInstagram,
   IconBrandLinkedin,
   IconBrandWhatsapp,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 
 const FooterComponent = () => {
   return (

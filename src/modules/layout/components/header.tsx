@@ -27,7 +27,7 @@ import {
   IconTransferOut,
   IconUser,
   IconUserCircle,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import { useProduct } from "@context/product-context";
 import { forwardRef, useEffect, useState } from "react";
 import { useAccount } from "@context/account-context";
@@ -272,10 +272,8 @@ const HomeHeader = () => {
             </Menu>
             <Space w="md" />
             <Indicator
-              showZero={false}
-              dot={false}
+              disabled={cartLength <= 0}
               label={cartLength}
-              overflowCount={10}
               inline
               size={22}
             >

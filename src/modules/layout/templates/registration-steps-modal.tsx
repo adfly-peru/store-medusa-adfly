@@ -11,7 +11,7 @@ import {
   Text,
   UnstyledButton,
 } from "@mantine/core";
-import { IconCheck } from "@tabler/icons";
+import { IconCheck } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 
 const profileCompleted = (collaborator: Collaborator | undefined) => {
@@ -39,8 +39,10 @@ const RegistrationStepsModal: React.FC<{ children?: React.ReactNode }> = ({
         opened
         radius="md"
         onClose={() => null}
-        overlayOpacity={0.55}
-        overlayBlur={3}
+        overlayProps={{
+          opacity: 0.55,
+          blur: 3,
+        }}
         withCloseButton={false}
         centered={true}
         size="50%"

@@ -11,7 +11,7 @@ import {
   Title,
 } from "@mantine/core";
 import CartView from "@modules/my-cart/templates/cart-view";
-import { IconShoppingCart } from "@tabler/icons";
+import { IconShoppingCart } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import EmptyCart from "../components/empty-cart";
 import { useEffect, useState } from "react";

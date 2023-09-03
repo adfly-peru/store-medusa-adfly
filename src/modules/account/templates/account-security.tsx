@@ -1,6 +1,6 @@
 import { Text, Grid, Avatar, Stack, Badge, Title } from "@mantine/core";
 
-import { IconStar } from "@tabler/icons";
+import { IconStar } from "@tabler/icons-react";
 import { useViewportSize } from "@mantine/hooks";
 import SecurityForm from "../components/security-form";
 import InformationBox from "../components/information-box";

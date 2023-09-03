@@ -25,10 +25,10 @@ import {
   IconCaretLeft,
   IconCaretRight,
   IconCheck,
-  IconCircleMinus,
-  IconCirclePlus,
+  IconMinus,
+  IconPlus,
   IconX,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
 import { Product } from "@interfaces/productInterface";
@@ -208,11 +208,11 @@ export function DetailedProduct({ product }: { product: Product }) {
             <Text fz="xs">Fecha de Vencimiento: null</Text>
             <Group spacing={5}>
               <ActionIcon
-                size={36}
+                radius="xl"
                 variant="default"
                 onClick={() => handlers.current?.decrement()}
               >
-                <IconCircleMinus stroke={1.5} size={34} />
+                <IconMinus stroke={1.5} size="1.125rem" />
               </ActionIcon>
               <NumberInput
                 hideControls
@@ -225,11 +225,11 @@ export function DetailedProduct({ product }: { product: Product }) {
                 styles={{ input: { width: 70, textAlign: "center" } }}
               />
               <ActionIcon
-                size={36}
+                radius="xl"
                 variant="default"
                 onClick={() => handlers.current?.increment()}
               >
-                <IconCirclePlus stroke={1.5} size={34} />
+                <IconPlus stroke={1.5} size="1.125rem" />
               </ActionIcon>
               <Space />
               <Text fz="xs" c="dimmed">

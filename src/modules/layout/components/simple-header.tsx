@@ -19,7 +19,7 @@ import {
   IconTransferOut,
   IconUser,
   IconUserCircle,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import { forwardRef, useEffect, useState } from "react";
 import { useAccount } from "@context/account-context";
 import { useRouter } from "next/router";

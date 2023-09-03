@@ -11,7 +11,7 @@ import {
   NumberInputHandlers,
   Stack,
 } from "@mantine/core";
-import { IconCirclePlus, IconCircleMinus } from "@tabler/icons";
+import { IconPlus, IconMinus } from "@tabler/icons-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
@@ -42,14 +42,13 @@ const useStyles = createStyles((theme) => ({
 
 const ProductCard = ({ product }: { product: Product }) => {
   const { classes } = useStyles();
-  const [selectedVariant, setSelectedVariant] = useState(product.variant[0]);
+  const [selectedVariant, _] = useState(product.variant[0]);
   const [cartItem, setCartItem] = useState<CartItem | null>(null);
-  const [showBuy, setShowBuy] = useState(false);
   const handlers = useRef<NumberInputHandlers>();
-  const { addProduct, editProduct, removeProduct, getProductById } = useCart();
+  const { addProduct, editProduct, removeProduct, getProductById, cart } =
+    useCart();
   const setZero = () => {
     if (cartItem) {
-      setShowBuy(false);
       removeProduct(cartItem.uuidcartitem, product.business.uuidbusiness);
     }
   };
@@ -63,15 +62,17 @@ const ProductCard = ({ product }: { product: Product }) => {
   );
 
   useEffect(() => {
+    if (!cart) return;
     const itemGetted = getProductById(
       product.uuidProduct,
       product.business.uuidbusiness
     );
     if (itemGetted) {
       setCartItem(itemGetted);
-      setShowBuy(true);
+    } else {
+      setCartItem(null);
     }
-  }, []);
+  }, [cart]);
 
   if (!selectedVariant) {
     return <></>;
@@ -119,14 +120,15 @@ const ProductCard = ({ product }: { product: Product }) => {
         <Text fz="sm" c="red">
           Ahorro estimado S/. {ahorro}
         </Text>
-        {showBuy && cartItem ? (
+        {cartItem ? (
           <Group spacing={5} position="center" style={{ marginTop: 15 }}>
             <ActionIcon
               color="gray"
-              size={34}
+              radius="xl"
+              variant="outline"
               onClick={() => handlers.current?.decrement()}
             >
-              <IconCircleMinus stroke={1.5} size={34} />
+              <IconMinus stroke={1.5} size="1.125rem" />
             </ActionIcon>
             <NumberInput
               hideControls
@@ -144,10 +146,11 @@ const ProductCard = ({ product }: { product: Product }) => {
             />
             <ActionIcon
               color="gray"
-              size={34}
+              radius="xl"
+              variant="outline"
               onClick={() => handlers.current?.increment()}
             >
-              <IconCirclePlus stroke={1.5} size={34} />
+              <IconPlus stroke={1.5} size="1.125rem" />
             </ActionIcon>
           </Group>
         ) : (
@@ -157,7 +160,6 @@ const ProductCard = ({ product }: { product: Product }) => {
             fullWidth
             radius="md"
             onClick={() => {
-              setShowBuy(true);
               addProduct(
                 product.variant.at(0)?.uuidVariant!,
                 product.business.uuidbusiness,

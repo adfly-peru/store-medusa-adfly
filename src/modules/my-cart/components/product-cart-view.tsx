@@ -14,12 +14,7 @@ import {
   Divider,
   Button,
 } from "@mantine/core";
-import {
-  IconCheck,
-  IconCircleMinus,
-  IconCirclePlus,
-  IconX,
-} from "@tabler/icons";
+import { IconCheck, IconMinus, IconPlus, IconX } from "@tabler/icons-react";
 import { useRef } from "react";
 import { useCart } from "@context/cart-context";
 import { CartItem, CartSubOrder } from "@interfaces/cart";
@@ -126,15 +121,18 @@ const DetailedProductCartView = ({
             <Group spacing={5}>
               <ActionIcon
                 color="dark"
-                size={42}
+                radius="xl"
+                variant="outline"
                 onClick={() => handlers.current?.decrement()}
               >
-                <IconCircleMinus stroke={1.5} size={34} />
+                <IconMinus stroke={1.5} size="1.125rem" />
               </ActionIcon>
               <NumberInput
                 hideControls
                 value={item.quantity}
-                onChange={(val) => editProduct(item, businessid, val ?? 0)}
+                onChange={(val) =>
+                  editProduct(item, businessid, val == "" ? 0 : val)
+                }
                 handlersRef={handlers}
                 max={10}
                 min={1}
@@ -143,10 +141,11 @@ const DetailedProductCartView = ({
               />
               <ActionIcon
                 color="dark"
-                size={42}
+                radius="xl"
+                variant="outline"
                 onClick={() => handlers.current?.increment()}
               >
-                <IconCirclePlus stroke={1.5} size={34} />
+                <IconPlus stroke={1.5} size="1.125rem" />
               </ActionIcon>
             </Group>
 

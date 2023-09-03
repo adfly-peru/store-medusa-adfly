@@ -2,7 +2,7 @@ import Layout from "@modules/layout/templates";
 import { useRouter } from "next/router";
 import { ActionIcon, Center, Stack, Text } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
-import { IconMoodSad } from "@tabler/icons";
+import { IconMoodSad } from "@tabler/icons-react";
 
 const ErrorPage = () => {
   const router = useRouter();

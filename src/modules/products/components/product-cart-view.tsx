@@ -10,7 +10,7 @@ import {
   Group,
   ActionIcon,
 } from "@mantine/core";
-import { IconCircleMinus, IconCirclePlus, IconTrash } from "@tabler/icons";
+import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useCart } from "@context/cart-context";
 import { CartItem } from "@interfaces/cart";
 import { useState } from "react";
@@ -64,19 +64,21 @@ const ProductCartView = ({
               <Text>Cantidad: {cartItem.quantity}</Text>
               <ActionIcon
                 color="gray"
-                size={34}
+                radius="xl"
+                variant="outline"
                 disabled={updating || cartItem.quantity <= 1}
                 onClick={() => handleEditProduct(-1)}
               >
-                <IconCircleMinus stroke={1.5} size={34} />
+                <IconMinus stroke={1.5} size="1.125rem" />
               </ActionIcon>
               <ActionIcon
                 color="gray"
-                size={34}
+                radius="xl"
+                variant="outline"
                 disabled={updating || cartItem.quantity >= 10}
                 onClick={() => handleEditProduct(1)}
               >
-                <IconCirclePlus stroke={1.5} size={34} />
+                <IconPlus stroke={1.5} size="1.125rem" />
               </ActionIcon>
             </Group>
             <Button

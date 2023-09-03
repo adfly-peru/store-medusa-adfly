@@ -12,7 +12,7 @@ import {
   TextInput,
   Select,
 } from "@mantine/core";
-import { IconEye, IconTrash } from "@tabler/icons";
+import { IconEye, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useAccount } from "@context/account-context";
 import AddressForm from "@modules/checkout/components/address-form";

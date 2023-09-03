@@ -7,7 +7,7 @@ import {
   Text,
 } from "@mantine/core";
 
-import { IconShoppingCart, IconShoppingCartOff } from "@tabler/icons";
+import { IconShoppingCart, IconShoppingCartOff } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { useCart } from "@context/cart-context";
 import { useViewportSize } from "@mantine/hooks";

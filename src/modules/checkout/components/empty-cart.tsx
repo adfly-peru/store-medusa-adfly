@@ -1,6 +1,6 @@
 import { Center, Stack, ActionIcon, Text } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
-import { IconShoppingCartOff } from "@tabler/icons";
+import { IconShoppingCartOff } from "@tabler/icons-react";
 
 const EmptyCart = () => {
   const { width, height } = useViewportSize();

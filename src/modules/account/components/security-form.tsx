@@ -10,7 +10,7 @@ import {
   Progress,
   Popover,
 } from "@mantine/core";
-import { IconX, IconCheck } from "@tabler/icons";
+import { IconX, IconCheck } from "@tabler/icons-react";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
@@ -116,7 +116,7 @@ const SecurityForm = () => {
           opened={popoverOpened}
           position="bottom"
           width="target"
-          transition="pop"
+          transitionProps={{ transition: "pop" }}
         >
           <Popover.Target>
             <div

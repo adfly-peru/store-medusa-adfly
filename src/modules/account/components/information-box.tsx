@@ -8,7 +8,7 @@ import {
   Title,
   NavLink,
 } from "@mantine/core";
-import { IconStar } from "@tabler/icons";
+import { IconStar } from "@tabler/icons-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 

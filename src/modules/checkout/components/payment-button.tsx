@@ -15,7 +15,7 @@ import {
   Title,
   Image,
 } from "@mantine/core";
-import { IconCreditCard } from "@tabler/icons";
+import { IconCreditCard } from "@tabler/icons-react";
 import { UseFormReturnType } from "@mantine/form";
 import { BillingForm } from "@interfaces/billing";
 import { useAccount } from "@context/account-context";
