@@ -58,9 +58,14 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     {
       variables: { collaboratorId },
       skip: !collaboratorId,
-      onCompleted: (data) => setCart(data?.getCart),
     }
   );
+
+  useEffect(() => {
+    if (data?.getCart) {
+      setCart(data.getCart);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (!data?.getCart && !loading && collaboratorId) {

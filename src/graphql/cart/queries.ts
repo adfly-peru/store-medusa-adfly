@@ -64,6 +64,7 @@ const GET_CART = gql`
             imageURL
             sku
             product {
+              uuidProduct
               productName
               description
               type
