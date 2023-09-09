@@ -244,7 +244,10 @@ const HomeHeader = () => {
                 >
                   Mi cuenta
                 </Menu.Item>
-                <Menu.Item icon={<IconBasket size={14} />}>
+                <Menu.Item
+                  icon={<IconBasket size={14} />}
+                  onClick={() => router.push("/orders")}
+                >
                   Mis compras
                 </Menu.Item>
                 {/* <Menu.Item

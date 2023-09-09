@@ -1,8 +1,10 @@
 import { Grid } from "@mantine/core";
-import SimpleOrderView from "./simple";
+import { useViewportSize } from "@mantine/hooks";
 import InformationBox from "@modules/account/components/information-box";
+import OrdersList from "../components/orders-list";
 
-const OrderTemplate = ({ orderId }: { orderId: string }) => {
+const AllOrdersTemplate = () => {
+  const { height } = useViewportSize();
   return (
     <Grid p={20} w="100%" justify="space-around">
       <Grid.Col span={4}>
@@ -11,15 +13,16 @@ const OrderTemplate = ({ orderId }: { orderId: string }) => {
       <Grid.Col
         span={6}
         sx={{
+          height: height,
           display: "flex",
           justifyContent: "center",
           alignItems: "flex-start",
         }}
       >
-        <SimpleOrderView orderId={orderId} />
+        <OrdersList />
       </Grid.Col>
     </Grid>
   );
 };
 
-export default OrderTemplate;
+export default AllOrdersTemplate;

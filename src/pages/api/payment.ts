@@ -18,6 +18,7 @@ interface AdflyResponse {
   message: string;
   token: string;
   data: any;
+  error: any;
 }
 
 export default async function handler(req: any, res: any) {
@@ -33,6 +34,9 @@ export default async function handler(req: any, res: any) {
         variables: { collaboratorId: collaboratorid },
       });
       const cartdata = data.getCart;
+      const hasReceiverName =
+        (cartdata.deliveryInfo?.receivername?.length ?? 0) > 0;
+      const hasRUC = (cartdata.billingInfo?.ruc?.length ?? 0) > 0;
 
       const response: AxiosResponse<AdflyResponse> = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_API}/store/order`,
@@ -44,6 +48,10 @@ export default async function handler(req: any, res: any) {
           uuidcart: cartdata.uuidcart,
           amount: Number(amount),
           transactionToken: transactionToken,
+          uuiddeliveryinfo: cartdata.deliveryInfo?.uuiddeliveryinfo,
+          uuidbillinginfo: cartdata.billingInfo?.uuidbillinginfo,
+          isreceiver: hasReceiverName,
+          isbilling: hasRUC,
         },
         {
           headers: {
@@ -53,33 +61,37 @@ export default async function handler(req: any, res: any) {
       );
 
       if (response.status >= 200 && response.status < 300) {
-        res
-          .status(302)
-          .setHeader("Location", `/orders/${response.data.data.data}`);
+        const pNumber = response.data.data.data.purchaseNumber;
+        const orderid = response.data.data.data.orderid;
+        const location = `/success?number=${encodeURIComponent(
+          pNumber
+        )}&id=${encodeURIComponent(orderid)}`;
+        res.status(302).setHeader("Location", location);
         res.end();
       } else {
-        // La solicitud fue exitosa, pero el código de estado indica un problema
-        console.error(`Error: ${response.data.message}`);
         if (response.data.data) {
           res
             .status(302)
             .setHeader(
               "Location",
-              `/error?message=${encodeURIComponent(response.data.data.data)}`
+              `/error?message=${encodeURIComponent(
+                JSON.stringify(response.data.data)
+              )}`
             );
           res.end();
         }
       }
     } catch (error) {
       const axiosError = error as AxiosError<AdflyResponse>;
-      let errorToSend = `Error al hacer la solicitud: ${error}`;
+      let errorToSend = `Error al hacer la solicitud: ${JSON.stringify(error)}`;
       if (axiosError && axiosError.response) {
-        errorToSend = `Error: ${axiosError.response.data}`;
-        if (axiosError.response.data.data.data) {
-          errorToSend = `${axiosError.response.data.data.data}`;
+        errorToSend = `Error: ${JSON.stringify(axiosError.response.data)}`;
+        if (axiosError.response.data.data) {
+          errorToSend = `${JSON.stringify(axiosError.response.data.data)}`;
+        } else if (axiosError.response.data.error) {
+          errorToSend = `${JSON.stringify(axiosError.response.data.error)}`;
         }
       }
-      console.error(errorToSend);
       res
         .status(302)
         .setHeader(

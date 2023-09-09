@@ -1,30 +1,57 @@
-import { useQuery } from "@apollo/client";
-import { GET_ORDERS } from "@graphql/order/queries";
-import { Cart } from "@interfaces/cart";
-import { Order } from "@interfaces/order";
+import { useLazyQuery } from "@apollo/client";
+import { GET_ORDERS, GET_ORDER_REPORT } from "@graphql/order/queries";
+import { OrderReport, PaginatedOrders } from "@interfaces/order";
 import { createContext, useState, useContext, useEffect } from "react";
-import { useAccount } from "./account-context";
+
+export interface FilterOptions {
+  limit?: number;
+  offset?: number;
+  sortBy?: string;
+  searchBy?: string;
+  asc?: boolean;
+}
 
 interface OrderContext {
-  orders: Order[] | null;
+  orders: PaginatedOrders | null;
   loading: boolean;
   refetch: () => Promise<any>;
+  getOrder: (id: string) => Promise<OrderReport | null>;
+  fetchOrders: (options: FilterOptions, collaboratorId: string) => void;
 }
 
 const OrderContext = createContext<OrderContext | null>(null);
 
 export const OrderProvider = ({ children }: { children?: React.ReactNode }) => {
-  const { collaborator } = useAccount();
-  const [collaboratorId, setCollaboratorId] = useState<string | null>(null);
-  const [orders, setOrders] = useState<Order[] | null>(null);
-  const { error, loading, refetch } = useQuery<{ getOrders: Order[] }>(
-    GET_ORDERS,
-    {
-      variables: { collaboratorId },
-      skip: !collaboratorId,
-      onCompleted: (data) => setOrders(data?.getOrders),
+  const [orders, setOrders] = useState<PaginatedOrders | null>(null);
+  const [getOrders, { data: ordersData, error, loading, refetch }] =
+    useLazyQuery<{
+      getOrders: PaginatedOrders;
+    }>(GET_ORDERS);
+
+  const [getOrderReport] = useLazyQuery<{
+    getOrderReport: OrderReport;
+  }>(GET_ORDER_REPORT);
+
+  const getOrder = async (id: string) => {
+    const result = await getOrderReport({ variables: { uuidorder: id } });
+    return result.data?.getOrderReport ?? null;
+  };
+
+  const fetchOrders = (options: FilterOptions, collaboratorId: string) => {
+    if (collaboratorId)
+      getOrders({
+        variables: {
+          ...options,
+          collaboratorId,
+        },
+      });
+  };
+
+  useEffect(() => {
+    if (ordersData && ordersData.getOrders) {
+      setOrders(ordersData.getOrders);
     }
-  );
+  }, [ordersData]);
 
   useEffect(() => {
     if (error) {
@@ -32,13 +59,10 @@ export const OrderProvider = ({ children }: { children?: React.ReactNode }) => {
     }
   }, [error]);
 
-  useEffect(() => {
-    if (collaborator?.uuidcollaborator)
-      setCollaboratorId(collaborator?.uuidcollaborator);
-  }, [collaborator]);
-
   return (
-    <OrderContext.Provider value={{ orders, loading, refetch }}>
+    <OrderContext.Provider
+      value={{ fetchOrders, orders, loading, refetch, getOrder }}
+    >
       {children}
     </OrderContext.Provider>
   );

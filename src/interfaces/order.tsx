@@ -1,28 +1,47 @@
+import {
+  DeliveryMethod,
+  OrderStatus,
+  SuborderStatus,
+} from "@modules/common/types";
+import { Collaborator } from "./collaborator";
 import { VariantDetailed } from "./productInterface";
 
+export interface PaginatedOrders {
+  orders: Order[];
+  totalOrders: number;
+}
 export interface Order {
-  uuidorder: string;
-  uuidcollaborator: string;
-  creationdate: string;
-  status: string;
+  uuidOrder: string;
+  uuidCollaborator: string;
+  creationDate: string;
+  status: OrderStatus;
   total: number;
   igv: number;
-  finaltotal: number;
-  purchasenumber: string;
-  installment: number;
+  finalTotal: number;
+  totalIgv: number;
+  deliveryPrice: number;
+  businessName: string;
   suborders: [Suborder];
+  paymentInfo: PaymentInfo;
+  comments: string;
+  isBilling: boolean;
+  isReceiver: boolean;
 }
 
 export interface Suborder {
-  uuidsuborder: string;
-  uuidorder: string;
-  uuidbusiness: string;
+  uuidSuborder: string;
+  uuidOrder: string;
+  uuidBusiness: string;
   businessName: string;
-  creationdate: string;
-  status: string;
+  sellerName: string;
+  creationDate: string;
+  status: SuborderStatus;
   total: number;
-  deliverymethod?: string;
+  deliveryMethod?: DeliveryMethod;
+  deliveryPrice?: number;
+  deliveryTime?: string;
   items: [SuborderItem];
+  comments: string;
 }
 
 export interface SuborderItem {
@@ -32,4 +51,41 @@ export interface SuborderItem {
   variant: VariantDetailed;
   quantity: number;
   subtotal: number;
+}
+
+export interface PaymentInfo {
+  canal: string;
+  card: string;
+  brand: string;
+  purchaseNumber: string;
+}
+
+export interface OrderReport {
+  order: Order;
+  billingInfo: BillingInfo;
+  deliveryInfo?: DeliveryInfo;
+  collaborator: Collaborator;
+}
+
+export interface BillingInfo {
+  phone: string;
+  ruc: string;
+  businessname: string;
+  fiscaladdress: string;
+}
+
+export interface DeliveryInfo {
+  receivername: string;
+  receiverdocumentkind: string;
+  receiverdocumentnumber: string;
+  collaboratoraddress?: {
+    address: string;
+    lat: number;
+    lng: number;
+    district: string;
+    province: string;
+    department: string;
+    country: string;
+    additional: string;
+  };
 }

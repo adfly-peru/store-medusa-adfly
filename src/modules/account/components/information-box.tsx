@@ -68,6 +68,13 @@ const InformationBox = () => {
           icon={<Badge radius="xs" variant="filled" p={2} />}
           active={router.asPath == "/account/security"}
         />
+        <NavLink
+          component={Link}
+          href="/orders"
+          label="Mis Compras"
+          icon={<Badge radius="xs" variant="filled" p={2} />}
+          active={router.asPath.startsWith("/orders")}
+        />
       </Card.Section>
     </Card>
   );

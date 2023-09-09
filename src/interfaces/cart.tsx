@@ -9,12 +9,14 @@ export interface Cart {
   expirationdate?: string;
   total: number;
   billingInfo?: {
+    uuidbillinginfo: string;
     phone: string;
     ruc?: string;
     businessname?: string;
     fiscaladdress?: string;
   };
   deliveryInfo?: {
+    uuiddeliveryinfo: string;
     collaboratoraddress: {
       uuidcollaboratoraddress: string;
     };
@@ -33,6 +35,7 @@ export interface CartSubOrder {
   businessName: string;
   deliverymethod?: string;
   deliveryprice?: number;
+  deliverytime?: string;
   availableDeliveryMethods: {
     online: boolean;
     onhome: boolean;

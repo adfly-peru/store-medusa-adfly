@@ -11,12 +11,14 @@ const GET_CART = gql`
       expirationdate
       total
       billingInfo {
+        uuidbillinginfo
         phone
         ruc
         businessname
         fiscaladdress
       }
       deliveryInfo {
+        uuiddeliveryinfo
         collaboratoraddress {
           uuidcollaboratoraddress
         }
@@ -31,6 +33,7 @@ const GET_CART = gql`
         businessName
         deliverymethod
         deliveryprice
+        deliverytime
         availableDeliveryMethods {
           online
           onhome
