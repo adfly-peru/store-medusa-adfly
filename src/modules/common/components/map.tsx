@@ -50,12 +50,52 @@ interface ReverseGeocodeResponse {
   status: string;
 }
 
-function normalizeString(s: string): string {
+function normalizeString(s: string) {
   return s
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
 }
+
+function cleanAndNormalize(name: string) {
+  // Lista de palabras a eliminar
+  const wordsToRemove = [
+    "provincia de",
+    "departamento de",
+    "distrito de",
+    "gobierno regional de",
+  ];
+
+  let cleanedName = name.toLowerCase();
+
+  wordsToRemove.forEach((word) => {
+    cleanedName = cleanedName.replace(word, "");
+  });
+
+  return cleanedName.trim();
+}
+
+const filterByType = (data: GeocodeResult[], types: string[]) =>
+  data.filter((component) => types.some((t) => component.types.includes(t)));
+
+const extractNames = (components: GeocodeResult[]) =>
+  components.map((d) =>
+    cleanAndNormalize(d.address_components.at(0)?.short_name ?? "")
+  );
+
+const findUbigeoMatch = (
+  availableList: UbigeoEntry[],
+  possibleNames: string[]
+) => {
+  for (let name of possibleNames) {
+    const normalized = normalizeString(name ?? "");
+    const matches = availableList.filter(
+      (a) => normalizeString(a.nombre) === normalized
+    );
+    if (matches.length > 0) return matches;
+  }
+  return [];
+};
 
 interface MapProps {
   onSelectPlace: (place: Place | null) => void;
@@ -65,6 +105,12 @@ export const MapForm: React.FC<MapProps> = ({ onSelectPlace }) => {
   const [availableDistricts, setAvailableDistrict] = useState<UbigeoEntry[]>(
     []
   );
+  const [availableProvinces, setAvailableProvince] = useState<UbigeoEntry[]>(
+    []
+  );
+  const [availableDepartments, setAvailableDepartment] = useState<
+    UbigeoEntry[]
+  >([]);
   const [selectedPlaceName, setSelectedPlaceName] = useState("");
   const [, setMap] = useState<google.maps.Map | null>(null);
   const [searchBox, setSearchBox] =
@@ -77,8 +123,16 @@ export const MapForm: React.FC<MapProps> = ({ onSelectPlace }) => {
   });
 
   useEffect(() => {
-    const data = ubigeoPeru.reniec.filter((r) => r.distrito != "00");
-    setAvailableDistrict(data);
+    const data1 = ubigeoPeru.reniec.filter((r) => r.distrito != "00");
+    const data2 = ubigeoPeru.reniec.filter(
+      (r) => r.provincia != "00" && r.distrito == "00"
+    );
+    const data3 = ubigeoPeru.reniec.filter(
+      (r) => r.provincia == "00" && r.distrito == "00"
+    );
+    setAvailableDistrict(data1);
+    setAvailableProvince(data2);
+    setAvailableDepartment(data3);
   }, []);
 
   const handleLoadMap = (map: google.maps.Map) => {
@@ -102,6 +156,82 @@ export const MapForm: React.FC<MapProps> = ({ onSelectPlace }) => {
     }
   };
 
+  const resolveLocationData = async (
+    lat: number,
+    lng: number,
+    place: google.maps.places.PlaceResult | null
+  ) => {
+    const fullPlaceData = await reverseGeocode(lat, lng);
+    if (!fullPlaceData) return null;
+
+    const districtComponent = filterByType(fullPlaceData, [
+      "administrative_area_level_3",
+      "locality",
+    ]);
+    const provinceComponent = filterByType(fullPlaceData, [
+      "administrative_area_level_2",
+    ]);
+    const departmentComponent = filterByType(fullPlaceData, [
+      "administrative_area_level_1",
+    ]);
+
+    const posibleDistricts = extractNames(districtComponent);
+    const posibleProvinces = extractNames(provinceComponent);
+    const posibleDepartments = extractNames(departmentComponent);
+
+    let districtValues = findUbigeoMatch(availableDistricts, posibleDistricts);
+    let provinceValues: UbigeoEntry[] = [];
+    let departmentValues: UbigeoEntry[] = [];
+
+    if (districtValues.length > 1) {
+      provinceValues = findUbigeoMatch(availableProvinces, posibleProvinces);
+      if (provinceValues.length > 1) {
+        departmentValues = findUbigeoMatch(
+          availableDepartments,
+          posibleDepartments
+        );
+      }
+    }
+
+    if (districtValues.length > 1 && provinceValues.length > 0) {
+      districtValues = districtValues.filter((d) =>
+        provinceValues.some(
+          (p) =>
+            d.departamento === p.departamento && d.provincia === p.provincia
+        )
+      );
+    }
+
+    if (districtValues.length > 1 && departmentValues.length > 0) {
+      districtValues = districtValues.filter((d) =>
+        departmentValues.some((de) => d.departamento === de.departamento)
+      );
+    }
+
+    const districtValue = districtValues.at(0);
+    const placename =
+      place?.formatted_address ??
+      place?.name ??
+      fullPlaceData[0].formatted_address ??
+      "";
+    if (districtValue) {
+      const newSelectedPlace: Place = {
+        id: place?.place_id ?? fullPlaceData[0].place_id ?? "",
+        district: districtValue,
+        name: placename,
+        location: {
+          lat: lat,
+          lng: lng,
+        },
+      };
+      setSelectedPlaceName(placename);
+      setSelectedPlace(newSelectedPlace);
+      onSelectPlace(newSelectedPlace);
+    }
+
+    return null;
+  };
+
   const handlePlaceChanged = async () => {
     if (searchBox && searchBox?.getPlaces()) {
       const placeRaw = searchBox.getPlaces();
@@ -110,45 +240,7 @@ export const MapForm: React.FC<MapProps> = ({ onSelectPlace }) => {
       if (place) {
         const lat = place.geometry?.location?.lat() || 0;
         const lng = place.geometry?.location?.lng() || 0;
-
-        // Usa la geocodificación inversa para obtener la información completa
-        const fullPlaceData = await reverseGeocode(lat, lng);
-        const districtComponent = fullPlaceData?.filter(
-          (component) =>
-            component.types.includes("administrative_area_level_3") ||
-            component.types.includes("locality")
-        );
-
-        const posibleDistricts = districtComponent?.map(
-          (d) => d.address_components.at(0)?.short_name
-        );
-
-        let districtValue;
-        if (posibleDistricts) {
-          for (let posibleDistrict of posibleDistricts) {
-            const normalizedDistrict = normalizeString(posibleDistrict ?? "");
-            districtValue = availableDistricts.find(
-              (a) => normalizeString(a.nombre) === normalizedDistrict
-            );
-            if (districtValue) break;
-          }
-        }
-
-        if (districtValue) {
-          const newSelectedPlace: Place = {
-            id: place.place_id || "",
-            district: districtValue,
-            name: place?.formatted_address || "",
-            location: {
-              lat: lat,
-              lng: lng,
-            },
-          };
-          setSelectedPlaceName(place.formatted_address ?? place.name ?? "");
-          setSelectedPlace(newSelectedPlace);
-          onSelectPlace(newSelectedPlace);
-        }
-
+        await resolveLocationData(lat, lng, place);
         setCenter({
           lat: lat,
           lng: lng,
@@ -162,53 +254,13 @@ export const MapForm: React.FC<MapProps> = ({ onSelectPlace }) => {
     const latLng = event?.latLng?.toJSON();
     const lat = latLng?.lat || 0;
     const lng = latLng?.lng || 0;
-
     try {
-      // Usa la geocodificación inversa para obtener la información completa
-      const fullPlaceData = await reverseGeocode(lat, lng);
-      if (fullPlaceData) {
-        const place = fullPlaceData[0];
-        const districtComponent = fullPlaceData?.filter(
-          (component) =>
-            component.types.includes("administrative_area_level_3") ||
-            component.types.includes("locality")
-        );
-
-        const posibleDistricts = districtComponent?.map(
-          (d) => d.address_components.at(0)?.short_name
-        );
-
-        let districtValue;
-        if (posibleDistricts) {
-          for (let posibleDistrict of posibleDistricts) {
-            const normalizedDistrict = normalizeString(posibleDistrict ?? "");
-            districtValue = availableDistricts.find(
-              (a) => normalizeString(a.nombre) === normalizedDistrict
-            );
-            if (districtValue) break;
-          }
-        }
-
-        if (districtValue) {
-          const newSelectedPlace: Place = {
-            id: place.place_id || "",
-            district: districtValue,
-            name: place?.formatted_address || "",
-            location: {
-              lat: lat,
-              lng: lng,
-            },
-          };
-          setSelectedPlaceName(newSelectedPlace.name);
-          setSelectedPlace(newSelectedPlace);
-          onSelectPlace(newSelectedPlace);
-        }
-        setCenter({
-          lat: lat,
-          lng: lng,
-        });
-        setZoom(18);
-      }
+      await resolveLocationData(lat, lng, null);
+      setCenter({
+        lat: lat,
+        lng: lng,
+      });
+      setZoom(18);
     } catch (error) {
       console.error("Error retrieving place information:", error);
     }
