@@ -9,6 +9,11 @@ import {
   PasswordInput,
   Progress,
   Popover,
+  Center,
+  Loader,
+  Modal,
+  Title,
+  Alert,
 } from "@mantine/core";
 import { IconX, IconCheck } from "@tabler/icons-react";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
@@ -70,6 +75,8 @@ const SecurityForm = () => {
   const { width } = useViewportSize();
   const [popoverOpened, setPopoverOpened] = useState(false);
   const { verify } = useAccount();
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const form = useForm({
     initialValues: {
       currentPassword: "",
@@ -88,88 +95,119 @@ const SecurityForm = () => {
   const color = strength === 100 ? "teal" : strength > 50 ? "yellow" : "red";
   const isPasswordValid = doesPasswordMeetRequirements(form.values.newPassword);
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     form.validate();
     if (form.isValid()) {
+      setLoading(true);
       const securityform: SecurityForm = {
         oldpassword: form.values.currentPassword,
         newpassword: form.values.newPassword,
       };
-      verify(undefined, securityform);
+      const res = await verify(undefined, securityform);
+      setMessage(res ?? "success");
+      setLoading(false);
     }
   };
 
   return (
-    <Box sx={{ width: width / 3 }}>
-      <Stack spacing="xs">
-        <Text>Seguridad</Text>
-        <Divider></Divider>
-
-        <TextInput
-          label="Contraseña Actual"
-          radius="xs"
-          size="sm"
-          {...form.getInputProps("currentPassword")}
-        />
-
-        <Popover
-          opened={popoverOpened}
-          position="bottom"
-          width="target"
-          transitionProps={{ transition: "pop" }}
-        >
-          <Popover.Target>
-            <div
-              onFocusCapture={() => setPopoverOpened(true)}
-              onBlurCapture={() => setPopoverOpened(false)}
-            >
-              <PasswordInput
-                withAsterisk
-                label="Nueva Contraseña"
-                {...form.getInputProps("newPassword")}
-              />
-            </div>
-          </Popover.Target>
-          <Popover.Dropdown>
-            <Progress
-              color={color}
-              value={strength}
-              size={5}
-              style={{ marginBottom: 10 }}
-            />
-            <PasswordRequirement
-              label="Incluye al menos 6 carácteres"
-              meets={form.values.newPassword.length > 5}
-            />
-            {requirements.map((requirement, index) => (
-              <PasswordRequirement
-                key={index}
-                label={requirement.label}
-                meets={requirement.re.test(form.values.newPassword)}
-              />
-            ))}
-          </Popover.Dropdown>
-        </Popover>
-
-        <PasswordInput
-          label="Confirmar Contraseña"
-          withAsterisk
-          {...form.getInputProps("confPassword")}
-        />
-      </Stack>
-
-      <Space h="md" />
-
-      <Button
-        color="gray"
-        fullWidth
-        size="lg"
-        onClick={handleUpdate}
-        disabled={!isPasswordValid}
+    <>
+      <Modal
+        opened={loading}
+        withCloseButton={false}
+        onClose={() => null}
+        closeOnClickOutside={false}
+        closeOnEscape={false}
+        centered
+        size="xl"
       >
-        Actualizar
-      </Button>
-    </Box>
+        <Center>
+          <Loader />
+        </Center>
+      </Modal>
+      <Box sx={{ width: width / 3 }}>
+        <Stack spacing="xs">
+          {message != "" && (
+            <Alert
+              title={message == "success" ? "Felicidades!" : "Error!"}
+              color={message == "success" ? "green" : "red"}
+              onClose={() => setMessage("")}
+              my="lg"
+              withCloseButton
+            >
+              {message == "success"
+                ? "Se ha actualizado el perfil de manera exitosa"
+                : message}
+            </Alert>
+          )}
+          <Title>Seguridad</Title>
+          <Divider></Divider>
+
+          <TextInput
+            label="Contraseña Actual"
+            radius="xs"
+            size="sm"
+            {...form.getInputProps("currentPassword")}
+          />
+
+          <Popover
+            opened={popoverOpened}
+            position="bottom"
+            width="target"
+            transitionProps={{ transition: "pop" }}
+          >
+            <Popover.Target>
+              <div
+                onFocusCapture={() => setPopoverOpened(true)}
+                onBlurCapture={() => setPopoverOpened(false)}
+              >
+                <PasswordInput
+                  withAsterisk
+                  label="Nueva Contraseña"
+                  {...form.getInputProps("newPassword")}
+                />
+              </div>
+            </Popover.Target>
+            <Popover.Dropdown>
+              <Progress
+                color={color}
+                value={strength}
+                size={5}
+                style={{ marginBottom: 10 }}
+              />
+              <PasswordRequirement
+                label="Incluye al menos 6 carácteres"
+                meets={form.values.newPassword.length > 5}
+              />
+              {requirements.map((requirement, index) => (
+                <PasswordRequirement
+                  key={index}
+                  label={requirement.label}
+                  meets={requirement.re.test(form.values.newPassword)}
+                />
+              ))}
+            </Popover.Dropdown>
+          </Popover>
+
+          <PasswordInput
+            label="Confirmar Contraseña"
+            withAsterisk
+            {...form.getInputProps("confPassword")}
+          />
+        </Stack>
+
+        <Space h="md" />
+
+        <Button
+          color="gray"
+          fullWidth
+          size="lg"
+          onClick={handleUpdate}
+          disabled={!isPasswordValid}
+        >
+          Actualizar
+        </Button>
+      </Box>
+    </>
   );
 };
 

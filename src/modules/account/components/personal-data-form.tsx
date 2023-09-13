@@ -12,6 +12,9 @@ import {
   FileInput,
   Alert,
   Anchor,
+  Modal,
+  Center,
+  Loader,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
@@ -34,6 +37,7 @@ const PersonalDataForm = () => {
   const { width } = useViewportSize();
   const { collaborator, verify } = useAccount();
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const form = useForm<FormValues>({
     initialValues: {
       name: collaborator?.name ?? "",
@@ -57,130 +61,146 @@ const PersonalDataForm = () => {
     },
   });
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     form.validate();
     if (form.isValid()) {
+      setLoading(true);
       const profileform: ProfileForm = {
         email: form.values.email,
         phone: form.values.cellPhone,
         image: form.values.imgprofile ?? undefined,
       };
-      verify(profileform).then((res) => {
-        setMessage(res ?? "success");
-      });
+      const res = await verify(profileform);
+      setMessage(res ?? "success");
+      setLoading(false);
     }
   };
 
   return (
-    <Box sx={{ width: width / 3 }}>
-      <Stack spacing="xs">
-        {message != "" && (
-          <Alert
-            title={message == "success" ? "Felicidades!" : "Error!"}
-            color={message == "success" ? "green" : "red"}
-            onClose={() => setMessage("")}
-            my="lg"
-            withCloseButton
-          >
-            {message == "success"
-              ? "Se ha actualizado el perfil de manera exitosa"
-              : message}
-          </Alert>
-        )}
-        <Title>Perfil</Title>
-        <Divider></Divider>
-        <Title order={3}>Datos Personales</Title>
+    <>
+      <Modal
+        opened={loading}
+        withCloseButton={false}
+        onClose={() => null}
+        closeOnClickOutside={false}
+        closeOnEscape={false}
+        centered
+        size="xl"
+      >
+        <Center>
+          <Loader />
+        </Center>
+      </Modal>
+      <Box sx={{ width: width / 3 }}>
+        <Stack spacing="xs">
+          {message != "" && (
+            <Alert
+              title={message == "success" ? "Felicidades!" : "Error!"}
+              color={message == "success" ? "green" : "red"}
+              onClose={() => setMessage("")}
+              my="lg"
+              withCloseButton
+            >
+              {message == "success"
+                ? "Se ha actualizado el perfil de manera exitosa"
+                : message}
+            </Alert>
+          )}
+          <Title>Perfil</Title>
+          <Divider></Divider>
+          <Title order={3}>Datos Personales</Title>
 
-        <Group grow>
+          <Group grow>
+            <TextInput
+              placeholder="Nombres (*)"
+              label="Nombres"
+              radius="xs"
+              size="sm"
+              disabled
+              withAsterisk
+              {...form.getInputProps("name")}
+            />
+            <TextInput
+              placeholder="Apellidos (*)"
+              label="Apellidos"
+              radius="xs"
+              size="sm"
+              disabled
+              withAsterisk
+              {...form.getInputProps("lastname")}
+            />
+          </Group>
+          <Group grow>
+            <TextInput
+              placeholder="Tipo Documento"
+              label="Tipo Documento"
+              radius="xs"
+              size="sm"
+              disabled
+              withAsterisk
+              {...form.getInputProps("documenttype")}
+            />
+            <TextInput
+              placeholder="Nro. Documento"
+              label="Nro. Documento"
+              radius="xs"
+              size="sm"
+              disabled
+              withAsterisk
+              {...form.getInputProps("documentnumber")}
+            />
+          </Group>
           <TextInput
-            placeholder="Nombres (*)"
-            label="Nombres"
+            placeholder=""
+            label="Correo Electrónico"
             radius="xs"
             size="sm"
-            disabled
             withAsterisk
-            {...form.getInputProps("name")}
+            {...form.getInputProps("email")}
           />
           <TextInput
-            placeholder="Apellidos (*)"
-            label="Apellidos"
+            placeholder=""
+            label="Celular"
             radius="xs"
             size="sm"
-            disabled
             withAsterisk
-            {...form.getInputProps("lastname")}
+            {...form.getInputProps("cellPhone")}
           />
-        </Group>
-        <Group grow>
-          <TextInput
-            placeholder="Tipo Documento"
-            label="Tipo Documento"
-            radius="xs"
-            size="sm"
-            disabled
+          <FileInput
+            label="Imagen de Perfil"
             withAsterisk
-            {...form.getInputProps("documenttype")}
+            clearable
+            sx={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxWidth: "420px",
+            }}
+            {...form.getInputProps("imgprofile")}
           />
-          <TextInput
-            placeholder="Nro. Documento"
-            label="Nro. Documento"
-            radius="xs"
-            size="sm"
-            disabled
-            withAsterisk
-            {...form.getInputProps("documentnumber")}
+          <Space h="md" />
+          <Checkbox
+            label={
+              <>
+                Acepto los{" "}
+                <Anchor href="/terms" target="_blank">
+                  Términos y Condiciones
+                </Anchor>
+              </>
+            }
+            {...form.getInputProps("termsOfService")}
           />
-        </Group>
-        <TextInput
-          placeholder=""
-          label="Correo Electrónico"
-          radius="xs"
-          size="sm"
-          withAsterisk
-          {...form.getInputProps("email")}
-        />
-        <TextInput
-          placeholder=""
-          label="Celular"
-          radius="xs"
-          size="sm"
-          withAsterisk
-          {...form.getInputProps("cellPhone")}
-        />
-        <FileInput
-          label="Imagen de Perfil"
-          withAsterisk
-          clearable
-          sx={{
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            maxWidth: "420px",
-          }}
-          {...form.getInputProps("imgprofile")}
-        />
+          <Checkbox
+            label="Acepto recibir publicidad"
+            {...form.getInputProps("acceptPublicity")}
+          />
+        </Stack>
         <Space h="md" />
-        <Checkbox
-          label={
-            <>
-              Acepto los{" "}
-              <Anchor href="/terms" target="_blank">
-                Términos y Condiciones
-              </Anchor>
-            </>
-          }
-          {...form.getInputProps("termsOfService")}
-        />
-        <Checkbox
-          label="Acepto recibir publicidad"
-          {...form.getInputProps("acceptPublicity")}
-        />
-      </Stack>
-      <Space h="md" />
-      <Button color="gray" fullWidth size="lg" onClick={handleUpdate}>
-        Actualizar
-      </Button>
-    </Box>
+        <Button color="gray" fullWidth size="lg" onClick={handleUpdate}>
+          Actualizar
+        </Button>
+      </Box>
+    </>
   );
 };
 
