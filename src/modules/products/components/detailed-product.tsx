@@ -75,14 +75,15 @@ export function DetailedProduct({ product }: { product: Product }) {
     2
   );
   useEffect(() => {
-    const matchingVariant = product.variant.find((variant) =>
+    const matchingVariantIndex = product.variant.findIndex((variant) =>
       variant.attributes.every(
         (attr) => attributeSelections[attr.attributeName] === attr.value
       )
     );
 
-    if (matchingVariant) {
-      setSelectedVariant(matchingVariant);
+    if (matchingVariantIndex > -1) {
+      setSelectedVariant(product.variant[matchingVariantIndex]);
+      setImgIdx(matchingVariantIndex)
     }
   }, [attributeSelections, product.variant]);
 
@@ -158,6 +159,7 @@ export function DetailedProduct({ product }: { product: Product }) {
             </Group>
             {/* <Text fw={450}>o 5 estrellas ⭐</Text> */}
             <Text fz="xs">(Ahorro estimado S/. {ahorro})</Text>
+            <Text>{selectedVariant.uuidVariant}</Text>
             <Divider my="sm" />
             {product.productAttributes.map((productAttr, index) => {
               const validVariants = product.variant.filter((variant) =>
