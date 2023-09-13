@@ -1,4 +1,4 @@
-import { AppShell, Header } from "@mantine/core";
+import { AppShell, BackgroundImage, Header, Stack, Title } from "@mantine/core";
 import HomeHeader from "@modules/layout/components/header";
 import React, { useEffect } from "react";
 import FooterComponent from "@modules/layout/components/footer";
@@ -46,7 +46,41 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         </AppShell>
       );
     }
-    return <div></div>;
+    return (
+      <AppShell
+        fixed={false}
+        padding={0}
+        header={
+          <Header fixed height={120} p="xs">
+            <SimpleHeader />
+          </Header>
+        }
+        footer={<FooterComponent />}
+        styles={(theme) => ({
+          main: {
+            paddingTop: 140,
+            minHeight: height - 120,
+          },
+        })}
+      >
+        <BackgroundImage
+          src={homeDesign?.bannerurl ?? ""}
+          radius="xs"
+          sx={{
+            height: 300,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Stack align="center" justify="flex-end">
+            <Title order={3}>Bienvenido(a) a:</Title>
+            <Title order={3}>Tu tienda de Beneficios (*)</Title>
+          </Stack>
+        </BackgroundImage>
+      </AppShell>
+    );
   }
 
   return (

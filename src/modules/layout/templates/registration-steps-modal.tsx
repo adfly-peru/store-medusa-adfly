@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 import { useRouter } from "next/router";
+import Layout from ".";
 
 const profileCompleted = (collaborator: Collaborator | undefined) => {
   if (collaborator) {
@@ -91,10 +92,14 @@ const RegistrationStepsModal: React.FC<{ children?: React.ReactNode }> = ({
               </UnstyledButton>
             </Center>
             <Center>
-              <UnstyledButton w="50%">
+              <UnstyledButton
+                w="50%"
+                onClick={() => router.push("/account/security")}
+              >
                 <Indicator
                   size={22}
                   label={<IconCheck />}
+                  radius="lg"
                   disabled={!collaborator?.changePassword}
                 >
                   <Paper shadow="xs" radius="md" p="xs" withBorder>
@@ -134,6 +139,7 @@ const RegistrationStepsModal: React.FC<{ children?: React.ReactNode }> = ({
           ) : null}
         </Stack>
       </Modal>
+      <Layout />
     </>
   );
 };
