@@ -27,8 +27,6 @@ export default async function handler(req: any, res: any) {
     const { purchaseNumber, amount, collaboratorid } = req.query;
 
     try {
-      const { collaboratorid } = req.query;
-
       const { data } = await client.query<{ getCart: Cart }>({
         query: GET_CART,
         variables: { collaboratorId: collaboratorid },
@@ -61,11 +59,11 @@ export default async function handler(req: any, res: any) {
       );
 
       if (response.status >= 200 && response.status < 300) {
-        const pNumber = response.data.data.data.purchaseNumber;
+        // const pNumber = response.data.data.data.purchaseNumber;
         const orderid = response.data.data.data.orderid;
-        const location = `/success?number=${encodeURIComponent(
-          pNumber
-        )}&id=${encodeURIComponent(orderid)}`;
+        const location = `/success?id=${encodeURIComponent(
+          orderid
+        )}&data=${encodeURIComponent(JSON.stringify(response.data.data.data))}`;
         res.status(302).setHeader("Location", location);
         res.end();
       } else {
@@ -84,10 +82,14 @@ export default async function handler(req: any, res: any) {
     } catch (error) {
       const axiosError = error as AxiosError<AdflyResponse>;
       let errorToSend = `Error al hacer la solicitud: ${JSON.stringify(error)}`;
+      let errorDataResponse = JSON.stringify(axiosError);
       if (axiosError && axiosError.response) {
         errorToSend = `Error: ${JSON.stringify(axiosError.response.data)}`;
+        errorDataResponse = JSON.stringify(axiosError.response.data);
+        console.log(JSON.stringify(axiosError.response.data));
         if (axiosError.response.data.data) {
           errorToSend = `${JSON.stringify(axiosError.response.data.data)}`;
+          errorDataResponse = JSON.stringify(axiosError.response.data.data);
         } else if (axiosError.response.data.error) {
           errorToSend = `${JSON.stringify(axiosError.response.data.error)}`;
         }
@@ -96,7 +98,9 @@ export default async function handler(req: any, res: any) {
         .status(302)
         .setHeader(
           "Location",
-          `/error?message=${encodeURIComponent(errorToSend)}`
+          `/error?message=${encodeURIComponent(
+            errorToSend
+          )}&data=${encodeURIComponent(errorDataResponse)}`
         );
       res.end();
     }
