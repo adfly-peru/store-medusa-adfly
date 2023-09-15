@@ -1,6 +1,7 @@
 export interface IToken {
   uuid_collaborator: string;
   uuid_business: string;
+  creation_date: string;
   exp: number;
 }
 

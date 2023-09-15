@@ -27,13 +27,21 @@ declare global {
 }
 
 const createSessionToken = async (
-  productAmount: number
+  productAmount: number,
+  customerEmail: string,
+  activeCustomer: boolean,
+  documentNumber: string,
+  daysInApp: number
 ): Promise<string | null> => {
   try {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_API}/store/session`,
       {
         amount: productAmount,
+        customerEmail: customerEmail,
+        activeCustomer: activeCustomer,
+        documentNumber: documentNumber,
+        daysInApp: daysInApp,
       },
       {
         headers: {
@@ -59,17 +67,23 @@ const PaymentButton = ({
   submitInfo: () => Promise<string | null>;
 }) => {
   const { cart } = useCart();
-  const { collaborator } = useAccount();
+  const { collaborator, daysInApp } = useAccount();
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [checked, setChecked] = useState("ticket");
 
   const payment = async () => {
-    if (!cart) return;
+    if (!cart || !collaborator) return;
     const infoerror = await submitInfo();
     if (infoerror) return;
     const totalAmountFixed = parseFloat(totalAmount.toFixed(2));
-    const sessionToken = await createSessionToken(totalAmountFixed);
+    const sessionToken = await createSessionToken(
+      totalAmountFixed,
+      collaborator.email ?? "",
+      true,
+      collaborator.documentnumber,
+      daysInApp
+    );
     if (!sessionToken) return;
     window.VisanetCheckout.configure({
       sessiontoken: `${sessionToken}`,

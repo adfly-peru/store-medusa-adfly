@@ -17,6 +17,7 @@ import { verifyAccount } from "api/verify";
 import { createAddress } from "api/delivery";
 
 interface AccountContext {
+  daysInApp: number;
   login: (values: { email: string; password: string }) => void;
   logout: () => void;
   verify: (
@@ -40,6 +41,7 @@ interface AccountProviderProps {
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
   const router = useRouter();
+  const [daysInApp, setDaysInApp] = useState(0);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [collaborator, setCollaborator] = useState<Collaborator | undefined>(
@@ -111,6 +113,17 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
           setToken(storedToken);
           const decodedToken: IToken = jwtDecode(storedToken);
           const decodeduserid = decodedToken.uuid_collaborator;
+          const creationDate = new Date(decodedToken.creation_date);
+          const now = new Date();
+          creationDate.setHours(0, 0, 0, 0);
+          now.setHours(0, 0, 0, 0);
+          const differenceInTime = now.getTime() - creationDate.getTime();
+          const differenceInDays = Math.ceil(
+            differenceInTime / (1000 * 3600 * 24)
+          );
+          const daysInStore = differenceInDays + 1;
+          console.log(daysInStore);
+          setDaysInApp(daysInStore);
           setUserId(decodeduserid);
         } else {
           setStatus("unauthenticated");
@@ -259,6 +272,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   return (
     <AccountContext.Provider
       value={{
+        daysInApp,
         collaborator,
         verify,
         homeDesign,
