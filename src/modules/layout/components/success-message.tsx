@@ -1,20 +1,83 @@
-import { Stack, Title, Group, Button, Text } from "@mantine/core";
+import {
+  Stack,
+  Title,
+  Group,
+  Button,
+  Text,
+  LoadingOverlay,
+  Divider,
+  Paper,
+  Space,
+  TextInput,
+} from "@mantine/core";
 import { IconArrowLeft, IconLocation } from "@tabler/icons-react";
 import { useAccount } from "@context/account-context";
+import { JsonView } from "react-json-view-lite";
+import SimpleOrderView from "@modules/order/templates/simple";
+import { useOrder } from "@context/order-context";
+import { OrderReport } from "@interfaces/order";
+import { useState, useEffect } from "react";
+import { formatDate } from "@modules/common/functions/format-date";
+import { orderStatuses } from "@modules/common/types";
+import SuborderCard from "@modules/order/components/subordercard";
+
+function formatarFecha(fechaStr: string): string {
+  if (fechaStr.length !== 12) {
+    throw new Error("Formato de fecha no válido.");
+  }
+
+  const año = "20" + fechaStr.substr(0, 2);
+  const mes = fechaStr.substr(2, 2);
+  const dia = fechaStr.substr(4, 2);
+  const hora = fechaStr.substr(6, 2);
+  const minuto = fechaStr.substr(8, 2);
+  const segundo = fechaStr.substr(10, 2);
+
+  const fecha = new Date(
+    parseInt(año),
+    parseInt(mes) - 1, // Los meses en JavaScript empiezan desde 0
+    parseInt(dia),
+    parseInt(hora),
+    parseInt(minuto),
+    parseInt(segundo)
+  );
+
+  return fecha.toLocaleString(); // Retorna en formato 'dd/mm/yyyy, hh:mm:ss AM/PM'
+}
 
 const SuccessMessage = ({
   number,
   id,
+  niubizData,
 }: {
   number: string[] | string | undefined;
   id: string[] | string | undefined;
+  niubizData: any;
 }) => {
   const { collaborator } = useAccount();
+  const { getOrder } = useOrder();
+  const [report, setReport] = useState<OrderReport | null>(null);
+  const [loading, setLoading] = useState(false);
+  const getOrderReport = async () => {
+    setLoading(true);
+    const orderReaded = await getOrder(id as string);
+    setReport(orderReaded ?? null);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getOrderReport();
+  }, []);
+
+  if (loading || !report) {
+    return <LoadingOverlay visible={loading} />;
+  }
 
   return (
     <Stack align="center" spacing={45}>
       <Title>¡Gracias por tu pedido!</Title>
       <Stack align="center" spacing="xs">
+        <Text fz={18}>{niubizData.dataMap.ACTION_DESCRIPTION}</Text>
         <Text fz={18}>
           Hola{" "}
           <Text span c="blue">
@@ -36,6 +99,166 @@ const SuccessMessage = ({
           vez confirmado el pedido.
         </Text>
       </Stack>
+      <Paper radius="md" py="md" px="xl" withBorder>
+        <Text>
+          Fecha de Pedido:{" "}
+          <Text fw="bold" span>
+            {formatarFecha(niubizData.order.transactionDate)}
+          </Text>
+        </Text>
+        <Text>
+          N° Pedido:{" "}
+          <Text fw="bold" span>
+            {report.order.paymentInfo.purchaseNumber}
+          </Text>
+        </Text>
+        <Text>
+          Total del Pedido:{" "}
+          <Text fw="bold" span>
+            {`${niubizData.order.amount.toFixed(2)} ${
+              niubizData.order.currency
+            }`}
+          </Text>
+        </Text>
+        <Space h="xl" />
+        <Title order={3}> Información de Pago </Title>
+        <Paper radius="md" py="md" px="xl" withBorder>
+          <Text fw="bold">
+            Estado:{" "}
+            <Text fw="normal" span>{`${
+              orderStatuses[report.order.status ?? ""]
+            }`}</Text>
+          </Text>
+          <Text fw="bold">
+            Comentarios:{" "}
+            <Text fw="normal" span>
+              {report.order.comments || "-"}
+            </Text>
+          </Text>
+          <Divider mb="sm" />
+          <Text fw="bold">
+            Método de Pago:{" "}
+            <Text fw="normal" span>
+              {`Pago ${report.order.paymentInfo.canal || "-"}`}
+            </Text>
+          </Text>
+          <Text fw="bold">
+            Detalle de Pago:{" "}
+            <Text fw="normal" span>
+              {`${report.order.paymentInfo.brand} ${report.order.paymentInfo.card}`}
+            </Text>
+          </Text>
+          <Divider mb="sm" />
+          <Title order={4}>Facturación</Title>
+          <Group position="apart" grow>
+            <TextInput
+              label="Comprobante Pago"
+              disabled
+              value={report.order.isBilling ? "Factura" : "Boleta"}
+            />
+            <TextInput
+              label="Nombre Completo / Razón Social"
+              disabled
+              value={
+                report.order.isBilling
+                  ? report.billingInfo.businessname
+                  : `${report.collaborator.name} ${report.collaborator.lastname}`
+              }
+            />
+          </Group>
+          <Group position="apart" grow>
+            <TextInput
+              label="Tipo Documento"
+              disabled
+              value={
+                report.order.isBilling
+                  ? "RUC"
+                  : report.collaborator.documenttype
+              }
+            />
+            <TextInput
+              label="N° Documento"
+              disabled
+              value={
+                report.order.isBilling
+                  ? report.billingInfo.ruc
+                  : report.collaborator.documentnumber
+              }
+            />
+          </Group>
+          <TextInput
+            label="Dirección Facturación"
+            disabled
+            value={
+              report.order.isBilling ? report.billingInfo.fiscaladdress : ""
+            }
+          />
+        </Paper>
+        <Space h="xl" />
+        <Title order={3}> Envíos </Title>
+        <Paper radius="md" py="md" px="xl" withBorder>
+          {report.order.suborders.map((suborder, index) => (
+            <SuborderCard
+              suborder={suborder}
+              index={index}
+              total={report.order.suborders.length}
+              key={index}
+            />
+          ))}
+        </Paper>
+        <Space h="xl" />
+        <Title order={3}> Información de Entrega </Title>
+        <Paper radius="md" py="md" px="xl" withBorder>
+          <Text fw="bold">Dirección de Entrega</Text>
+          <Text>
+            {report.deliveryInfo?.collaboratoraddress?.address || "-"}
+          </Text>
+          <Divider my="sm" />
+          <Text fw="bold">Entregar pedido a:</Text>
+          <Text>
+            {`Nombre Completo: ${
+              report.order.isReceiver
+                ? report.deliveryInfo?.receivername || "-"
+                : report.collaborator.name + " " + report.collaborator.lastname
+            }`}
+          </Text>
+          <Text>
+            {`Tipo de Documento: ${
+              report.order.isReceiver
+                ? report.deliveryInfo?.receiverdocumentkind || "-"
+                : report.collaborator.documenttype
+            }`}
+          </Text>
+          <Text>
+            {`N° Documento: ${
+              report.order.isReceiver
+                ? report.deliveryInfo?.receiverdocumentnumber || "-"
+                : report.collaborator.documentnumber
+            }`}
+          </Text>
+          <Text>
+            {`Teléfono de Contacto: ${
+              report.order.isReceiver
+                ? report.billingInfo.phone || "-"
+                : report.billingInfo.phone
+            }`}
+          </Text>
+        </Paper>
+        <Space h="xl" />
+        <Title order={3}> Resumen del Pedido </Title>
+        <Paper radius="md" py="md" px="xl" withBorder>
+          <Text>{`Sub total: S/.${report.order.totalIgv.toFixed(2)}`}</Text>
+          <Text>{`Envío: S/.${(report.order.deliveryPrice || 0).toFixed(
+            2
+          )}`}</Text>
+          <Text>{`Impuestos pagados (IGV 18%): S/.${report.order.igv.toFixed(
+            2
+          )}`}</Text>
+          <Text fw="bold">{`Total del Pedido: S/.${report.order.finalTotal.toFixed(
+            2
+          )}`}</Text>
+        </Paper>
+      </Paper>
       <Group position="center">
         <Button
           component="a"

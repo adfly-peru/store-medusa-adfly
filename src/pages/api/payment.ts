@@ -61,9 +61,12 @@ export default async function handler(req: any, res: any) {
       if (response.status >= 200 && response.status < 300) {
         // const pNumber = response.data.data.data.purchaseNumber;
         const orderid = response.data.data.data.orderid;
+        const niubizdata = response.data.data.data.niubizResponse;
         const location = `/success?id=${encodeURIComponent(
           orderid
-        )}&data=${encodeURIComponent(JSON.stringify(response.data.data.data))}`;
+        )}&data=${encodeURIComponent(
+          JSON.stringify(niubizdata)
+        )}&number=${encodeURIComponent(purchaseNumber)}`;
         res.status(302).setHeader("Location", location);
         res.end();
       } else {
@@ -86,10 +89,17 @@ export default async function handler(req: any, res: any) {
       if (axiosError && axiosError.response) {
         errorToSend = `Error: ${JSON.stringify(axiosError.response.data)}`;
         errorDataResponse = JSON.stringify(axiosError.response.data);
-        console.log(JSON.stringify(axiosError.response.data));
         if (axiosError.response.data.data) {
           errorToSend = `${JSON.stringify(axiosError.response.data.data)}`;
           errorDataResponse = JSON.stringify(axiosError.response.data.data);
+          if (axiosError.response.data.data.data) {
+            errorToSend = `${JSON.stringify(
+              axiosError.response.data.data.data
+            )}`;
+            errorDataResponse = JSON.stringify(
+              axiosError.response.data.data.data
+            );
+          }
         } else if (axiosError.response.data.error) {
           errorToSend = `${JSON.stringify(axiosError.response.data.error)}`;
         }
@@ -100,7 +110,9 @@ export default async function handler(req: any, res: any) {
           "Location",
           `/error?message=${encodeURIComponent(
             errorToSend
-          )}&data=${encodeURIComponent(errorDataResponse)}`
+          )}&data=${encodeURIComponent(
+            errorDataResponse
+          )}&purchase=${encodeURIComponent(purchaseNumber)}`
         );
       res.end();
     }
