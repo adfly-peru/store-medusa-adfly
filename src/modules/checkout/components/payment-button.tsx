@@ -122,7 +122,7 @@ const PaymentButton = ({
     const script = document.createElement("script");
     script.type = "text/javascript";
     script.src =
-      "https://static-content-qas.vnforapps.com/v2/js/checkout.js?qa=true";
+      "https://static-content.vnforapps.com/v2/js/checkout.js";
     document.body.appendChild(script);
   }, []);
 
