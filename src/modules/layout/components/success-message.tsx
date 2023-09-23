@@ -12,12 +12,9 @@ import {
 } from "@mantine/core";
 import { IconArrowLeft, IconLocation } from "@tabler/icons-react";
 import { useAccount } from "@context/account-context";
-import { JsonView } from "react-json-view-lite";
-import SimpleOrderView from "@modules/order/templates/simple";
 import { useOrder } from "@context/order-context";
 import { OrderReport } from "@interfaces/order";
 import { useState, useEffect } from "react";
-import { formatDate } from "@modules/common/functions/format-date";
 import { orderStatuses } from "@modules/common/types";
 import SuborderCard from "@modules/order/components/subordercard";
 
