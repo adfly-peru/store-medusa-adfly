@@ -6,6 +6,8 @@ import {
   ActionIcon,
   Image,
   useMantineColorScheme,
+  Text,
+  Stack,
 } from "@mantine/core";
 import router from "next/router";
 
@@ -21,20 +23,14 @@ const CategorySection = () => {
   };
   return (
     <>
-      <Title>¡Descubre nuestras categorías! (*)</Title>
+      <Title>¡Descubre lo que tenemos para ti! (*)</Title>
       <Group spacing={50}>
         {departments.map((category, i) => (
-          <Tooltip
-            withArrow
-            transitionProps={{ transition: "fade", duration: 200 }}
-            key={`${i}tip`}
-            label={category.name}
-          >
+          <Stack align="center">
             <ActionIcon
               key={`${i}action`}
               size={60}
-              radius="xl"
-              variant="outline"
+              variant="transparent"
               onClick={() => searchProductByCategorie(category.name)}
             >
               <Image
@@ -45,7 +41,8 @@ const CategorySection = () => {
                 }}
               />
             </ActionIcon>
-          </Tooltip>
+            <Text>{category.name}</Text>
+          </Stack>
         ))}
       </Group>
     </>
