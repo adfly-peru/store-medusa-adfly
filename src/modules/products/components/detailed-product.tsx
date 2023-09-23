@@ -110,7 +110,7 @@ export function DetailedProduct({ product }: { product: Product }) {
           <Stack spacing="xs" w="35%">
             <div style={{ width: 70 }}>
               <Badge size="lg" color="red" radius="xs" variant="filled">
-                -{discount.toFixed(2)}%
+                -{discount.toFixed(0)}%
               </Badge>
             </div>
             <Space h="lg" />
