@@ -158,10 +158,10 @@ const DetailedProductCartView = ({
               Eliminar
             </Button>
 
-            <Divider size="sm" orientation="vertical" />
-            <Button color="dark" variant="subtle">
+            {/* <Divider size="sm" orientation="vertical" /> */}
+            {/* <Button color="dark" variant="subtle">
               Guardar para después
-            </Button>
+            </Button> */}
           </Group>
         </Stack>
       </Grid.Col>
