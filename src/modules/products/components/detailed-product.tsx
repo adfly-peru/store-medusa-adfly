@@ -83,7 +83,7 @@ export function DetailedProduct({ product }: { product: Product }) {
 
     if (matchingVariantIndex > -1) {
       setSelectedVariant(product.variant[matchingVariantIndex]);
-      setImgIdx(matchingVariantIndex)
+      setImgIdx(matchingVariantIndex);
     }
   }, [attributeSelections, product.variant]);
 
@@ -301,7 +301,7 @@ export function DetailedProduct({ product }: { product: Product }) {
                   >
                     Recojo en tienda
                   </List.Item>
-                  <List.Item
+                  {/* <List.Item
                     icon={
                       <ThemeIcon
                         color={
@@ -321,7 +321,7 @@ export function DetailedProduct({ product }: { product: Product }) {
                     }
                   >
                     Entrega en centro de trabajo
-                  </List.Item>
+                  </List.Item> */}
                 </List>
               </Card>
             </Center>

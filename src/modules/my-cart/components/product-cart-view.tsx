@@ -93,7 +93,7 @@ const DetailedProductCartView = ({
                 >
                   Recojo en tienda
                 </List.Item>
-                <List.Item
+                {/* <List.Item
                   icon={
                     <ThemeIcon
                       color={
@@ -113,7 +113,7 @@ const DetailedProductCartView = ({
                   }
                 >
                   Envío a centro de trabajo
-                </List.Item>
+                </List.Item> */}
               </List>
             </Stack>
           </Group>
