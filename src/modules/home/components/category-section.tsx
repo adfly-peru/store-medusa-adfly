@@ -26,7 +26,7 @@ const CategorySection = () => {
       <Title>¡Descubre lo que tenemos para ti! (*)</Title>
       <Group spacing={50}>
         {departments.map((category, i) => (
-          <Stack align="center">
+          <Stack align="center" key={category.id}>
             <ActionIcon
               key={`${i}action`}
               size={60}
