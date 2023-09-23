@@ -82,9 +82,10 @@ const ShipmentCard = ({
                 </Text>
                 <Text fz="sm">
                   <Text span c="dimmed">
-                    Horario de Entrega:
+                    Especificaciones:{" "}
                   </Text>
-                  {" Coordinar con cliente"}
+                  {suborder.availableDeliveryMethods.deliveryOnHome.comments ??
+                    "-"}
                 </Text>
               </Stack>
             </div>
