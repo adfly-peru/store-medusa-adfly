@@ -21,7 +21,7 @@ const FooterComponent = () => {
   return (
     <Footer height="100%" pt={10} mt={20} px="xl" fs="md">
       <Container mt={25} maw={1260}>
-        <Grid gutter={210}>
+        <Grid gutter={20} gutterSm={210}>
           <Grid.Col sm={4}>
             <Stack spacing="xs">
               <Image
