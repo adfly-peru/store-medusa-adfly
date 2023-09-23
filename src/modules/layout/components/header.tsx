@@ -104,12 +104,12 @@ const HomeHeader = () => {
   const { cart } = useCart();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
-  let tabs = [
-    "Menú",
-    "Ofertas del día",
-    "Envío Gratis",
-    "Entrega en Centro de Trabajo",
-  ];
+  // let tabs = [
+  //   "Menú",
+  //   "Ofertas del día",
+  //   "Envío Gratis",
+  //   "Entrega en Centro de Trabajo",
+  // ];
 
   const searchProduct = () => {
     router.push({
@@ -287,7 +287,7 @@ const HomeHeader = () => {
           </Button.Group>
         </Grid.Col>
       </Grid>
-      <Group position="apart" grow>
+      {/* <Group position="apart" grow>
         <Tabs
           defaultValue="Home"
           variant="outline"
@@ -305,7 +305,7 @@ const HomeHeader = () => {
             ))}
           </Tabs.List>
         </Tabs>
-      </Group>
+      </Group> */}
     </>
   );
 };
