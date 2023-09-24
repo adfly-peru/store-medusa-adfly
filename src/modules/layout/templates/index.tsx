@@ -11,7 +11,11 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { height } = useViewportSize();
   const { status, collaborator, homeDesign } = useAccount();
   const router = useRouter();
-  const isAllow = router.asPath.startsWith("/account");
+  const isAllow = router.asPath.startsWith("/account/profile")
+    ? true
+    : router.asPath.startsWith("/account/security") && collaborator?.emailVerify
+    ? true
+    : false;
 
   useEffect(() => {
     if (status == "unauthenticated") {
@@ -22,8 +26,11 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   if (status == "unauthenticated") {
     return <div></div>;
   }
+  if (!collaborator) {
+    return <div></div>;
+  }
 
-  if (collaborator?.status != "ACTIVE") {
+  if (!collaborator.emailVerify || !collaborator.changePassword) {
     if (isAllow) {
       return (
         <AppShell

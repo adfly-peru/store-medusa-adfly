@@ -1,5 +1,4 @@
 import {
-  Text,
   Stack,
   Button,
   TextInput,
@@ -21,6 +20,7 @@ import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
 import { ProfileForm } from "@interfaces/collaborator";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 interface FormValues {
   name: string;
@@ -34,6 +34,7 @@ interface FormValues {
 }
 
 const PersonalDataForm = () => {
+  const router = useRouter();
   const { width } = useViewportSize();
   const { collaborator, verify } = useAccount();
   const [message, setMessage] = useState("");
@@ -51,9 +52,6 @@ const PersonalDataForm = () => {
     },
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-      cellPhone: (val) => (val.length > 0 ? null : "Invalid Cellphone"),
-      imgprofile: (val: any) =>
-        val != null && val != undefined ? null : "Este campo es requerido",
       termsOfService: (val: boolean) =>
         val == true
           ? null
@@ -65,16 +63,31 @@ const PersonalDataForm = () => {
     form.validate();
     if (form.isValid()) {
       setLoading(true);
-      const profileform: ProfileForm = {
-        email: form.values.email,
-        phone: form.values.cellPhone,
-        image: form.values.imgprofile ?? undefined,
-      };
-      const res = await verify(profileform);
-      setMessage(res ?? "success");
-      setLoading(false);
+      try {
+        const profileform: ProfileForm = {
+          email: form.values.email,
+          phone: form.values.cellPhone,
+          image: form.values.imgprofile ?? undefined,
+        };
+        const res = await verify(profileform);
+        setMessage(res ?? "success");
+        if (!res) {
+          const timerId = setTimeout(() => {
+            router.push("/");
+          }, 3000);
+          return () => clearTimeout(timerId);
+        }
+      } catch (error) {
+        setMessage("Ha ocurrido un error durante la verificación");
+      } finally {
+        setLoading(false);
+      }
     }
   };
+
+  if (!collaborator) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -102,7 +115,7 @@ const PersonalDataForm = () => {
               withCloseButton
             >
               {message == "success"
-                ? "Se ha actualizado el perfil de manera exitosa"
+                ? "Se ha actualizado el perfil de manera exitosa. Será redirigido a la página principal en unos segundos..."
                 : message}
             </Alert>
           )}
@@ -163,13 +176,12 @@ const PersonalDataForm = () => {
             label="Celular"
             radius="xs"
             size="sm"
-            withAsterisk
             {...form.getInputProps("cellPhone")}
           />
           <FileInput
             label="Imagen de Perfil"
-            withAsterisk
             clearable
+            accept="image/png,image/jpeg,image/jpg"
             sx={{
               whiteSpace: "nowrap",
               overflow: "hidden",

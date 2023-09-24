@@ -2,10 +2,12 @@ import { useAccount } from "@context/account-context";
 import { Collaborator } from "@interfaces/collaborator";
 import {
   Center,
+  Grid,
   Group,
   Indicator,
   Modal,
   Paper,
+  SimpleGrid,
   Space,
   Stack,
   Text,
@@ -18,7 +20,6 @@ import Layout from ".";
 const profileCompleted = (collaborator: Collaborator | undefined) => {
   if (collaborator) {
     if (!collaborator.email?.length) return false;
-    if (!collaborator.phonenumber?.length) return false;
     return true;
   }
   return false;
@@ -29,7 +30,14 @@ const RegistrationStepsModal: React.FC<{ children?: React.ReactNode }> = ({
 }) => {
   const { collaborator } = useAccount();
   const router = useRouter();
-  const isAllow = router.asPath.startsWith("/account");
+  const isAllow = router.asPath.startsWith("/account/profile")
+    ? true
+    : router.asPath.startsWith("/account/security") && collaborator?.emailVerify
+    ? true
+    : false;
+
+  if (!collaborator) return <></>;
+
   if (isAllow) {
     return <>{children}</>;
   }
@@ -46,83 +54,78 @@ const RegistrationStepsModal: React.FC<{ children?: React.ReactNode }> = ({
         }}
         withCloseButton={false}
         centered={true}
-        size="50%"
+        size={900}
       >
-        <Stack>
+        <Stack spacing="xl" p="xl">
           <Center>
-            <Text sx={{ width: "75%" }} size="lg">
+            <Text sx={{ width: "85%" }} size="lg" align="justify">
               Estás a 3 pasos de poder disfrutar de todos los benificios que
               tenemos para ti.
             </Text>
           </Center>
-          <Space h="lg" />
-          <Group grow>
-            <Center>
-              <UnstyledButton
-                w="50%"
-                onClick={() => router.push("/account/profile")}
+          <SimpleGrid
+            cols={3}
+            spacing="xl"
+            breakpoints={[
+              { maxWidth: "48rem", cols: 2, spacing: "sm" },
+              { maxWidth: "36rem", cols: 1, spacing: "sm" },
+            ]}
+          >
+            <UnstyledButton onClick={() => router.push("/account/profile")}>
+              <Indicator
+                size={22}
+                label={<IconCheck />}
+                radius="lg"
+                disabled={!profileCompleted(collaborator)}
               >
-                <Indicator
-                  size={22}
-                  label={<IconCheck />}
-                  radius="lg"
-                  disabled={!profileCompleted(collaborator)}
-                >
-                  <Paper shadow="xs" radius="md" p="xs" withBorder>
-                    <Text align="center" lineClamp={2}>
-                      Completa tu perfil
-                    </Text>
-                  </Paper>
-                </Indicator>{" "}
-              </UnstyledButton>
-            </Center>
-            <Center>
-              <UnstyledButton w="50%">
-                <Indicator
-                  size={22}
-                  label={<IconCheck />}
-                  disabled={!collaborator?.emailVerify}
-                >
-                  <Paper shadow="xs" radius="md" p="xs" withBorder>
-                    <Text align="center" lineClamp={2}>
-                      Verificar email
-                    </Text>
-                  </Paper>
-                </Indicator>
-              </UnstyledButton>
-            </Center>
-            <Center>
-              <UnstyledButton
-                w="50%"
-                onClick={() => router.push("/account/security")}
+                <Paper shadow="xs" radius="md" p="xs" withBorder>
+                  <Text align="center" lineClamp={2}>
+                    Completa tu perfil
+                  </Text>
+                </Paper>
+              </Indicator>
+            </UnstyledButton>
+            <UnstyledButton disabled>
+              <Indicator
+                size={22}
+                label={<IconCheck />}
+                disabled={!collaborator?.emailVerify}
               >
-                <Indicator
-                  size={22}
-                  label={<IconCheck />}
-                  radius="lg"
-                  disabled={!collaborator?.changePassword}
-                >
-                  <Paper shadow="xs" radius="md" p="xs" withBorder>
-                    <Text align="center" lineClamp={2}>
-                      Actualizar contraseña
-                    </Text>
-                  </Paper>
-                </Indicator>
-              </UnstyledButton>
-            </Center>
-          </Group>
-          <Space h="lg" />
+                <Paper shadow="xs" radius="md" p="xs" withBorder>
+                  <Text align="center" lineClamp={2}>
+                    Verificar email
+                  </Text>
+                </Paper>
+              </Indicator>
+            </UnstyledButton>
+            <UnstyledButton
+              onClick={() => router.push("/account/security")}
+              disabled={!collaborator.emailVerify}
+            >
+              <Indicator
+                size={22}
+                label={<IconCheck />}
+                radius="lg"
+                disabled={!collaborator.changePassword}
+              >
+                <Paper shadow="xs" radius="md" p="xs" withBorder>
+                  <Text align="center" lineClamp={2}>
+                    Actualizar contraseña
+                  </Text>
+                </Paper>
+              </Indicator>
+            </UnstyledButton>
+          </SimpleGrid>
           <Center>
-            <Text sx={{ width: "75%" }} size="lg" align="justify">
+            <Text sx={{ width: "85%" }} size="lg" align="justify">
               Acuérdate que no podrás acceder a la tienda hasta que completes
-              todos los pasos anteriores. Si necesitas ayuda, escribenos a xx@xx
-              o llamanos al +51 xxxxxxxxx.
+              todos los pasos anteriores. Si necesitas ayuda, escríbenos a
+              hola@adfly.pe o llámanos al +51 970 802 065.
             </Text>
           </Center>
-          <Space h="md" />
-          {collaborator?.email?.length ? (
+          {collaborator.email?.length && !collaborator.emailVerify ? (
             <Center>
-              <Text sx={{ width: "75%" }} size="lg" align="justify">
+              <Text sx={{ width: "85%" }} size="lg" align="justify">
                 Hemos enviado un correo de verificación a {collaborator?.email},
                 revisa tu correo para completar tu perfil. Haz click{" "}
                 <Text

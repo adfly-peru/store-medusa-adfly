@@ -73,7 +73,7 @@ const ResourcesProvider: React.FC<{ children?: React.ReactNode }> = ({
     if (!collaborator) {
       return <LoadingOverlay visible={true} />;
     }
-    if (collaborator.status == "ACTIVE") {
+    if (collaborator.emailVerify && collaborator.changePassword) {
       return (
         <ProductProvider>
           <CartProvider>
