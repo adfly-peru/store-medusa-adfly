@@ -23,7 +23,7 @@ const HomeView = () => {
           <Title order={3}>Tu tienda de Beneficios (*)</Title>
         </Stack> */}
       </BackgroundImage>
-      <Stack align="center" justify="flex-end" spacing="xl">
+      <Stack align="center" justify="flex-end" spacing="xl" px={15}>
         <Space />
         <CategorySection />
         <FeaturedProducts />

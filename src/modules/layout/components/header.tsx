@@ -16,9 +16,13 @@ import {
   Indicator,
   UnstyledButton,
   useMantineColorScheme,
+  Center,
+  Avatar,
+  MediaQuery,
 } from "@mantine/core";
 import {
   IconBasket,
+  IconMenu2,
   IconMoon,
   IconSearch,
   IconSettings,
@@ -94,7 +98,6 @@ const useStyles = createStyles((theme) => ({
 
 const HomeHeader = () => {
   const router = useRouter();
-  const { classes } = useStyles();
   const { departments } = useProduct();
   const [opened, setOpened] = useState(false);
   const { collaborator, logout, homeDesign } = useAccount();
@@ -155,35 +158,59 @@ const HomeHeader = () => {
       >
         <CartDrawer></CartDrawer>
       </Drawer>
-      <Grid justify="center" align="center">
-        <Grid.Col span={1}>
-          <UnstyledButton onClick={() => router.push("/")}>
+      <Grid justify="center" align="center" columns={24}>
+        <Grid.Col span={24} bg="white">
+          <Group position="apart" py={10} px={15}>
+            <UnstyledButton onClick={() => router.push("/")}>
+              <Image
+                radius="md"
+                height={60}
+                width="inherit"
+                fit="contain"
+                src={homeDesign?.logourl}
+                alt="Enterprise Logo"
+              />
+            </UnstyledButton>
             <Image
               radius="md"
-              height={50}
+              height={60}
               width="inherit"
               fit="contain"
-              src={homeDesign?.logourl}
-              alt="Random unsplash image"
-              sx={{ padding: 10 }}
+              src="https://www.adfly.pe/Content/logo.png"
+              alt="Adfly Logo"
             />
-          </UnstyledButton>
+          </Group>
         </Grid.Col>
-        <Grid.Col span={1}>
+        <Grid.Col span={8} md={4}>
           <Menu
-            trigger="hover"
+            trigger="click"
             openDelay={100}
             closeDelay={400}
             shadow="md"
             width={200}
+            position="bottom"
           >
             <Menu.Target>
-              <Button variant="subtle" sx={{ width: "100%" }}>
-                Menú
-              </Button>
+              <Center>
+                <UnstyledButton w="80%">
+                  <Group spacing="xs" align="center" position="center">
+                    <IconMenu2 color={homeDesign?.fontcolor} size="1.5rem" />
+                    <MediaQuery
+                      smallerThan="sm"
+                      styles={{
+                        fontSize: 0,
+                      }}
+                    >
+                      <Text color={homeDesign?.fontcolor} size="1.5rem">
+                        Menu
+                      </Text>
+                    </MediaQuery>
+                  </Group>
+                </UnstyledButton>
+              </Center>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Label>Categorías</Menu.Label>
+              <Menu.Label>Departamentos</Menu.Label>
               {departments.map((category, id) => (
                 <Menu.Item
                   key={id}
@@ -205,7 +232,7 @@ const HomeHeader = () => {
             </Menu.Dropdown>
           </Menu>
         </Grid.Col>
-        <Grid.Col span={9}>
+        <Grid.Col span="auto" py={16}>
           <form onSubmit={form.onSubmit((_) => searchProduct())}>
             <Autocomplete
               placeholder="Buscar"
@@ -218,8 +245,8 @@ const HomeHeader = () => {
             />
           </form>
         </Grid.Col>
-        <Grid.Col span={1}>
-          <Button.Group>
+        <Grid.Col span={3} md={1}>
+          <Center>
             <Menu
               closeOnItemClick={false}
               position="bottom-end"
@@ -227,8 +254,12 @@ const HomeHeader = () => {
               width={200}
             >
               <Menu.Target>
-                <ActionIcon size="lg">
-                  <IconUser size={30} stroke={1.5} />
+                <ActionIcon variant="transparent" size="lg">
+                  <IconUser
+                    color={homeDesign?.fontcolor}
+                    size={30}
+                    stroke={1.5}
+                  />
                 </ActionIcon>
               </Menu.Target>
               <Menu.Dropdown>
@@ -273,18 +304,37 @@ const HomeHeader = () => {
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>
-            <Space w="md" />
+          </Center>
+        </Grid.Col>
+        <Grid.Col span={4} md={2}>
+          <Center>
             <Indicator
               disabled={cartLength <= 0}
               label={cartLength}
               inline
               size={22}
+              withBorder
+              color={homeDesign?.backcolor}
+              styles={{
+                indicator: {
+                  borderColor: homeDesign?.fontcolor,
+                  color: homeDesign?.fontcolor,
+                },
+              }}
             >
-              <ActionIcon onClick={() => setOpened(true)} size="lg">
-                <IconShoppingCart size={30} stroke={1.5} />
+              <ActionIcon
+                variant="transparent"
+                onClick={() => setOpened(true)}
+                size="lg"
+              >
+                <IconShoppingCart
+                  color={homeDesign?.fontcolor}
+                  size={30}
+                  stroke={1.5}
+                />
               </ActionIcon>
             </Indicator>
-          </Button.Group>
+          </Center>
         </Grid.Col>
       </Grid>
       {/* <Group position="apart" grow>

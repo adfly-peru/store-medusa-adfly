@@ -11,7 +11,7 @@ const FeaturedProducts = () => {
   if (products.length == 0) {
     return (
       <>
-        <Title>Productos Destacados (*)</Title>
+        <Title align="center">Productos Destacados (*)</Title>
         <Center>
           <Loader />
         </Center>
@@ -20,7 +20,7 @@ const FeaturedProducts = () => {
   }
   return (
     <>
-      <Title>Productos Destacados (*)</Title>
+      <Title align="center">Productos Destacados (*)</Title>
       <SimpleGrid
         w="80%"
         cols={4}

@@ -1,4 +1,4 @@
-import { AppShell, BackgroundImage, Header, Stack, Title } from "@mantine/core";
+import { AppShell, BackgroundImage, Header } from "@mantine/core";
 import HomeHeader from "@modules/layout/components/header";
 import React, { useEffect } from "react";
 import FooterComponent from "@modules/layout/components/footer";
@@ -95,20 +95,22 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       fixed={false}
       padding={0}
       header={
-        <Header fixed height={120} p="xs">
+        <Header fixed height="auto" p={0}>
           <HomeHeader />
         </Header>
       }
       footer={<FooterComponent />}
       styles={(theme) => ({
         main: {
-          paddingTop: 140,
-          minHeight: height - 120,
+          paddingTop: 200,
+          minHeight: height - 200,
         },
       })}
       sx={{
-        backgroundColor: homeDesign?.backcolor,
-        color: homeDesign?.fontcolor,
+        header: {
+          backgroundColor: homeDesign?.backcolor,
+          color: homeDesign?.fontcolor,
+        },
       }}
     >
       {children}
