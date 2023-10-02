@@ -10,8 +10,6 @@ export interface FilterOptions {
   categoryName?: string;
   subcategoryName?: string;
   brandName?: string;
-  limit?: number;
-  offset?: number;
 }
 
 interface FilteredProductsContext {
@@ -19,6 +17,12 @@ interface FilteredProductsContext {
   count: number;
   fetchProducts: (options: FilterOptions) => void;
   loading: boolean;
+  limit: number;
+  setlimit: (v: number) => void;
+  offset: number;
+  setoffset: (v: number) => void;
+  sortBy: string;
+  setSortBy: (s: string) => void;
 }
 
 const FilteredProductsContext = createContext<FilteredProductsContext | null>(
@@ -34,6 +38,9 @@ export const FilteredProductsProvider = ({
 }: FilteredProductsProviderProps) => {
   const [count, setCount] = useState(0);
   const [products, setProducts] = useState<ProductResult | null>(null);
+  const [sortBy, setSortBy] = useState("name");
+  const [limit, setlimit] = useState(12);
+  const [offset, setoffset] = useState(0);
 
   const [getProducts, { data: productsData, loading }] = useLazyQuery<{
     availableProducts: ProductResult;
@@ -43,6 +50,9 @@ export const FilteredProductsProvider = ({
     getProducts({
       variables: {
         ...options,
+        limit,
+        offset,
+        sortBy,
       },
     });
   };
@@ -61,6 +71,12 @@ export const FilteredProductsProvider = ({
         count,
         fetchProducts,
         loading,
+        limit,
+        setlimit,
+        offset,
+        setoffset,
+        sortBy,
+        setSortBy,
       }}
     >
       {children}

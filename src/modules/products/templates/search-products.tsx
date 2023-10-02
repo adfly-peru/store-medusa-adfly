@@ -1,6 +1,8 @@
+import { useFilteredProducts } from "@context/filtered-products-context";
 import { Text, Grid, Space, Group, Select, Divider } from "@mantine/core";
 import FilteredProducts from "@modules/products/components/filtered-products";
 import SearchBar from "@modules/products/components/search-bar";
+import { IconChevronDown } from "@tabler/icons-react";
 
 const SearchProducts = ({
   searchable,
@@ -9,6 +11,7 @@ const SearchProducts = ({
   searchable: string;
   departmentName: string;
 }) => {
+  const { setSortBy, sortBy } = useFilteredProducts();
   return (
     <>
       <Grid w="100%">
@@ -27,17 +30,16 @@ const SearchProducts = ({
               Resultados de búsqueda
             </Text>
             <Select
+              rightSection={<IconChevronDown size="1rem" />}
               label="Ordenar por:"
-              defaultValue={"relevancia"}
+              value={sortBy}
+              onChange={setSortBy}
               data={[
-                { value: "relevancia", label: "Relevancia" },
-                { value: "mas vendido", label: "Mas vendido" },
-                { value: "mas nueo", label: "Mas nuevo" },
-                { value: "mejor descuento", label: "Mejor descuento" },
-                { value: "mayor precio", label: "Mayor precio" },
-                { value: "menor precio", label: "Menor precio" },
-                { value: "a-z", label: "A-Z" },
-                { value: "z-a", label: "Z-A" },
+                { label: "Nombre", value: "name" },
+                { label: "Marca", value: "brand" },
+                { label: "Departamento", value: "department" },
+                { label: "Categoria", value: "category" },
+                { label: "Subcategoria", value: "subcategory" },
               ]}
             />
           </Group>

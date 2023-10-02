@@ -164,6 +164,7 @@ const PersonalDataForm = () => {
             />
           </Group>
           <TextInput
+            disabled={collaborator.emailVerify}
             placeholder=""
             label="Correo Electrónico"
             radius="xs"
@@ -191,21 +192,26 @@ const PersonalDataForm = () => {
             {...form.getInputProps("imgprofile")}
           />
           <Space h="md" />
-          <Checkbox
-            label={
-              <>
-                Acepto los{" "}
-                <Anchor href="/terms" target="_blank">
-                  Términos y Condiciones
-                </Anchor>
-              </>
-            }
-            {...form.getInputProps("termsOfService")}
-          />
-          <Checkbox
-            label="Acepto recibir publicidad"
-            {...form.getInputProps("acceptPublicity")}
-          />
+          {!collaborator.emailVerify && (
+            <>
+              {" "}
+              <Checkbox
+                label={
+                  <>
+                    Acepto los{" "}
+                    <Anchor href="/terms" target="_blank">
+                      Términos y Condiciones
+                    </Anchor>
+                  </>
+                }
+                {...form.getInputProps("termsOfService")}
+              />
+              <Checkbox
+                label="Acepto recibir publicidad"
+                {...form.getInputProps("acceptPublicity")}
+              />
+            </>
+          )}
         </Stack>
         <Space h="md" />
         <Button color="gray" fullWidth size="lg" onClick={handleUpdate}>

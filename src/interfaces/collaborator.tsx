@@ -20,7 +20,7 @@ export interface Collaborator {
 }
 
 export interface ProfileForm {
-  email: string;
+  email?: string;
   phone: string;
   image?: File;
 }
