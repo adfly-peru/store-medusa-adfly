@@ -41,7 +41,7 @@ const CategorySection = () => {
           ]}
         >
           {departments.map((category, i) => (
-            <Carousel.Slide>
+            <Carousel.Slide key={category.id}>
               <Stack align="center" key={category.id}>
                 <ActionIcon
                   key={`${i}action`}
