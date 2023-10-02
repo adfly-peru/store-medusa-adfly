@@ -15,4 +15,5 @@ export interface AddressInfoForm {
   receivername: string;
   receiverdocumentkind: string;
   receiverdocumentnumber: string;
+  receiverphone: string;
 }

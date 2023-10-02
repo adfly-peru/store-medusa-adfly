@@ -43,6 +43,7 @@ const CheckoutForm = () => {
       receivername: cart?.deliveryInfo?.receivername ?? "",
       receiverdocumentkind: cart?.deliveryInfo?.receiverdocumentkind ?? "",
       receiverdocumentnumber: cart?.deliveryInfo?.receiverdocumentnumber ?? "",
+      receiverphone: cart?.deliveryInfo?.receiverphone ?? "",
     },
   });
   const nextStep = () =>

@@ -78,6 +78,7 @@ export interface DeliveryInfo {
   receivername: string;
   receiverdocumentkind: string;
   receiverdocumentnumber: string;
+  receiverphone: string;
   collaboratoraddress?: {
     address: string;
     lat: number;

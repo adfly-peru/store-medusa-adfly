@@ -42,6 +42,7 @@ const ShippingInformation = ({
         receivername: "",
         receiverdocumentkind: "",
         receiverdocumentnumber: "",
+        receiverphone: "",
       },
       uuidcollaboratoraddress
     );
@@ -126,6 +127,7 @@ const ShippingInformation = ({
                   receivername: "",
                   receiverdocumentkind: "",
                   receiverdocumentnumber: "",
+                  receiverphone: "",
                 });
               }}
               radius="lg"
@@ -151,7 +153,8 @@ const ShippingInformation = ({
                 <Select
                   data={[
                     { value: "DNI", label: "DNI" },
-                    { value: "CE", label: "CE" },
+                    { value: "CE", label: "Carné extranjería" },
+                    { value: "passport", label: "Pasaporte" },
                     { value: "RUC", label: "RUC" },
                   ]}
                   label="Tipo Documento"
@@ -164,6 +167,11 @@ const ShippingInformation = ({
                   {...form.getInputProps("receiverdocumentnumber")}
                 />
               </Group>
+              <TextInput
+                label="Teléfono"
+                withAsterisk
+                {...form.getInputProps("receiverphone")}
+              />
             </>
           )}
           <Space h="lg" />

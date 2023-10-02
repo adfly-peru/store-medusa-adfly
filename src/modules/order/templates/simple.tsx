@@ -189,7 +189,7 @@ const SimpleOrderView = ({ orderId }: { orderId: string }) => {
           <Text>
             {`Teléfono de Contacto: ${
               report.order.isReceiver
-                ? report.billingInfo.phone || "-"
+                ? report.deliveryInfo?.receiverphone || "-"
                 : report.billingInfo.phone
             }`}
           </Text>

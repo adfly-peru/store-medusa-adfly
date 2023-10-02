@@ -217,8 +217,8 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         const resp = await editDeliveryInfo(
           collaboratorId,
           cart?.uuidcart,
-          uuidcollaboratoraddress,
-          deliveryform
+          deliveryform,
+          uuidcollaboratoraddress
         );
         refetch();
         setLoadingEvent(false);
