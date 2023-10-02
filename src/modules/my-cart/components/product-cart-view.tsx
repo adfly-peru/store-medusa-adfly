@@ -134,7 +134,7 @@ const DetailedProductCartView = ({
                   editProduct(item, businessid, val == "" ? 0 : val)
                 }
                 handlersRef={handlers}
-                max={10}
+                max={item.variant.stock}
                 min={1}
                 radius="md"
                 styles={{ input: { width: 54, textAlign: "center" } }}
@@ -155,7 +155,7 @@ const DetailedProductCartView = ({
               variant="subtle"
               onClick={() => removeProduct(item.uuidcartitem, businessid)}
             >
-              Eliminar
+              Eliminara
             </Button>
 
             {/* <Divider size="sm" orientation="vertical" /> */}

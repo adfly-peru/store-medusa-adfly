@@ -139,7 +139,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                   : editProduct(cartItem, product.business.uuidbusiness, val)
               }
               handlersRef={handlers}
-              max={10}
+              max={selectedVariant.stock}
               min={0}
               step={1}
               styles={{ input: { width: 70, textAlign: "center" } }}

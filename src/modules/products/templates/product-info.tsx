@@ -34,10 +34,8 @@ const ProductInfo = ({ productId }: { productId: string }) => {
 
   return (
     <>
-      <Container maw="80%" mt={20}>
-        <Center>
-          <DetailedProduct product={product} />
-        </Center>
+      <Container maw="90%" mt={20}>
+        <DetailedProduct product={product} />
       </Container>
       <Stack align="center" justify="flex-end" spacing="xl">
         <SimilarProducts products={relatedProducts} loading={loadingRelateds} />
