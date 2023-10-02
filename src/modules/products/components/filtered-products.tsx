@@ -1,5 +1,5 @@
 import { useFilteredProducts } from "@context/filtered-products-context";
-import { Center, Grid, Loader } from "@mantine/core";
+import { Center, Loader, SimpleGrid } from "@mantine/core";
 import ProductCard from "@modules/products/components/product-card";
 
 const FilteredProducts = () => {
@@ -13,13 +13,22 @@ const FilteredProducts = () => {
     );
   }
   return (
-    <Grid>
+    <SimpleGrid
+      w="100%"
+      cols={4}
+      spacing="xl"
+      breakpoints={[
+        { maxWidth: "96rem", cols: 3, spacing: "md" },
+        { maxWidth: "72rem", cols: 2, spacing: "sm" },
+        { maxWidth: "48rem", cols: 1, spacing: "sm" },
+      ]}
+    >
       {products.products.map((prod, i): any => (
-        <Grid.Col key={i} xs={3}>
+        <div key={i}>
           <ProductCard product={prod} />
-        </Grid.Col>
+        </div>
       ))}
-    </Grid>
+    </SimpleGrid>
   );
 };
 

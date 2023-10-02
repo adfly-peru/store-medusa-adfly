@@ -21,6 +21,7 @@ import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
 import { useState } from "react";
 import { SecurityForm } from "@interfaces/collaborator";
+import { useRouter } from "next/router";
 
 const PasswordRequirement = ({
   meets,
@@ -72,6 +73,7 @@ const doesPasswordMeetRequirements = (password: string) => {
 };
 
 const SecurityForm = () => {
+  const router = useRouter();
   const { width } = useViewportSize();
   const [popoverOpened, setPopoverOpened] = useState(false);
   const { verify } = useAccount();
@@ -99,13 +101,24 @@ const SecurityForm = () => {
     form.validate();
     if (form.isValid()) {
       setLoading(true);
-      const securityform: SecurityForm = {
-        oldpassword: form.values.currentPassword,
-        newpassword: form.values.newPassword,
-      };
-      const res = await verify(undefined, securityform);
-      setMessage(res ?? "success");
-      setLoading(false);
+      try {
+        const securityform: SecurityForm = {
+          oldpassword: form.values.currentPassword,
+          newpassword: form.values.newPassword,
+        };
+        const res = await verify(undefined, securityform);
+        setMessage(res ?? "success");
+        if (!res) {
+          const timerId = setTimeout(() => {
+            router.push("/");
+          }, 3000);
+          return () => clearTimeout(timerId);
+        }
+      } catch (error) {
+        setMessage("Ha ocurrido un error durante la verificación");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -135,7 +148,7 @@ const SecurityForm = () => {
               withCloseButton
             >
               {message == "success"
-                ? "Se ha actualizado el perfil de manera exitosa"
+                ? "Se ha actualizado el perfil de manera exitosa. Será redirigido a la página principal en unos segundos..."
                 : message}
             </Alert>
           )}

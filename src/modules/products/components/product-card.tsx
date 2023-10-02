@@ -9,7 +9,7 @@ import {
   createStyles,
   NumberInput,
   NumberInputHandlers,
-  Stack,
+  Title,
 } from "@mantine/core";
 import { IconPlus, IconMinus } from "@tabler/icons-react";
 import Link from "next/link";
@@ -89,7 +89,7 @@ const ProductCard = ({ product }: { product: Product }) => {
     >
       <Card.Section inheritPadding py="xs">
         <Group position="apart">
-          <Badge color="red">-{discount.toFixed(2)}%</Badge>
+          <Badge color="red">-{discount.toFixed(0)}%</Badge>
         </Group>
       </Card.Section>
       <Card.Section p={10} withBorder>
@@ -103,12 +103,12 @@ const ProductCard = ({ product }: { product: Product }) => {
           />
         </Link>
       </Card.Section>
-      <Card.Section inheritPadding mt="sm" pb="md">
+      <Card.Section inheritPadding mt="sm" pb="md" ta="center">
         <Text mt={5}>{product.brand.name}</Text>
-        <Text fz="xl" fw={700} lineClamp={1}>
+        <Title lineClamp={3} fz="xl">
           {product.productName}
-        </Text>
-        <Group>
+        </Title>
+        <Group my="xs" position="center">
           <Text fz="sm" td="line-through">
             S/. {selectedVariant.refPrice}
           </Text>
@@ -139,7 +139,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                   : editProduct(cartItem, product.business.uuidbusiness, val)
               }
               handlersRef={handlers}
-              max={10}
+              max={selectedVariant.stock}
               min={0}
               step={1}
               styles={{ input: { width: 70, textAlign: "center" } }}
@@ -156,7 +156,6 @@ const ProductCard = ({ product }: { product: Product }) => {
         ) : (
           <Button
             variant="light"
-            color="blue"
             fullWidth
             radius="md"
             onClick={() => {

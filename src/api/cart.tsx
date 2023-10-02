@@ -110,8 +110,8 @@ export const editBillingInfo = async (
 export const editDeliveryInfo = async (
   uuidcollaborator: string,
   uuidcart: string,
-  uuidcollaboratoraddress: string,
-  addressinfo: AddressInfoForm
+  addressinfo: AddressInfoForm,
+  uuidcollaboratoraddress: string
 ): Promise<string | null> => {
   try {
     if (typeof window !== "undefined") {
@@ -133,6 +133,10 @@ export const editDeliveryInfo = async (
               addressinfo.receiverdocumentnumber == ""
                 ? null
                 : addressinfo.receiverdocumentnumber,
+            phonenumber:
+              addressinfo.receiverphone == ""
+                ? null
+                : addressinfo.receiverphone,
           },
           {
             headers: {

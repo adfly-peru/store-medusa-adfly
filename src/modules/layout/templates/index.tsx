@@ -1,4 +1,4 @@
-import { AppShell, BackgroundImage, Header, Stack, Title } from "@mantine/core";
+import { AppShell, BackgroundImage, Header } from "@mantine/core";
 import HomeHeader from "@modules/layout/components/header";
 import React, { useEffect } from "react";
 import FooterComponent from "@modules/layout/components/footer";
@@ -11,7 +11,11 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { height } = useViewportSize();
   const { status, collaborator, homeDesign } = useAccount();
   const router = useRouter();
-  const isAllow = router.asPath.startsWith("/account");
+  const isAllow = router.asPath.startsWith("/account/profile")
+    ? true
+    : router.asPath.startsWith("/account/security") && collaborator?.emailVerify
+    ? true
+    : false;
 
   useEffect(() => {
     if (status == "unauthenticated") {
@@ -22,8 +26,11 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   if (status == "unauthenticated") {
     return <div></div>;
   }
+  if (!collaborator) {
+    return <div></div>;
+  }
 
-  if (collaborator?.status != "ACTIVE") {
+  if (!collaborator.emailVerify || !collaborator.changePassword) {
     if (isAllow) {
       return (
         <AppShell
@@ -74,10 +81,10 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             alignItems: "center",
           }}
         >
-          <Stack align="center" justify="flex-end">
+          {/* <Stack align="center" justify="flex-end">
             <Title order={3}>Bienvenido(a) a:</Title>
             <Title order={3}>Tu tienda de Beneficios (*)</Title>
-          </Stack>
+          </Stack> */}
         </BackgroundImage>
       </AppShell>
     );
@@ -88,20 +95,22 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       fixed={false}
       padding={0}
       header={
-        <Header fixed height={120} p="xs">
+        <Header fixed height="auto" p={0}>
           <HomeHeader />
         </Header>
       }
       footer={<FooterComponent />}
       styles={(theme) => ({
         main: {
-          paddingTop: 140,
-          minHeight: height - 120,
+          paddingTop: 200,
+          minHeight: height - 200,
         },
       })}
       sx={{
-        backgroundColor: homeDesign?.backcolor,
-        color: homeDesign?.fontcolor,
+        header: {
+          backgroundColor: homeDesign?.backcolor,
+          color: homeDesign?.fontcolor,
+        },
       }}
     >
       {children}

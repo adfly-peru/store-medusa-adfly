@@ -105,6 +105,7 @@ const GET_ORDER_REPORT = gql`
       }
       deliveryInfo {
         receivername
+        receiverphone
         receiverdocumentkind
         receiverdocumentnumber
         collaboratoraddress {

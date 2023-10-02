@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { ActionIcon, Center, Stack, Text } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { IconMoodSad } from "@tabler/icons-react";
-import { JsonView } from "react-json-view-lite";
 
 function formatarFecha(fechaStr: string): string {
   if (fechaStr.length !== 12) {

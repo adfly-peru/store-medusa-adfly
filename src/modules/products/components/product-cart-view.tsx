@@ -75,7 +75,9 @@ const ProductCartView = ({
                 color="gray"
                 radius="xl"
                 variant="outline"
-                disabled={updating || cartItem.quantity >= 10}
+                disabled={
+                  updating || cartItem.quantity >= cartItem.variant.stock
+                }
                 onClick={() => handleEditProduct(1)}
               >
                 <IconPlus stroke={1.5} size="1.125rem" />
@@ -87,7 +89,7 @@ const ProductCartView = ({
               disabled={updating}
               onClick={handleRemoveProduct}
             >
-              Eliminar
+              Eliminara
             </Button>
           </Stack>
         </Grid.Col>

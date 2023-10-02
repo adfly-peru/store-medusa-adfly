@@ -11,7 +11,7 @@ const FeaturedProducts = () => {
   if (products.length == 0) {
     return (
       <>
-        <Title>Productos Destacados (*)</Title>
+        <Title align="center">Productos Destacados (*)</Title>
         <Center>
           <Loader />
         </Center>
@@ -20,8 +20,17 @@ const FeaturedProducts = () => {
   }
   return (
     <>
-      <Title>Productos Destacados (*)</Title>
-      <SimpleGrid w="80%" cols={4} spacing="xl">
+      <Title align="center">Productos Destacados (*)</Title>
+      <SimpleGrid
+        w="80%"
+        cols={4}
+        spacing="xl"
+        breakpoints={[
+          { maxWidth: "72rem", cols: 3, spacing: "md" },
+          { maxWidth: "48rem", cols: 2, spacing: "sm" },
+          { maxWidth: "36rem", cols: 1, spacing: "sm" },
+        ]}
+      >
         {products.map((prod, i): any => (
           <div key={i}>
             <ProductCard product={prod} />

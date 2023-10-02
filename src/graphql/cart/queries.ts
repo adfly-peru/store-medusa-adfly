@@ -23,6 +23,7 @@ const GET_CART = gql`
           uuidcollaboratoraddress
         }
         receivername
+        receiverphone
         receiverdocumentkind
         receiverdocumentnumber
       }

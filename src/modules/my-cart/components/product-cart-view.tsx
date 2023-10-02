@@ -93,7 +93,7 @@ const DetailedProductCartView = ({
                 >
                   Recojo en tienda
                 </List.Item>
-                <List.Item
+                {/* <List.Item
                   icon={
                     <ThemeIcon
                       color={
@@ -113,7 +113,7 @@ const DetailedProductCartView = ({
                   }
                 >
                   Envío a centro de trabajo
-                </List.Item>
+                </List.Item> */}
               </List>
             </Stack>
           </Group>
@@ -134,7 +134,7 @@ const DetailedProductCartView = ({
                   editProduct(item, businessid, val == "" ? 0 : val)
                 }
                 handlersRef={handlers}
-                max={10}
+                max={item.variant.stock}
                 min={1}
                 radius="md"
                 styles={{ input: { width: 54, textAlign: "center" } }}
@@ -155,13 +155,13 @@ const DetailedProductCartView = ({
               variant="subtle"
               onClick={() => removeProduct(item.uuidcartitem, businessid)}
             >
-              Eliminar
+              Eliminara
             </Button>
 
-            <Divider size="sm" orientation="vertical" />
-            <Button color="dark" variant="subtle">
+            {/* <Divider size="sm" orientation="vertical" /> */}
+            {/* <Button color="dark" variant="subtle">
               Guardar para después
-            </Button>
+            </Button> */}
           </Group>
         </Stack>
       </Grid.Col>

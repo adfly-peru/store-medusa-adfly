@@ -7,6 +7,7 @@ import {
   Stack,
   Title,
   NavLink,
+  Loader,
 } from "@mantine/core";
 import { IconStar } from "@tabler/icons-react";
 import Link from "next/link";
@@ -15,6 +16,8 @@ import { useRouter } from "next/router";
 const InformationBox = () => {
   const router = useRouter();
   const { collaborator } = useAccount();
+
+  if (!collaborator) return <Loader />;
 
   return (
     <Card pb={40} withBorder shadow="sm" radius="md">
@@ -33,13 +36,13 @@ const InformationBox = () => {
           <Avatar
             radius="xl"
             size="xl"
-            src={collaborator?.urlprofile}
+            src={collaborator.urlprofile}
             alt="it's me"
           />
           <Stack spacing="xs" justify="flex-start">
             <Title
               order={2}
-            >{`${collaborator?.name} ${collaborator?.lastname}`}</Title>
+            >{`${collaborator.name} ${collaborator.lastname}`}</Title>
             <Title fw={300} order={3}>
               Empresa (*)
             </Title>
@@ -58,6 +61,7 @@ const InformationBox = () => {
           component={Link}
           href="/account/addresses"
           label="Mis Direcciones"
+          disabled={!collaborator.changePassword}
           icon={<Badge radius="xs" variant="filled" p={2} />}
           active={router.asPath == "/account/addresses"}
         />
@@ -65,6 +69,7 @@ const InformationBox = () => {
           component={Link}
           href="/account/security"
           label="Seguridad"
+          disabled={!collaborator.emailVerify}
           icon={<Badge radius="xs" variant="filled" p={2} />}
           active={router.asPath == "/account/security"}
         />
@@ -72,6 +77,7 @@ const InformationBox = () => {
           component={Link}
           href="/orders"
           label="Mis Compras"
+          disabled={!collaborator.changePassword}
           icon={<Badge radius="xs" variant="filled" p={2} />}
           active={router.asPath.startsWith("/orders")}
         />

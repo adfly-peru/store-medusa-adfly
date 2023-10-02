@@ -1,11 +1,13 @@
 import { useProduct } from "@context/product-context";
+import { Carousel } from "@mantine/carousel";
 import {
   Title,
-  Group,
-  Tooltip,
   ActionIcon,
   Image,
   useMantineColorScheme,
+  Text,
+  Stack,
+  MediaQuery,
 } from "@mantine/core";
 import router from "next/router";
 
@@ -21,33 +23,46 @@ const CategorySection = () => {
   };
   return (
     <>
-      <Title>¡Descubre nuestras categorías! (*)</Title>
-      <Group spacing={50}>
-        {departments.map((category, i) => (
-          <Tooltip
-            withArrow
-            transitionProps={{ transition: "fade", duration: 200 }}
-            key={`${i}tip`}
-            label={category.name}
-          >
-            <ActionIcon
-              key={`${i}action`}
-              size={60}
-              radius="xl"
-              variant="outline"
-              onClick={() => searchProductByCategorie(category.name)}
-            >
-              <Image
-                src={category.image}
-                alt={category.name}
-                style={{
-                  filter: colorScheme === "dark" ? "invert(1)" : "none",
-                }}
-              />
-            </ActionIcon>
-          </Tooltip>
-        ))}
-      </Group>
+      <Title align="center">¡Descubre lo que tenemos para ti! (*)</Title>
+      <MediaQuery
+        smallerThan="sm"
+        styles={{
+          width: "100%",
+        }}
+      >
+        <Carousel
+          align="center"
+          loop
+          slideSize="25%"
+          slideGap="md"
+          breakpoints={[
+            { maxWidth: "md", slideSize: "33.33333%", slideGap: "xs" },
+            { maxWidth: "sm", slideSize: "50%", slideGap: "xs" },
+          ]}
+        >
+          {departments.map((category, i) => (
+            <Carousel.Slide key={category.id}>
+              <Stack align="center" key={category.id}>
+                <ActionIcon
+                  key={`${i}action`}
+                  size={60}
+                  variant="transparent"
+                  onClick={() => searchProductByCategorie(category.name)}
+                >
+                  <Image
+                    src={category.image}
+                    alt={category.name}
+                    style={{
+                      filter: colorScheme === "dark" ? "invert(1)" : "none",
+                    }}
+                  />
+                </ActionIcon>
+                <Text>{category.name}</Text>
+              </Stack>
+            </Carousel.Slide>
+          ))}
+        </Carousel>
+      </MediaQuery>
     </>
   );
 };

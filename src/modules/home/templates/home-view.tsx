@@ -18,12 +18,12 @@ const HomeView = () => {
           alignItems: "center",
         }}
       >
-        <Stack align="center" justify="flex-end">
+        {/* <Stack align="center" justify="flex-end">
           <Title order={3}>Bienvenido(a) a:</Title>
           <Title order={3}>Tu tienda de Beneficios (*)</Title>
-        </Stack>
+        </Stack> */}
       </BackgroundImage>
-      <Stack align="center" justify="flex-end" spacing="xl">
+      <Stack align="center" justify="flex-end" spacing="xl" px={15}>
         <Space />
         <CategorySection />
         <FeaturedProducts />

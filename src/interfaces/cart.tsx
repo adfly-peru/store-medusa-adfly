@@ -23,6 +23,7 @@ export interface Cart {
     receivername?: string;
     receiverdocumentkind?: string;
     receiverdocumentnumber?: string;
+    receiverphone?: string;
   };
   suborders: CartSubOrder[];
   purchaseNumber: string;

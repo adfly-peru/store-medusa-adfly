@@ -17,8 +17,10 @@ import { useForm } from "@mantine/form";
 import { BillingForm } from "@interfaces/billing";
 import { useCart } from "@context/cart-context";
 import { AddressInfoForm } from "@interfaces/address-interface";
+import { useRouter } from "next/router";
 
 const CheckoutForm = () => {
+  const router = useRouter();
   const { height } = useViewportSize();
   const { collaborator } = useAccount();
   const { editBilling, editDelivery, cart, loadingEvent } = useCart();
@@ -41,6 +43,7 @@ const CheckoutForm = () => {
       receivername: cart?.deliveryInfo?.receivername ?? "",
       receiverdocumentkind: cart?.deliveryInfo?.receiverdocumentkind ?? "",
       receiverdocumentnumber: cart?.deliveryInfo?.receiverdocumentnumber ?? "",
+      receiverphone: cart?.deliveryInfo?.receiverphone ?? "",
     },
   });
   const nextStep = () =>
@@ -96,7 +99,12 @@ const CheckoutForm = () => {
         </Stepper.Step>
       </Stepper>
       <Group px={70} position="apart" grow mt="xl">
-        <Button variant="light" onClick={prevStep}>
+        <Button
+          variant="light"
+          onClick={
+            active === 0 ? () => router.push("/checkout/mycart") : prevStep
+          }
+        >
           {active == 0 ? "Regresar a Carrito" : "Retroceder"}
         </Button>
         {active != 2 && (
