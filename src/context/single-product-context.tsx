@@ -61,7 +61,6 @@ export const SingleProductProvider = ({
       setRelatedProducts(relatedProductsData.availableProducts.products);
       setRelatedCount(relatedProductsData.availableProducts.totalProducts);
     }
-    console.log(product);
   }, [productData, relatedProductsData]);
 
   return (

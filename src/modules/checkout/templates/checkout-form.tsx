@@ -56,10 +56,10 @@ const CheckoutForm = () => {
       await editBilling(formValues);
     } else if (active === 1) {
       const formValues = deliveryform.values;
-      if (cart?.deliveryInfo) {
+      if (cart) {
         await editDelivery(
           formValues,
-          cart.deliveryInfo.collaboratoraddress.uuidcollaboratoraddress
+          cart.deliveryInfo?.collaboratoraddress.uuidcollaboratoraddress ?? ""
         );
       }
     }
