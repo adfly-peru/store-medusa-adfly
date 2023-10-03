@@ -64,15 +64,7 @@ const Login = () => {
           <BackgroundImage
             src={loginDesign?.bannerurl ?? ""}
             radius="xs"
-            sx={{
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "contain",
-              backgroundPosition: "center",
-              height: height - 8,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+            h="100%"
           >
             {/* <Stack align="center" justify="flex-end">
               <Title order={3}>Bienvenido(a) a:</Title>
