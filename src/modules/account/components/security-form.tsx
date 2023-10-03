@@ -47,7 +47,7 @@ const requirements = [
   { re: /[0-9]/, label: "Incluye un número" },
   { re: /[a-z]/, label: "Incluye una letra en minúscula" },
   { re: /[A-Z]/, label: "Incluye una letra en mayúscula" },
-  { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Incluye un símbolo especial" },
+  // { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Incluye un símbolo especial" },
 ];
 
 const getStrength = (password: string) => {
