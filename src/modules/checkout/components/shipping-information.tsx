@@ -11,6 +11,7 @@ import {
   Modal,
   TextInput,
   Select,
+  LoadingOverlay,
 } from "@mantine/core";
 import { IconEye, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
@@ -27,7 +28,8 @@ const ShippingInformation = ({
 }: {
   form: UseFormReturnType<AddressInfoForm>;
 }) => {
-  const { addresses } = useAccount();
+  const { addresses, deleteAddress } = useAccount();
+  const [loading, setLoading] = useState(false);
   const { cart, editDelivery } = useCart();
   const [opened, setOpened] = useState(false);
   const [opened2, setOpened2] = useState(false);
@@ -76,9 +78,22 @@ const ShippingInformation = ({
             setOpened2(false);
           }}
         >
-          {address && <AddressView address={address} />}
+          {address && (
+            <AddressView
+              data={address}
+              cb={() => {
+                setAddress(null);
+                setOpened2(false);
+              }}
+            />
+          )}
         </Modal>
         <Stack px={60} spacing="xs" w="80%">
+          <LoadingOverlay
+            overlayBlur={2}
+            overlayOpacity={0.9}
+            visible={loading}
+          />
           <Text fw={700}>Direcciones de Envío</Text>
           <Divider />
           <Stack>
@@ -100,7 +115,14 @@ const ShippingInformation = ({
                   >
                     <IconEye size={30} />
                   </ActionIcon>
-                  <ActionIcon color="red" onClick={() => {}}>
+                  <ActionIcon
+                    color="red"
+                    onClick={async () => {
+                      setLoading(true);
+                      await deleteAddress(value.uuidcollaboratoraddress);
+                      setLoading(false);
+                    }}
+                  >
                     <IconTrash size={30} />
                   </ActionIcon>
                 </Group>

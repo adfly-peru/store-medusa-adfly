@@ -14,7 +14,11 @@ import { Address } from "@interfaces/address-interface";
 import { DesignConfig } from "@interfaces/design";
 import { GET_HOME_DESIGN } from "@graphql/design/queries";
 import { verifyAccount } from "api/verify";
-import { createAddress } from "api/delivery";
+import {
+  createAddress,
+  deleteAddressQuery,
+  updateAddressQuery,
+} from "api/delivery";
 
 interface AccountContext {
   daysInApp: number;
@@ -29,6 +33,8 @@ interface AccountContext {
   status: string;
   addresses: Address[];
   addAddress: (newAddress: Address) => Promise<string | null>;
+  editAddress: (newAddress: Address) => Promise<string | null>;
+  deleteAddress: (addressId: string) => Promise<string | null>;
   loading: boolean;
   errorText: string;
 }
@@ -122,7 +128,6 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
             differenceInTime / (1000 * 3600 * 24)
           );
           const daysInStore = differenceInDays + 1;
-          console.log(daysInStore);
           setDaysInApp(daysInStore);
           setUserId(decodeduserid);
         } else {
@@ -162,7 +167,33 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     try {
       if (userId) {
         const resp = await createAddress(userId, newAddress);
-        refetchAddresses();
+        await refetchAddresses();
+        return resp;
+      }
+      return "Error: null collaborator id";
+    } catch (error) {
+      return `Error: ${error}`;
+    }
+  };
+
+  const editAddress = async (newAddress: Address) => {
+    try {
+      if (userId) {
+        const resp = await updateAddressQuery(newAddress);
+        await refetchAddresses();
+        return resp;
+      }
+      return "Error: null collaborator id";
+    } catch (error) {
+      return `Error: ${error}`;
+    }
+  };
+
+  const deleteAddress = async (addressId: string) => {
+    try {
+      if (userId) {
+        const resp = await deleteAddressQuery(addressId);
+        await refetchAddresses();
         return resp;
       }
       return "Error: null collaborator id";
@@ -281,6 +312,8 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         status,
         addresses,
         addAddress,
+        editAddress,
+        deleteAddress,
         loading,
         errorText,
       }}

@@ -1,4 +1,4 @@
-import { Button, Group, Stack, TextInput } from "@mantine/core";
+import { Button, Group, LoadingOverlay, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
 import { Address } from "@interfaces/address-interface";
@@ -18,12 +18,13 @@ interface AddressInfo {
 const AddressForm = ({ onSubmit }: { onSubmit: () => void }) => {
   const { addAddress } = useAccount();
   const [address, setAddress] = useState<AddressInfo | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const registerAddress = () => {
+  const registerAddress = async () => {
     form.validate();
     if (!form.isValid()) return;
     if (!address) return;
-
+    setLoading(true);
     const newAddress: Address = {
       alias: form.values.alias,
       address: address.address,
@@ -36,7 +37,9 @@ const AddressForm = ({ onSubmit }: { onSubmit: () => void }) => {
       additional: form.values.additional == "" ? null : form.values.additional,
       uuidcollaboratoraddress: "",
     };
-    addAddress(newAddress).then(() => onSubmit());
+    await addAddress(newAddress);
+    setLoading(false);
+    onSubmit();
   };
 
   const form = useForm({
@@ -51,6 +54,7 @@ const AddressForm = ({ onSubmit }: { onSubmit: () => void }) => {
 
   return (
     <Stack px="xl" spacing="sm">
+      <LoadingOverlay overlayBlur={2} overlayOpacity={0.9} visible={loading} />
       <TextInput
         label="Nombre de la Dirección"
         {...form.getInputProps("alias")}

@@ -3,6 +3,15 @@ import { GoogleMap, Marker, StandaloneSearchBox } from "@react-google-maps/api";
 import { TextInput } from "@mantine/core";
 import ubigeoPeru, { UbigeoEntry } from "ubigeo-peru";
 
+export interface AddressInfo {
+  address: string;
+  lat: number;
+  lng: number;
+  district: string;
+  province: string;
+  department: string;
+}
+
 export interface Place {
   id: string;
   name: string;

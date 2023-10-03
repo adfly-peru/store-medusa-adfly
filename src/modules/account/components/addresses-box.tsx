@@ -7,6 +7,7 @@ import {
   Card,
   Divider,
   Group,
+  LoadingOverlay,
   Modal,
   Stack,
   Text,
@@ -19,7 +20,8 @@ import { useState } from "react";
 
 const AddressesBox = () => {
   const { width } = useViewportSize();
-  const { addresses } = useAccount();
+  const { addresses, deleteAddress } = useAccount();
+  const [loading, setLoading] = useState(false);
   const [opened, setOpened] = useState(false);
   const [opened2, setOpened2] = useState(false);
   const [address, setAddress] = useState<Address | null>(null);
@@ -43,13 +45,26 @@ const AddressesBox = () => {
           setOpened2(false);
         }}
       >
-        {address && <AddressView address={address} />}
+        {address && (
+          <AddressView
+            data={address}
+            cb={() => {
+              setAddress(null);
+              setOpened2(false);
+            }}
+          />
+        )}
       </Modal>
       <Card withBorder shadow="sm" radius="md" sx={{ width: width / 3 }}>
         <Card.Section p="md" withBorder>
           <Text fw={700}>Direcciones de Envío</Text>
         </Card.Section>
         <Card.Section p="md">
+          <LoadingOverlay
+            overlayBlur={2}
+            overlayOpacity={0.9}
+            visible={loading}
+          />
           <Stack spacing="xl">
             {addresses.map((value, _) => (
               <Group key={value.uuidcollaboratoraddress} position="apart">
@@ -66,7 +81,14 @@ const AddressesBox = () => {
                   >
                     <IconEye size={30} />
                   </ActionIcon>
-                  <ActionIcon color="red" onClick={() => {}}>
+                  <ActionIcon
+                    color="red"
+                    onClick={async () => {
+                      setLoading(true);
+                      await deleteAddress(value.uuidcollaboratoraddress);
+                      setLoading(false);
+                    }}
+                  >
                     <IconTrash size={30} />
                   </ActionIcon>
                 </Group>
