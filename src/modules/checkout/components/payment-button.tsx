@@ -88,7 +88,7 @@ const PaymentButton = ({
     window.VisanetCheckout.configure({
       sessiontoken: `${sessionToken}`,
       channel: "web",
-      merchantid: "456879852",
+      merchantid: "650239546",
       purchasenumber: cart.purchaseNumber,
       amount: totalAmount,
       expirationminutes: "20",
@@ -122,7 +122,7 @@ const PaymentButton = ({
     const script = document.createElement("script");
     script.type = "text/javascript";
     script.src =
-      "https://static-content-qas.vnforapps.com/v2/js/checkout.js?qa=true";
+      "https://static-content.vnforapps.com/v2/js/checkout.js";
     document.body.appendChild(script);
   }, []);
 
