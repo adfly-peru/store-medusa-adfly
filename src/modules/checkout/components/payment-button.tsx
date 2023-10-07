@@ -64,7 +64,7 @@ const PaymentButton = ({
   submitInfo,
 }: {
   form: UseFormReturnType<BillingForm>;
-  submitInfo: () => Promise<string | null>;
+  submitInfo: (checked: string) => Promise<string | null>;
 }) => {
   const { cart } = useCart();
   const { collaborator, daysInApp } = useAccount();
@@ -74,7 +74,7 @@ const PaymentButton = ({
 
   const payment = async () => {
     if (!cart || !collaborator) return;
-    const infoerror = await submitInfo();
+    const infoerror = await submitInfo(checked);
     if (infoerror) return;
     const totalAmountFixed = parseFloat(totalAmount.toFixed(2));
     const sessionToken = await createSessionToken(

@@ -81,9 +81,20 @@ const ShippingInformation = ({
           {address && (
             <AddressView
               data={address}
-              cb={() => {
+              cb={async () => {
                 setAddress(null);
                 setOpened2(false);
+                if (address.uuidcollaboratoraddress == select) {
+                  await editDelivery(
+                    {
+                      receivername: "",
+                      receiverdocumentkind: "",
+                      receiverdocumentnumber: "",
+                      receiverphone: "",
+                    },
+                    address.uuidcollaboratoraddress
+                  );
+                }
               }}
             />
           )}
@@ -120,6 +131,15 @@ const ShippingInformation = ({
                     onClick={async () => {
                       setLoading(true);
                       await deleteAddress(value.uuidcollaboratoraddress);
+                      await editDelivery(
+                        {
+                          receivername: "",
+                          receiverdocumentkind: "",
+                          receiverdocumentnumber: "",
+                          receiverphone: "",
+                        },
+                        ""
+                      );
                       setLoading(false);
                     }}
                   >

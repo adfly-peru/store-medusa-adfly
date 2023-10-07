@@ -37,6 +37,10 @@ const CheckoutForm = () => {
       businessname: cart?.billingInfo?.businessname ?? "",
       fiscaladdress: cart?.billingInfo?.fiscaladdress ?? "",
     },
+    validate: {
+      phone: (value) =>
+        value?.length ?? 0 > 0 ? null : "Este campo es requerido",
+    },
   });
   const deliveryform = useForm<AddressInfoForm>({
     initialValues: {
@@ -53,7 +57,11 @@ const CheckoutForm = () => {
   const handleNextStep = async () => {
     if (active === 0) {
       const formValues = billingform.values;
-      await editBilling(formValues);
+      billingform.validate();
+      if (billingform.isValid("phone")) {
+        await editBilling(formValues);
+        nextStep();
+      }
     } else if (active === 1) {
       const formValues = deliveryform.values;
       if (cart) {
@@ -62,8 +70,38 @@ const CheckoutForm = () => {
           cart.deliveryInfo?.collaboratoraddress.uuidcollaboratoraddress ?? ""
         );
       }
+      nextStep();
     }
-    nextStep();
+  };
+  const funcOnPaymentButton = async (checked: string) => {
+    billingform.clearErrors();
+    if (checked === "bill") {
+      let valids = 0;
+      if ((billingform.values.ruc?.length ?? 0) == 0) {
+        valids += 1;
+        billingform.setFieldError("ruc", "RUC es obligatorio");
+      }
+      if ((billingform.values.businessname?.length ?? 0) <= 0) {
+        valids += 1;
+        billingform.setFieldError(
+          "businessname",
+          "Nombre de la empresa es obligatorio"
+        );
+      }
+      if ((billingform.values.fiscaladdress?.length ?? 0) <= 0) {
+        valids += 1;
+        billingform.setFieldError(
+          "fiscaladdress",
+          "Dirección Fiscal es obligatoria"
+        );
+      }
+      if (valids === 0) {
+        return await editBilling(billingform.values);
+      }
+    } else {
+      return await editBilling(billingform.values);
+    }
+    return "Complete los campos obligatorios";
   };
   return (
     <>
@@ -92,10 +130,7 @@ const CheckoutForm = () => {
           </ScrollArea>
         </Stepper.Step>
         <Stepper.Step label="Pago" allowStepSelect={active > 2}>
-          <PaymentButton
-            form={billingform}
-            submitInfo={async () => await editBilling(billingform.values)}
-          />
+          <PaymentButton form={billingform} submitInfo={funcOnPaymentButton} />
         </Stepper.Step>
       </Stepper>
       <Group px={70} position="apart" grow mt="xl">

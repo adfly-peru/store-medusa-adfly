@@ -1,7 +1,6 @@
 import { useCart } from "@context/cart-context";
 import { CartSubOrder } from "@interfaces/cart";
 import { Text, Group, Stack, Image, Checkbox, Grid } from "@mantine/core";
-import { useState } from "react";
 
 const ShipmentCard = ({
   index,
@@ -58,7 +57,7 @@ const ShipmentCard = ({
       <Grid.Col span={4}>
         <Stack>
           <Text fw={500}>Opciones de Envío</Text>
-          {suborder.availableDeliveryMethods.deliveryOnHome && (
+          {suborder.availableDeliveryMethods.deliveryOnHome != null ? (
             <div>
               <Checkbox
                 checked={suborder.deliverymethod == "onhome"}
@@ -89,6 +88,14 @@ const ShipmentCard = ({
                 </Text>
               </Stack>
             </div>
+          ) : (
+            <Checkbox
+              disabled
+              radius="lg"
+              value={0}
+              label="Entrega en Dirección Personal"
+              description="En este momento el partner no cuenta con Entrega a Domicilio en su zona"
+            />
           )}
           <Checkbox
             checked={suborder.deliverymethod == "pickup"}

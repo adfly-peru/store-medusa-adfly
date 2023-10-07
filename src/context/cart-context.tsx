@@ -117,7 +117,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
           operation: "update",
         });
       }
-      refetch();
+      await refetch();
     } catch (error) {
       console.error("Error on add product: ", error);
     }
@@ -132,7 +132,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       quantity: 0,
       operation: "remove",
     });
-    refetch();
+    await refetch();
   };
 
   const editProduct = async (
@@ -167,7 +167,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         setCart(cart);
         return;
       }
-      refetch();
+      await refetch();
     } catch (error) {
       console.error("Error on edit product: ", error);
       setCart(cart);
@@ -195,7 +195,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
           cart?.uuidcart,
           billingform
         );
-        refetch();
+        await refetch();
         setLoadingEvent(false);
         return resp;
       }
@@ -220,7 +220,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
           deliveryform,
           uuidcollaboratoraddress
         );
-        refetch();
+        await refetch();
         setLoadingEvent(false);
         return resp;
       }
@@ -240,7 +240,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       setLoadingEvent(true);
       if (collaboratorId && cart?.uuidcart) {
         const resp = await editDeliveryMethod(uuidcartsuborder, deliverymethod);
-        refetch();
+        await refetch();
         setLoadingEvent(false);
         return resp;
       }
