@@ -30,6 +30,10 @@ interface CartContext {
     uuidproduct: string,
     uuidbusiness: string
   ) => CartItem | null;
+  getVariantById: (
+    uuidvariant: string,
+    uuidbusiness: string
+  ) => CartItem | null;
   editBilling: (billingform: BillingForm) => Promise<string | null>;
   editDelivery: (
     deliveryform: AddressInfoForm,
@@ -186,6 +190,16 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     return item ?? null;
   };
 
+  const getVariantById = (uuidvariant: string, uuidbusiness: string) => {
+    if (!data?.getCart?.suborders) return null;
+    const suborder = data.getCart.suborders.find(
+      (obj) => obj.uuidbusiness == uuidbusiness
+    );
+    if (!suborder) return null;
+    const item = suborder?.items.find((obj) => obj.uuidvariant == uuidvariant);
+    return item ?? null;
+  };
+
   const editBilling = async (billingform: BillingForm) => {
     try {
       setLoadingEvent(true);
@@ -260,6 +274,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         removeProduct,
         editProduct,
         getProductById,
+        getVariantById,
         editBilling,
         editDelivery,
         selectDeliveryMethod,

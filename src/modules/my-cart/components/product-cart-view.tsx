@@ -155,7 +155,7 @@ const DetailedProductCartView = ({
               variant="subtle"
               onClick={() => removeProduct(item.uuidcartitem, businessid)}
             >
-              Eliminara
+              Eliminar
             </Button>
 
             {/* <Divider size="sm" orientation="vertical" /> */}
