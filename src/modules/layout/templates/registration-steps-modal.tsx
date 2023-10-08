@@ -1,19 +1,19 @@
 import { useAccount } from "@context/account-context";
 import { Collaborator } from "@interfaces/collaborator";
 import {
+  ActionIcon,
   Center,
-  Grid,
   Group,
   Indicator,
+  Menu,
   Modal,
   Paper,
   SimpleGrid,
-  Space,
   Stack,
   Text,
   UnstyledButton,
 } from "@mantine/core";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconMenu, IconTransferOut } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import Layout from ".";
 
@@ -28,7 +28,7 @@ const profileCompleted = (collaborator: Collaborator | undefined) => {
 const RegistrationStepsModal: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
-  const { collaborator } = useAccount();
+  const { collaborator, logout } = useAccount();
   const router = useRouter();
   const isAllow = router.asPath.startsWith("/account/profile")
     ? true
@@ -56,6 +56,20 @@ const RegistrationStepsModal: React.FC<{ children?: React.ReactNode }> = ({
         centered={true}
         size={900}
       >
+        <Group m={0} p={0} position="right">
+          <Menu>
+            <Menu.Target>
+              <ActionIcon variant="transparent" size="lg">
+                <IconMenu size={30} stroke={1.5} />
+              </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item onClick={logout} icon={<IconTransferOut size={14} />}>
+                Cerrar sesión
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Group>
         <Stack spacing="xl" p="xl">
           <Center>
             <Text sx={{ width: "85%" }} size="lg" align="justify">
