@@ -51,7 +51,7 @@ const requirements = [
 ];
 
 const getStrength = (password: string) => {
-  let multiplier = password.length > 5 ? 0 : 1;
+  let multiplier = password.length > 7 ? 0 : 1;
 
   requirements.forEach((requirement) => {
     if (!requirement.re.test(password)) {
@@ -188,8 +188,8 @@ const SecurityForm = () => {
                 style={{ marginBottom: 10 }}
               />
               <PasswordRequirement
-                label="Incluye al menos 6 carácteres"
-                meets={form.values.newPassword.length > 5}
+                label="Incluye al menos 8 carácteres"
+                meets={form.values.newPassword.length > 7}
               />
               {requirements.map((requirement, index) => (
                 <PasswordRequirement
