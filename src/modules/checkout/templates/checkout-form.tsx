@@ -67,7 +67,7 @@ const CheckoutForm = () => {
       if (cart) {
         await editDelivery(
           formValues,
-          cart.deliveryInfo?.collaboratoraddress.uuidcollaboratoraddress ?? ""
+          cart.deliveryInfo?.collaboratoraddress?.uuidcollaboratoraddress ?? ""
         );
       }
       nextStep();

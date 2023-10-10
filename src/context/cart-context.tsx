@@ -41,7 +41,8 @@ interface CartContext {
   ) => Promise<string | null>;
   selectDeliveryMethod: (
     uuidcartsuborder: string,
-    deliverymethod: string
+    deliverymethod: string,
+    uuidaddress: string
   ) => Promise<string | null>;
   loadingEvent: boolean;
 }
@@ -248,12 +249,17 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
   const selectDeliveryMethod = async (
     uuidcartsuborder: string,
-    deliverymethod: string
+    deliverymethod: string,
+    uuidaddress: string
   ) => {
     try {
       setLoadingEvent(true);
       if (collaboratorId && cart?.uuidcart) {
-        const resp = await editDeliveryMethod(uuidcartsuborder, deliverymethod);
+        const resp = await editDeliveryMethod(
+          uuidcartsuborder,
+          deliverymethod,
+          uuidaddress
+        );
         await refetch();
         setLoadingEvent(false);
         return resp;

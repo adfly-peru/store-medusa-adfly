@@ -159,7 +159,8 @@ export const editDeliveryInfo = async (
 
 export const editDeliveryMethod = async (
   uuidcartsuborder: string,
-  deliverymethod: string
+  deliverymethod: string,
+  uuidaddress: string
 ): Promise<string | null> => {
   try {
     if (typeof window !== "undefined") {
@@ -170,6 +171,7 @@ export const editDeliveryMethod = async (
           {
             uuidcartsuborder: uuidcartsuborder,
             deliverymethod: deliverymethod,
+            uuidadddress: uuidaddress,
           },
           {
             headers: {

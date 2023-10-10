@@ -17,7 +17,7 @@ export interface Cart {
   };
   deliveryInfo?: {
     uuiddeliveryinfo: string;
-    collaboratoraddress: {
+    collaboratoraddress?: {
       uuidcollaboratoraddress: string;
     };
     receivername?: string;
@@ -33,6 +33,7 @@ export interface CartSubOrder {
   uuidcartsuborder: string;
   uuidcart: string;
   uuidbusiness: string;
+  uuidaddress: string;
   businessName: string;
   deliverymethod?: string;
   deliveryprice?: number;
@@ -42,6 +43,7 @@ export interface CartSubOrder {
     onhome: boolean;
     onstore: boolean;
     deliveryOnHome: DeliveryHome;
+    deliveryOnStore: DeliveryStore[];
   };
   items: CartItem[];
 }
@@ -58,6 +60,18 @@ export interface CartItem {
 interface DeliveryHome {
   currency: string;
   price: number;
+  timetodelivery: string;
+  comments?: string;
+}
+
+export interface DeliveryStore {
+  uuiddeliverystore: string;
+  name: string;
+  country: string;
+  department: string;
+  city: string;
+  district: string;
+  line: string;
   timetodelivery: string;
   comments?: string;
 }

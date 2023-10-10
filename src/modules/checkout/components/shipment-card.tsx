@@ -1,6 +1,81 @@
 import { useCart } from "@context/cart-context";
-import { CartSubOrder } from "@interfaces/cart";
-import { Text, Group, Stack, Image, Checkbox, Grid } from "@mantine/core";
+import { CartSubOrder, DeliveryStore } from "@interfaces/cart";
+import {
+  Text,
+  Group,
+  Stack,
+  Image,
+  Checkbox,
+  Grid,
+  Accordion,
+  rem,
+  Button,
+} from "@mantine/core";
+import { modals } from "@mantine/modals";
+
+const SelectStore = ({
+  stores,
+  selectStore,
+}: {
+  stores: DeliveryStore[];
+  selectStore: (uuidstore: string) => void;
+}) => {
+  return (
+    <Accordion>
+      {stores.map((store) => {
+        return (
+          <Accordion.Item
+            value={store.uuiddeliverystore}
+            key={store.uuiddeliverystore}
+          >
+            <Accordion.Control>{store.name}</Accordion.Control>
+            <Accordion.Panel>
+              <Text>
+                <Text span fw="bold">
+                  Departamento:
+                </Text>
+                {` ${store.department}`}
+              </Text>
+              <Text>
+                <Text span fw="bold">
+                  Provincia:
+                </Text>
+                {` ${store.city}`}
+              </Text>
+              <Text>
+                <Text span fw="bold">
+                  Distrito:
+                </Text>
+                {` ${store.district}`}
+              </Text>
+              <Text>
+                <Text span fw="bold">
+                  Direccion:
+                </Text>
+                {` ${store.line}`}
+              </Text>
+              <Text>
+                <Text span fw="bold">
+                  Tiempo de llegada:
+                </Text>
+                {` ${store.timetodelivery}`}
+              </Text>
+              <Text>
+                <Text span fw="bold">
+                  Comentarios:
+                </Text>
+                {` ${store.comments}`}
+              </Text>
+              <Button onClick={() => selectStore(store.uuiddeliverystore)}>
+                Seleccionar Tienda
+              </Button>
+            </Accordion.Panel>
+          </Accordion.Item>
+        );
+      })}
+    </Accordion>
+  );
+};
 
 const ShipmentCard = ({
   index,
@@ -12,9 +87,36 @@ const ShipmentCard = ({
   suborder: CartSubOrder;
 }) => {
   const { selectDeliveryMethod, cart } = useCart();
-  const handleSelect = async (method: string) => {
-    await selectDeliveryMethod(suborder.uuidcartsuborder, method);
+  const onhomeSelect = async () => {
+    if (cart?.deliveryInfo?.collaboratoraddress?.uuidcollaboratoraddress)
+      await selectDeliveryMethod(
+        suborder.uuidcartsuborder,
+        "onhome",
+        cart?.deliveryInfo?.collaboratoraddress.uuidcollaboratoraddress
+      );
   };
+
+  const openStoreModal = async () => {
+    modals.closeAll();
+    modals.open({
+      title: "Seleccionar Tienda",
+      size: "xl",
+      children: (
+        <SelectStore
+          stores={suborder.availableDeliveryMethods.deliveryOnStore}
+          selectStore={(uuidstore) => {
+            modals.closeAll();
+            selectDeliveryMethod(
+              suborder.uuidcartsuborder,
+              "pickup",
+              uuidstore
+            );
+          }}
+        />
+      ),
+    });
+  };
+
   return (
     <Grid gutter="lg" grow>
       <Grid.Col span={8}>
@@ -61,7 +163,7 @@ const ShipmentCard = ({
             <div>
               <Checkbox
                 checked={suborder.deliverymethod == "onhome"}
-                onChange={(_) => handleSelect("onhome")}
+                onChange={onhomeSelect}
                 radius="lg"
                 value={0}
                 label="Entrega en Dirección Personal"
@@ -99,10 +201,17 @@ const ShipmentCard = ({
           )}
           <Checkbox
             checked={suborder.deliverymethod == "pickup"}
-            onChange={(_) => handleSelect("pickup")}
+            onChange={openStoreModal}
             radius="lg"
             value={1}
             label="Recojo en Tienda"
+            description={
+              suborder.deliverymethod == "pickup"
+                ? suborder.availableDeliveryMethods.deliveryOnStore.find(
+                    (s) => s.uuiddeliverystore == suborder.uuidaddress
+                  )?.name
+                : null
+            }
           />
         </Stack>
       </Grid.Col>

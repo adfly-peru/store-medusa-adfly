@@ -33,6 +33,9 @@ const SuborderCard = ({
         Método de entrega:{" "}
         <Text span fw="bold">
           {deliveryMethodInfo[suborder.deliveryMethod ?? "null"]}
+          {suborder.deliveryMethod === "pickup"
+            ? ` (${suborder.deliveryAddress?.alias})`
+            : ""}
         </Text>
       </Text>
       <Text>
