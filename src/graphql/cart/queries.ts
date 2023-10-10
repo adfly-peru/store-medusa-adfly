@@ -31,6 +31,7 @@ const GET_CART = gql`
         uuidcartsuborder
         uuidcart
         uuidbusiness
+        uuidaddress
         businessName
         deliverymethod
         deliveryprice
@@ -46,7 +47,15 @@ const GET_CART = gql`
             comments
           }
           deliveryOnStore {
+            uuiddeliverystore
+            name
+            country
             department
+            city
+            district
+            line
+            timetodelivery
+            comments
           }
         }
         items {

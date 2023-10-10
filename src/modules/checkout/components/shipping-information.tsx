@@ -41,10 +41,10 @@ const ShippingInformation = ({
     setSelect(uuidcollaboratoraddress);
     await editDelivery(
       {
-        receivername: "",
-        receiverdocumentkind: "",
-        receiverdocumentnumber: "",
-        receiverphone: "",
+        receivername: form.values.receivername,
+        receiverdocumentkind: form.values.receiverdocumentkind,
+        receiverdocumentnumber: form.values.receiverdocumentnumber,
+        receiverphone: form.values.receiverphone,
       },
       uuidcollaboratoraddress
     );
@@ -52,10 +52,12 @@ const ShippingInformation = ({
 
   useEffect(() => {
     if (cart?.deliveryInfo) {
-      setSelect(cart.deliveryInfo.collaboratoraddress.uuidcollaboratoraddress);
-      if (cart.deliveryInfo.receivername ?? "" != "") {
-        setReceiver("other");
-      }
+      if (cart.deliveryInfo.receivername ?? "" != "") setReceiver("other");
+
+      if (cart.deliveryInfo.collaboratoraddress)
+        setSelect(
+          cart.deliveryInfo.collaboratoraddress.uuidcollaboratoraddress
+        );
     }
   }, []);
   return (
@@ -81,9 +83,21 @@ const ShippingInformation = ({
           {address && (
             <AddressView
               data={address}
-              cb={() => {
+              cb={async () => {
                 setAddress(null);
                 setOpened2(false);
+                if (address.uuidcollaboratoraddress == select) {
+                  await editDelivery(
+                    {
+                      receivername: form.values.receivername,
+                      receiverdocumentkind: form.values.receiverdocumentkind,
+                      receiverdocumentnumber:
+                        form.values.receiverdocumentnumber,
+                      receiverphone: form.values.receiverphone,
+                    },
+                    address.uuidcollaboratoraddress
+                  );
+                }
               }}
             />
           )}
@@ -120,6 +134,17 @@ const ShippingInformation = ({
                     onClick={async () => {
                       setLoading(true);
                       await deleteAddress(value.uuidcollaboratoraddress);
+                      await editDelivery(
+                        {
+                          receivername: form.values.receivername,
+                          receiverdocumentkind:
+                            form.values.receiverdocumentkind,
+                          receiverdocumentnumber:
+                            form.values.receiverdocumentnumber,
+                          receiverphone: form.values.receiverphone,
+                        },
+                        ""
+                      );
                       setLoading(false);
                     }}
                   >

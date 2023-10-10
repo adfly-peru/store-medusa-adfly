@@ -30,6 +30,10 @@ interface CartContext {
     uuidproduct: string,
     uuidbusiness: string
   ) => CartItem | null;
+  getVariantById: (
+    uuidvariant: string,
+    uuidbusiness: string
+  ) => CartItem | null;
   editBilling: (billingform: BillingForm) => Promise<string | null>;
   editDelivery: (
     deliveryform: AddressInfoForm,
@@ -37,7 +41,8 @@ interface CartContext {
   ) => Promise<string | null>;
   selectDeliveryMethod: (
     uuidcartsuborder: string,
-    deliverymethod: string
+    deliverymethod: string,
+    uuidaddress: string
   ) => Promise<string | null>;
   loadingEvent: boolean;
 }
@@ -117,7 +122,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
           operation: "update",
         });
       }
-      refetch();
+      await refetch();
     } catch (error) {
       console.error("Error on add product: ", error);
     }
@@ -132,7 +137,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       quantity: 0,
       operation: "remove",
     });
-    refetch();
+    await refetch();
   };
 
   const editProduct = async (
@@ -167,7 +172,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         setCart(cart);
         return;
       }
-      refetch();
+      await refetch();
     } catch (error) {
       console.error("Error on edit product: ", error);
       setCart(cart);
@@ -186,6 +191,16 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     return item ?? null;
   };
 
+  const getVariantById = (uuidvariant: string, uuidbusiness: string) => {
+    if (!data?.getCart?.suborders) return null;
+    const suborder = data.getCart.suborders.find(
+      (obj) => obj.uuidbusiness == uuidbusiness
+    );
+    if (!suborder) return null;
+    const item = suborder?.items.find((obj) => obj.uuidvariant == uuidvariant);
+    return item ?? null;
+  };
+
   const editBilling = async (billingform: BillingForm) => {
     try {
       setLoadingEvent(true);
@@ -195,7 +210,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
           cart?.uuidcart,
           billingform
         );
-        refetch();
+        await refetch();
         setLoadingEvent(false);
         return resp;
       }
@@ -220,7 +235,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
           deliveryform,
           uuidcollaboratoraddress
         );
-        refetch();
+        await refetch();
         setLoadingEvent(false);
         return resp;
       }
@@ -234,13 +249,18 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
   const selectDeliveryMethod = async (
     uuidcartsuborder: string,
-    deliverymethod: string
+    deliverymethod: string,
+    uuidaddress: string
   ) => {
     try {
       setLoadingEvent(true);
       if (collaboratorId && cart?.uuidcart) {
-        const resp = await editDeliveryMethod(uuidcartsuborder, deliverymethod);
-        refetch();
+        const resp = await editDeliveryMethod(
+          uuidcartsuborder,
+          deliverymethod,
+          uuidaddress
+        );
+        await refetch();
         setLoadingEvent(false);
         return resp;
       }
@@ -260,6 +280,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         removeProduct,
         editProduct,
         getProductById,
+        getVariantById,
         editBilling,
         editDelivery,
         selectDeliveryMethod,

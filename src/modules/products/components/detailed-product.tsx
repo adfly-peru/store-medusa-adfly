@@ -35,6 +35,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
 import { Product } from "@interfaces/productInterface";
+import { CartItem } from "@interfaces/cart";
 
 export function DetailedProduct({ product }: { product: Product }) {
   const [details, setDetails] = useState<
@@ -54,11 +55,27 @@ export function DetailedProduct({ product }: { product: Product }) {
     setAttributeSelections((prev) => ({ ...prev, [attributeName]: value }));
   };
   const [selectedVariant, setSelectedVariant] = useState(product.variant[0]);
+  const [cartItem, setCartItem] = useState<CartItem | null>(null);
+  const { addProduct, editProduct, removeProduct, getVariantById, cart } =
+    useCart();
   const [imgIdx, setImgIdx] = useState(0);
-  const [value, setValue] = useState(0);
-  const { addProduct } = useCart();
   const [thumbnailStartIdx, setThumbnailStartIdx] = useState(0);
   const displayedThumbnails = 3;
+  const handlers = useRef<NumberInputHandlers>();
+  const allImages = product.variant.map((v) => v.imageURL);
+  let discount =
+    ((selectedVariant.refPrice - selectedVariant.adflyPrice) /
+      selectedVariant.refPrice) *
+    100;
+  let ahorro = (selectedVariant.refPrice - selectedVariant.adflyPrice).toFixed(
+    2
+  );
+
+  const setZero = () => {
+    if (cartItem) {
+      removeProduct(cartItem.uuidcartitem, product.business.uuidbusiness);
+    }
+  };
 
   const navigateThumbnails = (direction: "left" | "right") => {
     if (direction === "left" && thumbnailStartIdx > 0) {
@@ -71,15 +88,6 @@ export function DetailedProduct({ product }: { product: Product }) {
       setThumbnailStartIdx(thumbnailStartIdx + 1);
     }
   };
-  const handlers = useRef<NumberInputHandlers>();
-  const allImages = product.variant.map((v) => v.imageURL);
-  let discount =
-    ((selectedVariant.refPrice - selectedVariant.adflyPrice) /
-      selectedVariant.refPrice) *
-    100;
-  let ahorro = (selectedVariant.refPrice - selectedVariant.adflyPrice).toFixed(
-    2
-  );
   useEffect(() => {
     const matchingVariantIndex = product.variant.findIndex((variant) =>
       variant.attributes.every(
@@ -148,6 +156,19 @@ export function DetailedProduct({ product }: { product: Product }) {
     setDetails(newDetails);
   }, [product]);
 
+  useEffect(() => {
+    if (!cart) return;
+    const itemGetted = getVariantById(
+      selectedVariant.uuidVariant,
+      product.business.uuidbusiness
+    );
+    if (itemGetted) {
+      setCartItem(itemGetted);
+    } else {
+      setCartItem(null);
+    }
+  }, [cart]);
+
   if (!selectedVariant) {
     return null;
   }
@@ -201,7 +222,7 @@ export function DetailedProduct({ product }: { product: Product }) {
                 fit="contain"
                 withPlaceholder
               />
-              <Flex align="center">
+              {/* <Flex align="center">
                 <ActionIcon onClick={() => navigateThumbnails("left")}>
                   <IconCaretLeft />
                 </ActionIcon>
@@ -224,7 +245,7 @@ export function DetailedProduct({ product }: { product: Product }) {
                 <ActionIcon onClick={() => navigateThumbnails("right")}>
                   <IconCaretRight />
                 </ActionIcon>
-              </Flex>
+              </Flex> */}
             </Stack>
             <Divider orientation="vertical" size="xs" />
           </Grid.Col>
@@ -293,53 +314,68 @@ export function DetailedProduct({ product }: { product: Product }) {
               <Divider my="sm" />
               <Text fz="xs">Stock: {selectedVariant.stock} Unidad(es)</Text>
               <Group spacing={5}>
-                <ActionIcon
-                  radius="xl"
-                  variant="default"
-                  onClick={() => handlers.current?.decrement()}
-                >
-                  <IconMinus stroke={1.5} size="1.125rem" />
-                </ActionIcon>
-                <NumberInput
-                  hideControls
-                  value={value}
-                  onChange={(val: number) => setValue(val)}
-                  handlersRef={handlers}
-                  max={selectedVariant.stock}
-                  min={0}
-                  step={1}
-                  styles={{ input: { width: 70, textAlign: "center" } }}
-                />
-                <ActionIcon
-                  radius="xl"
-                  variant="default"
-                  onClick={() => handlers.current?.increment()}
-                >
-                  <IconPlus stroke={1.5} size="1.125rem" />
-                </ActionIcon>
-                <Space />
-                <Text fz="xs" c="dimmed">
-                  Máximo: x unidades este mes.
-                </Text>
-              </Group>
-              <Button
-                variant="light"
-                color="blue"
-                fullWidth
-                mt="md"
-                radius="md"
-                onClick={() =>
-                  value == 0
-                    ? null
-                    : addProduct(
+                {cartItem ? (
+                  <Group
+                    spacing={5}
+                    position="center"
+                    style={{ marginTop: 15 }}
+                  >
+                    <ActionIcon
+                      color="gray"
+                      radius="xl"
+                      variant="outline"
+                      onClick={() => handlers.current?.decrement()}
+                    >
+                      <IconMinus stroke={1.5} size="1.125rem" />
+                    </ActionIcon>
+                    <NumberInput
+                      hideControls
+                      value={cartItem.quantity}
+                      onChange={(val: number) =>
+                        val == 0
+                          ? setZero()
+                          : editProduct(
+                              cartItem,
+                              product.business.uuidbusiness,
+                              val
+                            )
+                      }
+                      handlersRef={handlers}
+                      max={selectedVariant.stock}
+                      min={0}
+                      step={1}
+                      styles={{ input: { width: 70, textAlign: "center" } }}
+                    />
+                    <ActionIcon
+                      color="gray"
+                      radius="xl"
+                      variant="outline"
+                      onClick={() => handlers.current?.increment()}
+                      disabled={cartItem.quantity >= cartItem.variant.stock}
+                    >
+                      <IconPlus stroke={1.5} size="1.125rem" />
+                    </ActionIcon>
+                  </Group>
+                ) : (
+                  <Button
+                    variant="light"
+                    radius="md"
+                    onClick={() => {
+                      addProduct(
                         selectedVariant.uuidVariant,
                         product.business.uuidbusiness,
-                        value
-                      )
-                }
-              >
-                Agregar
-              </Button>
+                        1
+                      );
+                    }}
+                  >
+                    Agregar
+                  </Button>
+                )}
+                <Space />
+                <Text fz="xs" c="dimmed">
+                  Máximo: {selectedVariant.maxQuantity} unidades este mes.
+                </Text>
+              </Group>
             </Stack>
           </Grid.Col>
           <Grid.Col span={4} md={3}>

@@ -40,6 +40,15 @@ export interface Suborder {
   deliveryMethod?: DeliveryMethod;
   deliveryPrice?: number;
   deliveryTime?: string;
+  deliveryAddress?: {
+    alias: string;
+    address: string;
+    district: string;
+    province: string;
+    department: string;
+    country: string;
+    additional?: string;
+  };
   items: [SuborderItem];
   comments: string;
 }

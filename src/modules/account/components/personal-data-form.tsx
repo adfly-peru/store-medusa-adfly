@@ -30,7 +30,6 @@ interface FormValues {
   email: string;
   cellPhone: string;
   termsOfService: boolean;
-  imgprofile: File | null;
 }
 
 const PersonalDataForm = () => {
@@ -48,7 +47,6 @@ const PersonalDataForm = () => {
       email: collaborator?.email ?? "",
       cellPhone: collaborator?.phonenumber ?? "",
       termsOfService: false,
-      imgprofile: null,
     },
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
@@ -67,7 +65,6 @@ const PersonalDataForm = () => {
         const profileform: ProfileForm = {
           email: form.values.email,
           phone: form.values.cellPhone,
-          image: form.values.imgprofile ?? undefined,
         };
         const res = await verify(profileform);
         setMessage(res ?? "success");
@@ -178,18 +175,6 @@ const PersonalDataForm = () => {
             radius="xs"
             size="sm"
             {...form.getInputProps("cellPhone")}
-          />
-          <FileInput
-            label="Imagen de Perfil"
-            clearable
-            accept="image/png,image/jpeg,image/jpg"
-            sx={{
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              maxWidth: "420px",
-            }}
-            {...form.getInputProps("imgprofile")}
           />
           <Space h="md" />
           {!collaborator.emailVerify && (

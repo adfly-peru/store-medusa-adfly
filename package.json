@@ -19,6 +19,7 @@
     "@mantine/form": "^6.0.19",
     "@mantine/hooks": "^6.0.19",
     "@mantine/next": "^6.0.19",
+    "@mantine/modals": "^6.0.19",
     "@react-google-maps/api": "^2.19.2",
     "@tabler/icons-react": "^2.32.0",
     "@types/node": "20.5.8",

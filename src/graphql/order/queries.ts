@@ -62,6 +62,17 @@ const GET_ORDER_REPORT = gql`
           deliveryMethod
           deliveryPrice
           deliveryTime
+          deliveryAddress {
+            alias
+            address
+            lat
+            lng
+            district
+            province
+            department
+            country
+            additional
+          }
           total
           status
           items {

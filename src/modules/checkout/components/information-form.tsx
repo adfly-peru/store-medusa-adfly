@@ -42,7 +42,12 @@ const InformationForm = ({
               disabled
               {...form.getInputProps("email")}
             />
-            <TextInput label="Celular:" {...form.getInputProps("phone")} />
+            <TextInput
+              label="Celular:"
+              required
+              withAsterisk
+              {...form.getInputProps("phone")}
+            />
           </Group>
         </Stack>
       </Stack>

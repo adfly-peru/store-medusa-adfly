@@ -89,7 +89,7 @@ const ProductCartView = ({
               disabled={updating}
               onClick={handleRemoveProduct}
             >
-              Eliminara
+              Eliminar
             </Button>
           </Stack>
         </Grid.Col>
