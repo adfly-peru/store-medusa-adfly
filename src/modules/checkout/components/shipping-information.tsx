@@ -186,7 +186,7 @@ const ShippingInformation = ({
               onChange={(_) => setReceiver("other")}
               radius="lg"
               value={"other"}
-              label="Otra persona recogerá el producto"
+              label="Otra persona recogerá el pedido"
             />
           </Group>
           {receiver === "other" && (
@@ -202,7 +202,6 @@ const ShippingInformation = ({
                     { value: "DNI", label: "DNI" },
                     { value: "CE", label: "Carné extranjería" },
                     { value: "passport", label: "Pasaporte" },
-                    { value: "RUC", label: "RUC" },
                   ]}
                   label="Tipo Documento"
                   withAsterisk
