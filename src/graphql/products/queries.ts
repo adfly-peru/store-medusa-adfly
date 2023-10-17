@@ -31,6 +31,7 @@ const GET_PRODUCT = gql`
       business {
         uuidbusiness
         businessname
+        commercialname
         deliveryMethods {
           deliveryonline
           deliveryonhome

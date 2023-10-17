@@ -386,7 +386,7 @@ export function DetailedProduct({ product }: { product: Product }) {
                     <Text span fw="bold">
                       Vendido y despachado por:
                     </Text>
-                    {` ${product.business.businessname}`}
+                    {` ${product.business.commercialname}`}
                   </Text>
                   <Divider my="md" />
                   <Text fw="bold" mb="xs">

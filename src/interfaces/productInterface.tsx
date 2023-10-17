@@ -81,6 +81,7 @@ export interface Product {
   business: {
     uuidbusiness: string;
     businessname: string;
+    commercialname: string;
     deliveryMethods: {
       deliveryonline: boolean;
       deliveryonhome: boolean;
