@@ -3,6 +3,7 @@ export interface Department {
   name: string;
   description?: string;
   active: boolean;
+  outstanding: boolean;
   visible: boolean;
   image?: string;
   categories: Category[];
