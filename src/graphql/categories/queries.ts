@@ -8,6 +8,7 @@ const GET_DEPARTMENTS = gql`
       description
       active
       visible
+      outstanding
       image
       categories {
         uuidCategory

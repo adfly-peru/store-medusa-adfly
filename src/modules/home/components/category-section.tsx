@@ -40,27 +40,29 @@ const CategorySection = () => {
             { maxWidth: "sm", slideSize: "50%", slideGap: "xs" },
           ]}
         >
-          {departments.map((category, i) => (
-            <Carousel.Slide key={category.id}>
-              <Stack align="center" key={category.id}>
-                <ActionIcon
-                  key={`${i}action`}
-                  size={60}
-                  variant="transparent"
-                  onClick={() => searchProductByCategorie(category.name)}
-                >
-                  <Image
-                    src={category.image}
-                    alt={category.name}
-                    style={{
-                      filter: colorScheme === "dark" ? "invert(1)" : "none",
-                    }}
-                  />
-                </ActionIcon>
-                <Text>{category.name}</Text>
-              </Stack>
-            </Carousel.Slide>
-          ))}
+          {departments
+            .filter((d) => d.outstanding)
+            .map((category, i) => (
+              <Carousel.Slide key={category.id}>
+                <Stack align="center" key={category.id}>
+                  <ActionIcon
+                    key={`${i}action`}
+                    size={60}
+                    variant="transparent"
+                    onClick={() => searchProductByCategorie(category.name)}
+                  >
+                    <Image
+                      src={category.image}
+                      alt={category.name}
+                      style={{
+                        filter: colorScheme === "dark" ? "invert(1)" : "none",
+                      }}
+                    />
+                  </ActionIcon>
+                  <Text>{category.name}</Text>
+                </Stack>
+              </Carousel.Slide>
+            ))}
         </Carousel>
       </MediaQuery>
     </>
