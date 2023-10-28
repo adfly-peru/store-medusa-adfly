@@ -7,16 +7,25 @@ import client from "lib/apollo-config";
 import { ApolloProvider } from "@apollo/client";
 import { useEffect, useState } from "react";
 import {
+  ButtonStylesParams,
   ColorScheme,
   ColorSchemeProvider,
   LoadingOverlay,
   MantineProvider,
+  rem,
 } from "@mantine/core";
 import { OrderProvider } from "@context/order-context";
 import { DesignProvider } from "@context/design-context";
 import RegistrationStepsModal from "@modules/layout/templates/registration-steps-modal";
 import { LoadScript } from "@react-google-maps/api";
 import "@fontsource/rubik";
+
+const adflyColors = {
+  default: "#31658E",
+  pressed: "#3D7FB2",
+  hover: "#234966",
+  disabled: "#A8C8E1",
+};
 
 export default function App({
   Component,
@@ -38,7 +47,40 @@ export default function App({
         toggleColorScheme={toggleColorScheme}
       >
         <MantineProvider
-          theme={{ colorScheme, fontFamily: "Rubik" }}
+          theme={{
+            colorScheme,
+            components: {
+              Button: {
+                styles: (theme, params: ButtonStylesParams, { variant }) => ({
+                  root: {
+                    borderRadius: rem(8),
+                    backgroundColor:
+                      variant === "filled" ? adflyColors.default : undefined,
+                    "&:hover": {
+                      backgroundColor:
+                        variant === "filled" ? adflyColors.hover : undefined,
+                    },
+                    "&:active": {
+                      backgroundColor:
+                        variant === "filled" ? adflyColors.pressed : undefined,
+                    },
+                    "&:disabled": {
+                      backgroundColor: adflyColors.disabled,
+                    },
+                  },
+                }),
+              },
+              Input: {
+                styles: (theme) => ({
+                  input: {
+                    borderColor: "#737A82",
+                    color: "#737A82",
+                    borderRadius: rem(8),
+                  },
+                }),
+              },
+            },
+          }}
           withGlobalStyles
           withNormalizeCSS
         >

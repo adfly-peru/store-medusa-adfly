@@ -1,5 +1,4 @@
 import {
-  BackgroundImage,
   Text,
   Grid,
   Stack,
@@ -7,13 +6,15 @@ import {
   TextInput,
   PasswordInput,
   Box,
-  Anchor,
   Image,
   Space,
   Title,
   LoadingOverlay,
   Loader,
   Alert,
+  Group,
+  BackgroundImage,
+  MediaQuery,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
@@ -53,27 +54,9 @@ const Login = () => {
         overlayBlur={2}
         overlayOpacity={0.9}
       />
-
-      <Grid
-        sx={{
-          backgroundColor: loginDesign?.backcolor,
-          color: loginDesign?.fontcolor,
-        }}
-      >
-        <Grid.Col span={6} sx={{ padding: 0 }}>
-          <BackgroundImage
-            src={loginDesign?.bannerurl ?? ""}
-            radius="xs"
-            h="100%"
-          >
-            {/* <Stack align="center" justify="flex-end">
-              <Title order={3}>Bienvenido(a) a:</Title>
-              <Title order={3}>Tu tienda de Beneficios (*)</Title>
-            </Stack> */}
-          </BackgroundImage>
-        </Grid.Col>
+      <Grid>
         <Grid.Col
-          span={6}
+          span="auto"
           sx={{
             height: height - 8,
             display: "flex",
@@ -81,60 +64,100 @@ const Login = () => {
             alignItems: "center",
           }}
         >
-          <Box sx={{ width: width / 3 }}>
-            <Image
-              radius="md"
-              height={100}
-              fit="contain"
-              src={loginDesign?.logourl}
-              alt="Login Logo"
-              sx={{ padding: 30 }}
-            />
-            {modalError && (
-              <Alert
-                mb="xl"
-                withCloseButton
-                title="Error al ingresar!"
-                onClose={() => setModalError(false)}
-                color="red"
-              >
-                {errorText}
-              </Alert>
-            )}
-            <form onSubmit={form.onSubmit((values) => login(values))}>
-              <Stack spacing="xl">
-                <TextInput
-                  placeholder="Correo electrónico / DNI"
-                  radius="xs"
-                  size="lg"
-                  {...form.getInputProps("email")}
-                />
-                <PasswordInput
-                  placeholder="Password"
-                  radius="xs"
-                  size="lg"
-                  {...form.getInputProps("password")}
-                />
-                <Button fullWidth size="lg" type="submit" disabled={loading}>
-                  {loading ? <Loader variant="dots" /> : <Text>Ingresar</Text>}
-                </Button>
-              </Stack>
-              <Space h="md" />
-              <Stack align="center" spacing="xs">
-                <Anchor href="" target="_blank">
-                  ¿Olvidaste tu contraseña?
-                </Anchor>
-                <Text>
-                  ¿No tienes una cuenta?{" "}
-                  <Anchor href="" inherit>
-                    Solicítala aquí
-                  </Anchor>
-                  .
+          <MediaQuery
+            smallerThan="sm"
+            styles={{
+              paddingLeft: 10,
+              paddingRight: 10,
+              h1: {
+                fontSize: "20px",
+              },
+            }}
+          >
+            <Stack>
+              <Image
+                radius="md"
+                height={100}
+                fit="contain"
+                src="https://logo.adfly.com.pe/b2e7c001-0dab-4db0-8e7a-172dd845c9a4.png"
+                alt="Login Logo"
+                sx={{ padding: 30 }}
+              />
+              {modalError && (
+                <Alert
+                  mb="xl"
+                  withCloseButton
+                  title="Error al ingresar!"
+                  onClose={() => setModalError(false)}
+                  color="red"
+                >
+                  {errorText}
+                </Alert>
+              )}
+              <Stack spacing="md" my="xl">
+                <Title align="center">¡Descubre lo que tenemos para ti!</Title>
+                <Text align="center" color="gray.7">
+                  Ingresar a tu cuenta
                 </Text>
               </Stack>
-            </form>
-          </Box>
+              <form onSubmit={form.onSubmit((values) => login(values))}>
+                <Stack spacing="xl" px="sm">
+                  <TextInput
+                    placeholder="E-mail / Doc. Identidad"
+                    radius="xs"
+                    size="lg"
+                    {...form.getInputProps("email")}
+                  />
+                  <PasswordInput
+                    placeholder="Contraseña"
+                    radius="xs"
+                    size="lg"
+                    {...form.getInputProps("password")}
+                  />
+                  <Button fullWidth size="lg" type="submit" disabled={loading}>
+                    {loading ? (
+                      <Loader variant="dots" />
+                    ) : (
+                      <Text>Ingresar</Text>
+                    )}
+                  </Button>
+                </Stack>
+                <Space h="md" />
+                <Group align="center" position="center" spacing={0}>
+                  <Text color="gray.6">Por:</Text>
+                  <Image
+                    radius="md"
+                    height={50}
+                    width="inherit"
+                    fit="contain"
+                    src="https://www.adfly.pe/Content/logo.png"
+                    alt="Adfly"
+                    sx={{ padding: 10 }}
+                  />
+                </Group>
+              </form>
+            </Stack>
+          </MediaQuery>
         </Grid.Col>
+        <MediaQuery
+          smallerThan="md"
+          styles={{
+            display: "none",
+          }}
+        >
+          <Grid.Col span={6} style={{ margin: 0, padding: 0 }}>
+            <BackgroundImage
+              src="https://banner.adfly.com.pe/c6527a82-f844-4b86-8c88-a89391557240.png"
+              style={{
+                height: "100%",
+                width: "100%",
+                backgroundSize: "100% 100%",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            />
+          </Grid.Col>
+        </MediaQuery>
       </Grid>
     </>
   );
