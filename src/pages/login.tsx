@@ -79,7 +79,7 @@ const Login = () => {
                 radius="md"
                 height={100}
                 fit="contain"
-                src="https://logo.adfly.com.pe/b2e7c001-0dab-4db0-8e7a-172dd845c9a4.png"
+                src={loginDesign?.logourl ?? ""}
                 alt="Login Logo"
                 sx={{ padding: 30 }}
               />
@@ -147,7 +147,7 @@ const Login = () => {
         >
           <Grid.Col span={6} style={{ margin: 0, padding: 0 }}>
             <BackgroundImage
-              src="https://banner.adfly.com.pe/c6527a82-f844-4b86-8c88-a89391557240.png"
+              src={loginDesign?.bannerurl ?? ""}
               style={{
                 height: "100%",
                 width: "100%",
