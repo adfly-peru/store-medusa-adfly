@@ -32,7 +32,6 @@ const DetailedProductCartView = ({
 }) => {
   const { editProduct, removeProduct } = useCart();
   const handlers = useRef<NumberInputHandlers>();
-
   return (
     <Grid my={5}>
       <Grid.Col span={3}>
