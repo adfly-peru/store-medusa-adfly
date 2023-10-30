@@ -1,12 +1,12 @@
 import ProductCard from "@modules/products/components/product-card";
 import { Box, Center, Grid, Loader, Title } from "@mantine/core";
-import { Product } from "@interfaces/productInterface";
+import { Offer } from "@interfaces/productInterface";
 
 const SimilarProducts = ({
   products,
   loading,
 }: {
-  products: Product[];
+  products: Offer[];
   loading: boolean;
 }) => {
   return (

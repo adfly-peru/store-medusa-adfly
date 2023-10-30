@@ -23,7 +23,7 @@ const FilteredProducts = () => {
         { maxWidth: "48rem", cols: 1, spacing: "sm" },
       ]}
     >
-      {products.products.map((prod, i): any => (
+      {products.offers.map((prod, i): any => (
         <div key={i}>
           <ProductCard product={prod} />
         </div>

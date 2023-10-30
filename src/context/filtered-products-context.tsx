@@ -1,6 +1,6 @@
 import { useLazyQuery } from "@apollo/client";
 import { GET_FILTERED_PRODUCTS } from "@graphql/products/queries";
-import { Product, ProductResult } from "@interfaces/productInterface";
+import { Offer, OfferResult } from "@interfaces/productInterface";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface FilterOptions {
@@ -13,7 +13,7 @@ export interface FilterOptions {
 }
 
 interface FilteredProductsContext {
-  products: ProductResult | null;
+  products: OfferResult | null;
   count: number;
   fetchProducts: (options: FilterOptions) => void;
   loading: boolean;
@@ -37,13 +37,13 @@ export const FilteredProductsProvider = ({
   children,
 }: FilteredProductsProviderProps) => {
   const [count, setCount] = useState(0);
-  const [products, setProducts] = useState<ProductResult | null>(null);
+  const [products, setProducts] = useState<OfferResult | null>(null);
   const [sortBy, setSortBy] = useState("name");
   const [limit, setlimit] = useState(12);
   const [offset, setoffset] = useState(0);
 
   const [getProducts, { data: productsData, loading }] = useLazyQuery<{
-    availableProducts: ProductResult;
+    availableOffers: OfferResult;
   }>(GET_FILTERED_PRODUCTS);
 
   const fetchProducts = (options: FilterOptions) => {
@@ -58,9 +58,9 @@ export const FilteredProductsProvider = ({
   };
 
   useEffect(() => {
-    if (productsData && productsData.availableProducts) {
-      setProducts(productsData.availableProducts);
-      setCount(productsData.availableProducts.totalProducts);
+    if (productsData && productsData.availableOffers) {
+      setProducts(productsData.availableOffers);
+      setCount(productsData.availableOffers.totalOffers);
     }
   }, [productsData]);
 

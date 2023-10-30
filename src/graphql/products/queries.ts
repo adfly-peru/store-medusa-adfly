@@ -1,15 +1,22 @@
 import { gql } from "@apollo/client";
 
 const GET_PRODUCT = gql`
-  query SingleProduct($id: ID!) {
-    product(id: $id) {
-      uuidProduct
-      productName
+  query SingleOffer($id: ID!) {
+    offer(id: $id) {
+      uuidOffer
+      offerName
+      description
+      principalSku
+      type
+      creationDate
+      updateDate
+      tags
+      rejectionComment
+      status
       brand {
         name
-        id
       }
-      productAttributes {
+      offerAttributes {
         attribute {
           attributeName
           values
@@ -17,15 +24,12 @@ const GET_PRODUCT = gql`
         attributeName
       }
       department {
-        id
         name
       }
       category {
-        uuidCategory
         name
       }
       subCategory {
-        uuidSubCategory
         name
       }
       business {
@@ -38,58 +42,77 @@ const GET_PRODUCT = gql`
           deliveryonstore
         }
       }
-      productAttributes {
-        attribute {
-          attributeName
-          values
-        }
-        attributeName
-      }
       variant {
         uuidVariant
-        currency
-        refPrice
-        adflyPrice
-        offerPrice
-        maxQuantity
-        sku
-        stock
-        imageURL
         attributes {
           attributeName
           value
         }
+        currency
+        stock
+        refPrice
+        adflyPrice
+        offerPrice
+        maxQuantity
+        purchasePeriod
+        imageURL
+        variantSku
+        product {
+          specification
+          condition
+          conditionDetails
+          productWarranty
+          sellerWarranty
+          included
+          width
+          height
+          weight
+          length
+        }
+        coupon {
+          initialDate
+          expirationDate
+          initialPurchaseDate
+          expirationPurchaseDate
+          couponUsage
+          couponContent
+          discountType
+          discount
+          couponCode
+        }
+        service {
+          initialDate
+          expirationDate
+          initialPurchaseDate
+          expirationPurchaseDate
+          accessService
+          contentService
+          couponCode
+        }
       }
-      description
-      type
-      productModel
-      specification
-      condition
-      conditionDetails
-      productWarranty
-      sellerWarranty
-      included
-      width
-      height
-      weight
-      length
-      status
     }
   }
 `;
 
 const GET_PRODUCTS = gql`
-  query FeaturedProducts($limit: Int, $offset: Int) {
-    availableProducts(limit: $limit, offset: $offset) {
-      totalProducts
-      products {
-        uuidProduct
-        productName
+  query FeaturedOffers($limit: Int, $offset: Int) {
+    availableOffers(limit: $limit, offset: $offset) {
+      totalOffers
+      offers {
+        uuidOffer
+        offerName
+        description
+        principalSku
+        type
+        creationDate
+        updateDate
+        tags
+        rejectionComment
+        status
         brand {
           name
-          id
         }
-        productAttributes {
+        offerAttributes {
           attribute {
             attributeName
             values
@@ -97,64 +120,73 @@ const GET_PRODUCTS = gql`
           attributeName
         }
         department {
-          id
           name
         }
         category {
-          uuidCategory
           name
         }
         subCategory {
-          uuidSubCategory
           name
         }
         business {
           uuidbusiness
           businessname
         }
-        productAttributes {
-          attribute {
-            attributeName
-            values
-          }
-          attributeName
-        }
         variant {
           uuidVariant
-          currency
-          refPrice
-          adflyPrice
-          offerPrice
-          maxQuantity
-          sku
-          stock
-          imageURL
           attributes {
             attributeName
             value
           }
+          currency
+          stock
+          refPrice
+          adflyPrice
+          offerPrice
+          maxQuantity
+          purchasePeriod
+          imageURL
+          variantSku
+          product {
+            specification
+            condition
+            conditionDetails
+            productWarranty
+            sellerWarranty
+            included
+            width
+            height
+            weight
+            length
+          }
+          coupon {
+            initialDate
+            expirationDate
+            initialPurchaseDate
+            expirationPurchaseDate
+            couponUsage
+            couponContent
+            discountType
+            discount
+            couponCode
+          }
+          service {
+            initialDate
+            expirationDate
+            initialPurchaseDate
+            expirationPurchaseDate
+            accessService
+            contentService
+            couponCode
+          }
         }
-        description
-        type
-        productModel
-        specification
-        condition
-        conditionDetails
-        productWarranty
-        sellerWarranty
-        included
-        width
-        height
-        weight
-        length
-        status
       }
     }
   }
 `;
 
 const GET_RELATED_PRODUCTS = gql`
-  query RelatedProducts(
+  query RelatedOffers(
     $departmentName: String
     $categoryName: String
     $subcategoryName: String
@@ -163,7 +195,7 @@ const GET_RELATED_PRODUCTS = gql`
     $limit: Int
     $offset: Int
   ) {
-    availableProducts(
+    availableOffers(
       departmentName: $departmentName
       categoryName: $categoryName
       subcategoryName: $subcategoryName
@@ -172,15 +204,22 @@ const GET_RELATED_PRODUCTS = gql`
       limit: $limit
       offset: $offset
     ) {
-      totalProducts
-      products {
-        uuidProduct
-        productName
+      totalOffers
+      offers {
+        uuidOffer
+        offerName
+        description
+        principalSku
+        type
+        creationDate
+        updateDate
+        tags
+        rejectionComment
+        status
         brand {
           name
-          id
         }
-        productAttributes {
+        offerAttributes {
           attribute {
             attributeName
             values
@@ -188,57 +227,66 @@ const GET_RELATED_PRODUCTS = gql`
           attributeName
         }
         department {
-          id
           name
         }
         category {
-          uuidCategory
           name
         }
         subCategory {
-          uuidSubCategory
           name
         }
         business {
           uuidbusiness
           businessname
         }
-        productAttributes {
-          attribute {
-            attributeName
-            values
-          }
-          attributeName
-        }
         variant {
           uuidVariant
-          currency
-          refPrice
-          adflyPrice
-          offerPrice
-          maxQuantity
-          sku
-          stock
-          imageURL
           attributes {
             attributeName
             value
           }
+          currency
+          stock
+          refPrice
+          adflyPrice
+          offerPrice
+          maxQuantity
+          purchasePeriod
+          imageURL
+          variantSku
+          product {
+            specification
+            condition
+            conditionDetails
+            productWarranty
+            sellerWarranty
+            included
+            width
+            height
+            weight
+            length
+          }
+          coupon {
+            initialDate
+            expirationDate
+            initialPurchaseDate
+            expirationPurchaseDate
+            couponUsage
+            couponContent
+            discountType
+            discount
+            couponCode
+          }
+          service {
+            initialDate
+            expirationDate
+            initialPurchaseDate
+            expirationPurchaseDate
+            accessService
+            contentService
+            couponCode
+          }
         }
-        description
-        type
-        productModel
-        specification
-        condition
-        conditionDetails
-        productWarranty
-        sellerWarranty
-        included
-        width
-        height
-        weight
-        length
-        status
       }
     }
   }
@@ -255,7 +303,7 @@ const GET_FILTERED_PRODUCTS = gql`
     $limit: Int
     $offset: Int
   ) {
-    availableProducts(
+    availableOffers(
       sortBy: $sortBy
       productSearch: $productSearch
       departmentName: $departmentName
@@ -280,15 +328,22 @@ const GET_FILTERED_PRODUCTS = gql`
         name
         count
       }
-      totalProducts
-      products {
-        uuidProduct
-        productName
+      totalOffers
+      offers {
+        uuidOffer
+        offerName
+        description
+        principalSku
+        type
+        creationDate
+        updateDate
+        tags
+        rejectionComment
+        status
         brand {
           name
-          id
         }
-        productAttributes {
+        offerAttributes {
           attribute {
             attributeName
             values
@@ -296,57 +351,66 @@ const GET_FILTERED_PRODUCTS = gql`
           attributeName
         }
         department {
-          id
           name
         }
         category {
-          uuidCategory
           name
         }
         subCategory {
-          uuidSubCategory
           name
         }
         business {
           uuidbusiness
           businessname
         }
-        productAttributes {
-          attribute {
-            attributeName
-            values
-          }
-          attributeName
-        }
         variant {
           uuidVariant
-          currency
-          refPrice
-          adflyPrice
-          offerPrice
-          maxQuantity
-          sku
-          stock
-          imageURL
           attributes {
             attributeName
             value
           }
+          currency
+          stock
+          refPrice
+          adflyPrice
+          offerPrice
+          maxQuantity
+          purchasePeriod
+          imageURL
+          variantSku
+          product {
+            specification
+            condition
+            conditionDetails
+            productWarranty
+            sellerWarranty
+            included
+            width
+            height
+            weight
+            length
+          }
+          coupon {
+            initialDate
+            expirationDate
+            initialPurchaseDate
+            expirationPurchaseDate
+            couponUsage
+            couponContent
+            discountType
+            discount
+            couponCode
+          }
+          service {
+            initialDate
+            expirationDate
+            initialPurchaseDate
+            expirationPurchaseDate
+            accessService
+            contentService
+            couponCode
+          }
         }
-        description
-        type
-        productModel
-        specification
-        condition
-        conditionDetails
-        productWarranty
-        sellerWarranty
-        included
-        width
-        height
-        weight
-        length
-        status
       }
     }
   }

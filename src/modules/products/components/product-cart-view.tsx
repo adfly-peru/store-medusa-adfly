@@ -58,7 +58,7 @@ const ProductCartView = ({
         </Grid.Col>
         <Grid.Col span={6}>
           <Stack spacing={5}>
-            <Title order={4}>{cartItem.variant.product.productName}</Title>
+            <Title order={4}>{cartItem.variant.offer.offerName}</Title>
             <Text fw={500}>{businessName}</Text>
             <Group position="apart">
               <Text>Cantidad: {cartItem.quantity}</Text>

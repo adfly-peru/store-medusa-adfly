@@ -24,20 +24,13 @@ import {
   Tabs,
   Grid,
 } from "@mantine/core";
-import {
-  IconCaretLeft,
-  IconCaretRight,
-  IconCheck,
-  IconMinus,
-  IconPlus,
-  IconX,
-} from "@tabler/icons-react";
-import { useEffect, useRef, useState } from "react";
+import { IconCheck, IconMinus, IconPlus, IconX } from "@tabler/icons-react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
-import { Product } from "@interfaces/productInterface";
+import { Offer } from "@interfaces/productInterface";
 import { CartItem } from "@interfaces/cart";
 
-export function DetailedProduct({ product }: { product: Product }) {
+export function DetailedProduct({ product }: { product: Offer }) {
   const [details, setDetails] = useState<
     { name: string; value: string | number }[]
   >([]);
@@ -102,57 +95,9 @@ export function DetailedProduct({ product }: { product: Product }) {
   }, [attributeSelections, product.variant]);
 
   useEffect(() => {
-    const newDetails = [];
-    if (product.condition)
-      newDetails.push({
-        name: "Condición del Producto",
-        value: product.condition === "new" ? "Nuevo" : "Usado",
-      });
-    if (product.conditionDetails)
-      newDetails.push({
-        name: "Detalle de la Condición",
-        value: product.conditionDetails,
-      });
-    if (product.productWarranty)
-      newDetails.push({
-        name: "Garantía del Producto",
-        value: product.productWarranty,
-      });
-    if (product.sellerWarranty)
-      newDetails.push({
-        name: "Garantía del Vendedor",
-        value: product.sellerWarranty,
-      });
-    if (product.included)
-      newDetails.push({
-        name: "¿Qué Incluye?",
-        value: product.included,
-      });
-    if (product.specification)
-      newDetails.push({
-        name: "Especificaciones",
-        value: product.specification,
-      });
-    if (product.width)
-      newDetails.push({
-        name: "Ancho",
-        value: product.width,
-      });
-    if (product.height)
-      newDetails.push({
-        name: "Largo",
-        value: product.height,
-      });
-    if (product.weight)
-      newDetails.push({
-        name: "Alto",
-        value: product.weight,
-      });
-    if (product.length)
-      newDetails.push({
-        name: "Peso",
-        value: product.length,
-      });
+    const newDetails: SetStateAction<
+      { name: string; value: string | number }[]
+    > = [];
     setDetails(newDetails);
   }, [product]);
 
@@ -201,7 +146,7 @@ export function DetailedProduct({ product }: { product: Product }) {
           >
             {product.subCategory.name}
           </Anchor>
-          <Text>{product.productName}</Text>
+          <Text>{product.offerName}</Text>
         </Breadcrumbs>
       </CardSection>
 
@@ -251,7 +196,7 @@ export function DetailedProduct({ product }: { product: Product }) {
           </Grid.Col>
           <Grid.Col span={8} md={5}>
             <Stack spacing="xs">
-              <Title order={1}>{product.productName}</Title>
+              <Title order={1}>{product.offerName}</Title>
               <Text fw={500}>Marca: {product.brand.name}</Text>
               <Group>
                 <Text c="dimmed" fw={100} fz="sm" td="line-through">
@@ -263,7 +208,7 @@ export function DetailedProduct({ product }: { product: Product }) {
               </Group>
               <Text fz="xs">(Ahorro estimado S/. {ahorro})</Text>
               <Divider my="sm" />
-              {product.productAttributes.map((productAttr, index) => {
+              {product.offerAttributes.map((productAttr, index) => {
                 const validVariants = product.variant.filter((variant) =>
                   Object.entries(attributeSelections).every(
                     ([key, value]) =>

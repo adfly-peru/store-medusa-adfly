@@ -186,7 +186,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     );
     if (!suborder) return null;
     const item = suborder?.items.find(
-      (obj) => obj.variant.product.uuidProduct == uuidproduct
+      (obj) => obj.variant.offer.uuidOffer == uuidproduct
     );
     return item ?? null;
   };

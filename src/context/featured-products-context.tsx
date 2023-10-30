@@ -1,10 +1,10 @@
 import { useLazyQuery } from "@apollo/client";
 import { GET_PRODUCTS } from "@graphql/products/queries";
-import { Product, ProductResult } from "@interfaces/productInterface";
+import { Offer, OfferResult } from "@interfaces/productInterface";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface FeaturedProductsContext {
-  products: Product[];
+  products: Offer[];
   count: number;
   fetchProducts: (offset?: number) => void;
   loading: boolean;
@@ -22,10 +22,10 @@ export const FeaturedProductsProvider = ({
   children,
 }: FeaturedProductsProviderProps) => {
   const [count, setCount] = useState(0);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Offer[]>([]);
 
   const [getProducts, { data: productsData, loading }] = useLazyQuery<{
-    availableProducts: ProductResult;
+    availableOffers: OfferResult;
   }>(GET_PRODUCTS);
 
   const fetchProducts = (offset: number = 0) => {
@@ -33,9 +33,9 @@ export const FeaturedProductsProvider = ({
   };
 
   useEffect(() => {
-    if (productsData && productsData.availableProducts) {
-      setProducts(productsData.availableProducts.products);
-      setCount(productsData.availableProducts.totalProducts);
+    if (productsData && productsData.availableOffers) {
+      setProducts(productsData.availableOffers.offers);
+      setCount(productsData.availableOffers.totalOffers);
     }
   }, [productsData]);
 
