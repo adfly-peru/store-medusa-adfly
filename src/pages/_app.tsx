@@ -81,6 +81,19 @@ export default function App({
                   },
                 }),
               },
+              Select: {
+                styles: (theme) => ({
+                  item: {
+                    "&[data-selected]": {
+                      backgroundColor: adflyColors.default,
+                      "&, &:hover": {
+                        backgroundColor: adflyColors.default,
+                      },
+                    },
+                    "&[data-hovered]": {},
+                  },
+                }),
+              },
             },
           }}
           withGlobalStyles

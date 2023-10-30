@@ -23,17 +23,29 @@ import {
   Table,
   Tabs,
   Grid,
+  UnstyledButton,
+  MediaQuery,
+  Select,
 } from "@mantine/core";
-import { IconCheck, IconMinus, IconPlus, IconX } from "@tabler/icons-react";
+import {
+  IconBuildingStore,
+  IconCheck,
+  IconChevronRight,
+  IconDatabase,
+  IconHome,
+  IconMail,
+  IconMinus,
+  IconPlus,
+  IconTruckDelivery,
+  IconX,
+} from "@tabler/icons-react";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
-import { Offer } from "@interfaces/productInterface";
+import { Offer, Variant } from "@interfaces/productInterface";
 import { CartItem } from "@interfaces/cart";
 
 export function DetailedProduct({ product }: { product: Offer }) {
-  const [details, setDetails] = useState<
-    { name: string; value: string | number }[]
-  >([]);
+  const [details, setDetails] = useState<{ name: string; value: string }[]>([]);
   const defaultAttributeSelections: Record<string, string> = {};
   if (product.variant[0]) {
     product.variant[0].attributes.forEach((attr) => {
@@ -47,10 +59,11 @@ export function DetailedProduct({ product }: { product: Offer }) {
   const handleAttributeSelection = (attributeName: string, value: string) => {
     setAttributeSelections((prev) => ({ ...prev, [attributeName]: value }));
   };
+  const [filteredVariants, setFilteredVariants] = useState<Variant[]>([]);
   const [selectedVariant, setSelectedVariant] = useState(product.variant[0]);
+  const [value, setValue] = useState<number>(1);
   const [cartItem, setCartItem] = useState<CartItem | null>(null);
-  const { addProduct, editProduct, removeProduct, getVariantById, cart } =
-    useCart();
+  const { addProduct, getVariantById, cart } = useCart();
   const [imgIdx, setImgIdx] = useState(0);
   const [thumbnailStartIdx, setThumbnailStartIdx] = useState(0);
   const displayedThumbnails = 3;
@@ -60,15 +73,6 @@ export function DetailedProduct({ product }: { product: Offer }) {
     ((selectedVariant.refPrice - selectedVariant.adflyPrice) /
       selectedVariant.refPrice) *
     100;
-  let ahorro = (selectedVariant.refPrice - selectedVariant.adflyPrice).toFixed(
-    2
-  );
-
-  const setZero = () => {
-    if (cartItem) {
-      removeProduct(cartItem.uuidcartitem, product.business.uuidbusiness);
-    }
-  };
 
   const navigateThumbnails = (direction: "left" | "right") => {
     if (direction === "left" && thumbnailStartIdx > 0) {
@@ -82,22 +86,161 @@ export function DetailedProduct({ product }: { product: Offer }) {
     }
   };
   useEffect(() => {
-    const matchingVariantIndex = product.variant.findIndex((variant) =>
+    const matchingVariantIndex = filteredVariants.findIndex((variant) =>
       variant.attributes.every(
         (attr) => attributeSelections[attr.attributeName] === attr.value
       )
     );
 
     if (matchingVariantIndex > -1) {
-      setSelectedVariant(product.variant[matchingVariantIndex]);
+      setSelectedVariant(filteredVariants[matchingVariantIndex]);
       setImgIdx(matchingVariantIndex);
     }
-  }, [attributeSelections, product.variant]);
+  }, [attributeSelections, filteredVariants]);
 
   useEffect(() => {
-    const newDetails: SetStateAction<
-      { name: string; value: string | number }[]
-    > = [];
+    const newDetails: { name: string; value: string }[] = [];
+    const dateOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    } as Intl.DateTimeFormatOptions;
+    switch (product.type) {
+      case "coupon":
+        if (selectedVariant.coupon?.initialDate)
+          newDetails.push({
+            name: "Fecha Inicio Uso",
+            value: new Date(selectedVariant.coupon?.initialDate).toLocaleString(
+              "es-ES",
+              dateOptions
+            ),
+          });
+        if (selectedVariant.coupon?.expirationDate)
+          newDetails.push({
+            name: "Fecha Vencimiento Uso",
+            value: new Date(
+              selectedVariant.coupon?.expirationDate
+            ).toLocaleString("es-ES", dateOptions),
+          });
+        if (selectedVariant.coupon?.initialPurchaseDate)
+          newDetails.push({
+            name: "Fecha Inicio Compra",
+            value: new Date(
+              selectedVariant.coupon?.initialPurchaseDate
+            ).toLocaleString("es-ES", dateOptions),
+          });
+        if (selectedVariant.coupon?.expirationPurchaseDate)
+          newDetails.push({
+            name: "Fecha Vencimiento Compra",
+            value: new Date(
+              selectedVariant.coupon?.expirationPurchaseDate
+            ).toLocaleString("es-ES", dateOptions),
+          });
+        if (selectedVariant.coupon?.couponUsage)
+          newDetails.push({
+            name: "¿Cómo usar el cupón?",
+            value: selectedVariant.coupon?.couponUsage,
+          });
+        if (selectedVariant.coupon?.couponContent)
+          newDetails.push({
+            name: "¿Qué incluye?",
+            value: selectedVariant.coupon?.couponContent,
+          });
+        break;
+      case "service":
+        if (selectedVariant.service?.initialDate)
+          newDetails.push({
+            name: "Fecha Inicio Uso",
+            value: new Date(
+              selectedVariant.service?.initialDate
+            ).toLocaleString("es-ES", dateOptions),
+          });
+        if (selectedVariant.service?.expirationDate)
+          newDetails.push({
+            name: "Fecha Vencimiento Uso",
+            value: new Date(
+              selectedVariant.service?.expirationDate
+            ).toLocaleString("es-ES", dateOptions),
+          });
+        if (selectedVariant.service?.initialPurchaseDate)
+          newDetails.push({
+            name: "Fecha Inicio Compra",
+            value: new Date(
+              selectedVariant.service?.initialPurchaseDate
+            ).toLocaleString("es-ES", dateOptions),
+          });
+        if (selectedVariant.service?.expirationPurchaseDate)
+          newDetails.push({
+            name: "Fecha Vencimiento Compra",
+            value: new Date(
+              selectedVariant.service?.expirationPurchaseDate
+            ).toLocaleString("es-ES", dateOptions),
+          });
+        if (selectedVariant.service?.accessService)
+          newDetails.push({
+            name: "¿Cómo acceder al servicio?",
+            value: selectedVariant.service?.accessService,
+          });
+        if (selectedVariant.service?.contentService)
+          newDetails.push({
+            name: "¿Qué incluye?",
+            value: selectedVariant.service?.contentService,
+          });
+        break;
+      case "product":
+        if (selectedVariant.product?.specification)
+          newDetails.push({
+            name: "Especificaciones del Producto",
+            value: selectedVariant.product.specification,
+          });
+        if (selectedVariant.product?.condition)
+          newDetails.push({
+            name: "Condición del Producto",
+            value:
+              selectedVariant.product.condition === "new" ? "Nuevo" : "Usado",
+          });
+        if (selectedVariant.product?.conditionDetails)
+          newDetails.push({
+            name: "Detalle de la Condición",
+            value: selectedVariant.product.conditionDetails,
+          });
+        if (selectedVariant.product?.productWarranty)
+          newDetails.push({
+            name: "Garantía del Producto",
+            value: selectedVariant.product?.productWarranty,
+          });
+        if (selectedVariant.product?.sellerWarranty)
+          newDetails.push({
+            name: "Garantía del Vendedor",
+            value: selectedVariant.product?.sellerWarranty,
+          });
+        if (selectedVariant.product?.included)
+          newDetails.push({
+            name: "¿Qué incluye?",
+            value: selectedVariant.product?.included,
+          });
+        if (selectedVariant.product?.width)
+          newDetails.push({
+            name: "Ancho (cm)",
+            value: `${selectedVariant.product?.width}`,
+          });
+        if (selectedVariant.product?.length)
+          newDetails.push({
+            name: "Largo (cm)",
+            value: `${selectedVariant.product?.length}`,
+          });
+        if (selectedVariant.product?.height)
+          newDetails.push({
+            name: "Alto (cm)",
+            value: `${selectedVariant.product?.height}`,
+          });
+        if (selectedVariant.product?.weight)
+          newDetails.push({
+            name: "Peso (kg)",
+            value: `${selectedVariant.product?.weight}`,
+          });
+        break;
+    }
     setDetails(newDetails);
   }, [product]);
 
@@ -114,51 +257,122 @@ export function DetailedProduct({ product }: { product: Offer }) {
     }
   }, [cart]);
 
+  useEffect(() => {
+    const uniqueAttributes = new Set();
+    const uniqueVariants = product.variant.filter((variant) => {
+      const attributesString = JSON.stringify(
+        variant.attributes.sort((a, b) =>
+          a.attributeName.localeCompare(b.attributeName)
+        )
+      );
+      if (!uniqueAttributes.has(attributesString)) {
+        uniqueAttributes.add(attributesString);
+        return true;
+      }
+      return false;
+    });
+    setFilteredVariants(uniqueVariants);
+    setSelectedVariant(uniqueVariants[0]);
+  }, [product.variant]);
+
   if (!selectedVariant) {
     return null;
   }
 
   return (
-    <Card withBorder py="xl" px="xl" radius="md">
-      <CardSection inheritPadding withBorder py="xs">
-        <Breadcrumbs separator="→">
-          <Anchor fw={500} color="dark" href={"/home"}>
-            Inicio
-          </Anchor>
-          <Anchor
-            fw={500}
-            color="dark"
+    <Card py="xl" radius="md">
+      <CardSection inheritPadding py="xs">
+        <Breadcrumbs separator={<IconChevronRight size={18} />}>
+          <UnstyledButton
+            c="#5C6268"
+            fw={400}
+            fz={12}
+            component="a"
+            href={"/home"}
+          >
+            <Group spacing="xs">
+              <IconHome size={18} />
+              <MediaQuery
+                smallerThan="sm"
+                styles={{
+                  display: "none",
+                }}
+              >
+                <Text>Inicio</Text>
+              </MediaQuery>
+            </Group>
+          </UnstyledButton>
+          <UnstyledButton
+            c="#5C6268"
+            fw={400}
+            fz={12}
+            component="a"
             href={`/search?data=${product.department.name}`}
           >
             {product.department.name}
-          </Anchor>
-          <Anchor
-            fw={500}
-            color="dark"
+          </UnstyledButton>
+          <UnstyledButton
+            c="#5C6268"
+            fw={400}
+            fz={12}
+            component="a"
             href={`/search?data=${product.category.name}`}
           >
             {product.category.name}
-          </Anchor>
-          <Anchor
-            fw={500}
-            color="dark"
+          </UnstyledButton>
+          <UnstyledButton
+            c="#5C6268"
+            fw={400}
+            fz={12}
+            component="a"
             href={`/search?data=${product.subCategory.name}`}
           >
             {product.subCategory.name}
-          </Anchor>
-          <Text>{product.offerName}</Text>
+          </UnstyledButton>
+          <Text c="#5C6268" fw={400} fz={12}>
+            {product.offerName}
+          </Text>
         </Breadcrumbs>
       </CardSection>
 
       <CardSection inheritPadding py="xl">
         <Grid>
+          <MediaQuery
+            largerThan="md"
+            styles={{
+              display: "none",
+            }}
+          >
+            <Stack w="90%" spacing="xs">
+              <Group position="apart">
+                <Text fw={700}>{product.brand.name}</Text>
+                <Text>
+                  <Text span fw="bold">
+                    SKU:
+                  </Text>
+                  {product.principalSku}
+                </Text>
+              </Group>
+              <Title fw={500} order={2}>
+                {product.offerName}
+              </Title>
+              <Text>...</Text>
+            </Stack>
+          </MediaQuery>
           <Grid.Col span={12} md={4}>
-            <Stack spacing="xs">
-              <div style={{ width: 70 }}>
-                <Badge size="lg" color="red" radius="xs" variant="filled">
-                  -{discount.toFixed(0)}%
+            <Stack spacing={0}>
+              <Group position="right">
+                <Badge color="red" variant="filled" radius="sm">
+                  -
+                  {product.type === "coupon"
+                    ? `${
+                        selectedVariant.coupon?.discountType === "monetary"
+                          ? ` S/.${selectedVariant.coupon.discount}`
+                          : ` ${selectedVariant.coupon?.discount}%`
+                      }`
+                    : ` ${discount.toFixed(0)}%`}
                 </Badge>
-              </div>
+              </Group>
               <Space h="lg" />
               <Image
                 height={300}
@@ -194,22 +408,60 @@ export function DetailedProduct({ product }: { product: Offer }) {
             </Stack>
             <Divider orientation="vertical" size="xs" />
           </Grid.Col>
-          <Grid.Col span={8} md={5}>
+          <Grid.Col span={12} md={5}>
             <Stack spacing="xs">
-              <Title order={1}>{product.offerName}</Title>
-              <Text fw={500}>Marca: {product.brand.name}</Text>
-              <Group>
-                <Text c="dimmed" fw={100} fz="sm" td="line-through">
-                  S/. {selectedVariant.refPrice}
-                </Text>
-                <Text c="red" fw={700}>
-                  S/. {selectedVariant.adflyPrice}
-                </Text>
-              </Group>
-              <Text fz="xs">(Ahorro estimado S/. {ahorro})</Text>
-              <Divider my="sm" />
+              <MediaQuery
+                smallerThan="md"
+                styles={{
+                  display: "none",
+                }}
+              >
+                <div>
+                  <Text fw={700}>{product.brand.name}</Text>
+                  <Title fw={500} order={2}>
+                    {product.offerName}
+                  </Title>
+                </div>
+              </MediaQuery>
+              {product.type === "coupon" ? (
+                <Stack justify="center" h="100%">
+                  <Group c="red" position="apart" fw="bold">
+                    <Text fz="sm">Descuento</Text>
+                    <Text>
+                      -
+                      {selectedVariant.coupon?.discountType === "monetary"
+                        ? ` S/. ${selectedVariant.coupon?.discount}`
+                        : ` ${selectedVariant.coupon?.discount}%`}
+                    </Text>
+                  </Group>
+                </Stack>
+              ) : (
+                <Stack justify="center" h="100%" spacing="xs">
+                  {selectedVariant.offerPrice ? (
+                    <Group c="red" position="apart" fw="bold">
+                      <Text fz="sm">Oferta</Text>
+                      <Text>S/. {selectedVariant.offerPrice}</Text>
+                    </Group>
+                  ) : null}
+                  <Group position="apart" fw="bold">
+                    <Text fz="sm">Precio ADFLY</Text>
+                    <Text
+                      td={selectedVariant.offerPrice ? "line-through" : "none"}
+                    >
+                      S/. {selectedVariant.adflyPrice}
+                    </Text>
+                  </Group>
+                  <Group position="apart">
+                    <Text fz="sm">Precio Mercado</Text>
+                    <Text td="line-through">
+                      S/. {selectedVariant.refPrice}
+                    </Text>
+                  </Group>
+                </Stack>
+              )}
+              {filteredVariants.length > 1 ? <Divider my="sm" /> : null}
               {product.offerAttributes.map((productAttr, index) => {
-                const validVariants = product.variant.filter((variant) =>
+                const validVariants = filteredVariants.filter((variant) =>
                   Object.entries(attributeSelections).every(
                     ([key, value]) =>
                       key === productAttr.attributeName ||
@@ -230,13 +482,13 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   ),
                 ];
                 return (
-                  <div key={index}>
+                  <Group key={index} position="apart">
                     <Text>
                       <Text span fw="bold">
                         {productAttr.attribute.attributeName}
                       </Text>
                     </Text>
-                    <SegmentedControl
+                    <Select
                       data={validValues.map((value) => ({
                         value,
                         label: value,
@@ -253,122 +505,236 @@ export function DetailedProduct({ product }: { product: Offer }) {
                         )
                       }
                     />
-                  </div>
+                  </Group>
                 );
               })}
               <Divider my="sm" />
-              <Text fz="xs">Stock: {selectedVariant.stock} Unidad(es)</Text>
-              <Group spacing={5}>
-                {cartItem ? (
-                  <Group
-                    spacing={5}
-                    position="center"
-                    style={{ marginTop: 15 }}
-                  >
+              <Text fz="xs">
+                <Text span fw="bold">
+                  - Stock:
+                </Text>
+                {` ${selectedVariant.stock} unidad(es)`}
+              </Text>
+              <Text fz="xs">
+                <Text span fw="bold">
+                  - Máximo pedido:
+                </Text>
+                {` ${selectedVariant.maxQuantity} unidad(es)`}
+              </Text>
+              {product.type === "coupon" ? (
+                <Button
+                  radius="md"
+                  onClick={() => {
+                    addProduct(
+                      selectedVariant.uuidVariant,
+                      product.business.uuidbusiness,
+                      value
+                    );
+                  }}
+                >
+                  Generar Cupón
+                </Button>
+              ) : (
+                <Group spacing={5} align="center">
+                  <Group spacing={5} position="center">
                     <ActionIcon
-                      color="gray"
-                      radius="xl"
-                      variant="outline"
+                      variant="transparent"
+                      color="dark"
+                      disabled={value === 1}
+                      bg="#F2F2F3"
+                      radius="md"
+                      h={45}
+                      w={45}
                       onClick={() => handlers.current?.decrement()}
                     >
                       <IconMinus stroke={1.5} size="1.125rem" />
                     </ActionIcon>
                     <NumberInput
                       hideControls
-                      value={cartItem.quantity}
-                      onChange={(val: number) =>
-                        val == 0
-                          ? setZero()
-                          : editProduct(
-                              cartItem,
-                              product.business.uuidbusiness,
-                              val
-                            )
-                      }
+                      value={value}
+                      onChange={(val) => setValue(val === "" ? 0 : val)}
                       handlersRef={handlers}
                       max={selectedVariant.stock}
                       min={0}
                       step={1}
-                      styles={{ input: { width: 70, textAlign: "center" } }}
+                      styles={{
+                        input: { width: 45, height: 45, textAlign: "center" },
+                      }}
                     />
                     <ActionIcon
-                      color="gray"
-                      radius="xl"
-                      variant="outline"
+                      variant="transparent"
+                      color="dark"
+                      disabled={value === selectedVariant.stock}
+                      bg="#F2F2F3"
+                      radius="md"
+                      h={45}
+                      w={45}
                       onClick={() => handlers.current?.increment()}
-                      disabled={cartItem.quantity >= cartItem.variant.stock}
                     >
                       <IconPlus stroke={1.5} size="1.125rem" />
                     </ActionIcon>
                   </Group>
-                ) : (
+                  <Space />
                   <Button
-                    variant="light"
                     radius="md"
                     onClick={() => {
                       addProduct(
                         selectedVariant.uuidVariant,
                         product.business.uuidbusiness,
-                        1
+                        value
                       );
                     }}
                   >
-                    Agregar
+                    Agregar al carrito
                   </Button>
-                )}
-                <Space />
-                <Text fz="xs" c="dimmed">
-                  Máximo: {selectedVariant.maxQuantity} unidades este mes.
-                </Text>
-              </Group>
+                </Group>
+              )}
             </Stack>
           </Grid.Col>
-          <Grid.Col span={4} md={3}>
+          <Grid.Col span={12} md={3}>
             <Stack>
               <Center>
-                <Card w={200} shadow="sm" p="lg" radius="sm" withBorder>
-                  <Text>
-                    <Text span fw="bold">
-                      Vendido y despachado por:
-                    </Text>
-                    {` ${product.business.commercialname}`}
+                <Text fz="xs">
+                  <Text span fw="bold">
+                    SKU:
                   </Text>
-                  <Divider my="md" />
-                  <Text fw="bold" mb="xs">
-                    Tipo de Entrega:
+                  {product.principalSku}
+                </Text>
+              </Center>
+              <Center>
+                <Card w={270} shadow="sm" p="lg" radius="sm" withBorder>
+                  <Text span fw="bold">
+                    Venta y despacho por:
                   </Text>
-                  <List spacing="xs" size="sm" center>
-                    <List.Item
-                      icon={
-                        <ThemeIcon
-                          color={
-                            product.business.deliveryMethods.deliveryonhome
-                              ? "green"
-                              : "red"
+                  <Text>{` ${product.business.commercialname}`}</Text>
+                  {/* TODO: TERMINOS Y CONDICIONES */}
+                  {product.type === "coupon" ? null : (
+                    <>
+                      <Divider my="md" />
+                      <Text fw="bold" mb="xs">
+                        Entrega disponible:
+                      </Text>
+                      <List spacing="xs" size="sm" center>
+                        <List.Item
+                          icon={
+                            <IconTruckDelivery
+                              color={
+                                product.business.deliveryMethods
+                                  .deliveryonhome && product.type === "product"
+                                  ? undefined
+                                  : "#ABAFB4"
+                              }
+                            />
                           }
-                          size={18}
-                          radius="xl"
                         >
-                          {product.business.deliveryMethods.deliveryonhome ? (
-                            <IconCheck size="1rem" />
-                          ) : (
-                            <IconX size="1rem" />
-                          )}
-                        </ThemeIcon>
-                      }
-                    >
-                      Entrega en domicilio
-                    </List.Item>
-                    <List.Item
-                      icon={
-                        <ThemeIcon color="green" size={18} radius="xl">
-                          <IconCheck size="1rem" />
-                        </ThemeIcon>
-                      }
-                    >
-                      Recojo en tienda
-                    </List.Item>
-                  </List>
+                          <Stack
+                            spacing={0}
+                            c={
+                              product.business.deliveryMethods.deliveryonhome &&
+                              product.type === "product"
+                                ? undefined
+                                : "#ABAFB4"
+                            }
+                          >
+                            <Text>Entrega a domicilio</Text>
+                            <Text
+                              fz={12}
+                              c={
+                                product.business.deliveryMethods
+                                  .deliveryonhome && product.type === "product"
+                                  ? "green"
+                                  : undefined
+                              }
+                            >
+                              {product.business.deliveryMethods
+                                .deliveryonhome && product.type === "product"
+                                ? "Disponible"
+                                : "No Disponible"}
+                            </Text>
+                          </Stack>
+                        </List.Item>
+                        <List.Item
+                          icon={
+                            <IconBuildingStore
+                              color={
+                                product.type === "service"
+                                  ? "#ABAFB4"
+                                  : undefined
+                              }
+                            />
+                          }
+                        >
+                          <Stack
+                            spacing={0}
+                            c={
+                              product.type === "service" ? "#ABAFB4" : undefined
+                            }
+                          >
+                            <Text>Recojo en tienda</Text>
+                            <Text
+                              fz={12}
+                              c={
+                                product.type === "service" ? undefined : "green"
+                              }
+                            >
+                              {product.type === "service"
+                                ? "No Disponible"
+                                : "Disponible"}
+                            </Text>
+                          </Stack>
+                        </List.Item>
+                        <List.Item
+                          icon={
+                            <IconMail
+                              color={
+                                product.type === "service"
+                                  ? undefined
+                                  : "#ABAFB4"
+                              }
+                            />
+                          }
+                        >
+                          <Stack
+                            spacing={0}
+                            c={
+                              product.type === "service" ? undefined : "#ABAFB4"
+                            }
+                          >
+                            <Text>Entrega virtual</Text>
+                            <Text
+                              fz={12}
+                              c={
+                                product.type === "service" ? "green" : undefined
+                              }
+                            >
+                              {product.type === "service"
+                                ? "Disponible"
+                                : "No Disponible"}
+                            </Text>
+                          </Stack>
+                        </List.Item>
+                      </List>
+                      <Divider my="md" />
+                      <Text fw="bold" mb="xs">
+                        Métodos de pago:
+                      </Text>
+                      <Group spacing={5}>
+                        <Text>{"Pago online con "}</Text>
+                        <Image
+                          height={13}
+                          width="inherit"
+                          fit="contain"
+                          src="/niubiz.svg"
+                        />
+                      </Group>
+                      <Image
+                        height={30}
+                        width="inherit"
+                        fit="contain"
+                        src="/payment-methods.svg"
+                      />
+                    </>
+                  )}
                 </Card>
               </Center>
             </Stack>
@@ -376,16 +742,39 @@ export function DetailedProduct({ product }: { product: Offer }) {
         </Grid>
       </CardSection>
       <CardSection inheritPadding withBorder py="xs">
-        <Tabs defaultValue="description">
+        <Tabs
+          defaultValue="description"
+          styles={(theme) => ({
+            tab: {
+              "&[data-active]": {
+                borderColor: "#31658E",
+                color: "#31658E",
+              },
+            },
+          })}
+        >
           <Tabs.List grow position="apart">
-            <Tabs.Tab value="description">Descripción</Tabs.Tab>
-            <Tabs.Tab value="details">Información Adicional</Tabs.Tab>
+            <Tabs.Tab value="description" fw="bold">
+              Descripción
+            </Tabs.Tab>
+            <Tabs.Tab value="details" fw="bold">
+              Información Adicional
+            </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="description" pt="xs">
             {product.description}
           </Tabs.Panel>
           <Tabs.Panel value="details" pt="xs" px="md">
-            <Table striped highlightOnHover withBorder withColumnBorders>
+            <Table
+              verticalSpacing="xl"
+              striped
+              highlightOnHover
+              withBorder
+              withColumnBorders
+              style={{
+                borderRadius: "20px",
+              }}
+            >
               <thead>
                 <tr></tr>
               </thead>
@@ -393,7 +782,11 @@ export function DetailedProduct({ product }: { product: Offer }) {
                 {details.map((d, index) => {
                   return (
                     <tr key={index}>
-                      <td>
+                      <td
+                        style={{
+                          width: 300,
+                        }}
+                      >
                         <Text fw="bold">{d.name}</Text>{" "}
                       </td>
                       <td>{d.value}</td>
