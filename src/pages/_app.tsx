@@ -19,6 +19,7 @@ import { DesignProvider } from "@context/design-context";
 import RegistrationStepsModal from "@modules/layout/templates/registration-steps-modal";
 import { LoadScript } from "@react-google-maps/api";
 import "@fontsource/rubik";
+import "@fontsource/open-sans";
 
 const adflyColors = {
   default: "#31658E",
@@ -48,6 +49,7 @@ export default function App({
       >
         <MantineProvider
           theme={{
+            fontFamily: "Open Sans, sans-serif",
             colorScheme,
             components: {
               Button: {

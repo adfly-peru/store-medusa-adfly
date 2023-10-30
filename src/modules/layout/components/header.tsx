@@ -19,9 +19,11 @@ import {
   Center,
   Avatar,
   MediaQuery,
+  Divider,
 } from "@mantine/core";
 import {
   IconBasket,
+  IconChevronDown,
   IconMenu2,
   IconMoon,
   IconSearch,
@@ -158,7 +160,7 @@ const HomeHeader = () => {
       >
         <CartDrawer></CartDrawer>
       </Drawer>
-      <Grid justify="center" align="center" columns={24}>
+      <Grid justify="center" align="center" columns={24} m={0}>
         <Grid.Col span={24} bg="white">
           <Group position="apart" py={10} px={15}>
             <UnstyledButton onClick={() => router.push("/")}>
@@ -171,17 +173,21 @@ const HomeHeader = () => {
                 alt="Enterprise Logo"
               />
             </UnstyledButton>
-            <Image
-              radius="md"
-              height={60}
-              width="inherit"
-              fit="contain"
-              src="https://www.adfly.pe/Content/logo.png"
-              alt="Adfly Logo"
-            />
+            <Group align="center" position="center" spacing={0}>
+              <Text color="gray.6">Por:</Text>
+              <Image
+                radius="md"
+                height={50}
+                width="inherit"
+                fit="contain"
+                src="https://www.adfly.pe/Content/logo.png"
+                alt="Adfly"
+                sx={{ padding: 10 }}
+              />
+            </Group>
           </Group>
         </Grid.Col>
-        <Grid.Col span={8} md={4}>
+        <Grid.Col span={6} md={3}>
           <Menu
             trigger="click"
             openDelay={100}
@@ -192,18 +198,23 @@ const HomeHeader = () => {
           >
             <Menu.Target>
               <Center>
-                <UnstyledButton w="80%">
-                  <Group spacing="xs" align="center" position="center">
-                    <IconMenu2 color={homeDesign?.fontcolor} size="1.5rem" />
+                <UnstyledButton
+                  w="80%"
+                  p="0.4rem"
+                  style={{
+                    border: "2px solid #ffffff",
+                    borderRadius: "6px",
+                  }}
+                >
+                  <Group spacing="xs" align="center" position="apart">
+                    <Text color={homeDesign?.fontcolor}>Menu</Text>
                     <MediaQuery
-                      smallerThan="sm"
+                      smallerThan="lg"
                       styles={{
-                        fontSize: 0,
+                        display: "none",
                       }}
                     >
-                      <Text color={homeDesign?.fontcolor} size="1.5rem">
-                        Menu
-                      </Text>
+                      <IconChevronDown color={homeDesign?.fontcolor} />
                     </MediaQuery>
                   </Group>
                 </UnstyledButton>
@@ -245,96 +256,122 @@ const HomeHeader = () => {
             />
           </form>
         </Grid.Col>
-        <Grid.Col span={3} md={1}>
-          <Center>
-            <Menu
-              closeOnItemClick={false}
-              position="bottom-end"
-              shadow="md"
-              width={200}
-            >
-              <Menu.Target>
-                <ActionIcon variant="transparent" size="lg">
-                  <IconUser
-                    color={homeDesign?.fontcolor}
-                    size={30}
-                    stroke={1.5}
-                  />
-                </ActionIcon>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Label sx={{ fontSize: 16 }}>
-                  Hola, {collaborator?.name}
-                </Menu.Label>
-                <Menu.Label sx={{ fontSize: 12 }}>
-                  {collaborator?.email}
-                </Menu.Label>
-                <Menu.Item
-                  icon={<IconUserCircle size={14} />}
-                  onClick={() => router.push("/account/profile")}
-                >
-                  Mi cuenta
-                </Menu.Item>
-                <Menu.Item
-                  icon={<IconBasket size={14} />}
-                  onClick={() => router.push("/orders")}
-                >
-                  Mis compras
-                </Menu.Item>
-                {/* <Menu.Item
-                  onClick={() => toggleColorScheme()}
-                  icon={
-                    colorScheme === "dark" ? (
-                      <IconSun size={14} />
-                    ) : (
-                      <IconMoon size={14} />
-                    )
-                  }
-                >
-                  Modo {colorScheme === "dark" ? "Claro" : "Oscuro"}
-                </Menu.Item> */}
-                <Menu.Item icon={<IconSettings size={14} />}>
-                  Configuracion
-                </Menu.Item>
-                <Menu.Item
-                  onClick={logout}
-                  icon={<IconTransferOut size={14} />}
-                >
-                  Cerrar sesión
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </Center>
-        </Grid.Col>
-        <Grid.Col span={4} md={2}>
-          <Center>
-            <Indicator
-              disabled={cartLength <= 0}
-              label={cartLength}
-              inline
-              size={22}
-              withBorder
-              color={homeDesign?.backcolor}
+        <Grid.Col span={8} sm={10} lg={7} xl={6}>
+          <Group position="center" spacing="md">
+            <Center>
+              <Menu
+                closeOnItemClick={false}
+                position="bottom-end"
+                shadow="md"
+                width={200}
+              >
+                <Menu.Target>
+                  <UnstyledButton c={homeDesign?.fontcolor}>
+                    <Center>
+                      <IconUser size={30} stroke={1.5} />
+                    </Center>
+                    <MediaQuery
+                      smallerThan="sm"
+                      styles={{
+                        display: "none",
+                      }}
+                    >
+                      <Text fw={400} fz={16}>
+                        Mi Perfil
+                      </Text>
+                    </MediaQuery>
+                  </UnstyledButton>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Label sx={{ fontSize: 16 }}>
+                    Hola, {collaborator?.name}
+                  </Menu.Label>
+                  <Menu.Label sx={{ fontSize: 12 }}>
+                    {collaborator?.email}
+                  </Menu.Label>
+                  <Menu.Item
+                    icon={<IconUserCircle size={14} />}
+                    onClick={() => router.push("/account/profile")}
+                  >
+                    Mi cuenta
+                  </Menu.Item>
+                  <Menu.Item icon={<IconSettings size={14} />}>
+                    Configuracion
+                  </Menu.Item>
+                  <Menu.Item
+                    onClick={logout}
+                    icon={<IconTransferOut size={14} />}
+                  >
+                    Cerrar sesión
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </Center>
+            <MediaQuery
+              smallerThan="sm"
               styles={{
-                indicator: {
-                  borderColor: homeDesign?.fontcolor,
-                  color: homeDesign?.fontcolor,
-                },
+                display: "none",
               }}
             >
-              <ActionIcon
-                variant="transparent"
-                onClick={() => setOpened(true)}
-                size="lg"
+              <Divider size="sm" orientation="vertical" />
+            </MediaQuery>
+            <MediaQuery
+              smallerThan="sm"
+              styles={{
+                display: "none",
+              }}
+            >
+              <Center>
+                <UnstyledButton
+                  c={homeDesign?.fontcolor}
+                  onClick={() => router.push("/orders")}
+                >
+                  <Center>
+                    <IconBasket size={30} stroke={1.5} />
+                  </Center>
+                  <Text fw={400} fz={16}>
+                    Mis Compras
+                  </Text>
+                </UnstyledButton>
+              </Center>
+            </MediaQuery>
+            <Divider size="sm" orientation="vertical" />
+            <Center>
+              <Indicator
+                disabled={cartLength <= 0}
+                label={cartLength}
+                inline
+                size={22}
+                withBorder
+                color={homeDesign?.backcolor}
+                styles={{
+                  indicator: {
+                    borderColor: homeDesign?.fontcolor,
+                    color: homeDesign?.fontcolor,
+                  },
+                }}
               >
-                <IconShoppingCart
-                  color={homeDesign?.fontcolor}
-                  size={30}
-                  stroke={1.5}
-                />
-              </ActionIcon>
-            </Indicator>
-          </Center>
+                <UnstyledButton
+                  c={homeDesign?.fontcolor}
+                  onClick={() => setOpened(true)}
+                >
+                  <Center>
+                    <IconShoppingCart size={30} stroke={1.5} />
+                  </Center>
+                  <MediaQuery
+                    smallerThan="sm"
+                    styles={{
+                      display: "none",
+                    }}
+                  >
+                    <Text fw={400} fz={16}>
+                      Carrito
+                    </Text>
+                  </MediaQuery>
+                </UnstyledButton>
+              </Indicator>
+            </Center>
+          </Group>
         </Grid.Col>
       </Grid>
       {/* <Group position="apart" grow>

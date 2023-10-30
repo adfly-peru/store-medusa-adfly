@@ -4,7 +4,6 @@ import {
   Title,
   ActionIcon,
   Image,
-  useMantineColorScheme,
   Text,
   Stack,
   MediaQuery,
@@ -13,7 +12,6 @@ import router from "next/router";
 
 const CategorySection = () => {
   const { departments } = useProduct();
-  const { colorScheme } = useMantineColorScheme();
 
   const searchProductByCategorie = (categorieToSearch: string) => {
     router.push({
@@ -31,12 +29,13 @@ const CategorySection = () => {
         }}
       >
         <Carousel
+          w="90%"
           align="center"
           loop
-          slideSize="25%"
-          slideGap="md"
+          slideSize="14%"
+          slideGap="xs"
           breakpoints={[
-            { maxWidth: "md", slideSize: "33.33333%", slideGap: "xs" },
+            { maxWidth: "md", slideSize: "25%", slideGap: "xs" },
             { maxWidth: "sm", slideSize: "50%", slideGap: "xs" },
           ]}
         >
@@ -51,13 +50,7 @@ const CategorySection = () => {
                     variant="transparent"
                     onClick={() => searchProductByCategorie(category.name)}
                   >
-                    <Image
-                      src={category.image}
-                      alt={category.name}
-                      style={{
-                        filter: colorScheme === "dark" ? "invert(1)" : "none",
-                      }}
-                    />
+                    <Image src={category.image} alt={category.name} />
                   </ActionIcon>
                   <Text>{category.name}</Text>
                 </Stack>

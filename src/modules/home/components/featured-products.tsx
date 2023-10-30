@@ -22,7 +22,7 @@ const FeaturedProducts = () => {
     <>
       <Title align="center">Productos Destacados (*)</Title>
       <SimpleGrid
-        w="80%"
+        w="90%"
         cols={4}
         spacing="xl"
         breakpoints={[
