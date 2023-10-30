@@ -135,7 +135,7 @@ const ShipmentCard = ({
                   withPlaceholder
                 />
                 <Stack spacing={0}>
-                  <Text c="indigo">{product.variant.product.productName}</Text>
+                  <Text c="indigo">{product.variant.offer.offerName}</Text>
                   <Text fz="sm">
                     <Text fw={500} span>
                       {"Cantidad: "}
