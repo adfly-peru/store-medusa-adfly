@@ -63,7 +63,7 @@ const SuborderCard = ({
             />
             <Stack spacing={0}>
               <Title order={5} fw="bold" c="indigo">
-                {product.variant.product.productName}
+                {product.variant.offer.offerName}
               </Title>
               <Text fz="sm">
                 <Text fw={500} span>

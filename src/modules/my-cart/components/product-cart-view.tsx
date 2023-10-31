@@ -48,7 +48,7 @@ const DetailedProductCartView = ({
         <Stack h="100%" justify="space-around">
           <Group position="apart" grow>
             <Stack>
-              <Title order={3}>{item.variant.product.productName}</Title>
+              <Title order={3}>{item.variant.offer.offerName}</Title>
               <Space h="lg" />
               <Text c="green">Stock disponible</Text>
               <Text>Vendido por {businessName}</Text>
