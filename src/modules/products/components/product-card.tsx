@@ -154,49 +154,14 @@ const ProductCard = ({ product }: { product: Offer }) => {
         )}
       </Card.Section>
       <Card.Section py="xs" inheritPadding ta="center" h={70}>
-        {cartItem ? (
-          <Group spacing={5} position="center" style={{ marginTop: 15 }}>
-            <ActionIcon
-              color="gray"
-              radius="xl"
-              variant="outline"
-              onClick={() => handlers.current?.decrement()}
-            >
-              <IconMinus stroke={1.5} size="1.125rem" />
-            </ActionIcon>
-            <NumberInput
-              hideControls
-              value={cartItem.quantity}
-              onChange={(val: number) =>
-                val == 0
-                  ? setZero()
-                  : editProduct(cartItem, product.business.uuidbusiness, val)
-              }
-              handlersRef={handlers}
-              max={selectedVariant.stock}
-              min={0}
-              step={1}
-              styles={{ input: { width: 70, textAlign: "center" } }}
-            />
-            <ActionIcon
-              color="gray"
-              radius="xl"
-              variant="outline"
-              onClick={() => handlers.current?.increment()}
-            >
-              <IconPlus stroke={1.5} size="1.125rem" />
-            </ActionIcon>
-          </Group>
-        ) : (
-          <Button
-            fullWidth
-            radius="md"
-            component="a"
-            href={"/product/" + product.uuidOffer}
-          >
-            {product.type === "coupon" ? "Generar Cupón" : "Agregar"}
-          </Button>
-        )}
+        <Button
+          fullWidth
+          radius="md"
+          component="a"
+          href={"/product/" + product.uuidOffer}
+        >
+          {product.type === "coupon" ? "Generar Cupón" : "Agregar"}
+        </Button>
       </Card.Section>
     </Card>
   );

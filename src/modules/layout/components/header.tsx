@@ -162,11 +162,11 @@ const HomeHeader = () => {
       </Drawer>
       <Grid justify="center" align="center" columns={24} m={0}>
         <Grid.Col span={24} bg="white">
-          <Group position="apart" py={10} px={15}>
+          <Group position="apart" py={0} px={15}>
             <UnstyledButton onClick={() => router.push("/")}>
               <Image
                 radius="md"
-                height={60}
+                height={35}
                 width="inherit"
                 fit="contain"
                 src={homeDesign?.logourl}
@@ -177,7 +177,7 @@ const HomeHeader = () => {
               <Text color="gray.6">Por:</Text>
               <Image
                 radius="md"
-                height={50}
+                height={35}
                 width="inherit"
                 fit="contain"
                 src="https://www.adfly.pe/Content/logo.png"
@@ -268,7 +268,7 @@ const HomeHeader = () => {
                 <Menu.Target>
                   <UnstyledButton c={homeDesign?.fontcolor}>
                     <Center>
-                      <IconUser size={30} stroke={1.5} />
+                      <IconUser size={24} stroke={1.5} />
                     </Center>
                     <MediaQuery
                       smallerThan="sm"
@@ -277,7 +277,7 @@ const HomeHeader = () => {
                       }}
                     >
                       <Text fw={400} fz={16}>
-                        Mi Perfil
+                        Mi perfil
                       </Text>
                     </MediaQuery>
                   </UnstyledButton>
@@ -327,10 +327,10 @@ const HomeHeader = () => {
                   onClick={() => router.push("/orders")}
                 >
                   <Center>
-                    <IconBasket size={30} stroke={1.5} />
+                    <IconBasket size={24} stroke={1.5} />
                   </Center>
                   <Text fw={400} fz={16}>
-                    Mis Compras
+                    Mis compras
                   </Text>
                 </UnstyledButton>
               </Center>
@@ -356,7 +356,7 @@ const HomeHeader = () => {
                   onClick={() => setOpened(true)}
                 >
                   <Center>
-                    <IconShoppingCart size={30} stroke={1.5} />
+                    <IconShoppingCart size={24} stroke={1.5} />
                   </Center>
                   <MediaQuery
                     smallerThan="sm"

@@ -21,7 +21,16 @@ const CategorySection = () => {
   };
   return (
     <>
-      <Title align="center">¡Descubre lo que tenemos para ti! (*)</Title>
+      <Title
+        align="center"
+        style={{
+          fontSize: "31px",
+          fontWeight: 400,
+          lineHeight: "37.2px",
+        }}
+      >
+        ¿Qué estás buscando?
+      </Title>
       <MediaQuery
         smallerThan="sm"
         styles={{

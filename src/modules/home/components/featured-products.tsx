@@ -11,7 +11,17 @@ const FeaturedProducts = () => {
   if (products.length == 0) {
     return (
       <>
-        <Title align="center">Productos Destacados (*)</Title>
+        <Title
+          order={5}
+          align="center"
+          style={{
+            fontSize: "61px",
+            fontWeight: 400,
+            lineHeight: "37.2px",
+          }}
+        >
+          Novedades Para Ti
+        </Title>
         <Center>
           <Loader />
         </Center>
@@ -20,7 +30,16 @@ const FeaturedProducts = () => {
   }
   return (
     <>
-      <Title align="center">Productos Destacados (*)</Title>
+      <Title
+        align="center"
+        style={{
+          fontSize: "31px",
+          fontWeight: 400,
+          lineHeight: "37.2px",
+        }}
+      >
+        Novedades Para Ti
+      </Title>
       <SimpleGrid
         w="90%"
         cols={4}
