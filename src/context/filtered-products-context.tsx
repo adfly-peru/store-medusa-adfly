@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 export interface FilterOptions {
   sortBy?: string;
-  productSearch?: string;
+  offerSearch?: string;
   departmentName?: string;
   categoryName?: string;
   subcategoryName?: string;

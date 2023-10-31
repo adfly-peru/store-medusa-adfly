@@ -295,7 +295,7 @@ const GET_RELATED_PRODUCTS = gql`
 const GET_FILTERED_PRODUCTS = gql`
   query FilteredProducts(
     $sortBy: String
-    $productSearch: String
+    $offerSearch: String
     $departmentName: String
     $categoryName: String
     $subcategoryName: String
@@ -305,7 +305,7 @@ const GET_FILTERED_PRODUCTS = gql`
   ) {
     availableOffers(
       sortBy: $sortBy
-      productSearch: $productSearch
+      offerSearch: $offerSearch
       departmentName: $departmentName
       categoryName: $categoryName
       subcategoryName: $subcategoryName

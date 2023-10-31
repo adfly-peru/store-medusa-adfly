@@ -39,14 +39,14 @@ const SearchBar = ({
 
   useEffect(() => {
     const fetchOptions: FilterOptions = {};
-    if (searchable) fetchOptions.productSearch = searchable;
+    if (searchable) fetchOptions.offerSearch = searchable;
     if (departmentName) fetchOptions.departmentName = departmentName;
     fetchProducts(fetchOptions);
   }, [searchable, departmentName]);
 
   useEffect(() => {
     const fetchOptions: FilterOptions = {};
-    if (searchable) fetchOptions.productSearch = searchable;
+    if (searchable) fetchOptions.offerSearch = searchable;
     if (departmentName) fetchOptions.departmentName = departmentName;
     if (category.length > 0) fetchOptions.categoryName = category.at(0);
     if (brand.length > 0) fetchOptions.brandName = brand.at(0);
@@ -57,7 +57,7 @@ const SearchBar = ({
 
   useEffect(() => {
     const fetchOptions: FilterOptions = {};
-    if (searchable) fetchOptions.productSearch = searchable;
+    if (searchable) fetchOptions.offerSearch = searchable;
     if (departmentName) fetchOptions.departmentName = departmentName;
     if (category.length > 0) fetchOptions.categoryName = category.at(0);
     if (subcategory.length > 0)
@@ -68,7 +68,7 @@ const SearchBar = ({
 
   useEffect(() => {
     const fetchOptions: FilterOptions = {};
-    if (searchable) fetchOptions.productSearch = searchable;
+    if (searchable) fetchOptions.offerSearch = searchable;
     if (departmentName) fetchOptions.departmentName = departmentName;
     if (category.length > 0) fetchOptions.categoryName = category.at(0);
     if (subcategory.length > 0)
