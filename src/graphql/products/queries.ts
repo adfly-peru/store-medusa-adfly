@@ -313,6 +313,11 @@ const GET_FILTERED_PRODUCTS = gql`
       limit: $limit
       offset: $offset
     ) {
+      departmentCounts {
+        uuid
+        name
+        count
+      }
       brandCounts {
         uuid
         name

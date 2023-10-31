@@ -123,6 +123,7 @@ export interface Offer {
 }
 
 export interface OfferResult {
+  departmentCounts?: FieldCount[];
   brandCounts?: FieldCount[];
   categoryCounts?: FieldCount[];
   subcategoryCounts?: FieldCount[];

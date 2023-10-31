@@ -15,7 +15,8 @@ export interface FilterOptions {
 interface FilteredProductsContext {
   products: OfferResult | null;
   count: number;
-  fetchProducts: (options: FilterOptions) => void;
+  // fetchProducts: (options: FilterOptions) => void;
+  setOptions: (options: FilterOptions) => void;
   loading: boolean;
   limit: number;
   setlimit: (v: number) => void;
@@ -37,6 +38,7 @@ export const FilteredProductsProvider = ({
   children,
 }: FilteredProductsProviderProps) => {
   const [count, setCount] = useState(0);
+  const [options, setOptions] = useState<FilterOptions>({});
   const [products, setProducts] = useState<OfferResult | null>(null);
   const [sortBy, setSortBy] = useState("name");
   const [limit, setlimit] = useState(12);
@@ -58,6 +60,10 @@ export const FilteredProductsProvider = ({
   };
 
   useEffect(() => {
+    fetchProducts(options);
+  }, [limit, offset, sortBy, options]);
+
+  useEffect(() => {
     if (productsData && productsData.availableOffers) {
       setProducts(productsData.availableOffers);
       setCount(productsData.availableOffers.totalOffers);
@@ -69,7 +75,7 @@ export const FilteredProductsProvider = ({
       value={{
         products,
         count,
-        fetchProducts,
+        setOptions,
         loading,
         limit,
         setlimit,

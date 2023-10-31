@@ -24,9 +24,7 @@ const FilteredProducts = () => {
       ]}
     >
       {products.offers.map((prod, i): any => (
-        <div key={i}>
-          <ProductCard product={prod} />
-        </div>
+        <ProductCard product={prod} key={prod.uuidOffer} />
       ))}
     </SimpleGrid>
   );
