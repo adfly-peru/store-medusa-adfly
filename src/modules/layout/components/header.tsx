@@ -161,12 +161,12 @@ const HomeHeader = () => {
         <CartDrawer></CartDrawer>
       </Drawer>
       <Grid justify="center" align="center" columns={24} m={0}>
-        <Grid.Col span={24} bg="white">
+        <Grid.Col span={24} bg="white" p={0}>
           <Group position="apart" py={0} px={15}>
             <UnstyledButton onClick={() => router.push("/")}>
               <Image
                 radius="md"
-                height={35}
+                height={60}
                 width="inherit"
                 fit="contain"
                 src={homeDesign?.logourl}
@@ -341,6 +341,7 @@ const HomeHeader = () => {
                 disabled={cartLength <= 0}
                 label={cartLength}
                 inline
+                offset={3}
                 size={22}
                 withBorder
                 color={homeDesign?.backcolor}
