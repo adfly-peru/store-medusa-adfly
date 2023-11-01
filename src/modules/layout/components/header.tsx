@@ -2,34 +2,24 @@ import {
   Text,
   Group,
   Image,
-  Tabs,
   createStyles,
   Autocomplete,
   Grid,
-  Title,
   Menu,
-  Button,
-  Drawer,
-  ActionIcon,
-  Space,
   SelectItemProps,
   Indicator,
   UnstyledButton,
   useMantineColorScheme,
   Center,
-  Avatar,
   MediaQuery,
   Divider,
 } from "@mantine/core";
 import {
   IconBasket,
   IconChevronDown,
-  IconMenu2,
-  IconMoon,
   IconSearch,
   IconSettings,
   IconShoppingCart,
-  IconSun,
   IconTransferOut,
   IconUser,
   IconUserCircle,
@@ -150,16 +140,6 @@ const HomeHeader = () => {
 
   return (
     <>
-      <Drawer
-        opened={opened}
-        onClose={() => setOpened(false)}
-        title={<Title order={2}>Mi carrito</Title>}
-        padding="xl"
-        size="xl"
-        position="right"
-      >
-        <CartDrawer></CartDrawer>
-      </Drawer>
       <Grid justify="center" align="center" columns={24} m={0}>
         <Grid.Col span={24} bg="white" p={0}>
           <Group position="apart" py={0} px={15}>
@@ -354,7 +334,7 @@ const HomeHeader = () => {
               >
                 <UnstyledButton
                   c={homeDesign?.fontcolor}
-                  onClick={() => setOpened(true)}
+                  onClick={() => router.push("/checkout/mycart")}
                 >
                   <Center>
                     <IconShoppingCart size={24} stroke={1.5} />
@@ -375,25 +355,6 @@ const HomeHeader = () => {
           </Group>
         </Grid.Col>
       </Grid>
-      {/* <Group position="apart" grow>
-        <Tabs
-          defaultValue="Home"
-          variant="outline"
-          classNames={{
-            root: classes.tabs,
-            tabsList: classes.tabsList,
-            tab: classes.tab,
-          }}
-        >
-          <Tabs.List grow>
-            {tabs.map((tab) => (
-              <Tabs.Tab value={tab} key={tab}>
-                {tab}
-              </Tabs.Tab>
-            ))}
-          </Tabs.List>
-        </Tabs>
-      </Group> */}
     </>
   );
 };

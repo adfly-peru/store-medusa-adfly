@@ -1,32 +1,111 @@
 import { Cart } from "@interfaces/cart";
-import { Stack, Divider, ScrollArea, Title } from "@mantine/core";
+import {
+  Stack,
+  Divider,
+  ScrollArea,
+  Title,
+  Table,
+  MediaQuery,
+} from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import DetailedProductCartView from "@modules/my-cart/components/product-cart-view";
+import ProductCartRow from "../components/product-cart-row";
 
 const CartView = ({ cart }: { cart: Cart }) => {
   const { height } = useViewportSize();
-  const items = cart.suborders.flatMap((subOrder) => subOrder.items);
+
+  const allItems = () => {
+    const itemsList = [];
+    return cart.suborders.flatMap((a) => a.items);
+  };
+
   return (
     <Stack align="flex-start">
-      <Title px="sm">Mi Carrito ({items.length} Productos)</Title>
-      <Divider size="sm" w="100%" color="dark" />
-      <ScrollArea h={height / 1.5} w="100%" type="auto" offsetScrollbars>
-        {cart.suborders.map((suborder, id): any => (
-          <div key={id}>
-            {suborder.items.map((item, iditem): any => (
-              <div key={iditem}>
+      <MediaQuery
+        smallerThan="md"
+        styles={{
+          display: "none",
+        }}
+      >
+        <Table withBorder>
+          <thead>
+            <tr>
+              <th
+                style={{
+                  fontSize: 20,
+                  fontWeight: 700,
+                  color: "black",
+                  paddingLeft: 15,
+                }}
+              >
+                Detalle
+              </th>
+              <th
+                style={{
+                  textAlign: "center",
+                  fontSize: 20,
+                  fontWeight: 700,
+                  color: "black",
+                }}
+              >
+                Precio
+              </th>
+              <th
+                style={{
+                  textAlign: "center",
+                  fontSize: 20,
+                  fontWeight: 700,
+                  color: "black",
+                }}
+              >
+                Cantidad
+              </th>
+              <th
+                style={{
+                  textAlign: "center",
+                  fontSize: 20,
+                  fontWeight: 700,
+                  color: "black",
+                }}
+              >
+                Total
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {cart.suborders.map((suborder, id) => (
+              <>
+                {suborder.items.map((item) => (
+                  <ProductCartRow
+                    key={item.uuidcartitem}
+                    item={item}
+                    businessid={suborder.uuidbusiness}
+                    businessName={suborder.businessName}
+                  />
+                ))}
+              </>
+            ))}
+          </tbody>
+        </Table>
+      </MediaQuery>
+      <MediaQuery largerThan="md" styles={{ display: "none" }}>
+        <Stack spacing="md" w="100%" align="center">
+          {cart.suborders.map((suborder, id) => (
+            <>
+              {suborder.items.map((item) => (
                 <DetailedProductCartView
+                  key={item.uuidcartitem}
                   item={item}
                   suborder={suborder}
                   businessid={suborder.uuidbusiness}
                   businessName={suborder.businessName}
                 />
-                <Divider />
-              </div>
-            ))}
-          </div>
-        ))}
-      </ScrollArea>
+              ))}
+            </>
+          ))}
+        </Stack>
+      </MediaQuery>
     </Stack>
   );
 };

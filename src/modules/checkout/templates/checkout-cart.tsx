@@ -9,9 +9,10 @@ import {
   Group,
   Space,
   Title,
+  Divider,
+  Box,
 } from "@mantine/core";
 import CartView from "@modules/my-cart/templates/cart-view";
-import { IconShoppingCart } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import EmptyCart from "../components/empty-cart";
 import { useEffect, useState } from "react";
@@ -19,23 +20,27 @@ import { useEffect, useState } from "react";
 const CheckoutCart = () => {
   const { cart } = useCart();
   const [saving, setSaving] = useState(0);
+  const [total, setTotal] = useState(0);
   const router = useRouter();
 
-  const calculateTotalRefPrice = () => {
-    if (!cart) return 0;
-
-    return cart.suborders.reduce((suborderTotal, suborder) => {
-      return (
-        suborderTotal +
-        suborder.items.reduce((itemTotal, item) => {
-          return itemTotal + item.quantity * item.variant.refPrice;
-        }, 0)
-      );
-    }, 0);
-  };
-
   useEffect(() => {
-    setSaving(calculateTotalRefPrice());
+    const calculateTotalRefPrice = () => {
+      if (!cart) return 0;
+
+      return cart.suborders.reduce((suborderTotal, suborder) => {
+        return (
+          suborderTotal +
+          suborder.items.reduce((itemTotal, item) => {
+            return itemTotal + item.quantity * item.variant.refPrice;
+          }, 0)
+        );
+      }, 0);
+    };
+    if (cart) {
+      setSaving(calculateTotalRefPrice());
+      const items = cart.suborders.flatMap((subOrder) => subOrder.items);
+      setTotal(items.length);
+    }
   }, [cart]);
 
   if (!cart) {
@@ -51,42 +56,54 @@ const CheckoutCart = () => {
   }
 
   return (
-    <Grid w="100%" mt={20}>
-      <Grid.Col span="auto" px="xl">
-        <CartView cart={cart} />
-      </Grid.Col>
-      <Grid.Col span={3}>
-        <Stack align="flex-start">
-          <Title>Resumen de la orden</Title>
-          <Card w="90%" shadow="sm" p="lg" radius="md" withBorder>
-            <Group position="apart">
-              <Text>Subtotal:</Text>
-              <Text>
-                S/.{cart.total}
-                {/* <Text fz="md" c="dimmed" span inherit>
-                  (1600 estrellas)
-                </Text> */}
+    <Box ml="xl">
+      <Title order={2} px="sm">
+        Mi Carrito ({total} Productos)
+      </Title>
+      <Grid w="100%" mt={20}>
+        <Grid.Col span="auto" px="xl">
+          <CartView cart={cart} />
+        </Grid.Col>
+        <Grid.Col span={12} md={3}>
+          <Stack align="center">
+            <Card w="90%" p="sm" radius="xs" withBorder fz={15}>
+              <Title order={3} fz={20}>
+                Resumen
+              </Title>
+              <Space h="md" />
+              <Group position="apart">
+                <Text>Subtotal:</Text>
+                <Text>S/.{cart.total}</Text>
+              </Group>
+              <Group position="apart">
+                <Text>Envío:</Text>
+                <Text>-</Text>
+              </Group>
+              <Divider my={5} style={{ border: "1px solid black" }} />
+              <Group position="apart">
+                <Text>Total:</Text>
+                <Text>S/.{cart.total}</Text>
+              </Group>
+              <Space h="lg" />
+              <Text
+                fz={10}
+                color="gray.6"
+              >{`(Ahorro estimado: ${saving})`}</Text>
+              <Text fz={10} color="gray.6">
+                Gastos de envío calculados más adelante.
               </Text>
-            </Group>
-            <Group position="apart">
-              <Text>Ahorro estimado:</Text>
-              <Text>S/.{(saving - cart.total).toFixed(2)}</Text>
-            </Group>
-            <Space h="md" />
-            <Center>
-              <Button
-                leftIcon={<IconShoppingCart />}
-                variant="light"
-                radius="xs"
-                onClick={GoToPay}
-              >
-                Finalizar Compra
-              </Button>
-            </Center>
-          </Card>
-        </Stack>
-      </Grid.Col>
-    </Grid>
+              <Space h="xl" />
+              <Space h="xl" />
+              <Center>
+                <Button radius="xs" fz={18} w="80%" onClick={GoToPay}>
+                  Finalizar Compra
+                </Button>
+              </Center>
+            </Card>
+          </Stack>
+        </Grid.Col>
+      </Grid>
+    </Box>
   );
 };
 

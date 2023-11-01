@@ -6,6 +6,7 @@ import {
   Modal,
   Loader,
   Center,
+  Card,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useState } from "react";
@@ -118,22 +119,24 @@ const CheckoutForm = () => {
           <Loader />
         </Center>
       </Modal>
-      <Stepper active={active} onStepClick={setActive} breakpoint="sm">
-        <Stepper.Step label="Información" allowStepSelect={active > 0}>
-          <ScrollArea h={height / 1.5} w="100%" type="auto" offsetScrollbars>
-            <InformationForm form={billingform} />
-          </ScrollArea>
-        </Stepper.Step>
-        <Stepper.Step label="Envío" allowStepSelect={active > 1}>
-          <ScrollArea h={height / 1.5} w="100%" type="auto" offsetScrollbars>
-            <ShippingInformation form={deliveryform} />
-          </ScrollArea>
-        </Stepper.Step>
-        <Stepper.Step label="Pago" allowStepSelect={active > 2}>
-          <PaymentButton form={billingform} submitInfo={funcOnPaymentButton} />
-        </Stepper.Step>
-      </Stepper>
-      <Group px={70} position="apart" grow mt="xl">
+      <Card withBorder>
+        <Stepper active={active} onStepClick={setActive} breakpoint="sm">
+          <Stepper.Step label="Información" allowStepSelect={active > 0}>
+            {/* <ScrollArea h={height / 1.5} w="100%" type="auto" offsetScrollbars> */}
+              <InformationForm form={billingform} handleNextStep={handleNextStep} />
+            {/* </ScrollArea> */}
+          </Stepper.Step>
+          <Stepper.Step label="Envío" allowStepSelect={active > 1}>
+            <ScrollArea h={height / 1.5} w="100%" type="auto" offsetScrollbars>
+              <ShippingInformation form={deliveryform} />
+            </ScrollArea>
+          </Stepper.Step>
+          <Stepper.Step label="Pago" allowStepSelect={active > 2}>
+            <PaymentButton form={billingform} submitInfo={funcOnPaymentButton} />
+          </Stepper.Step>
+        </Stepper>
+      </Card>
+      {/* <Group px={70} position="apart" grow mt="xl">
         <Button
           variant="light"
           onClick={
@@ -147,7 +150,7 @@ const CheckoutForm = () => {
             Continuar
           </Button>
         )}
-      </Group>
+      </Group> */}
     </>
   );
 };

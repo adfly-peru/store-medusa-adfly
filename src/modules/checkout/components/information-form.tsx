@@ -1,56 +1,57 @@
 import { BillingForm } from "@interfaces/billing";
-import { Text, Group, Stack, TextInput, Checkbox } from "@mantine/core";
+import { Text, Group, Stack, TextInput, Checkbox, Button, SimpleGrid, MediaQuery } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
+import { useRouter } from "next/router";
 
 const InformationForm = ({
   form,
+  handleNextStep
 }: {
   form: UseFormReturnType<BillingForm>;
+  handleNextStep: () => void;
 }) => {
+  const router = useRouter();
   return (
     <div>
-      <Stack px={60} spacing="xl">
-        <Text>Datos Personales</Text>
-        <Stack px="xl" spacing="sm">
-          <Group position="apart" spacing="xl" grow>
-            <TextInput
-              label="Nombre:"
-              disabled
-              {...form.getInputProps("name")}
-            />
-            <TextInput
-              label="Apellidos:"
-              disabled
-              {...form.getInputProps("lastname")}
-            />
-          </Group>
-          <Group position="apart" spacing="xl" grow>
-            <TextInput
-              label="Tipo de Documento:"
-              disabled
-              {...form.getInputProps("doctype")}
-            />
-            <TextInput
-              label="N° Doc:"
-              disabled
-              {...form.getInputProps("doc")}
-            />
-          </Group>
-          <Group position="apart" spacing="xl" grow>
-            <TextInput
-              label="Correo electrónico:"
-              disabled
-              {...form.getInputProps("email")}
-            />
-            <TextInput
-              label="Celular:"
-              required
-              withAsterisk
-              {...form.getInputProps("phone")}
-            />
-          </Group>
-        </Stack>
-      </Stack>
+      <SimpleGrid
+        cols={2}
+        spacing="lg"
+        breakpoints={[
+          { maxWidth: '40rem', cols: 1, spacing: 'sm' },
+        ]}
+      >
+        <TextInput
+          label="Nombre:"
+          disabled
+          {...form.getInputProps("name")}
+        />
+        <TextInput
+          label="Apellidos:"
+          disabled
+          {...form.getInputProps("lastname")}
+        />
+        <TextInput
+          label="Tipo de Documento:"
+          disabled
+          {...form.getInputProps("doctype")}
+        />
+        <TextInput
+          label="N° Doc:"
+          disabled
+          {...form.getInputProps("doc")}
+        />
+        <TextInput
+          label="Correo electrónico:"
+          disabled
+          {...form.getInputProps("email")}
+        />
+        <TextInput
+          label="Celular:"
+          required
+          withAsterisk
+          {...form.getInputProps("phone")}
+        />
+      </SimpleGrid>
     </div>
   );
 };
