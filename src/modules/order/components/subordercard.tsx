@@ -58,7 +58,7 @@ const SuborderCard = ({
             <Image
               src={product.variant.imageURL}
               alt={product.variant.imageURL}
-              height={150}
+              height={100}
               fit="contain"
               withPlaceholder
             />

@@ -2,36 +2,40 @@ import { useAccount } from "@context/account-context";
 import { Address } from "@interfaces/address-interface";
 import {
   ActionIcon,
-  Avatar,
+  Burger,
   Button,
-  Card,
+  Center,
   Divider,
   Group,
   LoadingOverlay,
+  MediaQuery,
   Modal,
   Stack,
   Text,
+  Title,
 } from "@mantine/core";
-import { useViewportSize } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import AddressForm from "@modules/checkout/components/address-form";
 import AddressView from "@modules/checkout/components/address-view";
-import { IconEye, IconMapPin, IconTrash } from "@tabler/icons-react";
+import { formatAddress } from "@modules/common/functions/format-place";
+import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
+import InformationBox from "./information-box";
 
 const AddressesBox = () => {
-  const { width } = useViewportSize();
+  const [opened, { toggle, close }] = useDisclosure(false);
   const { addresses, deleteAddress } = useAccount();
   const [loading, setLoading] = useState(false);
-  const [opened, setOpened] = useState(false);
+  const [openedModal, setOpened] = useState(false);
   const [opened2, setOpened2] = useState(false);
   const [address, setAddress] = useState<Address | null>(null);
 
   return (
-    <div>
+    <Center w="100%">
       <Modal
         title={"Nueva dirección"}
         size="xl"
-        opened={opened}
+        opened={openedModal}
         onClose={() => setOpened(false)}
       >
         <AddressForm onSubmit={() => setOpened(false)} />
@@ -39,7 +43,6 @@ const AddressesBox = () => {
       <Modal
         size="xl"
         opened={opened2}
-        title={address?.alias}
         onClose={() => {
           setAddress(null);
           setOpened2(false);
@@ -55,61 +58,69 @@ const AddressesBox = () => {
           />
         )}
       </Modal>
-      <Card withBorder shadow="sm" radius="md" sx={{ width: width / 3 }}>
-        <Card.Section p="md" withBorder>
-          <Text fw={700}>Direcciones de Envío</Text>
-        </Card.Section>
-        <Card.Section p="md">
-          <LoadingOverlay
-            overlayBlur={2}
-            overlayOpacity={0.9}
-            visible={loading}
-          />
-          <Stack spacing="xl">
-            {addresses.map((value, _) => (
-              <Group key={value.uuidcollaboratoraddress} position="apart">
-                <Group position="left">
-                  <IconMapPin />
-                  <Text>{value.alias}</Text>
-                </Group>
-                <Group position="right">
-                  <ActionIcon
-                    onClick={() => {
-                      setAddress(value);
-                      setOpened2(true);
-                    }}
-                  >
-                    <IconEye size={30} />
-                  </ActionIcon>
-                  <ActionIcon
-                    color="red"
-                    onClick={async () => {
-                      setLoading(true);
-                      await deleteAddress(value.uuidcollaboratoraddress);
-                      setLoading(false);
-                    }}
-                  >
-                    <IconTrash size={30} />
-                  </ActionIcon>
-                </Group>
+      <Stack w="80%">
+        <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+          <div>
+            <Burger opened={opened} onClick={toggle} />
+            {opened ? (
+              <InformationBox withClose={true} onClose={close} />
+            ) : (
+              <></>
+            )}
+          </div>
+        </MediaQuery>
+        <Title fz={20} order={3}>
+          Mis Direcciones
+        </Title>
+        <Divider />
+        <LoadingOverlay
+          overlayBlur={2}
+          overlayOpacity={0.9}
+          visible={loading}
+        />
+        <Stack spacing="xl">
+          {addresses.map((value, _) => (
+            <Group key={value.uuidcollaboratoraddress} position="apart">
+              <Stack spacing={0} m={0} fz={10}>
+                <Text fz={15}>{value.alias}</Text>
+                <Text c="#737A82">{value.address.split(",")[0]}</Text>
+                <Text c="#737A82">{formatAddress(value)}</Text>
+              </Stack>
+              <Group position="right">
+                <ActionIcon
+                  onClick={() => {
+                    setAddress(value);
+                    setOpened2(true);
+                  }}
+                >
+                  <IconPencil color="#5C98C7" size={30} />
+                </ActionIcon>
+                <ActionIcon
+                  color="red"
+                  onClick={async () => {
+                    setLoading(true);
+                    await deleteAddress(value.uuidcollaboratoraddress);
+                    setLoading(false);
+                  }}
+                >
+                  <IconTrash size={30} />
+                </ActionIcon>
               </Group>
-            ))}
-          </Stack>
-        </Card.Section>
+            </Group>
+          ))}
+        </Stack>
         <Button
           mt="sm"
           onClick={() => {
             setAddress(null);
             setOpened(true);
           }}
-          variant="default"
-          color="dark"
           fullWidth
         >
           Agregar Dirección
         </Button>
-      </Card>
-    </div>
+      </Stack>
+    </Center>
   );
 };
 

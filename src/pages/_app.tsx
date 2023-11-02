@@ -73,6 +73,21 @@ export default function App({
                   },
                 }),
               },
+              NavLink: {
+                styles: (theme) => ({
+                  root: {
+                    backgroundColor: "white",
+                    "&[data-active]": {
+                      backgroundColor: "white",
+                      color: "black",
+                      fontWeight: 700,
+                      "&:hover": {
+                        backgroundColor: "#f8f9fa",
+                      },
+                    },
+                  },
+                }),
+              },
               Checkbox: {
                 styles: (theme) => ({
                   icon: {

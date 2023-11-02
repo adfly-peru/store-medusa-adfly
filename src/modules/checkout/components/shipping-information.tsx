@@ -29,8 +29,7 @@ import { useCart } from "@context/cart-context";
 import { Address, AddressInfoForm } from "@interfaces/address-interface";
 import AddressView from "./address-view";
 import { UseFormReturnType } from "@mantine/form";
-import ubigeoPeru from "ubigeo-peru";
-import { useRouter } from "next/router";
+import { formatAddress } from "@modules/common/functions/format-place";
 
 const ShippingInformation = ({
   form,
@@ -50,31 +49,6 @@ const ShippingInformation = ({
   const [receiver, setReceiver] = useState("one");
   const [address, setAddress] = useState<Address | null>(null);
   const [addressSelected, setAddressSelected] = useState(false);
-
-  const formatAddress = (add: Address) => {
-    const d =
-      ubigeoPeru.reniec.find(
-        (v) =>
-          v.departamento == add?.department &&
-          v.provincia == "00" &&
-          v.distrito == "00"
-      )?.nombre ?? "";
-    const p =
-      ubigeoPeru.reniec.find(
-        (v) =>
-          v.departamento == add?.department &&
-          v.provincia == add?.province &&
-          v.distrito == "00"
-      )?.nombre ?? "";
-    const c =
-      ubigeoPeru.reniec.find(
-        (v) =>
-          v.departamento == add?.department &&
-          v.provincia == add?.province &&
-          v.distrito == add?.district
-      )?.nombre ?? "";
-    return `${c} - ${p} - ${d}`;
-  };
 
   const handleSelect = async (uuidcollaboratoraddress: string) => {
     console.log("hi");

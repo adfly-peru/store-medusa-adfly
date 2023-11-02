@@ -14,6 +14,8 @@ import {
   Modal,
   Title,
   Alert,
+  Burger,
+  MediaQuery,
 } from "@mantine/core";
 import { IconX, IconCheck } from "@tabler/icons-react";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
@@ -22,6 +24,7 @@ import { useAccount } from "@context/account-context";
 import { useState } from "react";
 import { SecurityForm } from "@interfaces/collaborator";
 import { useRouter } from "next/router";
+import InformationBox from "./information-box";
 
 const PasswordRequirement = ({
   meets,
@@ -74,6 +77,7 @@ const doesPasswordMeetRequirements = (password: string) => {
 
 const SecurityForm = () => {
   const router = useRouter();
+  const [opened, { toggle, close }] = useDisclosure(false);
   const { width } = useViewportSize();
   const [popoverOpened, setPopoverOpened] = useState(false);
   const { verify } = useAccount();
@@ -123,7 +127,7 @@ const SecurityForm = () => {
   };
 
   return (
-    <>
+    <Center w="100%">
       <Modal
         opened={loading}
         withCloseButton={false}
@@ -137,7 +141,7 @@ const SecurityForm = () => {
           <Loader />
         </Center>
       </Modal>
-      <Box sx={{ width: width / 3 }}>
+      <Stack w="80%">
         <Stack spacing="xs">
           {message != "" && (
             <Alert
@@ -152,6 +156,16 @@ const SecurityForm = () => {
                 : message}
             </Alert>
           )}
+          <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+            <div>
+              <Burger opened={opened} onClick={toggle} />
+              {opened ? (
+                <InformationBox withClose={true} onClose={close} />
+              ) : (
+                <></>
+              )}
+            </div>
+          </MediaQuery>
           <Title>Seguridad</Title>
           <Divider></Divider>
 
@@ -219,8 +233,8 @@ const SecurityForm = () => {
         >
           Actualizar
         </Button>
-      </Box>
-    </>
+      </Stack>
+    </Center>
   );
 };
 

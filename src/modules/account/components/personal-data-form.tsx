@@ -2,25 +2,27 @@ import {
   Stack,
   Button,
   TextInput,
-  Box,
   Space,
   Divider,
   Checkbox,
   Group,
   Title,
-  FileInput,
   Alert,
   Anchor,
   Modal,
   Center,
   Loader,
+  Burger,
+  MediaQuery,
+  SimpleGrid,
 } from "@mantine/core";
-import { useViewportSize } from "@mantine/hooks";
+import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
 import { ProfileForm } from "@interfaces/collaborator";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import InformationBox from "./information-box";
 
 interface FormValues {
   name: string;
@@ -34,7 +36,7 @@ interface FormValues {
 
 const PersonalDataForm = () => {
   const router = useRouter();
-  const { width } = useViewportSize();
+  const [opened, { toggle, close }] = useDisclosure(false);
   const { collaborator, verify } = useAccount();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -87,7 +89,7 @@ const PersonalDataForm = () => {
   }
 
   return (
-    <>
+    <Stack w="80%">
       <Modal
         opened={loading}
         withCloseButton={false}
@@ -101,65 +103,74 @@ const PersonalDataForm = () => {
           <Loader />
         </Center>
       </Modal>
-      <Box sx={{ width: width / 3 }}>
-        <Stack spacing="xs">
-          {message != "" && (
-            <Alert
-              title={message == "success" ? "Felicidades!" : "Error!"}
-              color={message == "success" ? "green" : "red"}
-              onClose={() => setMessage("")}
-              my="lg"
-              withCloseButton
-            >
-              {message == "success"
-                ? "Se ha actualizado el perfil de manera exitosa. Será redirigido a la página principal en unos segundos..."
-                : message}
-            </Alert>
-          )}
-          <Title>Perfil</Title>
-          <Divider></Divider>
-          <Title order={3}>Datos Personales</Title>
+      <Stack spacing="xs">
+        {message != "" && (
+          <Alert
+            title={message == "success" ? "Felicidades!" : "Error!"}
+            color={message == "success" ? "green" : "red"}
+            onClose={() => setMessage("")}
+            my="lg"
+            withCloseButton
+          >
+            {message == "success"
+              ? "Se ha actualizado el perfil de manera exitosa. Será redirigido a la página principal en unos segundos..."
+              : message}
+          </Alert>
+        )}
+        <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+          <div>
+            <Burger opened={opened} onClick={toggle} />
+            {opened ? (
+              <InformationBox withClose={true} onClose={close} />
+            ) : (
+              <></>
+            )}
+          </div>
+        </MediaQuery>
+        <Title>Perfil</Title>
+        <Divider></Divider>
 
-          <Group grow>
-            <TextInput
-              placeholder="Nombres (*)"
-              label="Nombres"
-              radius="xs"
-              size="sm"
-              disabled
-              withAsterisk
-              {...form.getInputProps("name")}
-            />
-            <TextInput
-              placeholder="Apellidos (*)"
-              label="Apellidos"
-              radius="xs"
-              size="sm"
-              disabled
-              withAsterisk
-              {...form.getInputProps("lastname")}
-            />
-          </Group>
-          <Group grow>
-            <TextInput
-              placeholder="Tipo Documento"
-              label="Tipo Documento"
-              radius="xs"
-              size="sm"
-              disabled
-              withAsterisk
-              {...form.getInputProps("documenttype")}
-            />
-            <TextInput
-              placeholder="Nro. Documento"
-              label="Nro. Documento"
-              radius="xs"
-              size="sm"
-              disabled
-              withAsterisk
-              {...form.getInputProps("documentnumber")}
-            />
-          </Group>
+        <SimpleGrid
+          cols={2}
+          spacing="xl"
+          breakpoints={[{ maxWidth: "48rem", cols: 1, spacing: "sm" }]}
+        >
+          <TextInput
+            placeholder="Nombres (*)"
+            label="Nombres"
+            radius="xs"
+            size="sm"
+            disabled
+            withAsterisk
+            {...form.getInputProps("name")}
+          />
+          <TextInput
+            placeholder="Apellidos (*)"
+            label="Apellidos"
+            radius="xs"
+            size="sm"
+            disabled
+            withAsterisk
+            {...form.getInputProps("lastname")}
+          />
+          <TextInput
+            placeholder="Tipo Documento"
+            label="Tipo Documento"
+            radius="xs"
+            size="sm"
+            disabled
+            withAsterisk
+            {...form.getInputProps("documenttype")}
+          />
+          <TextInput
+            placeholder="Nro. Documento"
+            label="Nro. Documento"
+            radius="xs"
+            size="sm"
+            disabled
+            withAsterisk
+            {...form.getInputProps("documentnumber")}
+          />
           <TextInput
             disabled={collaborator.emailVerify}
             placeholder=""
@@ -176,34 +187,34 @@ const PersonalDataForm = () => {
             size="sm"
             {...form.getInputProps("cellPhone")}
           />
-          <Space h="md" />
-          {!collaborator.emailVerify && (
-            <>
-              {" "}
-              <Checkbox
-                label={
-                  <>
-                    Acepto los{" "}
-                    <Anchor href="/terms" target="_blank">
-                      Términos y Condiciones
-                    </Anchor>
-                  </>
-                }
-                {...form.getInputProps("termsOfService")}
-              />
-              <Checkbox
-                label="Acepto recibir publicidad"
-                {...form.getInputProps("acceptPublicity")}
-              />
-            </>
-          )}
-        </Stack>
+        </SimpleGrid>
         <Space h="md" />
-        <Button color="gray" fullWidth size="lg" onClick={handleUpdate}>
-          Actualizar
-        </Button>
-      </Box>
-    </>
+        {!collaborator.emailVerify && (
+          <>
+            {" "}
+            <Checkbox
+              label={
+                <>
+                  Acepto los{" "}
+                  <Anchor href="/terms" target="_blank">
+                    Términos y Condiciones
+                  </Anchor>
+                </>
+              }
+              {...form.getInputProps("termsOfService")}
+            />
+            <Checkbox
+              label="Acepto recibir publicidad"
+              {...form.getInputProps("acceptPublicity")}
+            />
+          </>
+        )}
+      </Stack>
+      <Space h="md" />
+      <Button color="gray" fullWidth size="lg" onClick={handleUpdate}>
+        Actualizar
+      </Button>
+    </Stack>
   );
 };
 
