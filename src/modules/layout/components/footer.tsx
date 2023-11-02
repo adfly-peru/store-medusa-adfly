@@ -9,76 +9,53 @@ import {
   Stack,
   Container,
   Divider,
+  Center,
 } from "@mantine/core";
 import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandLinkedin,
   IconBrandWhatsapp,
+  IconMail,
+  IconMailFilled,
+  IconMessage2,
+  IconPhoneFilled,
 } from "@tabler/icons-react";
 
 const FooterComponent = () => {
   return (
-    <Footer height="100%" pt={10} mt={20} px="xl" fs="md">
-      <Container mt={25} maw={1260}>
-        <Grid gutter={20} gutterSm={210}>
-          <Grid.Col sm={4}>
-            <Stack spacing="xs">
-              <Image
-                radius="md"
-                height={50}
-                width="inherit"
-                fit="contain"
-                src="https://www.adfly.pe/Content/logo.png"
-                alt="Adfly"
-                sx={{ padding: 10 }}
-              />
-              <Title order={3}>Comunícate con nosotros:</Title>
-              <Text>Escríbenos:</Text>
-              <Text>hola@adfly.pe</Text>
-              <Text>Llámanos:</Text>
-              <Text>(+51) 970 802 065</Text>
-              <Text>WhatsApp:</Text>
-              <Text>(+51) 970 802 065</Text>
-              <Group mt="md">
-                <ActionIcon
-                  size="lg"
-                  variant="transparent"
-                  component="a"
-                  href="https://www.instagram.com/adfly.pe/"
-                >
-                  <IconBrandInstagram size={26} />
-                </ActionIcon>
-                <ActionIcon
-                  size="lg"
-                  variant="transparent"
-                  component="a"
-                  href="https://pe.linkedin.com/company/somosadfly"
-                >
-                  <IconBrandLinkedin size={26} />
-                </ActionIcon>
-                <ActionIcon
-                  size="lg"
-                  variant="transparent"
-                  component="a"
-                  href="https://wa.me/51970802065"
-                >
-                  <IconBrandWhatsapp size={26} />
-                </ActionIcon>
-                <ActionIcon
-                  size="lg"
-                  variant="transparent"
-                  component="a"
-                  href="https://www.facebook.com/adfly.pe/"
-                >
-                  <IconBrandFacebook size={26} />
-                </ActionIcon>
+    <Footer height="100%" pt={10} mt={20} fz={15}>
+      <Center>
+        <Group w="85%" align="start" position="apart" px="xl">
+          <Stack spacing="xs" align="center" h="100%">
+            <Image
+              radius="md"
+              height={50}
+              width="inherit"
+              fit="contain"
+              src="https://www.adfly.pe/Content/logo.png"
+              alt="Adfly"
+              sx={{ padding: 10 }}
+            />
+            <Stack align="left">
+              <Title order={3}>CONTÁCTANOS:</Title>
+              <Group>
+                <IconMailFilled style={{ color: "#5C98C7" }} />
+                <Text>hola@adfly.pe</Text>
+              </Group>
+              <Group>
+                <IconPhoneFilled style={{ color: "#5C98C7" }} />
+                <Text>(+51) 970 802 065</Text>
+              </Group>
+              <Group>
+                <IconMessage2 style={{ color: "#5C98C7" }} />
+                <Text>(+51) 970 802 065</Text>
               </Group>
             </Stack>
-          </Grid.Col>
-          <Grid.Col sm={4}>
-            <Stack spacing="xs">
-              <Title order={3}>Tienda Online</Title>
+          </Stack>
+          <Stack spacing="xs" align="center">
+            <Stack align="left" spacing="xs">
+              <Title order={3}>TIENDA ONLINE</Title>
               <Text>Términos y condiciones</Text>
               <Text>Políticas de Privacidad y Seguridad</Text>
               <Text>Políticas de Cookies</Text>
@@ -91,12 +68,13 @@ const FooterComponent = () => {
               <Text>¿Cómo Comprar?</Text>
               <Text>Boletas y facturas</Text>
             </Stack>
-          </Grid.Col>
-          <Grid.Col sm={4}>
-            <Stack spacing="xs">
-              <Title order={3}>Nosotros</Title>
-              <Text>Sobre ADLY</Text>
-
+          </Stack>
+          <Stack spacing="xs" align="center">
+            <Stack>
+              <Title pl="md" order={3}>
+                NOSOTROS
+              </Title>
+              <Text pl="md">¿Qué es ADLY?</Text>
               <Image
                 radius="md"
                 height={100}
@@ -104,16 +82,55 @@ const FooterComponent = () => {
                 fit="contain"
                 src="https://bestbrands.com.pe/librodereclamaciones/wp-content/uploads/2022/02/i1.jpg"
                 alt="Adfly"
-                sx={{ padding: 10 }}
+                sx={{ paddingTop: 10, paddingLeft: -10 }}
               />
             </Stack>
-          </Grid.Col>
-        </Grid>
-      </Container>
-      <Divider my="sm" />
-      <Text color="gray" align="end" style={{ marginTop: "20px" }}>
-        © 2023 ADFLY. Todos los derechos reservados. Lima - Perú
-      </Text>
+          </Stack>
+        </Group>
+      </Center>
+      <Group position="apart" pb="lg" bg="#2A6595" px="md">
+        <Group mt="md">
+          <ActionIcon
+            size="lg"
+            variant="transparent"
+            c="white"
+            component="a"
+            href="https://www.instagram.com/adfly.pe/"
+          >
+            <IconBrandInstagram size={26} />
+          </ActionIcon>
+          <ActionIcon
+            size="lg"
+            variant="transparent"
+            c="white"
+            component="a"
+            href="https://pe.linkedin.com/company/somosadfly"
+          >
+            <IconBrandLinkedin size={26} />
+          </ActionIcon>
+          <ActionIcon
+            size="lg"
+            variant="transparent"
+            c="white"
+            component="a"
+            href="https://wa.me/51970802065"
+          >
+            <IconBrandWhatsapp size={26} />
+          </ActionIcon>
+          <ActionIcon
+            size="lg"
+            variant="transparent"
+            c="white"
+            component="a"
+            href="https://www.facebook.com/adfly.pe/"
+          >
+            <IconBrandFacebook size={26} />
+          </ActionIcon>
+        </Group>
+        <Text c="white" align="end" style={{ marginTop: "20px" }}>
+          © 2023 ADFLY S.A.C. Todos los derechos reservados. Lima - Perú
+        </Text>
+      </Group>
     </Footer>
   );
 };
