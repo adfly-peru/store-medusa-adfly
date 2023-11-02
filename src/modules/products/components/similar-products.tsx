@@ -1,5 +1,13 @@
 import ProductCard from "@modules/products/components/product-card";
-import { Box, Center, Grid, Loader, Title } from "@mantine/core";
+import {
+  Box,
+  Center,
+  Grid,
+  Loader,
+  SimpleGrid,
+  Stack,
+  Title,
+} from "@mantine/core";
 import { Offer } from "@interfaces/productInterface";
 
 const SimilarProducts = ({
@@ -10,22 +18,32 @@ const SimilarProducts = ({
   loading: boolean;
 }) => {
   return (
-    <Box mt="xl" w="90%">
-      <Title>Productos Relacionados</Title>
-      {loading ? (
-        <Center>
-          <Loader />
-        </Center>
-      ) : (
-        <Grid w="100%">
-          {products.map((prod, i): any => (
-            <Grid.Col key={i} xs={3}>
-              <ProductCard product={prod} />
-            </Grid.Col>
-          ))}
-        </Grid>
-      )}
-    </Box>
+    <Center mt="xl" w="100%">
+      <Stack>
+        <Title>Productos Relacionados</Title>
+        {loading ? (
+          <Center>
+            <Loader />
+          </Center>
+        ) : (
+          <SimpleGrid
+            cols={4}
+            spacing="xl"
+            breakpoints={[
+              { maxWidth: "72rem", cols: 3, spacing: "md" },
+              { maxWidth: "56rem", cols: 2, spacing: "sm" },
+              { maxWidth: "40rem", cols: 1, spacing: "sm" },
+            ]}
+          >
+            {products.map((prod, i): any => (
+              <Center key={prod.uuidOffer}>
+                <ProductCard key={prod.uuidOffer} product={prod} />
+              </Center>
+            ))}
+          </SimpleGrid>
+        )}
+      </Stack>
+    </Center>
   );
 };
 

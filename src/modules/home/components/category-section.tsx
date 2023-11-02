@@ -1,4 +1,5 @@
 import { useProduct } from "@context/product-context";
+import { Department } from "@interfaces/category";
 import { Carousel } from "@mantine/carousel";
 import {
   Title,
@@ -9,9 +10,11 @@ import {
   MediaQuery,
 } from "@mantine/core";
 import router from "next/router";
+import { useEffect, useState } from "react";
 
 const CategorySection = () => {
   const { departments } = useProduct();
+  const [departmentsToShow, setDepartmentsToShow] = useState<Department[]>([]);
 
   const searchProductByCategorie = (categorieToSearch: string) => {
     router.push({
@@ -19,6 +22,17 @@ const CategorySection = () => {
       query: { data: categorieToSearch },
     });
   };
+
+  useEffect(() => {
+    const departmentsFiltered = departments.filter((d) => d.outstanding);
+    if (departmentsFiltered.length < 10 && departments.length > 0) {
+      const completeList: Department[] = [];
+      for (let i = 0; i < 10; i++) {
+        completeList.push(departmentsFiltered[i % departmentsFiltered.length]);
+      }
+      setDepartmentsToShow(completeList);
+    } else setDepartmentsToShow(departmentsFiltered);
+  }, [departments]);
   return (
     <>
       <Title
@@ -48,23 +62,21 @@ const CategorySection = () => {
             { maxWidth: "sm", slideSize: "50%", slideGap: "xs" },
           ]}
         >
-          {departments
-            .filter((d) => d.outstanding)
-            .map((category, i) => (
-              <Carousel.Slide key={category.id}>
-                <Stack align="center" key={category.id}>
-                  <ActionIcon
-                    key={`${i}action`}
-                    size={60}
-                    variant="transparent"
-                    onClick={() => searchProductByCategorie(category.name)}
-                  >
-                    <Image src={category.image} alt={category.name} />
-                  </ActionIcon>
-                  <Text>{category.name}</Text>
-                </Stack>
-              </Carousel.Slide>
-            ))}
+          {departmentsToShow.map((category, i) => (
+            <Carousel.Slide key={i}>
+              <Stack align="center">
+                <ActionIcon
+                  key={`${i}action`}
+                  size={60}
+                  variant="transparent"
+                  onClick={() => searchProductByCategorie(category.name)}
+                >
+                  <Image src={category.image} alt={category.name} />
+                </ActionIcon>
+                <Text>{category.name}</Text>
+              </Stack>
+            </Carousel.Slide>
+          ))}
         </Carousel>
       </MediaQuery>
     </>

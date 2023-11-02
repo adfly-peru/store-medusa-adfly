@@ -81,7 +81,6 @@ const Login = () => {
                 fit="contain"
                 src={loginDesign?.logourl ?? ""}
                 alt="Login Logo"
-                sx={{ padding: 30 }}
               />
               {modalError && (
                 <Alert
@@ -95,26 +94,37 @@ const Login = () => {
                 </Alert>
               )}
               <Stack spacing="md" my="xl">
-                <Title align="center">¡Descubre lo que tenemos para ti!</Title>
+                <Title fz={20} align="center">
+                  ¡Descubre lo que tenemos para ti!
+                </Title>
                 <Text align="center" color="gray.7">
                   Ingresar a tu cuenta
                 </Text>
               </Stack>
               <form onSubmit={form.onSubmit((values) => login(values))}>
-                <Stack spacing="xl" px="sm">
+                <Stack
+                  spacing="xl"
+                  px="sm"
+                  style={{
+                    fontSize: 16,
+                  }}
+                  align="center"
+                >
                   <TextInput
                     placeholder="E-mail / Doc. Identidad"
                     radius="xs"
-                    size="lg"
+                    size="md"
+                    w={320}
                     {...form.getInputProps("email")}
                   />
                   <PasswordInput
                     placeholder="Contraseña"
                     radius="xs"
-                    size="lg"
+                    size="md"
+                    w={320}
                     {...form.getInputProps("password")}
                   />
-                  <Button fullWidth size="lg" type="submit" disabled={loading}>
+                  <Button w={320} size="lg" type="submit" disabled={loading}>
                     {loading ? (
                       <Loader variant="dots" />
                     ) : (
@@ -122,7 +132,7 @@ const Login = () => {
                     )}
                   </Button>
                 </Stack>
-                <Space h="md" />
+                <Space h={100} />
                 <Group align="center" position="center" spacing={0}>
                   <Text color="gray.6">Por:</Text>
                   <Image

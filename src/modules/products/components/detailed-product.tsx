@@ -26,6 +26,9 @@ import {
   UnstyledButton,
   MediaQuery,
   Select,
+  Modal,
+  CopyButton,
+  rem,
 } from "@mantine/core";
 import {
   IconBuildingStore,
@@ -35,6 +38,7 @@ import {
   IconHome,
   IconMail,
   IconMinus,
+  IconMoodSad,
   IconPlus,
   IconTruckDelivery,
   IconX,
@@ -43,6 +47,7 @@ import { SetStateAction, useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
 import { Offer, Variant } from "@interfaces/productInterface";
 import { CartItem } from "@interfaces/cart";
+import { CouponResponse } from "api/cart";
 
 export function DetailedProduct({ product }: { product: Offer }) {
   const [details, setDetails] = useState<{ name: string; value: string }[]>([]);
@@ -60,10 +65,14 @@ export function DetailedProduct({ product }: { product: Offer }) {
     setAttributeSelections((prev) => ({ ...prev, [attributeName]: value }));
   };
   const [filteredVariants, setFilteredVariants] = useState<Variant[]>([]);
+  const [opened, setOpen] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState(product.variant[0]);
   const [value, setValue] = useState<number>(1);
   const [cartItem, setCartItem] = useState<CartItem | null>(null);
-  const { addProduct, getVariantById, cart } = useCart();
+  const [couponReponse, setCouponResponse] = useState<CouponResponse | null>(
+    null
+  );
+  const { addProduct, getVariantById, cart, generateCoupon } = useCart();
   const [imgIdx, setImgIdx] = useState(0);
   const [thumbnailStartIdx, setThumbnailStartIdx] = useState(0);
   const displayedThumbnails = 3;
@@ -281,6 +290,47 @@ export function DetailedProduct({ product }: { product: Offer }) {
 
   return (
     <Card py="xl" radius="md">
+      <Modal opened={opened} onClose={() => setOpen(false)}>
+        {couponReponse?.status === "success" ? (
+          <Stack>
+            <Title order={3} fz={16}>
+              ¡Felicitaciones, tu cupón de descuento se ha generado con éxito!
+            </Title>
+            <Group
+              h={59}
+              position="apart"
+              bg="#E3E4E6"
+              style={{
+                border: "1px solid #737A82",
+                borderRadius: "0.5rem",
+                fontSize: 20,
+              }}
+            >
+              <Text fw={700} ml="lg">
+                {couponReponse?.couponCode ?? "aaaaaaaaaa"}
+              </Text>
+              <CopyButton value="https://mantine.dev">
+                {({ copied, copy }) => (
+                  <Button
+                    h="100%"
+                    w={146}
+                    color={copied ? "teal" : "blue"}
+                    onClick={copy}
+                    fz={16}
+                  >
+                    {copied ? "Listo" : "Copiar"}
+                  </Button>
+                )}
+              </CopyButton>
+            </Group>
+          </Stack>
+        ) : (
+          <Stack align="center">
+            <Text fw={700}>Ocurrió un error inesperado</Text>
+            <IconMoodSad size={100} />
+          </Stack>
+        )}
+      </Modal>
       <CardSection inheritPadding py="xs">
         <Breadcrumbs separator={<IconChevronRight size={18} />}>
           <UnstyledButton
@@ -367,7 +417,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   {product.type === "coupon"
                     ? `${
                         selectedVariant.coupon?.discountType === "monetary"
-                          ? ` S/.${selectedVariant.coupon.discount}`
+                          ? ` S/.${selectedVariant.coupon.discount.toFixed(2)}`
                           : ` ${selectedVariant.coupon?.discount}%`
                       }`
                     : ` ${discount.toFixed(0)}%`}
@@ -440,7 +490,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   {selectedVariant.offerPrice ? (
                     <Group c="red" position="apart" fw="bold">
                       <Text fz="sm">Oferta</Text>
-                      <Text>S/. {selectedVariant.offerPrice}</Text>
+                      <Text>S/. {selectedVariant.offerPrice.toFixed(2)}</Text>
                     </Group>
                   ) : null}
                   <Group position="apart" fw="bold">
@@ -448,13 +498,13 @@ export function DetailedProduct({ product }: { product: Offer }) {
                     <Text
                       td={selectedVariant.offerPrice ? "line-through" : "none"}
                     >
-                      S/. {selectedVariant.adflyPrice}
+                      S/. {selectedVariant.adflyPrice.toFixed(2)}
                     </Text>
                   </Group>
                   <Group position="apart">
                     <Text fz="sm">Precio Mercado</Text>
                     <Text td="line-through">
-                      S/. {selectedVariant.refPrice}
+                      S/. {selectedVariant.refPrice.toFixed(2)}
                     </Text>
                   </Group>
                 </Stack>
@@ -524,12 +574,13 @@ export function DetailedProduct({ product }: { product: Offer }) {
               {product.type === "coupon" ? (
                 <Button
                   radius="md"
-                  onClick={() => {
-                    addProduct(
+                  onClick={async () => {
+                    const response = await generateCoupon(
                       selectedVariant.uuidVariant,
-                      product.business.uuidbusiness,
-                      value
+                      product.uuidOffer
                     );
+                    setCouponResponse(response ?? null);
+                    setOpen(true);
                   }}
                 >
                   Generar Cupón

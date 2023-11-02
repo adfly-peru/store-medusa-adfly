@@ -8,7 +8,7 @@ const HomeView = () => {
   const { homeDesign } = useAccount();
   return (
     <>
-      <Carousel w="90%" mx="auto" withIndicators height={500}>
+      <Carousel w="90%" mx="auto" withIndicators height={250}>
         <Carousel.Slide>
           <BackgroundImage
             style={{

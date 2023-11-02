@@ -78,7 +78,7 @@ const ProductCard = ({ product }: { product: Offer }) => {
   }
 
   return (
-    <Card shadow="sm" radius="md" className={classes.card} px="sm">
+    <Card shadow="sm" radius="md" className={classes.card} px="sm" w={272}>
       <Card.Section py="xs" inheritPadding>
         <Group position="right">
           <Badge color="red" variant="filled" radius="sm">
@@ -86,7 +86,7 @@ const ProductCard = ({ product }: { product: Offer }) => {
             {product.type === "coupon"
               ? `${
                   selectedVariant.coupon?.discountType === "monetary"
-                    ? ` S/.${selectedVariant.coupon.discount}`
+                    ? ` S/.${selectedVariant.coupon.discount.toFixed(2)}`
                     : ` ${selectedVariant.coupon?.discount}%`
                 }`
               : ` ${discount.toFixed(0)}%`}
@@ -137,18 +137,20 @@ const ProductCard = ({ product }: { product: Offer }) => {
             {selectedVariant.offerPrice ? (
               <Group c="red" position="apart" fw="bold">
                 <Text fz="sm">Oferta</Text>
-                <Text>S/. {selectedVariant.offerPrice}</Text>
+                <Text>S/. {selectedVariant.offerPrice.toFixed(2)}</Text>
               </Group>
             ) : null}
             <Group position="apart" fw="bold">
               <Text fz="sm">Precio ADFLY</Text>
               <Text td={selectedVariant.offerPrice ? "line-through" : "none"}>
-                S/. {selectedVariant.adflyPrice}
+                S/. {selectedVariant.adflyPrice.toFixed(2)}
               </Text>
             </Group>
             <Group position="apart">
               <Text fz="sm">Precio Mercado</Text>
-              <Text td="line-through">S/. {selectedVariant.refPrice}</Text>
+              <Text td="line-through">
+                S/. {selectedVariant.refPrice.toFixed(2)}
+              </Text>
             </Group>
           </Stack>
         )}

@@ -2,10 +2,12 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_CART } from "@graphql/cart/queries";
 import {
+  CouponResponse,
   createCart,
   editBillingInfo,
   editDeliveryInfo,
   editDeliveryMethod,
+  generateCouponRequest,
   manageItem,
 } from "api/cart";
 import { Cart, CartItem } from "@interfaces/cart";
@@ -30,6 +32,10 @@ interface CartContext {
     uuidproduct: string,
     uuidbusiness: string
   ) => CartItem | null;
+  generateCoupon: (
+    uuid_variant: string,
+    uuid_product: string
+  ) => Promise<CouponResponse | undefined>;
   getVariantById: (
     uuidvariant: string,
     uuidbusiness: string
@@ -90,6 +96,20 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     if (collaborator?.uuidcollaborator)
       setCollaboratorId(collaborator?.uuidcollaborator);
   }, [collaborator]);
+
+  const generateCoupon = async (uuid_variant: string, uuid_product: string) => {
+    try {
+      const response = await generateCouponRequest(uuid_variant, uuid_product);
+      await refetch();
+      return response;
+    } catch (error) {
+      console.error("Error on add product: ", error);
+      return {
+        couponCode: "",
+        status: "failed",
+      };
+    }
+  };
 
   const addProduct = async (
     uuidvariant: string,
@@ -283,6 +303,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         getVariantById,
         editBilling,
         editDelivery,
+        generateCoupon,
         selectDeliveryMethod,
         loadingEvent,
       }}
