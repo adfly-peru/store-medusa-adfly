@@ -76,6 +76,8 @@ const GET_ORDER_REPORT = gql`
           total
           status
           items {
+            uuidorderitem
+            uuidsuborder
             uuidvariant
             variant {
               uuidVariant
@@ -90,9 +92,9 @@ const GET_ORDER_REPORT = gql`
               offerPrice
               maxQuantity
               imageURL
-              sku
-              product {
-                productName
+              variantSku
+              offer {
+                offerName
                 description
                 type
               }

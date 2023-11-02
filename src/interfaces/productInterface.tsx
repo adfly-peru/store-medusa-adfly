@@ -75,7 +75,7 @@ export interface VariantDetailed {
   offerPrice?: number;
   maxQuantity?: number;
   imageURL: string;
-  sku?: string;
+  variantSku?: string;
   offer: {
     uuidOffer: string;
     offerName: string;
