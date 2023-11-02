@@ -6,9 +6,9 @@ import { IconSearch } from "@tabler/icons-react";
 const OrderRow = ({ order }: { order: Order }) => {
   return (
     <tr key={order.uuidOrder}>
-      <td>
+      {/* <td>
         <Text>{order.paymentInfo.purchaseNumber}</Text>
-      </td>
+      </td> */}
       <td>
         <Text>{formatDate(order.creationDate)}</Text>
       </td>

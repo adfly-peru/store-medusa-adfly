@@ -10,7 +10,11 @@ import {
   Space,
   TextInput,
 } from "@mantine/core";
-import { IconArrowLeft, IconLocation } from "@tabler/icons-react";
+import {
+  IconArrowLeft,
+  IconChevronLeft,
+  IconLocation,
+} from "@tabler/icons-react";
 import { useAccount } from "@context/account-context";
 import { useOrder } from "@context/order-context";
 import { OrderReport } from "@interfaces/order";
@@ -71,57 +75,100 @@ const SuccessMessage = ({
   }
 
   return (
-    <Stack align="center" spacing={45}>
-      <Title>¡Gracias por tu pedido!</Title>
-      <Stack align="center" spacing="xs">
-        <Text fz={18}>{niubizData.dataMap.ACTION_DESCRIPTION}</Text>
-        <Text fz={18}>
-          Hola{" "}
-          <Text span c="blue">
-            {collaborator?.name ?? ""}
+    <Stack align="center" spacing="xs" mx="lg">
+      <Paper bg="#F2F2F3" p="xl" fz={15}>
+        <Stack>
+          <Title fz={25} fw={700}>{`¡Pedido Recibido! - # ${number}`}</Title>
+          <Text>
+            <Text span c="blue">
+              {collaborator?.name ?? ""}
+            </Text>
+            , gracias por tu pedido.
           </Text>
-          , hemos recibido tu pedido{" "}
-          <Text span c="blue">
-            {number}
+          <Text>
+            Hemos recibido tu pedido N°{" "}
+            <Text span c="blue">
+              {number}
+            </Text>
+            . El detalle de tu pedido ha sido enviado a{" "}
+            <Text span c="blue">
+              {collaborator?.email}
+            </Text>
+            .
           </Text>
-        </Text>
-        <Text fz={18}>
-          El detalle de tu compra ha sido enviado a{" "}
-          <Text span c="blue">
-            {collaborator?.email}
+          <Text>
+            Estamos procesando tu pedido. Recibirás un correo de confirmación
+            una vez confirmado el pedido.
           </Text>
-        </Text>
-        <Text fz={18}>
-          Estamos procesando tu pedido. Recibirás un correo de confirmación una
-          vez confirmado el pedido.
-        </Text>
-      </Stack>
-      <Paper radius="md" py="md" px="xl" withBorder>
-        <Text>
-          Fecha de Pedido:{" "}
-          <Text fw="bold" span>
-            {formatarFecha(niubizData.order.transactionDate)}
+        </Stack>
+      </Paper>
+      <Group position="center">
+        <Button component="a" href="/home" leftIcon={<IconChevronLeft />}>
+          Regresar a la Tienda
+        </Button>
+        <Button
+          component="a"
+          href={`/orders/${id}`}
+          leftIcon={<IconLocation />}
+          variant="outline"
+          styles={{
+            root: {
+              borderColor: "#31658E",
+              color: "#31658E",
+            },
+          }}
+        >
+          Seguir mi Pedido
+        </Button>
+      </Group>
+      <Space />
+      <Group w="100%" position="left">
+        <Title fw={600} fz={20}>
+          Detalle Pedido
+          <Text color="dimmed" component="span">
+            {" "}
+            #{report.order.paymentInfo.purchaseNumber}
           </Text>
-        </Text>
-        <Text>
-          N° Pedido:{" "}
-          <Text fw="bold" span>
-            {report.order.paymentInfo.purchaseNumber}
-          </Text>
-        </Text>
-        <Text>
-          Total del Pedido:{" "}
-          <Text fw="bold" span>
-            {`${niubizData.order.amount.toFixed(2)} ${
-              niubizData.order.currency
-            }`}
-          </Text>
-        </Text>
+        </Title>
+      </Group>
+      <Paper w="100%" radius="md" py="md" px="xl" fz={15} withBorder>
+        <Group spacing="lg">
+          <Stack spacing="xs">
+            <Text>Fecha de Pedido:</Text>
+            <Text>N° Pedido: </Text>
+            <Text>Total del Pedido:</Text>
+          </Stack>
+          <Stack spacing="xs">
+            <Text fw="bold" span>
+              {formatarFecha(niubizData.order.transactionDate)}
+            </Text>
+            <Text fw="bold" span>
+              {report.order.paymentInfo.purchaseNumber}
+            </Text>
+            <Text fw="bold" span>
+              {`${niubizData.order.amount.toFixed(2)} ${
+                niubizData.order.currency
+              }`}
+            </Text>
+          </Stack>
+        </Group>
+        <Space h="xl" />
+        <Title order={3}> Envíos </Title>
+        <Paper radius="md" py="md" px="xl" withBorder>
+          {report.order.suborders.map((suborder, index) => (
+            <SuborderCard
+              suborder={suborder}
+              index={index}
+              total={report.order.suborders.length}
+              key={index}
+            />
+          ))}
+        </Paper>
         <Space h="xl" />
         <Title order={3}> Información de Pago </Title>
         <Paper radius="md" py="md" px="xl" withBorder>
           <Text fw="bold">
-            Estado:{" "}
+            Estado de Entrega:{" "}
             <Text fw="normal" span>{`${
               orderStatuses[report.order.status ?? ""]
             }`}</Text>
@@ -192,18 +239,6 @@ const SuccessMessage = ({
           />
         </Paper>
         <Space h="xl" />
-        <Title order={3}> Envíos </Title>
-        <Paper radius="md" py="md" px="xl" withBorder>
-          {report.order.suborders.map((suborder, index) => (
-            <SuborderCard
-              suborder={suborder}
-              index={index}
-              total={report.order.suborders.length}
-              key={index}
-            />
-          ))}
-        </Paper>
-        <Space h="xl" />
         <Title order={3}> Información de Entrega </Title>
         <Paper radius="md" py="md" px="xl" withBorder>
           <Text fw="bold">Dirección de Entrega</Text>
@@ -248,32 +283,11 @@ const SuccessMessage = ({
           <Text>{`Envío: S/.${(report.order.deliveryPrice || 0).toFixed(
             2
           )}`}</Text>
-          <Text>{`Impuestos pagados (IGV 18%): S/.${report.order.igv.toFixed(
-            2
-          )}`}</Text>
           <Text fw="bold">{`Total del Pedido: S/.${report.order.finalTotal.toFixed(
             2
           )}`}</Text>
         </Paper>
       </Paper>
-      <Group position="center">
-        <Button
-          component="a"
-          href="/home"
-          leftIcon={<IconArrowLeft />}
-          variant="light"
-        >
-          Regresar a la tienda de Beneficios
-        </Button>
-        <Button
-          component="a"
-          href={`/orders/${id}`}
-          leftIcon={<IconLocation />}
-          variant="outline"
-        >
-          Seguir mi Pedido
-        </Button>
-      </Group>
     </Stack>
   );
 };

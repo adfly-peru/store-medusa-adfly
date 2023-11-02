@@ -31,6 +31,46 @@ export const createCart = async (
   }
 };
 
+export interface CouponResponse {
+  couponCode: string;
+  status: string;
+}
+
+export const generateCouponRequest = async (
+  uuid_variant: string,
+  uuid_product: string
+): Promise<CouponResponse> => {
+  try {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("collaboratortoken");
+      if (storedToken) {
+        const response = await axios.put(
+          `${process.env.NEXT_PUBLIC_BACKEND_API}/store/order/coupon`,
+          {
+            uuid_variant,
+            uuid_product,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: storedToken,
+            },
+          }
+        );
+        const status = response.status;
+        if (status == 201 || status == 200) {
+          const { data } = response.data;
+          console.log(data);
+          return { couponCode: data.couponCode, status: "success" };
+        }
+      }
+    }
+    return { couponCode: "", status: "failed" };
+  } catch (error) {
+    return { couponCode: "", status: "failed" };
+  }
+};
+
 interface ManageItemBody {
   uuiditem: string;
   uuidcart: string;

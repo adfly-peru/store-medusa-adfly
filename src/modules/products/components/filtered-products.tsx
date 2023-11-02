@@ -18,15 +18,15 @@ const FilteredProducts = () => {
       cols={4}
       spacing="xl"
       breakpoints={[
-        { maxWidth: "96rem", cols: 3, spacing: "md" },
-        { maxWidth: "72rem", cols: 2, spacing: "sm" },
-        { maxWidth: "48rem", cols: 1, spacing: "sm" },
+        { maxWidth: "80rem", cols: 3, spacing: "md" },
+        { maxWidth: "66rem", cols: 2, spacing: "sm" },
+        { maxWidth: "40rem", cols: 1, spacing: "sm" },
       ]}
     >
-      {products.products.map((prod, i): any => (
-        <div key={i}>
-          <ProductCard product={prod} />
-        </div>
+      {products.offers.map((prod): any => (
+        <Center key={prod.uuidOffer}>
+          <ProductCard product={prod} key={prod.uuidOffer} />
+        </Center>
       ))}
     </SimpleGrid>
   );

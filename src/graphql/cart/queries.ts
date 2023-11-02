@@ -74,11 +74,12 @@ const GET_CART = gql`
             adflyPrice
             offerPrice
             maxQuantity
+            purchasePeriod
             imageURL
-            sku
-            product {
-              uuidProduct
-              productName
+            variantSku
+            offer {
+              uuidOffer
+              offerName
               description
               type
             }

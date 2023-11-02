@@ -3,19 +3,23 @@ import { Collaborator } from "@interfaces/collaborator";
 import {
   ActionIcon,
   Center,
+  Divider,
   Group,
-  Indicator,
   Menu,
   Modal,
-  Paper,
-  SimpleGrid,
   Stack,
+  Stepper,
   Text,
-  UnstyledButton,
+  Title,
+  rem,
 } from "@mantine/core";
-import { IconCheck, IconMenu, IconTransferOut } from "@tabler/icons-react";
+import { IconMenu, IconTransferOut } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import Layout from ".";
+import { useEffect, useState } from "react";
+import PersonalDataFormRegister from "@modules/account/components/personal-data-form-register";
+import VerifyEmailRegister from "../components/verify-email";
+import SecurityFormRegister from "@modules/account/components/security-form-register";
 
 const profileCompleted = (collaborator: Collaborator | undefined) => {
   if (collaborator) {
@@ -28,6 +32,7 @@ const profileCompleted = (collaborator: Collaborator | undefined) => {
 const RegistrationStepsModal: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
+  const [active, setActive] = useState(0);
   const { collaborator, logout } = useAccount();
   const router = useRouter();
   const isAllow = router.asPath.startsWith("/account/profile")
@@ -35,6 +40,17 @@ const RegistrationStepsModal: React.FC<{ children?: React.ReactNode }> = ({
     : router.asPath.startsWith("/account/security") && collaborator?.emailVerify
     ? true
     : false;
+  const nextStep = () =>
+    setActive((current) => (current < 3 ? current + 1 : current));
+  const prevStep = () =>
+    setActive((current) => (current > 0 ? current - 1 : current));
+
+  useEffect(() => {
+    if (collaborator) {
+      if (profileCompleted(collaborator)) setActive(1);
+      if (collaborator.emailVerify) setActive(2);
+    }
+  }, [collaborator]);
 
   if (!collaborator) return <></>;
 
@@ -70,91 +86,102 @@ const RegistrationStepsModal: React.FC<{ children?: React.ReactNode }> = ({
             </Menu.Dropdown>
           </Menu>
         </Group>
-        <Stack spacing="xl" p="xl">
-          <Center>
-            <Text sx={{ width: "85%" }} size="lg" align="justify">
-              Estás a 3 pasos de poder disfrutar de todos los benificios que
-              tenemos para ti.
-            </Text>
-          </Center>
-          <SimpleGrid
-            cols={3}
-            spacing="xl"
-            breakpoints={[
-              { maxWidth: "48rem", cols: 2, spacing: "sm" },
-              { maxWidth: "36rem", cols: 1, spacing: "sm" },
-            ]}
+        <Center w="100%" mb="xl">
+          <Title c="#31658E" fz={25}>
+            Completa tu Registro
+          </Title>
+        </Center>
+        <Stepper
+          active={active}
+          onStepClick={setActive}
+          breakpoint="sm"
+          styles={{
+            steps: {
+              paddingLeft: 50,
+              paddingRight: 50,
+            },
+            stepIcon: {
+              fontSize: 25,
+              backgroundColor: "white",
+              border: "2px solid #BCBCBC",
+              color: "#BCBCBC",
+              "&[data-completed]": {
+                borderWidth: 0,
+                backgroundColor: "#31658E",
+                color: "white",
+              },
+              "&[data-progress]": {
+                borderWidth: 0,
+                backgroundColor: "#31658E",
+                color: "white",
+              },
+            },
+            step: {
+              flexDirection: "column",
+              width: 200,
+            },
+            stepBody: {
+              margin: 0,
+            },
+            stepLabel: {
+              marginTop: 5,
+              fontSize: 16,
+            },
+            separator: {
+              backgroundColor: "#BCBCBC",
+              marginBottom: 20,
+              height: 4,
+              marginLeft: rem(-100),
+              marginRight: rem(-100),
+            },
+            separatorActive: {
+              backgroundColor: "#31658E",
+            },
+          }}
+        >
+          <Stepper.Step
+            label="Completa tu Perfil"
+            allowStepSelect={true}
+            completedIcon={1}
           >
-            <UnstyledButton onClick={() => router.push("/account/profile")}>
-              <Indicator
-                size={22}
-                label={<IconCheck />}
-                radius="lg"
-                disabled={!profileCompleted(collaborator)}
-              >
-                <Paper shadow="xs" radius="md" p="xs" withBorder>
-                  <Text align="center" lineClamp={2}>
-                    Completa tu perfil
-                  </Text>
-                </Paper>
-              </Indicator>
-            </UnstyledButton>
-            <UnstyledButton disabled>
-              <Indicator
-                size={22}
-                label={<IconCheck />}
-                disabled={!collaborator?.emailVerify}
-              >
-                <Paper shadow="xs" radius="md" p="xs" withBorder>
-                  <Text align="center" lineClamp={2}>
-                    Verificar email
-                  </Text>
-                </Paper>
-              </Indicator>
-            </UnstyledButton>
-            <UnstyledButton
-              onClick={() => router.push("/account/security")}
-              disabled={!collaborator.emailVerify}
-            >
-              <Indicator
-                size={22}
-                label={<IconCheck />}
-                radius="lg"
-                disabled={!collaborator.changePassword}
-              >
-                <Paper shadow="xs" radius="md" p="xs" withBorder>
-                  <Text align="center" lineClamp={2}>
-                    Actualizar contraseña
-                  </Text>
-                </Paper>
-              </Indicator>
-            </UnstyledButton>
-          </SimpleGrid>
-          <Center>
-            <Text sx={{ width: "85%" }} size="lg" align="justify">
+            <Divider w="100%" style={{ border: "1px solid #31658E" }} my="lg" />
+            <Center>
+              <PersonalDataFormRegister handleNextStep={nextStep} />
+            </Center>
+          </Stepper.Step>
+          <Stepper.Step
+            label="Verifica tu correo"
+            allowStepSelect={profileCompleted(collaborator)}
+            completedIcon={2}
+          >
+            <Divider w="100%" style={{ border: "1px solid #31658E" }} my="lg" />
+            <Center>
+              <VerifyEmailRegister
+                handlePrevStep={prevStep}
+                handleNextStep={collaborator.emailVerify ? nextStep : null}
+              />
+            </Center>
+          </Stepper.Step>
+          <Stepper.Step
+            label="Actualiza tu contraseña"
+            allowStepSelect={collaborator.emailVerify}
+            completedIcon={3}
+          >
+            <Divider w="100%" style={{ border: "1px solid #31658E" }} my="lg" />
+            <Center>
+              <SecurityFormRegister handlePrevStep={prevStep} />
+            </Center>
+          </Stepper.Step>
+        </Stepper>
+        <Center mt="lg">
+          <Stack w="70%" align="center">
+            <Text fz={10} align="center">
               Acuérdate que no podrás acceder a la tienda hasta que completes
               todos los pasos anteriores. Si necesitas ayuda, escríbenos a
               hola@adfly.pe o llámanos al +51 970 802 065.
             </Text>
-          </Center>
-          {collaborator.email?.length && !collaborator.emailVerify ? (
-            <Center>
-              <Text sx={{ width: "85%" }} size="lg" align="justify">
-                Hemos enviado un correo de verificación a {collaborator?.email},
-                revisa tu correo para completar tu perfil. Haz click{" "}
-                <Text
-                  span
-                  c="blue"
-                  onClick={() => router.push("/account/profile")}
-                  inherit
-                >
-                  aquí
-                </Text>{" "}
-                para cambiar tu dirección de correo electrónico.
-              </Text>
-            </Center>
-          ) : null}
-        </Stack>
+          </Stack>
+        </Center>
       </Modal>
       <Layout />
     </>

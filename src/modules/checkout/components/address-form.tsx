@@ -116,7 +116,7 @@ const AddressForm = ({ onSubmit }: { onSubmit: () => void }) => {
         {...form.getInputProps("additional")}
       />
       <Group px={70} position="apart" grow mt="xl">
-        <Button type="submit" onClick={registerAddress} variant="light">
+        <Button type="submit" onClick={registerAddress}>
           Guardar
         </Button>
       </Group>

@@ -1,24 +1,30 @@
-import { Grid } from "@mantine/core";
+import { Center, Grid, MediaQuery, Stack } from "@mantine/core";
 import SimpleOrderView from "./simple";
 import InformationBox from "@modules/account/components/information-box";
 
 const OrderTemplate = ({ orderId }: { orderId: string }) => {
   return (
-    <Grid p={20} w="100%" justify="space-around">
-      <Grid.Col span={4}>
-        <InformationBox />
-      </Grid.Col>
-      <Grid.Col
-        span={6}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-start",
-        }}
-      >
-        <SimpleOrderView orderId={orderId} />
-      </Grid.Col>
-    </Grid>
+    <Center>
+      <Stack w="90%">
+        <Grid p={20} justify="space-around">
+          <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+            <Grid.Col span={3}>
+              <InformationBox />
+            </Grid.Col>
+          </MediaQuery>
+          <Grid.Col
+            span="auto"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+            }}
+          >
+            <SimpleOrderView orderId={orderId} />
+          </Grid.Col>
+        </Grid>
+      </Stack>
+    </Center>
   );
 };
 

@@ -1,27 +1,31 @@
-import { Grid } from "@mantine/core";
+import { Center, Grid, MediaQuery, Stack } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import InformationBox from "@modules/account/components/information-box";
 import OrdersList from "../components/orders-list";
 
 const AllOrdersTemplate = () => {
-  const { height } = useViewportSize();
   return (
-    <Grid p={20} w="100%" justify="space-around">
-      <Grid.Col span={4}>
-        <InformationBox />
-      </Grid.Col>
-      <Grid.Col
-        span={6}
-        sx={{
-          height: height,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-start",
-        }}
-      >
-        <OrdersList />
-      </Grid.Col>
-    </Grid>
+    <Center>
+      <Stack w="90%">
+        <Grid p={20} justify="space-around">
+          <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+            <Grid.Col span={3}>
+              <InformationBox />
+            </Grid.Col>
+          </MediaQuery>
+          <Grid.Col
+            span="auto"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+            }}
+          >
+            <OrdersList />
+          </Grid.Col>
+        </Grid>
+      </Stack>
+    </Center>
   );
 };
 

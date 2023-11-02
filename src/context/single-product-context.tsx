@@ -1,11 +1,11 @@
 import { useLazyQuery } from "@apollo/client";
 import { GET_PRODUCT, GET_RELATED_PRODUCTS } from "@graphql/products/queries";
-import { Product, ProductResult } from "@interfaces/productInterface";
+import { Offer, OfferResult } from "@interfaces/productInterface";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface SingleProductContext {
-  product: Product | null;
-  relatedProducts: Product[];
+  product: Offer | null;
+  relatedProducts: Offer[];
   relatedCount: number;
   fetchProduct: (id: string) => void;
   fetchRelatedProducts: (id: string, offset?: number) => void;
@@ -22,19 +22,19 @@ interface SingleProductProviderProps {
 export const SingleProductProvider = ({
   children,
 }: SingleProductProviderProps) => {
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<Offer | null>(null);
   const [relatedCount, setRelatedCount] = useState(0);
-  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [relatedProducts, setRelatedProducts] = useState<Offer[]>([]);
 
   const [getProduct, { data: productData, loading: loadingProduct }] =
     useLazyQuery<{
-      product: Product;
+      offer: Offer;
     }>(GET_PRODUCT);
   const [
     getRelatedProducts,
     { data: relatedProductsData, loading: loadingRelateds },
   ] = useLazyQuery<{
-    availableProducts: ProductResult;
+    availableOffers: OfferResult;
   }>(GET_RELATED_PRODUCTS);
 
   const fetchProduct = (id: string) => {
@@ -53,13 +53,13 @@ export const SingleProductProvider = ({
   };
 
   useEffect(() => {
-    if (productData && productData.product) {
-      setProduct(productData.product);
+    if (productData && productData.offer) {
+      setProduct(productData.offer);
     }
 
-    if (relatedProductsData && relatedProductsData.availableProducts) {
-      setRelatedProducts(relatedProductsData.availableProducts.products);
-      setRelatedCount(relatedProductsData.availableProducts.totalProducts);
+    if (relatedProductsData && relatedProductsData.availableOffers) {
+      setRelatedProducts(relatedProductsData.availableOffers.offers);
+      setRelatedCount(relatedProductsData.availableOffers.totalOffers);
     }
   }, [productData, relatedProductsData]);
 

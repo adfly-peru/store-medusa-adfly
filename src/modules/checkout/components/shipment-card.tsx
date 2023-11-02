@@ -10,8 +10,10 @@ import {
   Accordion,
   rem,
   Button,
+  Divider,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
+import { IconCircleFilled } from "@tabler/icons-react";
 
 const SelectStore = ({
   stores,
@@ -118,104 +120,124 @@ const ShipmentCard = ({
   };
 
   return (
-    <Grid gutter="lg" grow>
-      <Grid.Col span={8}>
-        <Stack spacing="xl">
-          <Text fw={500}>
+    <Stack spacing={0}>
+      <Grid gutter="lg" fw={600} fz={15} grow>
+        <Grid.Col span={8}>
+          <Text>
             Pedido {index + 1} de {total}: Entregado por {suborder.businessName}
           </Text>
-          {suborder.items.map((product, _) => (
-            <div key={product.uuidcartitem}>
-              <Group position="apart" spacing="xl" grow>
-                <Image
-                  src={product.variant.imageURL}
-                  alt={product.variant.imageURL}
-                  height={150}
-                  fit="contain"
-                  withPlaceholder
-                />
-                <Stack spacing={0}>
-                  <Text c="indigo">{product.variant.product.productName}</Text>
-                  <Text fz="sm">
-                    <Text fw={500} span>
-                      {"Cantidad: "}
+        </Grid.Col>
+        <Grid.Col span={4}>
+          <Text>Opciones de Envío</Text>
+        </Grid.Col>
+      </Grid>
+      <Divider />
+      <Grid gutter="lg" mt="md" grow>
+        <Grid.Col span={8}>
+          <Stack spacing="xl">
+            {suborder.items.map((product, _) => (
+              <div key={product.uuidcartitem}>
+                <Group position="left" spacing="xl">
+                  <Image
+                    src={product.variant.imageURL}
+                    alt={product.variant.imageURL}
+                    height={100}
+                    width={100}
+                    fit="contain"
+                    withPlaceholder
+                  />
+                  <Stack fz={10} spacing={0}>
+                    <Text fz={15}>{product.variant.offer.offerName}</Text>
+                    ...
+                    <Text>
+                      <Text fw={500} span>
+                        {"Cantidad: "}
+                      </Text>
+                      {product.quantity}
                     </Text>
-                    {product.quantity}
+                    <Text>
+                      <Text fw={500} span>
+                        {"Subtotal: "}
+                      </Text>
+                      {`S/.${
+                        product.quantity * (product.variant.adflyPrice ?? 0)
+                      }`}
+                    </Text>
+                    <Text>
+                      <Text fw={500} span>
+                        {"Vendido y Entregado por: "}
+                      </Text>
+                      {suborder.businessName}
+                    </Text>
+                  </Stack>
+                </Group>
+              </div>
+            ))}
+          </Stack>
+        </Grid.Col>
+        <Grid.Col span={4}>
+          <Stack>
+            {suborder.availableDeliveryMethods.deliveryOnHome != null ? (
+              <div>
+                <Checkbox
+                  checked={suborder.deliverymethod == "onhome"}
+                  onChange={onhomeSelect}
+                  radius="lg"
+                  value={0}
+                  icon={IconCircleFilled}
+                  label="Entrega en Dirección Personal"
+                />
+                <Stack pl={20} spacing={0}>
+                  <Text fz="sm">
+                    <Text span c="dimmed">
+                      Costo de Envío:
+                    </Text>
+                    {` S/. ${suborder.availableDeliveryMethods.deliveryOnHome.price}`}
                   </Text>
                   <Text fz="sm">
-                    <Text fw={500} span>
-                      {"Subtotal: "}
+                    <Text span c="dimmed">
+                      Fecha de Entrega:
                     </Text>
-                    {`S/.${
-                      product.quantity * (product.variant.adflyPrice ?? 0)
-                    }`}
+                    {` ${suborder.availableDeliveryMethods.deliveryOnHome.timetodelivery}`}
+                  </Text>
+                  <Text fz="sm">
+                    <Text span c="dimmed">
+                      Especificaciones:{" "}
+                    </Text>
+                    {suborder.availableDeliveryMethods.deliveryOnHome
+                      .comments ?? "-"}
                   </Text>
                 </Stack>
-              </Group>
-            </div>
-          ))}
-        </Stack>
-      </Grid.Col>
-      <Grid.Col span={4}>
-        <Stack>
-          <Text fw={500}>Opciones de Envío</Text>
-          {suborder.availableDeliveryMethods.deliveryOnHome != null ? (
-            <div>
+              </div>
+            ) : (
               <Checkbox
-                checked={suborder.deliverymethod == "onhome"}
-                onChange={onhomeSelect}
+                icon={IconCircleFilled}
+                disabled
                 radius="lg"
                 value={0}
                 label="Entrega en Dirección Personal"
+                description="No ha seleccionado una dirección personal o el partner no cuenta con esta modalidad en su dirección."
               />
-              <Stack pl={20} spacing={0}>
-                <Text fz="sm">
-                  <Text span c="dimmed">
-                    Costo de Envío:
-                  </Text>
-                  {` S/. ${suborder.availableDeliveryMethods.deliveryOnHome.price}`}
-                </Text>
-                <Text fz="sm">
-                  <Text span c="dimmed">
-                    Fecha de Entrega:
-                  </Text>
-                  {` ${suborder.availableDeliveryMethods.deliveryOnHome.timetodelivery}`}
-                </Text>
-                <Text fz="sm">
-                  <Text span c="dimmed">
-                    Especificaciones:{" "}
-                  </Text>
-                  {suborder.availableDeliveryMethods.deliveryOnHome.comments ??
-                    "-"}
-                </Text>
-              </Stack>
-            </div>
-          ) : (
+            )}
             <Checkbox
-              disabled
+              icon={IconCircleFilled}
+              checked={suborder.deliverymethod == "pickup"}
+              onChange={openStoreModal}
               radius="lg"
-              value={0}
-              label="Entrega en Dirección Personal"
-              description="En este momento el partner no cuenta con Entrega a Domicilio en su zona"
+              value={1}
+              label="Recojo en Tienda"
+              description={
+                suborder.deliverymethod == "pickup"
+                  ? suborder.availableDeliveryMethods.deliveryOnStore.find(
+                      (s) => s.uuiddeliverystore == suborder.uuidaddress
+                    )?.name
+                  : null
+              }
             />
-          )}
-          <Checkbox
-            checked={suborder.deliverymethod == "pickup"}
-            onChange={openStoreModal}
-            radius="lg"
-            value={1}
-            label="Recojo en Tienda"
-            description={
-              suborder.deliverymethod == "pickup"
-                ? suborder.availableDeliveryMethods.deliveryOnStore.find(
-                    (s) => s.uuiddeliverystore == suborder.uuidaddress
-                  )?.name
-                : null
-            }
-          />
-        </Stack>
-      </Grid.Col>
-    </Grid>
+          </Stack>
+        </Grid.Col>
+      </Grid>
+    </Stack>
   );
 };
 

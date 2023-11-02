@@ -10,9 +10,7 @@ const SuccesPage = () => {
   return (
     <Layout>
       <Center>
-        <Stack align="center" mt="xl">
-          <SuccessMessage number={number} id={id} niubizData={orderData} />
-        </Stack>
+        <SuccessMessage number={number} id={id} niubizData={orderData} />
       </Center>
     </Layout>
   );

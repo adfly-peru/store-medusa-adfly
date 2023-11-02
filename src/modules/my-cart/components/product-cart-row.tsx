@@ -8,32 +8,19 @@ import {
   NumberInputHandlers,
   Grid,
   Title,
-  Space,
-  List,
-  ThemeIcon,
-  Divider,
-  Button,
-  Card,
+  Center,
 } from "@mantine/core";
-import {
-  IconCheck,
-  IconMinus,
-  IconPlus,
-  IconTrash,
-  IconX,
-} from "@tabler/icons-react";
+import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useRef } from "react";
 import { useCart } from "@context/cart-context";
-import { CartItem, CartSubOrder } from "@interfaces/cart";
+import { CartItem } from "@interfaces/cart";
 
-const DetailedProductCartView = ({
+const ProductCartRow = ({
   item,
-  suborder,
   businessid,
   businessName,
 }: {
   item: CartItem;
-  suborder: CartSubOrder;
   businessid: string;
   businessName: string;
 }) => {
@@ -41,58 +28,43 @@ const DetailedProductCartView = ({
   const handlers = useRef<NumberInputHandlers>();
 
   return (
-    <Card w="93%" withBorder radius="xs">
-      <Grid align="flex-start">
-        <Grid.Col px={0} pt={0} span="auto">
-          <Group grow>
-            <Grid.Col span="content">
-              <Stack align="center" justify="center" h="100%" w={80}>
-                <Image
-                  src={item.variant.imageURL}
-                  alt={item.variant.imageURL}
-                  height={80}
-                  width={80}
-                  fit="contain"
-                  withPlaceholder
-                />
-              </Stack>
-            </Grid.Col>
-            <Grid.Col span="auto">
-              <Title fw={600} order={3}>
-                {item.variant.offer.offerName}
-              </Title>
-              <Space h="xs" />
-              <Text>{item.variant.offer.type}</Text>
-              <Text>
-                {item.variant.attributes.reduce(
-                  (p, v, i) =>
-                    p +
-                    (i === 0
-                      ? `${v.attributeName}: ${v.value}`
-                      : `; ${v.attributeName}: ${v.value}`),
-                  ""
-                )}
-              </Text>
-              <Text>{`Vendido y despachado por ${businessName}`}</Text>
-            </Grid.Col>
-          </Group>
-        </Grid.Col>
-        <Grid.Col
-          p={0}
-          span={1}
-          style={{
-            flex: "revert",
-          }}
-        >
-          <ActionIcon
-            onClick={() => removeProduct(item.uuidcartitem, businessid)}
-          >
-            <IconTrash color="red" />
-          </ActionIcon>
-        </Grid.Col>
-      </Grid>
-      <Group position="apart">
-        <Stack justify="center" h="100%" spacing={0}>
+    <tr key={item.uuidcartitem} style={{ height: "180px", fontSize: 15 }}>
+      <td>
+        <Grid>
+          <Grid.Col span={3}>
+            <Stack align="center" justify="center" h="100%">
+              <Image
+                src={item.variant.imageURL}
+                alt={item.variant.imageURL}
+                height={80}
+                width={80}
+                fit="contain"
+                withPlaceholder
+              />
+            </Stack>
+          </Grid.Col>
+          <Grid.Col span="auto">
+            <Title fw={600} order={3}>
+              {item.variant.offer.offerName}
+            </Title>
+            ...
+            <Text>
+              {item.variant.attributes.reduce(
+                (p, v, i) =>
+                  p +
+                  (i === 0
+                    ? `${v.attributeName}: ${v.value}`
+                    : `; ${v.attributeName}: ${v.value}`),
+                ""
+              )}
+            </Text>
+            ...
+            <Text>{`Vendido y despachado por ${businessName}`}</Text>
+          </Grid.Col>
+        </Grid>
+      </td>
+      <td style={{ textAlign: "center" }}>
+        <Stack justify="center" h="100%" spacing="xs">
           <Text td="line-through">S/ {item.variant.refPrice.toFixed(2)}</Text>
           <Text fw={700} td={item.variant.offerPrice ? "line-through" : "none"}>
             S/ {item.variant.adflyPrice.toFixed(2)}
@@ -100,9 +72,10 @@ const DetailedProductCartView = ({
           {item.variant.offerPrice ? (
             <Text fw={700}>S/ {item.variant.offerPrice.toFixed(2)}</Text>
           ) : null}
-          <Text fw={700}>{`Total: S/${item.subtotal.toFixed(2)}`}</Text>
         </Stack>
-        <Stack>
+      </td>
+      <td style={{ textAlign: "center" }}>
+        <Stack align="center">
           <Group spacing={5}>
             <ActionIcon
               variant="transparent"
@@ -153,11 +126,21 @@ const DetailedProductCartView = ({
               <IconPlus color="white" stroke={3} size={30} />
             </ActionIcon>
           </Group>
-          <Text>{`Máximo ${item.variant.maxQuantity} unidades`}</Text>
+          <Text fz={10}>{`Máximo ${item.variant.maxQuantity} unidades`}</Text>
         </Stack>
-      </Group>
-    </Card>
+      </td>
+      <td
+        style={{ textAlign: "center", fontWeight: 700 }}
+      >{`S/${item.subtotal.toFixed(2)}`}</td>
+      <td>
+        <ActionIcon
+          onClick={() => removeProduct(item.uuidcartitem, businessid)}
+        >
+          <IconTrash color="red" />
+        </ActionIcon>
+      </td>
+    </tr>
   );
 };
 
-export default DetailedProductCartView;
+export default ProductCartRow;

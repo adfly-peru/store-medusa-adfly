@@ -146,7 +146,7 @@ const AddressView = ({ data, cb }: { data: Address; cb: () => void }) => {
         {...form.getInputProps("additional")}
       />
       <Group px={70} position="apart" grow mt="xl">
-        <Button type="submit" onClick={handleUpdate} variant="light">
+        <Button type="submit" onClick={handleUpdate}>
           Guardar
         </Button>
       </Group>

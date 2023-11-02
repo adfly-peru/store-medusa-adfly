@@ -20,7 +20,7 @@ const capitalizeText = (text: string) => {
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 };
 
-const SearchBar = ({
+const FilterDrawer = ({
   searchable,
   departmentName,
 }: {
@@ -88,128 +88,7 @@ const SearchBar = ({
 
   return (
     <Container p={0}>
-      <Center p={15}>
-        <Title
-          order={5}
-          style={{
-            fontSize: "31px",
-            fontWeight: "700",
-            lineHeight: "37px",
-            letterSpacing: "0em",
-          }}
-        >
-          {searchable != ""
-            ? capitalizeText(searchable)
-            : departmentName != ""
-            ? capitalizeText(departmentName)
-            : "Departamento"}
-        </Title>
-      </Center>
-      <Divider my="sm" style={{ borderColor: "black" }} />
-      <Stack px={20}>
-        <Text
-          style={{
-            fontWeight: 700,
-          }}
-        >
-          Filtros seleccionados
-        </Text>
-
-        <Chip.Group
-          value={[
-            ...department,
-            ...category,
-            ...subcategory,
-            ...brand,
-            ...seller,
-            ...delivery,
-          ]}
-        >
-          <Group position="center">
-            {searchable.length > 0 ? (
-              <>
-                {department.map((e) => (
-                  <Chip
-                    value={e}
-                    onClick={() =>
-                      setDepartment(department.filter((value) => value != e))
-                    }
-                    key={e}
-                    radius="sm"
-                    color="dark"
-                  >
-                    {e}
-                  </Chip>
-                ))}
-              </>
-            ) : (
-              <></>
-            )}
-            {category.map((e) => (
-              <Chip
-                value={e}
-                onClick={() =>
-                  setCategory(category.filter((value) => value != e))
-                }
-                key={e}
-                radius="sm"
-                color="dark"
-              >
-                {e}
-              </Chip>
-            ))}
-            {subcategory.map((e) => (
-              <Chip
-                value={e}
-                onClick={() =>
-                  setSubcategory(subcategory.filter((value) => value != e))
-                }
-                key={e}
-                radius="sm"
-                color="dark"
-              >
-                {e}
-              </Chip>
-            ))}
-            {brand.map((e) => (
-              <Chip
-                value={e}
-                onClick={() => setBrand(brand.filter((value) => value != e))}
-                key={e}
-                radius="sm"
-                color="dark"
-              >
-                {e}
-              </Chip>
-            ))}
-            {seller.map((e) => (
-              <Chip
-                value={e}
-                onClick={() => setSeller(seller.filter((value) => value != e))}
-                key={e}
-                radius="sm"
-                color="dark"
-              >
-                {e}
-              </Chip>
-            ))}
-            {delivery.map((e) => (
-              <Chip
-                value={e}
-                onClick={() =>
-                  setDelivery(delivery.filter((value) => value != e))
-                }
-                key={e}
-                radius="sm"
-                color="dark"
-              >
-                {e}
-              </Chip>
-            ))}
-          </Group>
-        </Chip.Group>
-      </Stack>
-      <Divider mt="sm" style={{ borderColor: "black" }} />
+      <Divider size="md" style={{ borderColor: "black" }} />
       <Accordion
         p={0}
         multiple
@@ -326,4 +205,4 @@ const SearchBar = ({
   );
 };
 
-export default SearchBar;
+export default FilterDrawer;

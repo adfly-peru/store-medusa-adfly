@@ -1,28 +1,26 @@
-import { BackgroundImage, Stack, Title, Space, Box } from "@mantine/core";
+import { BackgroundImage, Stack, Title, Space, Image } from "@mantine/core";
 import CategorySection from "@modules/home/components/category-section";
 import FeaturedProducts from "../components/featured-products";
 import { useAccount } from "@context/account-context";
+import { Carousel } from "@mantine/carousel";
 
 const HomeView = () => {
   const { homeDesign } = useAccount();
   return (
     <>
-      <BackgroundImage
-        src={homeDesign?.bannerurl ?? ""}
-        radius="xs"
-        sx={{
-          height: 300,
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {/* <Stack align="center" justify="flex-end">
-          <Title order={3}>Bienvenido(a) a:</Title>
-          <Title order={3}>Tu tienda de Beneficios (*)</Title>
-        </Stack> */}
-      </BackgroundImage>
+      <Carousel w="90%" mx="auto" withIndicators height={250}>
+        <Carousel.Slide>
+          <BackgroundImage
+            style={{
+              height: "100%",
+              backgroundSize: "100% auto",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+            src={homeDesign?.bannerurl ?? ""}
+          />
+        </Carousel.Slide>
+      </Carousel>
       <Stack align="center" justify="flex-end" spacing="xl" px={15}>
         <Space />
         <CategorySection />

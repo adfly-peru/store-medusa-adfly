@@ -22,7 +22,6 @@ import { useAccount } from "@context/account-context";
 import { ProfileForm } from "@interfaces/collaborator";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import InformationBox from "./information-box";
 
 interface FormValues {
   name: string;
@@ -34,9 +33,12 @@ interface FormValues {
   termsOfService: boolean;
 }
 
-const PersonalDataForm = () => {
+const PersonalDataFormRegister = ({
+  handleNextStep,
+}: {
+  handleNextStep: () => void;
+}) => {
   const router = useRouter();
-  const [opened, { toggle, close }] = useDisclosure(false);
   const { collaborator, verify } = useAccount();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -70,6 +72,7 @@ const PersonalDataForm = () => {
         };
         const res = await verify(profileform);
         setMessage(res ?? "success");
+        handleNextStep();
         if (!res) {
           const timerId = setTimeout(() => {
             router.push("/");
@@ -104,32 +107,6 @@ const PersonalDataForm = () => {
         </Center>
       </Modal>
       <Stack spacing="xs">
-        {message != "" && (
-          <Alert
-            title={message == "success" ? "Felicidades!" : "Error!"}
-            color={message == "success" ? "green" : "red"}
-            onClose={() => setMessage("")}
-            my="lg"
-            withCloseButton
-          >
-            {message == "success"
-              ? "Se ha actualizado el perfil de manera exitosa. Será redirigido a la página principal en unos segundos..."
-              : message}
-          </Alert>
-        )}
-        <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-          <div>
-            <Burger opened={opened} onClick={toggle} />
-            {opened ? (
-              <InformationBox withClose={true} onClose={close} />
-            ) : (
-              <></>
-            )}
-          </div>
-        </MediaQuery>
-        <Title>Perfil</Title>
-        <Divider></Divider>
-
         <SimpleGrid
           cols={2}
           spacing="xl"
@@ -211,11 +188,11 @@ const PersonalDataForm = () => {
         )}
       </Stack>
       <Space h="md" />
-      <Button color="gray" fullWidth size="lg" onClick={handleUpdate}>
-        Actualizar
+      <Button color="gray" size="md" onClick={handleUpdate}>
+        Continuar
       </Button>
     </Stack>
   );
 };
 
-export default PersonalDataForm;
+export default PersonalDataFormRegister;

@@ -7,16 +7,26 @@ import client from "lib/apollo-config";
 import { ApolloProvider } from "@apollo/client";
 import { useEffect, useState } from "react";
 import {
+  ButtonStylesParams,
   ColorScheme,
   ColorSchemeProvider,
   LoadingOverlay,
   MantineProvider,
+  rem,
 } from "@mantine/core";
 import { OrderProvider } from "@context/order-context";
 import { DesignProvider } from "@context/design-context";
 import RegistrationStepsModal from "@modules/layout/templates/registration-steps-modal";
 import { LoadScript } from "@react-google-maps/api";
 import "@fontsource/rubik";
+import "@fontsource/open-sans";
+
+const adflyColors = {
+  default: "#31658E",
+  pressed: "#3D7FB2",
+  hover: "#234966",
+  disabled: "#A8C8E1",
+};
 
 export default function App({
   Component,
@@ -38,7 +48,97 @@ export default function App({
         toggleColorScheme={toggleColorScheme}
       >
         <MantineProvider
-          theme={{ colorScheme, fontFamily: "Rubik" }}
+          theme={{
+            fontFamily: "Open Sans, sans-serif",
+            colorScheme,
+            components: {
+              Button: {
+                styles: (theme, params: ButtonStylesParams, { variant }) => ({
+                  root: {
+                    borderRadius: rem(8),
+                    backgroundColor:
+                      variant === "filled" ? adflyColors.default : undefined,
+                    "&:hover": {
+                      backgroundColor:
+                        variant === "filled" ? adflyColors.hover : undefined,
+                    },
+                    "&:active": {
+                      backgroundColor:
+                        variant === "filled" ? adflyColors.pressed : undefined,
+                    },
+                    "&:disabled": {
+                      backgroundColor: "#CECECE",
+                      color: "white",
+                    },
+                  },
+                }),
+              },
+              NavLink: {
+                styles: (theme) => ({
+                  root: {
+                    backgroundColor: "white",
+                    "&[data-active]": {
+                      backgroundColor: "white",
+                      color: "black",
+                      fontWeight: 700,
+                      "&:hover": {
+                        backgroundColor: "#f8f9fa",
+                      },
+                    },
+                  },
+                }),
+              },
+              Checkbox: {
+                styles: (theme) => ({
+                  icon: {
+                    color: "#5C98C7 !important",
+                  },
+                  input: {
+                    "&:checked": {
+                      border: "2px solid #5C98C7",
+                      backgroundColor: "white",
+                    },
+                    border: "2px solid #5C98C7",
+                  },
+                }),
+              },
+              InputWrapper: {
+                styles: (theme) => ({
+                  label: {
+                    fontWeight: 600,
+                    fontSize: 15,
+                  },
+                }),
+              },
+              Input: {
+                styles: (theme) => ({
+                  input: {
+                    "&[data-disabled]": {
+                      border: "0px",
+                      backgroundColor: "#F2F2F3",
+                      color: "#86888A",
+                    },
+                    borderColor: "#737A82",
+                    color: "#737A82",
+                    borderRadius: rem(8),
+                  },
+                }),
+              },
+              Select: {
+                styles: (theme) => ({
+                  item: {
+                    "&[data-selected]": {
+                      backgroundColor: adflyColors.default,
+                      "&, &:hover": {
+                        backgroundColor: adflyColors.default,
+                      },
+                    },
+                    "&[data-hovered]": {},
+                  },
+                }),
+              },
+            },
+          }}
           withGlobalStyles
           withNormalizeCSS
         >

@@ -16,6 +16,7 @@ import {
   Alert,
   Burger,
   MediaQuery,
+  Group,
 } from "@mantine/core";
 import { IconX, IconCheck } from "@tabler/icons-react";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
@@ -24,7 +25,6 @@ import { useAccount } from "@context/account-context";
 import { useState } from "react";
 import { SecurityForm } from "@interfaces/collaborator";
 import { useRouter } from "next/router";
-import InformationBox from "./information-box";
 
 const PasswordRequirement = ({
   meets,
@@ -75,10 +75,12 @@ const doesPasswordMeetRequirements = (password: string) => {
   return true;
 };
 
-const SecurityForm = () => {
+const SecurityFormRegister = ({
+  handlePrevStep,
+}: {
+  handlePrevStep: () => void;
+}) => {
   const router = useRouter();
-  const [opened, { toggle, close }] = useDisclosure(false);
-  const { width } = useViewportSize();
   const [popoverOpened, setPopoverOpened] = useState(false);
   const { verify } = useAccount();
   const [message, setMessage] = useState("");
@@ -143,39 +145,12 @@ const SecurityForm = () => {
       </Modal>
       <Stack w="80%">
         <Stack spacing="xs">
-          {message != "" && (
-            <Alert
-              title={message == "success" ? "Felicidades!" : "Error!"}
-              color={message == "success" ? "green" : "red"}
-              onClose={() => setMessage("")}
-              my="lg"
-              withCloseButton
-            >
-              {message == "success"
-                ? "Se ha actualizado el perfil de manera exitosa. Será redirigido a la página principal en unos segundos..."
-                : message}
-            </Alert>
-          )}
-          <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-            <div>
-              <Burger opened={opened} onClick={toggle} />
-              {opened ? (
-                <InformationBox withClose={true} onClose={close} />
-              ) : (
-                <></>
-              )}
-            </div>
-          </MediaQuery>
-          <Title>Seguridad</Title>
-          <Divider></Divider>
-
           <TextInput
             label="Contraseña Actual"
             radius="xs"
             size="sm"
             {...form.getInputProps("currentPassword")}
           />
-
           <Popover
             opened={popoverOpened}
             position="bottom"
@@ -223,19 +198,29 @@ const SecurityForm = () => {
         </Stack>
 
         <Space h="md" />
-
-        <Button
-          color="gray"
-          fullWidth
-          size="lg"
-          onClick={handleUpdate}
-          disabled={!isPasswordValid}
-        >
-          Actualizar
-        </Button>
+        <Group position="center">
+          <Button
+            w={130}
+            color="gray"
+            size="md"
+            fw={400}
+            onClick={handlePrevStep}
+          >
+            Atras
+          </Button>
+          <Button
+            w={130}
+            color="gray"
+            size="md"
+            fw={400}
+            onClick={handleUpdate}
+          >
+            Finalizar
+          </Button>
+        </Group>
       </Stack>
     </Center>
   );
 };
 
-export default SecurityForm;
+export default SecurityFormRegister;

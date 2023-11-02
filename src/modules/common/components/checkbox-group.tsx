@@ -13,7 +13,13 @@ const CheckGroup = ({
     <Checkbox.Group value={currentValues} onChange={changeValues}>
       <Group mt="xs">
         {Array.from(values.entries()).map((entry, idx) => (
-          <Checkbox key={idx} value={entry[0]} label={entry[1]}></Checkbox>
+          <Checkbox
+            key={idx}
+            value={entry[0]}
+            label={entry[1]}
+            color="dark"
+            radius="xs"
+          ></Checkbox>
         ))}
       </Group>
     </Checkbox.Group>
