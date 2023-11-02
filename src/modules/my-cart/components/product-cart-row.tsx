@@ -48,7 +48,6 @@ const ProductCartRow = ({
               {item.variant.offer.offerName}
             </Title>
             ...
-            <Text>{item.variant.offer.type}</Text>
             <Text>
               {item.variant.attributes.reduce(
                 (p, v, i) =>

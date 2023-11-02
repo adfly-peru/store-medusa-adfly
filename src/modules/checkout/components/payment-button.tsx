@@ -14,8 +14,9 @@ import {
   TextInput,
   Title,
   Image,
+  Divider,
 } from "@mantine/core";
-import { IconCreditCard } from "@tabler/icons-react";
+import { IconCircleFilled, IconCreditCard } from "@tabler/icons-react";
 import { UseFormReturnType } from "@mantine/form";
 import { BillingForm } from "@interfaces/billing";
 import { useAccount } from "@context/account-context";
@@ -62,9 +63,11 @@ const createSessionToken = async (
 const PaymentButton = ({
   form,
   submitInfo,
+  handlePrevStep,
 }: {
   form: UseFormReturnType<BillingForm>;
   submitInfo: (checked: string) => Promise<string | null>;
+  handlePrevStep: () => void;
 }) => {
   const { cart } = useCart();
   const { collaborator, daysInApp } = useAccount();
@@ -93,6 +96,9 @@ const PaymentButton = ({
       amount: totalAmount,
       expirationminutes: "20",
       timeouturl: "about:blank",
+      merchantlogo: "https://www.adfly.pe/Content/logo.png",
+      merchantname: "Adfly",
+      formbuttoncolor: "#31658E",
       action: `api/payment?purchaseNumber=${cart.purchaseNumber}&amount=${totalAmount}&collaboratorid=${collaborator?.uuidcollaborator}`,
     });
 
@@ -133,29 +139,68 @@ const PaymentButton = ({
   return (
     <Center py="md" px="lg">
       <Stack w="100%">
-        <Title>Datos de facturación</Title>
-        <Radio.Group value={checked} onChange={setChecked} withAsterisk>
+        <Stack spacing={0}>
+          <Text fz={20} fw={700}>
+            Datos de Envío
+          </Text>
+          <Divider m={0} />
+        </Stack>
+        <Group position="left">
+          <Checkbox
+            checked={checked == "ticket"}
+            onChange={(_) => {
+              setChecked("ticket");
+              form.setValues({
+                ruc: "",
+                businessname: "",
+                fiscaladdress: "",
+              });
+            }}
+            icon={IconCircleFilled}
+            radius="lg"
+            value={"ticket"}
+            label="Boleta"
+          />
+          <Checkbox
+            checked={checked == "bill"}
+            onChange={(_) => setChecked("bill")}
+            radius="lg"
+            icon={IconCircleFilled}
+            value={"bill"}
+            label="Factura"
+          />
+        </Group>
+        {/* <Radio.Group value={checked} onChange={setChecked} withAsterisk>
           <Radio value="ticket" label="Boleta" />
           <Radio value="bill" label="Factura" />
-        </Radio.Group>
+        </Radio.Group> */}
         {checked === "bill" ? (
-          <div>
-            <Stack px="xl" spacing="sm">
-              <Group position="apart" spacing="xl" grow>
-                <TextInput label="Ruc:" {...form.getInputProps("ruc")} />
-                <TextInput
-                  label="Razón Social:"
-                  {...form.getInputProps("businessname")}
-                />
-              </Group>
+          <Stack px={0} spacing="sm">
+            <Group position="apart" spacing="xl" grow>
               <TextInput
-                label="Dirección Fiscal:"
-                {...form.getInputProps("fiscaladdress")}
+                withAsterisk
+                label="Ruc:"
+                {...form.getInputProps("ruc")}
               />
-            </Stack>
-          </div>
+              <TextInput
+                withAsterisk
+                label="Razón Social:"
+                {...form.getInputProps("businessname")}
+              />
+            </Group>
+            <TextInput
+              withAsterisk
+              label="Dirección Fiscal:"
+              {...form.getInputProps("fiscaladdress")}
+            />
+          </Stack>
         ) : null}
-        <Title>Métodos de Pago</Title>
+        <Stack spacing={0}>
+          <Text fz={20} fw={700}>
+            Métodos de Pago
+          </Text>
+          <Divider m={0} />
+        </Stack>
         {/* <Text>
           El pedido equivale a {(cart.total / 0.1).toFixed(2)} Estrellas. Sin
           embargo, en caso tenga un costo de delivery, este deberá ser pagado
@@ -165,7 +210,7 @@ const PaymentButton = ({
         </Text> */}
         <Accordion variant="separated">
           <Accordion.Item value="online">
-            <Accordion.Control icon={<IconCreditCard />}>
+            <Accordion.Control bg="#F2F2F3" icon={<IconCreditCard />}>
               Pago en Línea
             </Accordion.Control>
             <Accordion.Panel>
@@ -208,6 +253,13 @@ const PaymentButton = ({
             </Accordion.Panel>
           </Accordion.Item>
         </Accordion>
+        <Center>
+          <Group w="60%" position="center" mt="xl">
+            <Button w={200} h={48} onClick={() => handlePrevStep()}>
+              {"Regresar"}
+            </Button>
+          </Group>
+        </Center>
       </Stack>
     </Center>
   );

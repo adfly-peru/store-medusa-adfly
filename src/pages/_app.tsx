@@ -67,14 +67,42 @@ export default function App({
                         variant === "filled" ? adflyColors.pressed : undefined,
                     },
                     "&:disabled": {
-                      backgroundColor: adflyColors.disabled,
+                      backgroundColor: "#CECECE",
+                      color: "white",
                     },
+                  },
+                }),
+              },
+              Checkbox: {
+                styles: (theme) => ({
+                  icon: {
+                    color: "#5C98C7 !important",
+                  },
+                  input: {
+                    "&:checked": {
+                      border: "2px solid #5C98C7",
+                      backgroundColor: "white",
+                    },
+                    border: "2px solid #5C98C7",
+                  },
+                }),
+              },
+              InputWrapper: {
+                styles: (theme) => ({
+                  label: {
+                    fontWeight: 600,
+                    fontSize: 15,
                   },
                 }),
               },
               Input: {
                 styles: (theme) => ({
                   input: {
+                    "&[data-disabled]": {
+                      border: "0px",
+                      backgroundColor: "#F2F2F3",
+                      color: "#86888A",
+                    },
                     borderColor: "#737A82",
                     color: "#737A82",
                     borderRadius: rem(8),

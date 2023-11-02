@@ -1,12 +1,11 @@
 import {
   Stepper,
   ScrollArea,
-  Group,
-  Button,
   Modal,
   Loader,
   Center,
   Card,
+  rem,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useState } from "react";
@@ -18,10 +17,8 @@ import { useForm } from "@mantine/form";
 import { BillingForm } from "@interfaces/billing";
 import { useCart } from "@context/cart-context";
 import { AddressInfoForm } from "@interfaces/address-interface";
-import { useRouter } from "next/router";
 
 const CheckoutForm = () => {
-  const router = useRouter();
   const { height } = useViewportSize();
   const { collaborator } = useAccount();
   const { editBilling, editDelivery, cart, loadingEvent } = useCart();
@@ -120,19 +117,89 @@ const CheckoutForm = () => {
         </Center>
       </Modal>
       <Card withBorder>
-        <Stepper active={active} onStepClick={setActive} breakpoint="sm">
-          <Stepper.Step label="Información" allowStepSelect={active > 0}>
+        <Stepper
+          active={active}
+          onStepClick={setActive}
+          breakpoint={0}
+          styles={{
+            steps: {
+              paddingLeft: 50,
+              paddingRight: 50,
+            },
+            stepIcon: {
+              fontSize: 25,
+              backgroundColor: "white",
+              border: "2px solid #BCBCBC",
+              color: "#BCBCBC",
+              "&[data-completed]": {
+                borderWidth: 0,
+                backgroundColor: "#31658E",
+                color: "white",
+              },
+              "&[data-progress]": {
+                borderWidth: 0,
+                backgroundColor: "#31658E",
+                color: "white",
+              },
+            },
+            step: {
+              flexDirection: "column",
+              width: 42,
+            },
+            stepBody: {
+              margin: 0,
+            },
+            stepLabel: {
+              marginTop: 5,
+              fontSize: 16,
+            },
+            separator: {
+              backgroundColor: "#BCBCBC",
+              marginBottom: 20,
+              height: 4,
+              marginLeft: rem(-2),
+              marginRight: rem(-2),
+            },
+            separatorActive: {
+              backgroundColor: "#31658E",
+            },
+          }}
+        >
+          <Stepper.Step
+            label="Información"
+            allowStepSelect={active > 0}
+            completedIcon={1}
+          >
             {/* <ScrollArea h={height / 1.5} w="100%" type="auto" offsetScrollbars> */}
-              <InformationForm form={billingform} handleNextStep={handleNextStep} />
+            <InformationForm
+              form={billingform}
+              handleNextStep={handleNextStep}
+            />
             {/* </ScrollArea> */}
           </Stepper.Step>
-          <Stepper.Step label="Envío" allowStepSelect={active > 1}>
+          <Stepper.Step
+            label="Envío"
+            allowStepSelect={active > 1}
+            completedIcon={2}
+          >
             <ScrollArea h={height / 1.5} w="100%" type="auto" offsetScrollbars>
-              <ShippingInformation form={deliveryform} />
+              <ShippingInformation
+                form={deliveryform}
+                handleNextStep={handleNextStep}
+                handlePrevStep={prevStep}
+              />
             </ScrollArea>
           </Stepper.Step>
-          <Stepper.Step label="Pago" allowStepSelect={active > 2}>
-            <PaymentButton form={billingform} submitInfo={funcOnPaymentButton} />
+          <Stepper.Step
+            label="Pago"
+            allowStepSelect={active > 2}
+            completedIcon={3}
+          >
+            <PaymentButton
+              form={billingform}
+              submitInfo={funcOnPaymentButton}
+              handlePrevStep={prevStep}
+            />
           </Stepper.Step>
         </Stepper>
       </Card>

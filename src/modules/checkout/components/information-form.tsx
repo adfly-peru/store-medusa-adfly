@@ -1,11 +1,11 @@
 import { BillingForm } from "@interfaces/billing";
-import { Text, Group, Stack, TextInput, Checkbox, Button, SimpleGrid, MediaQuery } from "@mantine/core";
+import { Group, TextInput, Button, SimpleGrid } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { useRouter } from "next/router";
 
 const InformationForm = ({
   form,
-  handleNextStep
+  handleNextStep,
 }: {
   form: UseFormReturnType<BillingForm>;
   handleNextStep: () => void;
@@ -16,33 +16,36 @@ const InformationForm = ({
       <SimpleGrid
         cols={2}
         spacing="lg"
-        breakpoints={[
-          { maxWidth: '40rem', cols: 1, spacing: 'sm' },
-        ]}
+        breakpoints={[{ maxWidth: "40rem", cols: 1, spacing: "sm" }]}
       >
         <TextInput
           label="Nombre:"
           disabled
+          withAsterisk
           {...form.getInputProps("name")}
         />
         <TextInput
           label="Apellidos:"
           disabled
+          withAsterisk
           {...form.getInputProps("lastname")}
         />
         <TextInput
           label="Tipo de Documento:"
           disabled
+          withAsterisk
           {...form.getInputProps("doctype")}
         />
         <TextInput
           label="N° Doc:"
           disabled
+          withAsterisk
           {...form.getInputProps("doc")}
         />
         <TextInput
           label="Correo electrónico:"
           disabled
+          withAsterisk
           {...form.getInputProps("email")}
         />
         <TextInput
@@ -52,6 +55,14 @@ const InformationForm = ({
           {...form.getInputProps("phone")}
         />
       </SimpleGrid>
+      <Group position="center" mt="xl">
+        <Button w={200} h={48} onClick={() => router.push("/checkout/mycart")}>
+          {"Regresar a Carrito"}
+        </Button>
+        <Button w={200} h={48} onClick={handleNextStep}>
+          Continuar
+        </Button>
+      </Group>
     </div>
   );
 };
