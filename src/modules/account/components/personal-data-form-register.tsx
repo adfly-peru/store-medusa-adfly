@@ -55,6 +55,10 @@ const PersonalDataFormRegister = ({
   });
 
   const handleUpdate = async () => {
+    if (collaborator?.emailVerify) {
+      handleNextStep();
+      return;
+    }
     form.validate();
     if (form.isValid()) {
       setLoading(true);
@@ -151,6 +155,7 @@ const PersonalDataFormRegister = ({
             {...form.getInputProps("email")}
           />
           <TextInput
+            disabled={collaborator.emailVerify}
             placeholder=""
             label="Celular"
             radius="xs"
@@ -159,7 +164,7 @@ const PersonalDataFormRegister = ({
           />
         </SimpleGrid>
         <Space h="md" />
-        {!collaborator.emailVerify && (
+        {!collaborator.emailVerify ? (
           <>
             {" "}
             <Checkbox
@@ -178,6 +183,8 @@ const PersonalDataFormRegister = ({
               {...form.getInputProps("acceptPublicity")}
             />
           </>
+        ) : (
+          <></>
         )}
       </Stack>
       <Space h="md" />
