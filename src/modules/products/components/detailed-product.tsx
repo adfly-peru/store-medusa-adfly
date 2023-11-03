@@ -284,8 +284,9 @@ export function DetailedProduct({ product }: { product: Offer }) {
   useEffect(() => {
     const uniqueAttributes = new Set();
     const uniqueVariants = product.variant.filter((variant) => {
+      const attributesCopy = [...variant.attributes];
       const attributesString = JSON.stringify(
-        variant.attributes.sort((a, b) =>
+        attributesCopy.sort((a, b) =>
           a.attributeName.localeCompare(b.attributeName)
         )
       );
