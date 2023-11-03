@@ -1,5 +1,11 @@
 import { BillingForm } from "@interfaces/billing";
-import { Group, TextInput, Button, SimpleGrid } from "@mantine/core";
+import {
+  Group,
+  TextInput,
+  Button,
+  SimpleGrid,
+  MediaQuery,
+} from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { useRouter } from "next/router";
 
@@ -55,13 +61,31 @@ const InformationForm = ({
           {...form.getInputProps("phone")}
         />
       </SimpleGrid>
-      <Group position="center" mt="xl">
-        <Button w={200} h={48} onClick={() => router.push("/checkout/mycart")}>
-          {"Regresar a Carrito"}
-        </Button>
-        <Button w={200} h={48} onClick={handleNextStep}>
-          Continuar
-        </Button>
+      <Group position="center" w="100%" mt="xl">
+        <MediaQuery
+          smallerThan="sm"
+          styles={{
+            width: "45%",
+          }}
+        >
+          <Button
+            w={200}
+            h={48}
+            onClick={() => router.push("/checkout/mycart")}
+          >
+            {"Regresar a Carrito"}
+          </Button>
+        </MediaQuery>
+        <MediaQuery
+          smallerThan="sm"
+          styles={{
+            width: "45%",
+          }}
+        >
+          <Button w={200} h={48} onClick={handleNextStep}>
+            Continuar
+          </Button>
+        </MediaQuery>
       </Group>
     </div>
   );

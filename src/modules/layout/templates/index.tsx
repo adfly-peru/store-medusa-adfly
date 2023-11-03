@@ -80,12 +80,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             justifyContent: "center",
             alignItems: "center",
           }}
-        >
-          {/* <Stack align="center" justify="flex-end">
-            <Title order={3}>Bienvenido(a) a:</Title>
-            <Title order={3}>Tu tienda de Beneficios (*)</Title>
-          </Stack> */}
-        </BackgroundImage>
+        ></BackgroundImage>
       </AppShell>
     );
   }
@@ -102,8 +97,8 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       footer={<FooterComponent />}
       styles={(theme) => ({
         main: {
-          paddingTop: 200,
-          minHeight: height - 200,
+          paddingTop: 150,
+          minHeight: height - 150,
         },
       })}
       sx={{

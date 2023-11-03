@@ -179,7 +179,6 @@ const HomeHeader = () => {
             <Menu.Target>
               <Center>
                 <UnstyledButton
-                  w="80%"
                   p="0.4rem"
                   style={{
                     border: "2px solid #ffffff",
@@ -187,7 +186,9 @@ const HomeHeader = () => {
                   }}
                 >
                   <Group spacing="xs" align="center" position="apart">
-                    <Text color={homeDesign?.fontcolor}>Menu</Text>
+                    <Text fz={20} color={homeDesign?.fontcolor}>
+                      Menú
+                    </Text>
                     <MediaQuery
                       smallerThan="lg"
                       styles={{
@@ -318,8 +319,7 @@ const HomeHeader = () => {
                 disabled={cartLength <= 0}
                 label={cartLength}
                 inline
-                offset={3}
-                size={22}
+                size={20}
                 withBorder
                 color={homeDesign?.backcolor}
                 styles={{

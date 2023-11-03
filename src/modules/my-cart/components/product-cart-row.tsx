@@ -44,11 +44,10 @@ const ProductCartRow = ({
             </Stack>
           </Grid.Col>
           <Grid.Col span="auto">
-            <Title fw={600} order={3}>
+            <Title fw={600} order={3} lineClamp={2}>
               {item.variant.offer.offerName}
             </Title>
-            ...
-            <Text>
+            <Text lineClamp={2}>
               {item.variant.attributes.reduce(
                 (p, v, i) =>
                   p +
@@ -58,7 +57,6 @@ const ProductCartRow = ({
                 ""
               )}
             </Text>
-            ...
             <Text>{`Vendido y despachado por ${businessName}`}</Text>
           </Grid.Col>
         </Grid>

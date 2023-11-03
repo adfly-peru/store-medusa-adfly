@@ -71,6 +71,9 @@ export default function App({
                       color: "white",
                     },
                   },
+                  label: {
+                    whiteSpace: "pre-line",
+                  },
                 }),
               },
               NavLink: {

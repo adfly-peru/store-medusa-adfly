@@ -34,7 +34,7 @@ const ProductInfo = ({ productId }: { productId: string }) => {
 
   return (
     <>
-      <Container maw="90%" mt={20}>
+      <Container maw="100%">
         <DetailedProduct product={product} />
       </Container>
       <Stack align="center" justify="flex-end" spacing="xl">

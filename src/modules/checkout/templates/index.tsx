@@ -9,12 +9,10 @@ import {
   Text,
   Space,
   Center,
-  Button,
 } from "@mantine/core";
 import EmptyCart from "../components/empty-cart";
 import CheckoutForm from "./checkout-form";
 import { useEffect, useState } from "react";
-import { IconShoppingCart } from "@tabler/icons-react";
 
 const CheckoutTemplate = () => {
   const { cart } = useCart();
@@ -40,7 +38,7 @@ const CheckoutTemplate = () => {
         );
       }, 0);
     };
-    setSaving(calculateTotalRefPrice());
+    setSaving(calculateTotalRefPrice() - (cart.total - totaldelivery));
   }, [cart]);
 
   if (!cart) {
@@ -53,21 +51,21 @@ const CheckoutTemplate = () => {
   return (
     <>
       <Center w="100%">
-        <Stack ml={40} w="95%" align="start">
+        <Stack w="95%" align="start" pl={8}>
           <Title fz={25} align="start" order={2}>
             Checkout
           </Title>
         </Stack>
       </Center>
       <Center w="100%">
-        <Grid ml={30} w="95%" mt={0}>
-          <Grid.Col span="auto" pl={0}>
+        <Grid w="95%" mt={0}>
+          <Grid.Col span="auto">
             <CheckoutForm />
           </Grid.Col>
           {/* <Divider size="sm" orientation="vertical" /> */}
           <Grid.Col span={12} md={3}>
             <Stack align="center">
-              <Card w="90%" radius="md" withBorder fz={15}>
+              <Card w="100%" radius="md" withBorder fz={15}>
                 <Title order={3} fz={20}>
                   Resumen
                 </Title>
@@ -93,7 +91,7 @@ const CheckoutTemplate = () => {
                 <Text
                   fz={10}
                   color="gray.6"
-                >{`(Ahorro estimado: ${saving})`}</Text>
+                >{`(Ahorro estimado: S/.${saving.toFixed(2)})`}</Text>
                 <Space h="xl" />
                 <Space h="xl" />
               </Card>

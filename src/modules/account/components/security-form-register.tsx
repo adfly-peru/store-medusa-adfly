@@ -143,82 +143,102 @@ const SecurityFormRegister = ({
           <Loader />
         </Center>
       </Modal>
-      <Stack w="80%">
-        <Stack spacing="xs">
-          <TextInput
-            label="Contraseña Actual"
-            radius="xs"
-            size="sm"
-            {...form.getInputProps("currentPassword")}
-          />
-          <Popover
-            opened={popoverOpened}
-            position="bottom"
-            width="target"
-            transitionProps={{ transition: "pop" }}
-          >
-            <Popover.Target>
-              <div
-                onFocusCapture={() => setPopoverOpened(true)}
-                onBlurCapture={() => setPopoverOpened(false)}
-              >
-                <PasswordInput
-                  withAsterisk
-                  label="Nueva Contraseña"
-                  {...form.getInputProps("newPassword")}
+      <MediaQuery
+        smallerThan="sm"
+        styles={{
+          width: "100%",
+        }}
+      >
+        <Stack w="80%">
+          <Stack spacing="xs">
+            <TextInput
+              label="Contraseña Actual"
+              radius="xs"
+              size="sm"
+              {...form.getInputProps("currentPassword")}
+            />
+            <Popover
+              opened={popoverOpened}
+              position="bottom"
+              width="target"
+              transitionProps={{ transition: "pop" }}
+            >
+              <Popover.Target>
+                <div
+                  onFocusCapture={() => setPopoverOpened(true)}
+                  onBlurCapture={() => setPopoverOpened(false)}
+                >
+                  <PasswordInput
+                    withAsterisk
+                    label="Nueva Contraseña"
+                    {...form.getInputProps("newPassword")}
+                  />
+                </div>
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Progress
+                  color={color}
+                  value={strength}
+                  size={5}
+                  style={{ marginBottom: 10 }}
                 />
-              </div>
-            </Popover.Target>
-            <Popover.Dropdown>
-              <Progress
-                color={color}
-                value={strength}
-                size={5}
-                style={{ marginBottom: 10 }}
-              />
-              <PasswordRequirement
-                label="Incluye al menos 8 carácteres"
-                meets={form.values.newPassword.length > 7}
-              />
-              {requirements.map((requirement, index) => (
                 <PasswordRequirement
-                  key={index}
-                  label={requirement.label}
-                  meets={requirement.re.test(form.values.newPassword)}
+                  label="Incluye al menos 8 carácteres"
+                  meets={form.values.newPassword.length > 7}
                 />
-              ))}
-            </Popover.Dropdown>
-          </Popover>
+                {requirements.map((requirement, index) => (
+                  <PasswordRequirement
+                    key={index}
+                    label={requirement.label}
+                    meets={requirement.re.test(form.values.newPassword)}
+                  />
+                ))}
+              </Popover.Dropdown>
+            </Popover>
 
-          <PasswordInput
-            label="Confirmar Contraseña"
-            withAsterisk
-            {...form.getInputProps("confPassword")}
-          />
+            <PasswordInput
+              label="Confirmar Contraseña"
+              withAsterisk
+              {...form.getInputProps("confPassword")}
+            />
+          </Stack>
+          <Space h="md" />
+          <Group position="center" w="100%">
+            <MediaQuery
+              smallerThan="sm"
+              styles={{
+                width: "45%",
+              }}
+            >
+              <Button
+                w={120}
+                color="gray"
+                size="md"
+                fw={400}
+                onClick={handlePrevStep}
+              >
+                Atras
+              </Button>
+            </MediaQuery>
+            <MediaQuery
+              smallerThan="sm"
+              styles={{
+                width: "45%",
+              }}
+            >
+              <Button
+                w={120}
+                color="gray"
+                size="md"
+                fw={400}
+                onClick={handleUpdate}
+              >
+                Finalizar
+              </Button>
+            </MediaQuery>
+          </Group>
         </Stack>
-
-        <Space h="md" />
-        <Group position="center">
-          <Button
-            w={130}
-            color="gray"
-            size="md"
-            fw={400}
-            onClick={handlePrevStep}
-          >
-            Atras
-          </Button>
-          <Button
-            w={130}
-            color="gray"
-            size="md"
-            fw={400}
-            onClick={handleUpdate}
-          >
-            Finalizar
-          </Button>
-        </Group>
-      </Stack>
+      </MediaQuery>
     </Center>
   );
 };

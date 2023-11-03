@@ -3,20 +3,13 @@ import {
   Button,
   TextInput,
   Space,
-  Divider,
   Checkbox,
-  Group,
-  Title,
-  Alert,
   Anchor,
   Modal,
   Center,
   Loader,
-  Burger,
-  MediaQuery,
   SimpleGrid,
 } from "@mantine/core";
-import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
 import { ProfileForm } from "@interfaces/collaborator";
@@ -62,6 +55,10 @@ const PersonalDataFormRegister = ({
   });
 
   const handleUpdate = async () => {
+    if (collaborator?.emailVerify) {
+      handleNextStep();
+      return;
+    }
     form.validate();
     if (form.isValid()) {
       setLoading(true);
@@ -158,6 +155,7 @@ const PersonalDataFormRegister = ({
             {...form.getInputProps("email")}
           />
           <TextInput
+            disabled={collaborator.emailVerify}
             placeholder=""
             label="Celular"
             radius="xs"
@@ -166,7 +164,7 @@ const PersonalDataFormRegister = ({
           />
         </SimpleGrid>
         <Space h="md" />
-        {!collaborator.emailVerify && (
+        {!collaborator.emailVerify ? (
           <>
             {" "}
             <Checkbox
@@ -185,6 +183,8 @@ const PersonalDataFormRegister = ({
               {...form.getInputProps("acceptPublicity")}
             />
           </>
+        ) : (
+          <></>
         )}
       </Stack>
       <Space h="md" />

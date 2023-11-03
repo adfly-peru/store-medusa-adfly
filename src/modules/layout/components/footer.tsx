@@ -71,10 +71,8 @@ const FooterComponent = () => {
           </Stack>
           <Stack spacing="xs" align="center">
             <Stack>
-              <Title pl="md" order={3}>
-                NOSOTROS
-              </Title>
-              <Text pl="md">¿Qué es ADLY?</Text>
+              <Title order={3}>NOSOTROS</Title>
+              <Text>¿Qué es ADLY?</Text>
               <Image
                 radius="md"
                 height={100}

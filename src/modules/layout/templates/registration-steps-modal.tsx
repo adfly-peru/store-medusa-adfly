@@ -5,6 +5,7 @@ import {
   Center,
   Divider,
   Group,
+  MediaQuery,
   Menu,
   Modal,
   Stack,
@@ -91,88 +92,209 @@ const RegistrationStepsModal: React.FC<{ children?: React.ReactNode }> = ({
             Completa tu Registro
           </Title>
         </Center>
-        <Stepper
-          active={active}
-          onStepClick={setActive}
-          breakpoint="sm"
+        <MediaQuery
+          largerThan="sm"
           styles={{
-            steps: {
-              paddingLeft: 50,
-              paddingRight: 50,
-            },
-            stepIcon: {
-              fontSize: 25,
-              backgroundColor: "white",
-              border: "2px solid #BCBCBC",
-              color: "#BCBCBC",
-              "&[data-completed]": {
-                borderWidth: 0,
-                backgroundColor: "#31658E",
-                color: "white",
-              },
-              "&[data-progress]": {
-                borderWidth: 0,
-                backgroundColor: "#31658E",
-                color: "white",
-              },
-            },
-            step: {
-              flexDirection: "column",
-              width: 200,
-            },
-            stepBody: {
-              margin: 0,
-            },
-            stepLabel: {
-              marginTop: 5,
-              fontSize: 16,
-            },
-            separator: {
-              backgroundColor: "#BCBCBC",
-              marginBottom: 20,
-              height: 4,
-              marginLeft: rem(-100),
-              marginRight: rem(-100),
-            },
-            separatorActive: {
-              backgroundColor: "#31658E",
-            },
+            display: "none",
           }}
         >
-          <Stepper.Step
-            label="Completa tu Perfil"
-            allowStepSelect={true}
-            completedIcon={1}
+          <Stepper
+            active={active}
+            onStepClick={setActive}
+            breakpoint={0}
+            styles={{
+              steps: {
+                paddingLeft: 0,
+                paddingRight: 0,
+              },
+              stepIcon: {
+                fontSize: 25,
+                backgroundColor: "white",
+                border: "2px solid #BCBCBC",
+                color: "#BCBCBC",
+                "&[data-completed]": {
+                  borderWidth: 0,
+                  backgroundColor: "#31658E",
+                  color: "white",
+                },
+                "&[data-progress]": {
+                  borderWidth: 0,
+                  backgroundColor: "#31658E",
+                  color: "white",
+                },
+              },
+              step: {
+                flexDirection: "column",
+                width: 60,
+              },
+              stepBody: {
+                margin: 0,
+              },
+              stepLabel: {
+                marginTop: 5,
+                fontSize: 10,
+                textAlign: "center",
+              },
+              separator: {
+                backgroundColor: "#BCBCBC",
+                marginBottom: 20,
+                height: 4,
+                marginLeft: rem(-10),
+                marginRight: rem(-10),
+              },
+              separatorActive: {
+                backgroundColor: "#31658E",
+              },
+            }}
           >
-            <Divider w="100%" style={{ border: "1px solid #31658E" }} my="lg" />
-            <Center>
-              <PersonalDataFormRegister handleNextStep={nextStep} />
-            </Center>
-          </Stepper.Step>
-          <Stepper.Step
-            label="Verifica tu correo"
-            allowStepSelect={profileCompleted(collaborator)}
-            completedIcon={2}
-          >
-            <Divider w="100%" style={{ border: "1px solid #31658E" }} my="lg" />
-            <Center>
-              <VerifyEmailRegister
-                handlePrevStep={prevStep}
-                handleNextStep={collaborator.emailVerify ? nextStep : null}
+            <Stepper.Step
+              label="Completa tu Perfil"
+              allowStepSelect={true}
+              completedIcon={1}
+            >
+              <Divider
+                w="100%"
+                style={{ border: "1px solid #31658E" }}
+                my="lg"
               />
-            </Center>
-          </Stepper.Step>
-          <Stepper.Step
-            label="Actualiza tu contraseña"
-            allowStepSelect={collaborator.emailVerify}
-            completedIcon={3}
+              <Center>
+                <PersonalDataFormRegister handleNextStep={nextStep} />
+              </Center>
+            </Stepper.Step>
+            <Stepper.Step
+              label="Verifica tu correo"
+              allowStepSelect={profileCompleted(collaborator)}
+              completedIcon={2}
+            >
+              <Divider
+                w="100%"
+                style={{ border: "1px solid #31658E" }}
+                my="lg"
+              />
+              <Center>
+                <VerifyEmailRegister
+                  handlePrevStep={prevStep}
+                  handleNextStep={collaborator.emailVerify ? nextStep : null}
+                />
+              </Center>
+            </Stepper.Step>
+            <Stepper.Step
+              label="Actualiza tu contraseña"
+              allowStepSelect={collaborator.emailVerify}
+              completedIcon={3}
+            >
+              <Divider
+                w="100%"
+                style={{ border: "1px solid #31658E" }}
+                my="lg"
+              />
+              <Center>
+                <SecurityFormRegister handlePrevStep={prevStep} />
+              </Center>
+            </Stepper.Step>
+          </Stepper>
+        </MediaQuery>
+        <MediaQuery
+          smallerThan="sm"
+          styles={{
+            display: "none",
+          }}
+        >
+          <Stepper
+            active={active}
+            onStepClick={setActive}
+            breakpoint={0}
+            styles={{
+              steps: {
+                paddingLeft: 50,
+                paddingRight: 50,
+              },
+              stepIcon: {
+                fontSize: 25,
+                backgroundColor: "white",
+                border: "2px solid #BCBCBC",
+                color: "#BCBCBC",
+                "&[data-completed]": {
+                  borderWidth: 0,
+                  backgroundColor: "#31658E",
+                  color: "white",
+                },
+                "&[data-progress]": {
+                  borderWidth: 0,
+                  backgroundColor: "#31658E",
+                  color: "white",
+                },
+              },
+              step: {
+                flexDirection: "column",
+                width: 200,
+              },
+              stepBody: {
+                margin: 0,
+              },
+              stepLabel: {
+                marginTop: 5,
+                fontSize: 16,
+              },
+              separator: {
+                backgroundColor: "#BCBCBC",
+                marginBottom: 20,
+                height: 4,
+                marginLeft: rem(-100),
+                marginRight: rem(-100),
+              },
+              separatorActive: {
+                backgroundColor: "#31658E",
+              },
+            }}
           >
-            <Divider w="100%" style={{ border: "1px solid #31658E" }} my="lg" />
-            <Center>
-              <SecurityFormRegister handlePrevStep={prevStep} />
-            </Center>
-          </Stepper.Step>
-        </Stepper>
+            <Stepper.Step
+              label="Completa tu Perfil"
+              allowStepSelect={true}
+              completedIcon={1}
+            >
+              <Divider
+                w="100%"
+                style={{ border: "1px solid #31658E" }}
+                my="lg"
+              />
+              <Center>
+                <PersonalDataFormRegister handleNextStep={nextStep} />
+              </Center>
+            </Stepper.Step>
+            <Stepper.Step
+              label="Verifica tu correo"
+              allowStepSelect={profileCompleted(collaborator)}
+              completedIcon={2}
+            >
+              <Divider
+                w="100%"
+                style={{ border: "1px solid #31658E" }}
+                my="lg"
+              />
+              <Center>
+                <VerifyEmailRegister
+                  handlePrevStep={prevStep}
+                  handleNextStep={collaborator.emailVerify ? nextStep : null}
+                />
+              </Center>
+            </Stepper.Step>
+            <Stepper.Step
+              label="Actualiza tu contraseña"
+              allowStepSelect={collaborator.emailVerify}
+              completedIcon={3}
+            >
+              <Divider
+                w="100%"
+                style={{ border: "1px solid #31658E" }}
+                my="lg"
+              />
+              <Center>
+                <SecurityFormRegister handlePrevStep={prevStep} />
+              </Center>
+            </Stepper.Step>
+          </Stepper>
+        </MediaQuery>
         <Center mt="lg">
           <Stack w="70%" align="center">
             <Text fz={10} align="center">

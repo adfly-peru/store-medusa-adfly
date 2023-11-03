@@ -56,7 +56,8 @@ const ProductCard = ({ product }: { product: Offer }) => {
   };
 
   let discount =
-    ((selectedVariant.refPrice - selectedVariant.adflyPrice) /
+    ((selectedVariant.refPrice -
+      (selectedVariant.offerPrice ?? selectedVariant.adflyPrice)) /
       selectedVariant.refPrice) *
     100;
 
@@ -78,23 +79,23 @@ const ProductCard = ({ product }: { product: Offer }) => {
   }
 
   return (
-    <Card shadow="sm" radius="md" className={classes.card} px="sm" w={272}>
-      <Card.Section py="xs" inheritPadding>
-        <Group position="right">
-          <Badge color="red" variant="filled" radius="sm">
-            -
-            {product.type === "coupon"
-              ? `${
-                  selectedVariant.coupon?.discountType === "monetary"
-                    ? ` S/.${selectedVariant.coupon.discount.toFixed(2)}`
-                    : ` ${selectedVariant.coupon?.discount}%`
-                }`
-              : ` ${discount.toFixed(0)}%`}
-          </Badge>
-        </Group>
-      </Card.Section>
-      <Card.Section inheritPadding>
-        <Link href={"/product/" + product.uuidOffer}>
+    <Link href={"/product/" + product.uuidOffer}>
+      <Card shadow="sm" radius="md" className={classes.card} px="sm" w={272}>
+        <Card.Section py="xs" inheritPadding>
+          <Group position="right">
+            <Badge color="red" variant="filled" radius="sm">
+              -
+              {product.type === "coupon"
+                ? `${
+                    selectedVariant.coupon?.discountType === "monetary"
+                      ? ` S/.${selectedVariant.coupon.discount.toFixed(2)}`
+                      : ` ${selectedVariant.coupon?.discount}%`
+                  }`
+                : ` ${discount.toFixed(0)}%`}
+            </Badge>
+          </Group>
+        </Card.Section>
+        <Card.Section inheritPadding>
           <Image
             src={selectedVariant.imageURL}
             alt={selectedVariant.imageURL}
@@ -109,63 +110,63 @@ const ProductCard = ({ product }: { product: Offer }) => {
               },
             }}
           />
-        </Link>
-      </Card.Section>
-      <Card.Section py="xs" inheritPadding ta="center" h={95}>
-        <Text lineClamp={1} mt={5}>
-          {product.brand.name}
-        </Text>
-        <Title lineClamp={2} order={3}>
-          {product.offerName}
-        </Title>
-      </Card.Section>
-      <Card.Section py="xs" inheritPadding ta="center" h={130}>
-        {product.type === "coupon" ? (
-          <Stack justify="center" h="100%">
-            <Group c="red" position="apart" fw="bold">
-              <Text fz="sm">Descuento</Text>
-              <Text>
-                -
-                {selectedVariant.coupon?.discountType === "monetary"
-                  ? ` S/. ${selectedVariant.coupon?.discount}`
-                  : ` ${selectedVariant.coupon?.discount}%`}
-              </Text>
-            </Group>
-          </Stack>
-        ) : (
-          <Stack justify="center" h="100%" spacing="xs">
-            {selectedVariant.offerPrice ? (
+        </Card.Section>
+        <Card.Section py="xs" inheritPadding ta="left" h={95}>
+          <Text lineClamp={1} mt={5}>
+            {product.brand.name}
+          </Text>
+          <Title lineClamp={2} order={3}>
+            {product.offerName}
+          </Title>
+        </Card.Section>
+        <Card.Section py="xs" inheritPadding ta="center" h={130}>
+          {product.type === "coupon" ? (
+            <Stack justify="center" h="100%">
               <Group c="red" position="apart" fw="bold">
-                <Text fz="sm">Oferta</Text>
-                <Text>S/. {selectedVariant.offerPrice.toFixed(2)}</Text>
+                <Text fz="sm">Descuento</Text>
+                <Text>
+                  -
+                  {selectedVariant.coupon?.discountType === "monetary"
+                    ? ` S/. ${selectedVariant.coupon?.discount}`
+                    : ` ${selectedVariant.coupon?.discount}%`}
+                </Text>
               </Group>
-            ) : null}
-            <Group position="apart" fw="bold">
-              <Text fz="sm">Precio ADFLY</Text>
-              <Text td={selectedVariant.offerPrice ? "line-through" : "none"}>
-                S/. {selectedVariant.adflyPrice.toFixed(2)}
-              </Text>
-            </Group>
-            <Group position="apart">
-              <Text fz="sm">Precio Mercado</Text>
-              <Text td="line-through">
-                S/. {selectedVariant.refPrice.toFixed(2)}
-              </Text>
-            </Group>
-          </Stack>
-        )}
-      </Card.Section>
-      <Card.Section py="xs" inheritPadding ta="center" h={70}>
-        <Button
-          fullWidth
-          radius="md"
-          component="a"
-          href={"/product/" + product.uuidOffer}
-        >
-          {product.type === "coupon" ? "Generar Cupón" : "Agregar"}
-        </Button>
-      </Card.Section>
-    </Card>
+            </Stack>
+          ) : (
+            <Stack justify="center" h="100%" spacing="xs">
+              {selectedVariant.offerPrice ? (
+                <Group c="red" position="apart" fw="bold">
+                  <Text fz="sm">Oferta</Text>
+                  <Text>S/. {selectedVariant.offerPrice.toFixed(2)}</Text>
+                </Group>
+              ) : null}
+              <Group position="apart" fw="bold">
+                <Text fz="sm">Precio ADFLY</Text>
+                <Text td={selectedVariant.offerPrice ? "line-through" : "none"}>
+                  S/. {selectedVariant.adflyPrice.toFixed(2)}
+                </Text>
+              </Group>
+              <Group position="apart">
+                <Text fz="sm">Precio Mercado</Text>
+                <Text td="line-through">
+                  S/. {selectedVariant.refPrice.toFixed(2)}
+                </Text>
+              </Group>
+            </Stack>
+          )}
+        </Card.Section>
+        <Card.Section py="xs" inheritPadding ta="center" h={70}>
+          <Button
+            fullWidth
+            radius="md"
+            component="a"
+            href={"/product/" + product.uuidOffer}
+          >
+            {product.type === "coupon" ? "Generar Cupón" : "Agregar"}
+          </Button>
+        </Card.Section>
+      </Card>
+    </Link>
   );
 };
 
