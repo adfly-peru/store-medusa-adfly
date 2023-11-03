@@ -44,7 +44,7 @@ export const generateCouponRequest = async (
     if (typeof window !== "undefined") {
       const storedToken = localStorage.getItem("collaboratortoken");
       if (storedToken) {
-        const response = await axios.put(
+        const response = await axios.post(
           `${process.env.NEXT_PUBLIC_BACKEND_API}/store/order/coupon`,
           {
             uuid_variant,

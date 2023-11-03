@@ -51,6 +51,7 @@ interface CartContext {
     uuidaddress: string
   ) => Promise<string | null>;
   loadingEvent: boolean;
+  refetch: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContext | null>(null);
@@ -297,6 +298,9 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       value={{
         cart,
         addProduct,
+        refetch: async () => {
+          await refetch();
+        },
         removeProduct,
         editProduct,
         getProductById,

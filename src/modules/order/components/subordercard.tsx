@@ -63,10 +63,9 @@ const SuborderCard = ({
               withPlaceholder
             />
             <Stack spacing={0}>
-              <Title order={5} fw="bold" c="indigo">
+              <Title order={5} fw="bold" c="indigo" lineClamp={2}>
                 {product.variant.offer.offerName}
               </Title>
-              ...
               <Text fz="sm">
                 <Text fw={500} span>
                   {"SKU: "}
@@ -90,7 +89,12 @@ const SuborderCard = ({
             </Stack>
             <Stack spacing={0}>
               <Text>
-                {`S/.${product.quantity * (product.variant.adflyPrice ?? 0)}`}
+                {`S/.${
+                  product.quantity *
+                  (product.variant.offerPrice ??
+                    product.variant.adflyPrice ??
+                    0)
+                }`}
               </Text>
             </Stack>
           </Group>

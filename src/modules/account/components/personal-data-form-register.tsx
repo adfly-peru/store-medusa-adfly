@@ -3,20 +3,13 @@ import {
   Button,
   TextInput,
   Space,
-  Divider,
   Checkbox,
-  Group,
-  Title,
-  Alert,
   Anchor,
   Modal,
   Center,
   Loader,
-  Burger,
-  MediaQuery,
   SimpleGrid,
 } from "@mantine/core";
-import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
 import { ProfileForm } from "@interfaces/collaborator";

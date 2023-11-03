@@ -14,6 +14,7 @@ import {
   LoadingOverlay,
   Title,
   UnstyledButton,
+  MediaQuery,
 } from "@mantine/core";
 import {
   IconCircleFilled,
@@ -30,6 +31,13 @@ import { Address, AddressInfoForm } from "@interfaces/address-interface";
 import AddressView from "./address-view";
 import { UseFormReturnType } from "@mantine/form";
 import { formatAddress } from "@modules/common/functions/format-place";
+import EmptyCart from "./empty-cart";
+
+export interface ShipmentData {
+  uuidcartsuborder: string;
+  method: string;
+  uuidaddress: string;
+}
 
 const ShippingInformation = ({
   form,
@@ -42,7 +50,7 @@ const ShippingInformation = ({
 }) => {
   const { addresses, deleteAddress } = useAccount();
   const [loading, setLoading] = useState(false);
-  const { cart, editDelivery } = useCart();
+  const { cart, editDelivery, selectDeliveryMethod } = useCart();
   const [opened, setOpened] = useState(false);
   const [opened2, setOpened2] = useState(false);
   const [select, setSelect] = useState<string>("");
@@ -51,7 +59,6 @@ const ShippingInformation = ({
   const [addressSelected, setAddressSelected] = useState(false);
 
   const handleSelect = async (uuidcollaboratoraddress: string) => {
-    console.log("hi");
     await editDelivery(
       {
         receivername: form.values.receivername,
@@ -67,13 +74,17 @@ const ShippingInformation = ({
   useEffect(() => {
     if (cart?.deliveryInfo) {
       if (cart.deliveryInfo.receivername ?? "" != "") setReceiver("other");
-
       if (cart.deliveryInfo.collaboratoraddress)
         setSelect(
           cart.deliveryInfo.collaboratoraddress.uuidcollaboratoraddress
         );
     }
-  }, []);
+  }, [cart]);
+
+  if (!cart) {
+    return <EmptyCart />;
+  }
+
   return (
     <>
       <Center w="100%">
@@ -173,6 +184,8 @@ const ShippingInformation = ({
                           },
                           ""
                         );
+                        if (value.uuidcollaboratoraddress == select)
+                          setSelect("");
                         setLoading(false);
                       }}
                     >
@@ -211,14 +224,20 @@ const ShippingInformation = ({
                     >
                       Continuar
                     </Button>
-                    <UnstyledButton
-                      w={200}
-                      onClick={() => handleSelect("")}
-                      fz={10}
-                      c="#31658E"
-                    >
-                      <Text align="end">Continuar sin dirección de envío</Text>
-                    </UnstyledButton>
+                    {select.length > 0 ? (
+                      <></>
+                    ) : (
+                      <UnstyledButton
+                        w={200}
+                        onClick={() => handleSelect("")}
+                        fz={10}
+                        c="#31658E"
+                      >
+                        <Text align="end">
+                          Continuar sin dirección de envío
+                        </Text>
+                      </UnstyledButton>
+                    )}
                   </Stack>
                 </Group>
               </Center>
@@ -295,6 +314,13 @@ const ShippingInformation = ({
                   index={index}
                   total={cart.suborders.length}
                   suborder={suborder}
+                  updateShipmentData={async (data) => {
+                    await selectDeliveryMethod(
+                      data.uuidcartsuborder,
+                      data.method,
+                      data.uuidaddress
+                    );
+                  }}
                 />
               ))}{" "}
             </Stack>
@@ -303,20 +329,45 @@ const ShippingInformation = ({
           )}
 
           <Center>
-            <Group w="70%" position="center" mt="xl">
-              <Button
-                w={200}
-                h={48}
-                onClick={() =>
-                  addressSelected ? setAddressSelected(false) : handlePrevStep()
-                }
+            <Group w="100%" position="center" mt="xl">
+              <MediaQuery
+                smallerThan="sm"
+                styles={{
+                  width: "45%",
+                }}
               >
-                {"Regresar"}
-              </Button>
-              {addressSelected ? (
-                <Button w={200} h={48} onClick={handleNextStep}>
-                  Continuar
+                <Button
+                  w={200}
+                  h={48}
+                  onClick={() =>
+                    addressSelected
+                      ? setAddressSelected(false)
+                      : handlePrevStep()
+                  }
+                >
+                  {"Regresar"}
                 </Button>
+              </MediaQuery>
+              {addressSelected ? (
+                <MediaQuery
+                  smallerThan="sm"
+                  styles={{
+                    width: "45%",
+                  }}
+                >
+                  <Button
+                    w={200}
+                    h={48}
+                    onClick={handleNextStep}
+                    disabled={
+                      cart.suborders.findIndex(
+                        (v) => (v.deliverymethod ?? "") === ""
+                      ) !== -1
+                    }
+                  >
+                    Continuar
+                  </Button>
+                </MediaQuery>
               ) : (
                 <></>
               )}

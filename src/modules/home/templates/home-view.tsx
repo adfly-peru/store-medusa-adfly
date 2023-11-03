@@ -8,16 +8,18 @@ const HomeView = () => {
   const { homeDesign } = useAccount();
   return (
     <>
-      <Carousel w="90%" mx="auto" withIndicators height={250}>
+      <Carousel w="90%" mx="auto" withIndicators>
         <Carousel.Slide>
-          <BackgroundImage
+          <Image
             style={{
-              height: "100%",
-              backgroundSize: "100% auto",
+              height: "auto",
+              width: "100%",
+              backgroundSize: "auto 100%",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
             }}
             src={homeDesign?.bannerurl ?? ""}
+            alt={homeDesign?.bannerurl ?? ""}
           />
         </Carousel.Slide>
       </Carousel>

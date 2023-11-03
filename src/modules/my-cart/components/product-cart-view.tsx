@@ -41,7 +41,7 @@ const DetailedProductCartView = ({
   const handlers = useRef<NumberInputHandlers>();
 
   return (
-    <Card w="93%" withBorder radius="xs">
+    <Card w="100%" withBorder radius="xs" fz={12}>
       <Grid align="flex-start">
         <Grid.Col px={0} pt={0} span="auto">
           <Group grow>
@@ -58,12 +58,12 @@ const DetailedProductCartView = ({
               </Stack>
             </Grid.Col>
             <Grid.Col span="auto">
-              <Title fw={600} order={3}>
+              <Title fw={600} order={3} fz={14} lineClamp={2}>
                 {item.variant.offer.offerName}
               </Title>
               <Space h="xs" />
-              <Text>{item.variant.offer.type}</Text>
-              <Text>
+              <Text>{`Por ${businessName}`}</Text>
+              <Text lineClamp={2}>
                 {item.variant.attributes.reduce(
                   (p, v, i) =>
                     p +
@@ -73,7 +73,6 @@ const DetailedProductCartView = ({
                   ""
                 )}
               </Text>
-              <Text>{`Vendido y despachado por ${businessName}`}</Text>
             </Grid.Col>
           </Group>
         </Grid.Col>

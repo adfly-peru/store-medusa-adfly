@@ -1,5 +1,6 @@
+import { useAccount } from "@context/account-context";
 import { useCart } from "@context/cart-context";
-import { CartSubOrder, DeliveryStore } from "@interfaces/cart";
+import { CartSubOrder } from "@interfaces/cart";
 import {
   Text,
   Group,
@@ -7,133 +8,71 @@ import {
   Image,
   Checkbox,
   Grid,
-  Accordion,
-  rem,
-  Button,
   Divider,
+  Select,
 } from "@mantine/core";
-import { modals } from "@mantine/modals";
 import { IconCircleFilled } from "@tabler/icons-react";
-
-const SelectStore = ({
-  stores,
-  selectStore,
-}: {
-  stores: DeliveryStore[];
-  selectStore: (uuidstore: string) => void;
-}) => {
-  return (
-    <Accordion>
-      {stores.map((store) => {
-        return (
-          <Accordion.Item
-            value={store.uuiddeliverystore}
-            key={store.uuiddeliverystore}
-          >
-            <Accordion.Control>{store.name}</Accordion.Control>
-            <Accordion.Panel>
-              <Text>
-                <Text span fw="bold">
-                  Departamento:
-                </Text>
-                {` ${store.department}`}
-              </Text>
-              <Text>
-                <Text span fw="bold">
-                  Provincia:
-                </Text>
-                {` ${store.city}`}
-              </Text>
-              <Text>
-                <Text span fw="bold">
-                  Distrito:
-                </Text>
-                {` ${store.district}`}
-              </Text>
-              <Text>
-                <Text span fw="bold">
-                  Direccion:
-                </Text>
-                {` ${store.line}`}
-              </Text>
-              <Text>
-                <Text span fw="bold">
-                  Tiempo de llegada:
-                </Text>
-                {` ${store.timetodelivery}`}
-              </Text>
-              <Text>
-                <Text span fw="bold">
-                  Comentarios:
-                </Text>
-                {` ${store.comments}`}
-              </Text>
-              <Button onClick={() => selectStore(store.uuiddeliverystore)}>
-                Seleccionar Tienda
-              </Button>
-            </Accordion.Panel>
-          </Accordion.Item>
-        );
-      })}
-    </Accordion>
-  );
-};
+import { useEffect, useState } from "react";
+import { ShipmentData } from "./shipping-information";
 
 const ShipmentCard = ({
   index,
   total,
   suborder,
+  updateShipmentData,
 }: {
   index: number;
   total: number;
   suborder: CartSubOrder;
+  updateShipmentData: (data: ShipmentData) => void;
 }) => {
-  const { selectDeliveryMethod, cart } = useCart();
-  const onhomeSelect = async () => {
-    if (cart?.deliveryInfo?.collaboratoraddress?.uuidcollaboratoraddress)
-      await selectDeliveryMethod(
-        suborder.uuidcartsuborder,
-        "onhome",
-        cart?.deliveryInfo?.collaboratoraddress.uuidcollaboratoraddress
-      );
-  };
+  const { cart } = useCart();
+  const { collaborator } = useAccount();
+  const [uuidstore, setUuidstore] = useState(
+    suborder.deliverymethod === "pickup" ? suborder.uuidaddress : ""
+  );
+  const [selected, setSelected] = useState(suborder.deliverymethod ?? "");
 
-  const openStoreModal = async () => {
-    modals.closeAll();
-    modals.open({
-      title: "Seleccionar Tienda",
-      size: "xl",
-      children: (
-        <SelectStore
-          stores={suborder.availableDeliveryMethods.deliveryOnStore}
-          selectStore={(uuidstore) => {
-            modals.closeAll();
-            selectDeliveryMethod(
-              suborder.uuidcartsuborder,
-              "pickup",
-              uuidstore
-            );
-          }}
-        />
-      ),
-    });
-  };
+  useEffect(() => {
+    if (selected === "onhome" || selected === "online") {
+      setUuidstore("");
+      updateShipmentData({
+        uuidcartsuborder: suborder.uuidcartsuborder,
+        method: selected,
+        uuidaddress:
+          selected === "onhome"
+            ? cart?.deliveryInfo?.collaboratoraddress
+                ?.uuidcollaboratoraddress ?? ""
+            : "",
+      });
+    }
+  }, [selected]);
+
+  useEffect(() => {
+    if (selected === "pickup" && uuidstore.length > 0) {
+      updateShipmentData({
+        uuidcartsuborder: suborder.uuidcartsuborder,
+        method: selected,
+        uuidaddress: uuidstore,
+      });
+    }
+  }, [uuidstore]);
 
   return (
-    <Stack spacing={0}>
+    <Stack spacing={0} mb="md">
       <Grid gutter="lg" fw={600} fz={15} grow>
-        <Grid.Col span={8}>
+        <Grid.Col span={6} md={8}>
           <Text>
             Pedido {index + 1} de {total}: Entregado por {suborder.businessName}
           </Text>
         </Grid.Col>
-        <Grid.Col span={4}>
+        <Grid.Col span={6} md={4}>
           <Text>Opciones de Envío</Text>
         </Grid.Col>
       </Grid>
       <Divider />
       <Grid gutter="lg" mt="md" grow>
-        <Grid.Col span={8}>
+        <Grid.Col span={6} md={8}>
           <Stack spacing="xl">
             {suborder.items.map((product, _) => (
               <div key={product.uuidcartitem}>
@@ -147,8 +86,9 @@ const ShipmentCard = ({
                     withPlaceholder
                   />
                   <Stack fz={10} spacing={0}>
-                    <Text fz={15}>{product.variant.offer.offerName}</Text>
-                    ...
+                    <Text fz={15} lineClamp={2}>
+                      {product.variant.offer.offerName}
+                    </Text>
                     <Text>
                       <Text fw={500} span>
                         {"Cantidad: "}
@@ -175,65 +115,126 @@ const ShipmentCard = ({
             ))}
           </Stack>
         </Grid.Col>
-        <Grid.Col span={4}>
+        <Grid.Col span={6} md={4}>
           <Stack>
-            {suborder.availableDeliveryMethods.deliveryOnHome != null ? (
-              <div>
-                <Checkbox
-                  checked={suborder.deliverymethod == "onhome"}
-                  onChange={onhomeSelect}
-                  radius="lg"
-                  value={0}
-                  icon={IconCircleFilled}
-                  label="Entrega en Dirección Personal"
-                />
-                <Stack pl={20} spacing={0}>
-                  <Text fz="sm">
-                    <Text span c="dimmed">
-                      Costo de Envío:
-                    </Text>
-                    {` S/. ${suborder.availableDeliveryMethods.deliveryOnHome.price}`}
-                  </Text>
-                  <Text fz="sm">
-                    <Text span c="dimmed">
-                      Fecha de Entrega:
-                    </Text>
-                    {` ${suborder.availableDeliveryMethods.deliveryOnHome.timetodelivery}`}
-                  </Text>
-                  <Text fz="sm">
-                    <Text span c="dimmed">
-                      Especificaciones:{" "}
-                    </Text>
-                    {suborder.availableDeliveryMethods.deliveryOnHome
-                      .comments ?? "-"}
-                  </Text>
-                </Stack>
-              </div>
-            ) : (
+            {suborder.items.findIndex(
+              (v) => v.variant.offer.type === "product"
+            ) === -1 ? (
               <Checkbox
                 icon={IconCircleFilled}
                 disabled
                 radius="lg"
-                value={0}
-                label="Entrega en Dirección Personal"
-                description="No ha seleccionado una dirección personal o el partner no cuenta con esta modalidad en su dirección."
+                onChange={() => {
+                  setSelected("online");
+                }}
+                checked={selected === "online"}
+                value={2}
+                label="Entrega online"
+                description={`Se le enviará al siguiente correo: ${collaborator?.email}`}
               />
+            ) : (
+              <>
+                {suborder.availableDeliveryMethods.deliveryOnHome !== null ? (
+                  <div>
+                    <Checkbox
+                      checked={selected === "onhome"}
+                      onChange={() => {
+                        setSelected("onhome");
+                      }}
+                      radius="lg"
+                      value={0}
+                      icon={IconCircleFilled}
+                      label="Entrega en Dirección Personal"
+                    />
+                    <Stack pl={20} spacing={0} fz={11}>
+                      <Text>
+                        <Text span c="dimmed">
+                          Costo de Envío:
+                        </Text>
+                        {` S/. ${suborder.availableDeliveryMethods.deliveryOnHome.price}`}
+                      </Text>
+                      <Text>
+                        <Text span c="dimmed">
+                          Fecha de Entrega:
+                        </Text>
+                        {` ${suborder.availableDeliveryMethods.deliveryOnHome.timetodelivery}`}
+                      </Text>
+                      <Text>
+                        <Text span c="dimmed">
+                          Especificaciones:{" "}
+                        </Text>
+                        {suborder.availableDeliveryMethods.deliveryOnHome
+                          .comments ?? "-"}
+                      </Text>
+                    </Stack>
+                  </div>
+                ) : (
+                  <Checkbox
+                    icon={IconCircleFilled}
+                    disabled
+                    radius="lg"
+                    value={0}
+                    label="Entrega en Dirección Personal"
+                    description="No ha seleccionado una dirección personal o el partner no cuenta con esta modalidad en su dirección."
+                  />
+                )}
+                <Checkbox
+                  icon={IconCircleFilled}
+                  checked={selected === "pickup"}
+                  onChange={() => setSelected("pickup")}
+                  radius="lg"
+                  value={1}
+                  label="Recojo en Tienda"
+                />
+                {selected === "pickup" ? (
+                  <Stack pl={20} spacing={0} fz={11}>
+                    <Select
+                      data={suborder.availableDeliveryMethods.deliveryOnStore.map(
+                        (value) => ({
+                          value: value.uuiddeliverystore,
+                          label: value.name,
+                        })
+                      )}
+                      value={uuidstore}
+                      onChange={(val) => {
+                        setUuidstore(val ?? "");
+                      }}
+                    />
+                    <Text>
+                      <Text span c="dimmed">
+                        Dirección:
+                      </Text>
+                      {` ${
+                        suborder.availableDeliveryMethods.deliveryOnStore
+                          .find((v) => v.uuiddeliverystore === uuidstore)
+                          ?.line?.split(",")
+                          ?.at(0) ?? "-"
+                      }`}
+                    </Text>
+                    <Text>
+                      <Text span c="dimmed">
+                        Tiempo Entrega:
+                      </Text>
+                      {` ${
+                        suborder.availableDeliveryMethods.deliveryOnStore.find(
+                          (v) => v.uuiddeliverystore === uuidstore
+                        )?.timetodelivery ?? "-"
+                      }`}
+                    </Text>
+                    <Text>
+                      <Text span c="dimmed">
+                        Especificaciones:{" "}
+                      </Text>
+                      {suborder.availableDeliveryMethods.deliveryOnStore.find(
+                        (v) => v.uuiddeliverystore === uuidstore
+                      )?.comments ?? "-"}
+                    </Text>
+                  </Stack>
+                ) : (
+                  <></>
+                )}
+              </>
             )}
-            <Checkbox
-              icon={IconCircleFilled}
-              checked={suborder.deliverymethod == "pickup"}
-              onChange={openStoreModal}
-              radius="lg"
-              value={1}
-              label="Recojo en Tienda"
-              description={
-                suborder.deliverymethod == "pickup"
-                  ? suborder.availableDeliveryMethods.deliveryOnStore.find(
-                      (s) => s.uuiddeliverystore == suborder.uuidaddress
-                    )?.name
-                  : null
-              }
-            />
           </Stack>
         </Grid.Col>
       </Grid>

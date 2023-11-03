@@ -4,6 +4,7 @@ import {
   Center,
   Grid,
   Loader,
+  MediaQuery,
   SimpleGrid,
   Stack,
   Title,
@@ -20,7 +21,14 @@ const SimilarProducts = ({
   return (
     <Center mt="xl" w="100%">
       <Stack>
-        <Title>Productos Relacionados</Title>
+        <MediaQuery
+          smallerThan="sm"
+          styles={{
+            marginLeft: 50,
+          }}
+        >
+          <Title>Productos Relacionados</Title>
+        </MediaQuery>
         {loading ? (
           <Center>
             <Loader />

@@ -29,6 +29,8 @@ import {
   Modal,
   CopyButton,
   rem,
+  Accordion,
+  LoadingOverlay,
 } from "@mantine/core";
 import {
   IconBuildingStore,
@@ -64,6 +66,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
   const handleAttributeSelection = (attributeName: string, value: string) => {
     setAttributeSelections((prev) => ({ ...prev, [attributeName]: value }));
   };
+  const [loading, setLoading] = useState(false);
   const [filteredVariants, setFilteredVariants] = useState<Variant[]>([]);
   const [opened, setOpen] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState(product.variant[0]);
@@ -79,7 +82,8 @@ export function DetailedProduct({ product }: { product: Offer }) {
   const handlers = useRef<NumberInputHandlers>();
   const allImages = product.variant.map((v) => v.imageURL);
   let discount =
-    ((selectedVariant.refPrice - selectedVariant.adflyPrice) /
+    ((selectedVariant.refPrice -
+      (selectedVariant.offerPrice ?? selectedVariant.adflyPrice)) /
       selectedVariant.refPrice) *
     100;
 
@@ -290,6 +294,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
 
   return (
     <Card py="xl" radius="md">
+      <LoadingOverlay overlayBlur={2} overlayOpacity={0.9} visible={loading} />
       <Modal opened={opened} onClose={() => setOpen(false)}>
         {couponReponse?.status === "success" ? (
           <Stack>
@@ -403,35 +408,46 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   {product.principalSku}
                 </Text>
               </Group>
-              <Title fw={500} order={2}>
+              <Title fw={500} order={2} lineClamp={2}>
                 {product.offerName}
               </Title>
-              <Text>...</Text>
             </Stack>
           </MediaQuery>
-          <Grid.Col span={12} md={4}>
-            <Stack spacing={0}>
-              <Group position="right">
-                <Badge color="red" variant="filled" radius="sm">
-                  -
-                  {product.type === "coupon"
-                    ? `${
-                        selectedVariant.coupon?.discountType === "monetary"
-                          ? ` S/.${selectedVariant.coupon.discount.toFixed(2)}`
-                          : ` ${selectedVariant.coupon?.discount}%`
-                      }`
-                    : ` ${discount.toFixed(0)}%`}
-                </Badge>
-              </Group>
-              <Space h="lg" />
-              <Image
-                height={300}
-                src={allImages[imgIdx]}
-                alt={allImages[imgIdx]}
-                fit="contain"
-                withPlaceholder
-              />
-              {/* <Flex align="center">
+          <Grid.Col span={12} md="content">
+            <MediaQuery
+              smallerThan="md"
+              styles={{
+                width: "100%",
+              }}
+            >
+              <Stack spacing={0} w={370} h={430}>
+                <Group position="right">
+                  <Badge color="red" variant="filled" radius="sm">
+                    -
+                    {product.type === "coupon"
+                      ? `${
+                          selectedVariant.coupon?.discountType === "monetary"
+                            ? ` S/.${selectedVariant.coupon.discount.toFixed(
+                                2
+                              )}`
+                            : ` ${selectedVariant.coupon?.discount}%`
+                        }`
+                      : ` ${discount.toFixed(0)}%`}
+                  </Badge>
+                </Group>
+                <Space h="lg" />
+                <Image
+                  width="100%"
+                  height={390}
+                  src={
+                    allImages[imgIdx] ??
+                    "https://cdn-icons-png.flaticon.com/512/3770/3770820.png"
+                  }
+                  alt={allImages[imgIdx]}
+                  fit="contain"
+                  withPlaceholder
+                />
+                {/* <Flex align="center">
                 <ActionIcon onClick={() => navigateThumbnails("left")}>
                   <IconCaretLeft />
                 </ActionIcon>
@@ -455,10 +471,10 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   <IconCaretRight />
                 </ActionIcon>
               </Flex> */}
-            </Stack>
-            <Divider orientation="vertical" size="xs" />
+              </Stack>
+            </MediaQuery>
           </Grid.Col>
-          <Grid.Col span={12} md={5}>
+          <Grid.Col span={12} md="auto">
             <Stack spacing="xs">
               <MediaQuery
                 smallerThan="md"
@@ -532,30 +548,54 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   ),
                 ];
                 return (
-                  <Group key={index} position="apart">
-                    <Text>
-                      <Text span fw="bold">
-                        {productAttr.attribute.attributeName}
-                      </Text>
-                    </Text>
-                    <Select
-                      data={validValues.map((value) => ({
-                        value,
-                        label: value,
-                      }))}
-                      value={
-                        attributeSelections[
-                          productAttr.attribute.attributeName
-                        ] || ""
-                      }
-                      onChange={(val) =>
-                        handleAttributeSelection(
-                          productAttr.attribute.attributeName,
-                          val ?? ""
-                        )
-                      }
-                    />
-                  </Group>
+                  <div>
+                    <MediaQuery smallerThan="md" styles={{ display: "none" }}>
+                      <Group key={index} position="apart">
+                        <Text>
+                          <Text span fw="bold">
+                            {productAttr.attribute.attributeName}
+                          </Text>
+                        </Text>
+                        <Select
+                          data={validValues.map((value) => ({
+                            value,
+                            label: value,
+                          }))}
+                          value={
+                            attributeSelections[
+                              productAttr.attribute.attributeName
+                            ] || ""
+                          }
+                          onChange={(val) =>
+                            handleAttributeSelection(
+                              productAttr.attribute.attributeName,
+                              val ?? ""
+                            )
+                          }
+                        />
+                      </Group>
+                    </MediaQuery>
+                    <MediaQuery largerThan="md" styles={{ display: "none" }}>
+                      <Select
+                        data={validValues.map((value) => ({
+                          value,
+                          label: value,
+                        }))}
+                        value={
+                          attributeSelections[
+                            productAttr.attribute.attributeName
+                          ] || ""
+                        }
+                        label={productAttr.attribute.attributeName}
+                        onChange={(val) =>
+                          handleAttributeSelection(
+                            productAttr.attribute.attributeName,
+                            val ?? ""
+                          )
+                        }
+                      />
+                    </MediaQuery>
+                  </div>
                 );
               })}
               <Divider my="sm" />
@@ -575,12 +615,14 @@ export function DetailedProduct({ product }: { product: Offer }) {
                 <Button
                   radius="md"
                   onClick={async () => {
+                    setLoading(true);
                     const response = await generateCoupon(
                       selectedVariant.uuidVariant,
                       product.uuidOffer
                     );
                     setCouponResponse(response ?? null);
                     setOpen(true);
+                    setLoading(false);
                   }}
                 >
                   Generar Cupón
@@ -642,213 +684,287 @@ export function DetailedProduct({ product }: { product: Offer }) {
               )}
             </Stack>
           </Grid.Col>
-          <Grid.Col span={12} md={3}>
-            <Stack>
-              <Center>
-                <Text fz="xs">
-                  <Text span fw="bold">
-                    SKU:
+          <MediaQuery smallerThan="md" styles={{ display: "none" }}>
+            <Grid.Col span="content">
+              <Stack w={272}>
+                <Center>
+                  <Text fz="xs">
+                    <Text span fw="bold">
+                      SKU:
+                    </Text>
+                    {product.principalSku}
                   </Text>
-                  {product.principalSku}
-                </Text>
-              </Center>
-              <Center>
-                <Card w={270} shadow="sm" p="lg" radius="sm" withBorder>
-                  <Text span fw="bold">
-                    Venta y despacho por:
-                  </Text>
-                  <Text>{` ${product.business.commercialname}`}</Text>
-                  {/* TODO: TERMINOS Y CONDICIONES */}
-                  {product.type === "coupon" ? null : (
-                    <>
-                      <Divider my="md" />
-                      <Text fw="bold" mb="xs">
-                        Entrega disponible:
-                      </Text>
-                      <List spacing="xs" size="sm" center>
-                        <List.Item
-                          icon={
-                            <IconTruckDelivery
-                              color={
+                </Center>
+                <Center>
+                  <Card w={270} shadow="sm" p="lg" radius="sm" withBorder>
+                    <Text span fw="bold">
+                      Venta y despacho por:
+                    </Text>
+                    <Text>{` ${product.business.commercialname}`}</Text>
+                    {/* TODO: TERMINOS Y CONDICIONES */}
+                    {product.type === "coupon" ? null : (
+                      <>
+                        <Divider my="md" />
+                        <Text fw="bold" mb="xs">
+                          Entrega disponible:
+                        </Text>
+                        <List spacing="xs" size="sm" center>
+                          <List.Item
+                            icon={
+                              <IconTruckDelivery
+                                color={
+                                  product.business.deliveryMethods
+                                    .deliveryonhome &&
+                                  product.type === "product"
+                                    ? undefined
+                                    : "#ABAFB4"
+                                }
+                              />
+                            }
+                          >
+                            <Stack
+                              spacing={0}
+                              c={
                                 product.business.deliveryMethods
                                   .deliveryonhome && product.type === "product"
                                   ? undefined
                                   : "#ABAFB4"
                               }
-                            />
-                          }
-                        >
-                          <Stack
-                            spacing={0}
-                            c={
-                              product.business.deliveryMethods.deliveryonhome &&
-                              product.type === "product"
-                                ? undefined
-                                : "#ABAFB4"
+                            >
+                              <Text>Entrega a domicilio</Text>
+                              <Text
+                                fz={12}
+                                c={
+                                  product.business.deliveryMethods
+                                    .deliveryonhome &&
+                                  product.type === "product"
+                                    ? "green"
+                                    : undefined
+                                }
+                              >
+                                {product.business.deliveryMethods
+                                  .deliveryonhome && product.type === "product"
+                                  ? "Disponible"
+                                  : "No Disponible"}
+                              </Text>
+                            </Stack>
+                          </List.Item>
+                          <List.Item
+                            icon={
+                              <IconBuildingStore
+                                color={
+                                  product.type === "service"
+                                    ? "#ABAFB4"
+                                    : undefined
+                                }
+                              />
                             }
                           >
-                            <Text>Entrega a domicilio</Text>
-                            <Text
-                              fz={12}
+                            <Stack
+                              spacing={0}
                               c={
-                                product.business.deliveryMethods
-                                  .deliveryonhome && product.type === "product"
-                                  ? "green"
-                                  : undefined
-                              }
-                            >
-                              {product.business.deliveryMethods
-                                .deliveryonhome && product.type === "product"
-                                ? "Disponible"
-                                : "No Disponible"}
-                            </Text>
-                          </Stack>
-                        </List.Item>
-                        <List.Item
-                          icon={
-                            <IconBuildingStore
-                              color={
                                 product.type === "service"
                                   ? "#ABAFB4"
                                   : undefined
                               }
-                            />
-                          }
-                        >
-                          <Stack
-                            spacing={0}
-                            c={
-                              product.type === "service" ? "#ABAFB4" : undefined
+                            >
+                              <Text>Recojo en tienda</Text>
+                              <Text
+                                fz={12}
+                                c={
+                                  product.type === "service"
+                                    ? undefined
+                                    : "green"
+                                }
+                              >
+                                {product.type === "service"
+                                  ? "No Disponible"
+                                  : "Disponible"}
+                              </Text>
+                            </Stack>
+                          </List.Item>
+                          <List.Item
+                            icon={
+                              <IconMail
+                                color={
+                                  product.type === "service"
+                                    ? undefined
+                                    : "#ABAFB4"
+                                }
+                              />
                             }
                           >
-                            <Text>Recojo en tienda</Text>
-                            <Text
-                              fz={12}
+                            <Stack
+                              spacing={0}
                               c={
-                                product.type === "service" ? undefined : "green"
-                              }
-                            >
-                              {product.type === "service"
-                                ? "No Disponible"
-                                : "Disponible"}
-                            </Text>
-                          </Stack>
-                        </List.Item>
-                        <List.Item
-                          icon={
-                            <IconMail
-                              color={
                                 product.type === "service"
                                   ? undefined
                                   : "#ABAFB4"
                               }
-                            />
-                          }
-                        >
-                          <Stack
-                            spacing={0}
-                            c={
-                              product.type === "service" ? undefined : "#ABAFB4"
-                            }
-                          >
-                            <Text>Entrega virtual</Text>
-                            <Text
-                              fz={12}
-                              c={
-                                product.type === "service" ? "green" : undefined
-                              }
                             >
-                              {product.type === "service"
-                                ? "Disponible"
-                                : "No Disponible"}
-                            </Text>
-                          </Stack>
-                        </List.Item>
-                      </List>
-                      <Divider my="md" />
-                      <Text fw="bold" mb="xs">
-                        Métodos de pago:
-                      </Text>
-                      <Group spacing={5}>
-                        <Text>{"Pago online con "}</Text>
+                              <Text>Entrega virtual</Text>
+                              <Text
+                                fz={12}
+                                c={
+                                  product.type === "service"
+                                    ? "green"
+                                    : undefined
+                                }
+                              >
+                                {product.type === "service"
+                                  ? "Disponible"
+                                  : "No Disponible"}
+                              </Text>
+                            </Stack>
+                          </List.Item>
+                        </List>
+                        <Divider my="md" />
+                        <Text fw="bold" mb="xs">
+                          Métodos de pago:
+                        </Text>
+                        <Group spacing={5}>
+                          <Text>{"Pago online con "}</Text>
+                          <Image
+                            height={13}
+                            width="inherit"
+                            fit="contain"
+                            src="/niubiz.svg"
+                          />
+                        </Group>
                         <Image
-                          height={13}
+                          height={30}
                           width="inherit"
                           fit="contain"
-                          src="/niubiz.svg"
+                          src="/payment-methods.svg"
                         />
-                      </Group>
-                      <Image
-                        height={30}
-                        width="inherit"
-                        fit="contain"
-                        src="/payment-methods.svg"
-                      />
-                    </>
-                  )}
-                </Card>
-              </Center>
-            </Stack>
-          </Grid.Col>
+                      </>
+                    )}
+                  </Card>
+                </Center>
+              </Stack>
+            </Grid.Col>
+          </MediaQuery>
+          <MediaQuery largerThan="md" styles={{ display: "none" }}>
+            <Grid.Col span={12}>
+              <Divider my="sm" />
+              <Text span fw="bold">
+                Venta y despacho por:
+              </Text>
+              <Text>{` ${product.business.commercialname}`}</Text>
+              <Accordion
+                mt="xl"
+                styles={{
+                  control: {
+                    padding: 0,
+                  },
+                  content: {
+                    padding: 0,
+                  },
+                }}
+              >
+                <Accordion.Item value="description">
+                  <Accordion.Control>Descripción</Accordion.Control>
+                  <Accordion.Panel>{product.description}</Accordion.Panel>
+                </Accordion.Item>
+                <Accordion.Item value="additional">
+                  <Accordion.Control>Información Adicional</Accordion.Control>
+                  <Accordion.Panel>
+                    <Table
+                      verticalSpacing="xl"
+                      striped
+                      highlightOnHover
+                      withBorder
+                      withColumnBorders
+                      style={{
+                        borderRadius: "20px",
+                      }}
+                    >
+                      <thead>
+                        <tr></tr>
+                      </thead>
+                      <tbody>
+                        {details.map((d, index) => {
+                          return (
+                            <tr key={index}>
+                              <td
+                                style={{
+                                  width: 140,
+                                }}
+                              >
+                                <Text fw="bold">{d.name}</Text>{" "}
+                              </td>
+                              <td>{d.value}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </Table>
+                  </Accordion.Panel>
+                </Accordion.Item>
+              </Accordion>
+            </Grid.Col>
+          </MediaQuery>
         </Grid>
       </CardSection>
-      <CardSection inheritPadding withBorder py="xs">
-        <Tabs
-          defaultValue="description"
-          styles={(theme) => ({
-            tab: {
-              "&[data-active]": {
-                borderColor: "#31658E",
-                color: "#31658E",
+      <MediaQuery smallerThan="md" styles={{ display: "none" }}>
+        <CardSection inheritPadding withBorder py="xs">
+          <Tabs
+            defaultValue="description"
+            styles={(theme) => ({
+              tab: {
+                "&[data-active]": {
+                  borderColor: "#31658E",
+                  color: "#31658E",
+                },
               },
-            },
-          })}
-        >
-          <Tabs.List grow position="apart">
-            <Tabs.Tab value="description" fw="bold">
-              Descripción
-            </Tabs.Tab>
-            <Tabs.Tab value="details" fw="bold">
-              Información Adicional
-            </Tabs.Tab>
-          </Tabs.List>
-          <Tabs.Panel value="description" pt="xs">
-            {product.description}
-          </Tabs.Panel>
-          <Tabs.Panel value="details" pt="xs" px="md">
-            <Table
-              verticalSpacing="xl"
-              striped
-              highlightOnHover
-              withBorder
-              withColumnBorders
-              style={{
-                borderRadius: "20px",
-              }}
-            >
-              <thead>
-                <tr></tr>
-              </thead>
-              <tbody>
-                {details.map((d, index) => {
-                  return (
-                    <tr key={index}>
-                      <td
-                        style={{
-                          width: 300,
-                        }}
-                      >
-                        <Text fw="bold">{d.name}</Text>{" "}
-                      </td>
-                      <td>{d.value}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          </Tabs.Panel>
-        </Tabs>
-      </CardSection>
+            })}
+          >
+            <Tabs.List grow position="apart">
+              <Tabs.Tab value="description" fw="bold">
+                Descripción
+              </Tabs.Tab>
+              <Tabs.Tab value="details" fw="bold">
+                Información Adicional
+              </Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Panel value="description" pt="xs">
+              {product.description}
+            </Tabs.Panel>
+            <Tabs.Panel value="details" pt="xs" px="md">
+              <Table
+                verticalSpacing="xl"
+                striped
+                highlightOnHover
+                withBorder
+                withColumnBorders
+                style={{
+                  borderRadius: "20px",
+                }}
+              >
+                <thead>
+                  <tr></tr>
+                </thead>
+                <tbody>
+                  {details.map((d, index) => {
+                    return (
+                      <tr key={index}>
+                        <td
+                          style={{
+                            width: 300,
+                          }}
+                        >
+                          <Text fw="bold">{d.name}</Text>{" "}
+                        </td>
+                        <td>{d.value}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Tabs.Panel>
+          </Tabs>
+        </CardSection>
+      </MediaQuery>
     </Card>
   );
 }
