@@ -11,7 +11,7 @@ import {
   Center,
 } from "@mantine/core";
 import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
 import { CartItem } from "@interfaces/cart";
 
@@ -26,6 +26,14 @@ const ProductCartRow = ({
 }) => {
   const { editProduct, removeProduct } = useCart();
   const handlers = useRef<NumberInputHandlers>();
+  const [maxUnits, setMaxUnits] = useState(item.variant.maxQuantity);
+
+  useEffect(() => {
+    if (!item) return;
+    setMaxUnits(
+      (item.variant.maxQuantity ?? 0) < item.variant.stock ? (item.variant.maxQuantity ?? 0) : item.variant.stock
+    );
+  }, [item]);
 
   return (
     <tr key={item.uuidcartitem} style={{ height: "180px", fontSize: 15 }}>
@@ -94,8 +102,8 @@ const ProductCartRow = ({
               }
               fz={15}
               handlersRef={handlers}
-              max={item.variant.stock}
-              min={0}
+              max={maxUnits}
+              min={1}
               step={1}
               w={80}
               height={30}
@@ -114,7 +122,7 @@ const ProductCartRow = ({
             />
             <ActionIcon
               variant="transparent"
-              disabled={item.quantity === item.variant.stock}
+              disabled={item.quantity === maxUnits}
               bg="#31658E"
               radius="sm"
               h={36}
