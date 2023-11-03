@@ -42,10 +42,11 @@ import {
   IconMinus,
   IconMoodSad,
   IconPlus,
+  IconShoppingCartCheck,
   IconTruckDelivery,
   IconX,
 } from "@tabler/icons-react";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
 import { Offer, Variant } from "@interfaces/productInterface";
 import { CartItem } from "@interfaces/cart";
@@ -70,8 +71,9 @@ export function DetailedProduct({ product }: { product: Offer }) {
   const [filteredVariants, setFilteredVariants] = useState<Variant[]>([]);
   const [opened, setOpen] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState(product.variant[0]);
-  const [value, setValue] = useState<number>(1);
+  const [value, setValue] = useState<number>(0);
   const [cartItem, setCartItem] = useState<CartItem | null>(null);
+  const [maxUnits, setMaxUnits] = useState(product.variant[0].maxQuantity);
   const [couponReponse, setCouponResponse] = useState<CouponResponse | null>(
     null
   );
@@ -264,11 +266,20 @@ export function DetailedProduct({ product }: { product: Offer }) {
       product.business.uuidbusiness
     );
     if (itemGetted) {
+      const allowed = selectedVariant.maxQuantity - itemGetted.quantity;
+      setMaxUnits(
+        allowed < selectedVariant.stock ? allowed : selectedVariant.stock
+      );
       setCartItem(itemGetted);
     } else {
+      setMaxUnits(
+        selectedVariant.maxQuantity < selectedVariant.stock
+          ? selectedVariant.maxQuantity
+          : selectedVariant.stock
+      );
       setCartItem(null);
     }
-  }, [cart]);
+  }, [cart, selectedVariant]);
 
   useEffect(() => {
     const uniqueAttributes = new Set();
@@ -628,59 +639,72 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   Generar Cupón
                 </Button>
               ) : (
-                <Group spacing={5} align="center">
-                  <Group spacing={5} position="center">
-                    <ActionIcon
-                      variant="transparent"
-                      color="dark"
-                      disabled={value === 1}
-                      bg="#F2F2F3"
+                <Stack spacing="md">
+                  <Group spacing={5} align="center">
+                    <Group spacing={5} position="center">
+                      <ActionIcon
+                        variant="transparent"
+                        color="dark"
+                        disabled={value === 0}
+                        bg="#F2F2F3"
+                        radius="md"
+                        h={45}
+                        w={45}
+                        onClick={() => handlers.current?.decrement()}
+                      >
+                        <IconMinus stroke={1.5} size="1.125rem" />
+                      </ActionIcon>
+                      <NumberInput
+                        hideControls
+                        value={value}
+                        onChange={(val) => setValue(val === "" ? 0 : val)}
+                        handlersRef={handlers}
+                        max={maxUnits}
+                        min={0}
+                        step={1}
+                        styles={{
+                          input: { width: 45, height: 45, textAlign: "center" },
+                        }}
+                      />
+                      <ActionIcon
+                        variant="transparent"
+                        color="dark"
+                        disabled={value === maxUnits}
+                        bg="#F2F2F3"
+                        radius="md"
+                        h={45}
+                        w={45}
+                        onClick={() => handlers.current?.increment()}
+                      >
+                        <IconPlus stroke={1.5} size="1.125rem" />
+                      </ActionIcon>
+                    </Group>
+                    <Space />
+                    <Button
                       radius="md"
-                      h={45}
-                      w={45}
-                      onClick={() => handlers.current?.decrement()}
-                    >
-                      <IconMinus stroke={1.5} size="1.125rem" />
-                    </ActionIcon>
-                    <NumberInput
-                      hideControls
-                      value={value}
-                      onChange={(val) => setValue(val === "" ? 0 : val)}
-                      handlersRef={handlers}
-                      max={selectedVariant.stock}
-                      min={0}
-                      step={1}
-                      styles={{
-                        input: { width: 45, height: 45, textAlign: "center" },
+                      disabled={maxUnits <= 0 || value === 0}
+                      onClick={() => {
+                        addProduct(
+                          selectedVariant.uuidVariant,
+                          product.business.uuidbusiness,
+                          value
+                        );
                       }}
-                    />
-                    <ActionIcon
-                      variant="transparent"
-                      color="dark"
-                      disabled={value === selectedVariant.stock}
-                      bg="#F2F2F3"
-                      radius="md"
-                      h={45}
-                      w={45}
-                      onClick={() => handlers.current?.increment()}
                     >
-                      <IconPlus stroke={1.5} size="1.125rem" />
-                    </ActionIcon>
+                      Agregar al carrito
+                    </Button>
                   </Group>
-                  <Space />
-                  <Button
-                    radius="md"
-                    onClick={() => {
-                      addProduct(
-                        selectedVariant.uuidVariant,
-                        product.business.uuidbusiness,
-                        value
-                      );
-                    }}
-                  >
-                    Agregar al carrito
-                  </Button>
-                </Group>
+                  <Group position="left">
+                    <IconShoppingCartCheck />
+                    <Text fz={12}>
+                      Tu carrito tiene
+                      <Text span fw={700}>{` ${
+                        cartItem?.quantity ?? 0
+                      } unidades `}</Text>
+                      de esta oferta.
+                    </Text>
+                  </Group>
+                </Stack>
               )}
             </Stack>
           </Grid.Col>
