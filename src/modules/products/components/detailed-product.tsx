@@ -559,9 +559,9 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   ),
                 ];
                 return (
-                  <div>
+                  <div key={index}>
                     <MediaQuery smallerThan="md" styles={{ display: "none" }}>
-                      <Group key={index} position="apart">
+                      <Group position="apart">
                         <Text>
                           <Text span fw="bold">
                             {productAttr.attribute.attributeName}
