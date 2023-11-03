@@ -18,7 +18,7 @@ const FilteredProducts = () => {
       cols={4}
       spacing="xl"
       breakpoints={[
-        { maxWidth: "80rem", cols: 3, spacing: "md" },
+        { maxWidth: "88rem", cols: 3, spacing: "md" },
         { maxWidth: "66rem", cols: 2, spacing: "sm" },
         { maxWidth: "40rem", cols: 1, spacing: "sm" },
       ]}
