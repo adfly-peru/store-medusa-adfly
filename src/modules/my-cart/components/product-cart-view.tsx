@@ -22,7 +22,7 @@ import {
   IconTrash,
   IconX,
 } from "@tabler/icons-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
 import { CartItem, CartSubOrder } from "@interfaces/cart";
 
@@ -38,7 +38,15 @@ const DetailedProductCartView = ({
   businessName: string;
 }) => {
   const { editProduct, removeProduct } = useCart();
+  const [maxUnits, setMaxUnits] = useState(item.variant.maxQuantity);
   const handlers = useRef<NumberInputHandlers>();
+
+  useEffect(() => {
+    if (!item) return;
+    setMaxUnits(
+      (item.variant.maxQuantity ?? 0) < item.variant.stock ? (item.variant.maxQuantity ?? 0) : item.variant.stock
+    );
+  }, [item]);
 
   return (
     <Card w="100%" withBorder radius="xs" fz={12}>
@@ -122,8 +130,8 @@ const DetailedProductCartView = ({
               }
               fz={15}
               handlersRef={handlers}
-              max={item.variant.stock}
-              min={0}
+              max={maxUnits}
+              min={1}
               step={1}
               w={80}
               height={30}
@@ -142,7 +150,7 @@ const DetailedProductCartView = ({
             />
             <ActionIcon
               variant="transparent"
-              disabled={item.quantity === item.variant.stock}
+              disabled={item.quantity === maxUnits}
               bg="#31658E"
               radius="sm"
               h={36}
