@@ -20,6 +20,7 @@ import RegistrationStepsModal from "@modules/layout/templates/registration-steps
 import { LoadScript } from "@react-google-maps/api";
 import "@fontsource/rubik";
 import "@fontsource/open-sans";
+import { CouponProvider } from "@context/coupon-context";
 
 const adflyColors = {
   default: "#31658E",
@@ -181,7 +182,9 @@ const ResourcesProvider: React.FC<{ children?: React.ReactNode }> = ({
       return (
         <ProductProvider>
           <CartProvider>
-            <OrderProvider>{children}</OrderProvider>
+            <CouponProvider>
+              <OrderProvider>{children}</OrderProvider>
+            </CouponProvider>
           </CartProvider>
         </ProductProvider>
       );

@@ -144,4 +144,82 @@ const GET_ORDER_REPORT = gql`
   }
 `;
 
-export { GET_ORDERS, GET_ORDER_REPORT };
+const GET_COUPONS = gql`
+  query getCoupons(
+    $limit: Int
+    $offset: Int
+    $sortBy: String
+    $searchBy: String
+    $asc: Boolean
+    $collaboratorId: ID!
+  ) {
+    getCoupons(
+      limit: $limit
+      offset: $offset
+      sortBy: $sortBy
+      searchBy: $searchBy
+      asc: $asc
+      uuidcollaborator: $collaboratorId
+    ) {
+      coupons {
+        uuidcouponcollaboratorusage
+        uuidcollaborator
+        uuidproduct
+        uuidvariant
+        businessname
+        dateused
+        type
+        couponcode
+      }
+      totalCoupons
+    }
+  }
+`;
+
+const GET_COUPON_REPORT = gql`
+  query couponReport($uuidcouponcollaboratorusage: ID!) {
+    couponReport(uuidcouponcollaboratorusage: $uuidcouponcollaboratorusage) {
+      uuidcouponcollaboratorusage
+      uuidcollaborator
+      uuidproduct
+      uuidvariant
+      businessname
+      dateused
+      type
+      couponcode
+      couponData {
+        initialDate
+        expirationDate
+        initialPurchaseDate
+        expirationPurchaseDate
+        couponUsage
+        couponContent
+        discountType
+        discount
+        couponCode
+      }
+      variant {
+        uuidVariant
+        attributes {
+          attributeName
+          value
+        }
+        currency
+        stock
+        refPrice
+        adflyPrice
+        offerPrice
+        maxQuantity
+        imageURL
+        variantSku
+        offer {
+          offerName
+          description
+          type
+        }
+      }
+    }
+  }
+`;
+
+export { GET_ORDERS, GET_ORDER_REPORT, GET_COUPONS, GET_COUPON_REPORT };

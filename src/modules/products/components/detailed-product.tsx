@@ -628,6 +628,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
               {product.type === "coupon" ? (
                 <Button
                   radius="md"
+                  disabled={maxUnits <= 0}
                   onClick={async () => {
                     setLoading(true);
                     const response = await generateCoupon(
