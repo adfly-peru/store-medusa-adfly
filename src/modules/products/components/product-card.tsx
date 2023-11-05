@@ -57,7 +57,9 @@ const ProductCard = ({ product }: { product: Offer }) => {
 
   let discount =
     ((selectedVariant.refPrice -
-      ((selectedVariant.offerPrice ?? 0) > 0 ? (selectedVariant.offerPrice ?? 0) : selectedVariant.adflyPrice)) /
+      ((selectedVariant.offerPrice ?? 0) > 0
+        ? selectedVariant.offerPrice ?? 0
+        : selectedVariant.adflyPrice)) /
       selectedVariant.refPrice) *
     100;
 

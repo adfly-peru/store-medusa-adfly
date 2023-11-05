@@ -85,7 +85,9 @@ export function DetailedProduct({ product }: { product: Offer }) {
   const allImages = product.variant.map((v) => v.imageURL);
   let discount =
     ((selectedVariant.refPrice -
-      ((selectedVariant.offerPrice ?? 0) > 0 ? (selectedVariant.offerPrice ?? 0) : selectedVariant.adflyPrice)) /
+      ((selectedVariant.offerPrice ?? 0) > 0
+        ? selectedVariant.offerPrice ?? 0
+        : selectedVariant.adflyPrice)) /
       selectedVariant.refPrice) *
     100;
 
@@ -326,7 +328,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
               <Text fw={700} ml="lg">
                 {couponReponse?.couponCode ?? "aaaaaaaaaa"}
               </Text>
-              <CopyButton value="https://mantine.dev">
+              <CopyButton value={couponReponse?.couponCode ?? "aaaaaaaaaa"}>
                 {({ copied, copy }) => (
                   <Button
                     h="100%"
