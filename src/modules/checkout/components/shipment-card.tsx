@@ -122,7 +122,6 @@ const ShipmentCard = ({
             ) === -1 ? (
               <Checkbox
                 icon={IconCircleFilled}
-                disabled
                 radius="lg"
                 onChange={() => {
                   setSelected("online");
