@@ -4,11 +4,29 @@ import {
   SuborderStatus,
 } from "@modules/common/types";
 import { Collaborator } from "./collaborator";
-import { VariantDetailed } from "./productInterface";
+import { Coupon, VariantDetailed } from "./productInterface";
 
 export interface PaginatedOrders {
   orders: Order[];
   totalOrders: number;
+}
+
+export interface PaginatedCouponUsages {
+  coupons: CouponUsage[];
+  totalCoupons: number;
+}
+
+export interface CouponUsage {
+  uuidcouponcollaboratorusage: string;
+  uuidcollaborator: string;
+  businessname: string;
+  dateused: string;
+  type: string;
+  couponcode: string;
+  uuidproduct: string;
+  uuidvariant: string;
+  variant?: VariantDetailed;
+  couponData?: Coupon;
 }
 export interface Order {
   uuidOrder: string;

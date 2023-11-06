@@ -54,6 +54,7 @@ import { CouponResponse } from "api/cart";
 
 export function DetailedProduct({ product }: { product: Offer }) {
   const [details, setDetails] = useState<{ name: string; value: string }[]>([]);
+  const [noAvailable, setNoAvailable] = useState(false);
   const defaultAttributeSelections: Record<string, string> = {};
   if (product.variant[0]) {
     product.variant[0].attributes.forEach((attr) => {
@@ -85,7 +86,9 @@ export function DetailedProduct({ product }: { product: Offer }) {
   const allImages = product.variant.map((v) => v.imageURL);
   let discount =
     ((selectedVariant.refPrice -
-      ((selectedVariant.offerPrice ?? 0) > 0 ? (selectedVariant.offerPrice ?? 0) : selectedVariant.adflyPrice)) /
+      ((selectedVariant.offerPrice ?? 0) > 0
+        ? selectedVariant.offerPrice ?? 0
+        : selectedVariant.adflyPrice)) /
       selectedVariant.refPrice) *
     100;
 
@@ -108,8 +111,11 @@ export function DetailedProduct({ product }: { product: Offer }) {
     );
 
     if (matchingVariantIndex > -1) {
+      setNoAvailable(false);
       setSelectedVariant(filteredVariants[matchingVariantIndex]);
       setImgIdx(matchingVariantIndex);
+    } else {
+      setNoAvailable(true);
     }
   }, [attributeSelections, filteredVariants]);
 
@@ -267,9 +273,8 @@ export function DetailedProduct({ product }: { product: Offer }) {
     );
     if (itemGetted) {
       const allowed = selectedVariant.maxQuantity - itemGetted.quantity;
-      setMaxUnits(
-        allowed < selectedVariant.stock ? allowed : selectedVariant.stock
-      );
+      const updatedStock = selectedVariant.stock - itemGetted.quantity;
+      setMaxUnits(allowed < updatedStock ? allowed : updatedStock);
       setCartItem(itemGetted);
     } else {
       setMaxUnits(
@@ -326,7 +331,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
               <Text fw={700} ml="lg">
                 {couponReponse?.couponCode ?? "aaaaaaaaaa"}
               </Text>
-              <CopyButton value="https://mantine.dev">
+              <CopyButton value={couponReponse?.couponCode ?? "aaaaaaaaaa"}>
                 {({ copied, copy }) => (
                   <Button
                     h="100%"
@@ -539,18 +544,8 @@ export function DetailedProduct({ product }: { product: Offer }) {
               )}
               {filteredVariants.length > 1 ? <Divider my="sm" /> : null}
               {product.offerAttributes.map((productAttr, index) => {
-                const validVariants = filteredVariants.filter((variant) =>
-                  Object.entries(attributeSelections).every(
-                    ([key, value]) =>
-                      key === productAttr.attributeName ||
-                      variant.attributes.some(
-                        (attr) =>
-                          attr.attributeName === key && attr.value === value
-                      )
-                  )
-                );
                 const validValues = [
-                  ...validVariants.flatMap((variant) =>
+                  ...filteredVariants.flatMap((variant) =>
                     variant.attributes
                       .filter(
                         (attr) =>
@@ -611,101 +606,114 @@ export function DetailedProduct({ product }: { product: Offer }) {
                 );
               })}
               <Divider my="sm" />
-              <Text fz="xs">
-                <Text span fw="bold">
-                  - Stock:
-                </Text>
-                {` ${selectedVariant.stock} unidad(es)`}
-              </Text>
-              <Text fz="xs">
-                <Text span fw="bold">
-                  - Máximo pedido:
-                </Text>
-                {` ${selectedVariant.maxQuantity} unidad(es)`}
-              </Text>
-              {product.type === "coupon" ? (
-                <Button
-                  radius="md"
-                  onClick={async () => {
-                    setLoading(true);
-                    const response = await generateCoupon(
-                      selectedVariant.uuidVariant,
-                      product.uuidOffer
-                    );
-                    setCouponResponse(response ?? null);
-                    setOpen(true);
-                    setLoading(false);
-                  }}
-                >
-                  Generar Cupón
-                </Button>
+              {noAvailable ? (
+                <>
+                  <Text fz="xs">Esta variante no está disponible</Text>
+                </>
               ) : (
-                <Stack spacing="md">
-                  <Group spacing={5} align="center">
-                    <Group spacing={5} position="center">
-                      <ActionIcon
-                        variant="transparent"
-                        color="dark"
-                        disabled={value === 0}
-                        bg="#F2F2F3"
-                        radius="md"
-                        h={45}
-                        w={45}
-                        onClick={() => handlers.current?.decrement()}
-                      >
-                        <IconMinus stroke={1.5} size="1.125rem" />
-                      </ActionIcon>
-                      <NumberInput
-                        hideControls
-                        value={value}
-                        onChange={(val) => setValue(val === "" ? 0 : val)}
-                        handlersRef={handlers}
-                        max={maxUnits}
-                        min={0}
-                        step={1}
-                        styles={{
-                          input: { width: 45, height: 45, textAlign: "center" },
-                        }}
-                      />
-                      <ActionIcon
-                        variant="transparent"
-                        color="dark"
-                        disabled={value === maxUnits}
-                        bg="#F2F2F3"
-                        radius="md"
-                        h={45}
-                        w={45}
-                        onClick={() => handlers.current?.increment()}
-                      >
-                        <IconPlus stroke={1.5} size="1.125rem" />
-                      </ActionIcon>
-                    </Group>
-                    <Space />
+                <>
+                  <Text fz="xs">
+                    <Text span fw="bold">
+                      - Stock:
+                    </Text>
+                    {` ${selectedVariant.stock} unidad(es)`}
+                  </Text>
+                  <Text fz="xs">
+                    <Text span fw="bold">
+                      - Máximo pedido:
+                    </Text>
+                    {` ${selectedVariant.maxQuantity} unidad(es)`}
+                  </Text>
+                  {product.type === "coupon" ? (
                     <Button
                       radius="md"
-                      disabled={maxUnits <= 0 || value === 0}
-                      onClick={() => {
-                        addProduct(
+                      disabled={maxUnits <= 0}
+                      onClick={async () => {
+                        setLoading(true);
+                        const response = await generateCoupon(
                           selectedVariant.uuidVariant,
-                          product.business.uuidbusiness,
-                          value
+                          product.uuidOffer
                         );
+                        setCouponResponse(response ?? null);
+                        setOpen(true);
+                        setLoading(false);
                       }}
                     >
-                      Agregar al carrito
+                      Generar Cupón
                     </Button>
-                  </Group>
-                  <Group position="left">
-                    <IconShoppingCartCheck />
-                    <Text fz={12}>
-                      Tu carrito tiene
-                      <Text span fw={700}>{` ${
-                        cartItem?.quantity ?? 0
-                      } unidades `}</Text>
-                      de esta oferta.
-                    </Text>
-                  </Group>
-                </Stack>
+                  ) : (
+                    <Stack spacing="md">
+                      <Group spacing={5} align="center">
+                        <Group spacing={5} position="center">
+                          <ActionIcon
+                            variant="transparent"
+                            color="dark"
+                            disabled={value === 0}
+                            bg="#F2F2F3"
+                            radius="md"
+                            h={45}
+                            w={45}
+                            onClick={() => handlers.current?.decrement()}
+                          >
+                            <IconMinus stroke={1.5} size="1.125rem" />
+                          </ActionIcon>
+                          <NumberInput
+                            hideControls
+                            value={value}
+                            onChange={(val) => setValue(val === "" ? 0 : val)}
+                            handlersRef={handlers}
+                            max={maxUnits}
+                            min={0}
+                            step={1}
+                            styles={{
+                              input: {
+                                width: 45,
+                                height: 45,
+                                textAlign: "center",
+                              },
+                            }}
+                          />
+                          <ActionIcon
+                            variant="transparent"
+                            color="dark"
+                            disabled={value === maxUnits}
+                            bg="#F2F2F3"
+                            radius="md"
+                            h={45}
+                            w={45}
+                            onClick={() => handlers.current?.increment()}
+                          >
+                            <IconPlus stroke={1.5} size="1.125rem" />
+                          </ActionIcon>
+                        </Group>
+                        <Space />
+                        <Button
+                          radius="md"
+                          disabled={maxUnits <= 0 || value === 0}
+                          onClick={() => {
+                            addProduct(
+                              selectedVariant.uuidVariant,
+                              product.business.uuidbusiness,
+                              value
+                            );
+                          }}
+                        >
+                          Agregar al carrito
+                        </Button>
+                      </Group>
+                      <Group position="left">
+                        <IconShoppingCartCheck />
+                        <Text fz={12}>
+                          Tu carrito tiene
+                          <Text span fw={700}>{` ${
+                            cartItem?.quantity ?? 0
+                          } unidades `}</Text>
+                          de esta oferta.
+                        </Text>
+                      </Group>
+                    </Stack>
+                  )}
+                </>
               )}
             </Stack>
           </Grid.Col>
