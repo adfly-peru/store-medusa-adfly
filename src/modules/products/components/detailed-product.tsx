@@ -269,9 +269,8 @@ export function DetailedProduct({ product }: { product: Offer }) {
     );
     if (itemGetted) {
       const allowed = selectedVariant.maxQuantity - itemGetted.quantity;
-      setMaxUnits(
-        allowed < selectedVariant.stock ? allowed : selectedVariant.stock
-      );
+      const updatedStock = selectedVariant.stock - itemGetted.quantity;
+      setMaxUnits(allowed < updatedStock ? allowed : updatedStock);
       setCartItem(itemGetted);
     } else {
       setMaxUnits(
