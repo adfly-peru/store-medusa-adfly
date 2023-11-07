@@ -98,6 +98,15 @@ const GET_ORDER_REPORT = gql`
                 description
                 type
               }
+              service {
+                initialDate
+                expirationDate
+                initialPurchaseDate
+                expirationPurchaseDate
+                accessService
+                contentService
+                couponCode
+              }
             }
             quantity
             subtotal
