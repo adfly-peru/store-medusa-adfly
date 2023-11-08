@@ -96,6 +96,9 @@ const PaymentButton = ({
       amount: totalAmount,
       expirationminutes: "20",
       timeouturl: "about:blank",
+      merchantlogo: "https://www.adfly.pe/Content/logo.png",
+      merchantname: "Adfly",
+      formbuttoncolor: "#31658E",
       action: `api/payment?purchaseNumber=${cart.purchaseNumber}&amount=${totalAmount}&collaboratorid=${collaborator?.uuidcollaborator}`,
     });
 
