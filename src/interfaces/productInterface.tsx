@@ -1,6 +1,6 @@
 export interface Attribute {
   attributeName: string;
-  value: string[];
+  values: string[];
 }
 
 export interface OfferAttribute {

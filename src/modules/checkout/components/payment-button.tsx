@@ -91,11 +91,14 @@ const PaymentButton = ({
     window.VisanetCheckout.configure({
       sessiontoken: `${sessionToken}`,
       channel: "web",
-      merchantid: "456879852",
+      merchantid: process.env.NEXT_PUBLIC_MERCHANT_ID,
       purchasenumber: cart.purchaseNumber,
       amount: totalAmount,
       expirationminutes: "20",
       timeouturl: "about:blank",
+      merchantlogo: "https://www.adfly.pe/Content/logo.png",
+      merchantname: "Adfly",
+      formbuttoncolor: "#31658E",
       action: `api/payment?purchaseNumber=${cart.purchaseNumber}&amount=${totalAmount}&collaboratorid=${collaborator?.uuidcollaborator}`,
     });
 
@@ -124,8 +127,7 @@ const PaymentButton = ({
   useEffect(() => {
     const script = document.createElement("script");
     script.type = "text/javascript";
-    script.src =
-      "https://static-content-qas.vnforapps.com/v2/js/checkout.js?qa=true";
+    script.src = process.env.NEXT_PUBLIC_CHECKOUT_URL ?? "";
     document.body.appendChild(script);
   }, []);
 

@@ -109,6 +109,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
         (attr) => attributeSelections[attr.attributeName] === attr.value
       )
     );
+    console.log("variant", filteredVariants[matchingVariantIndex]);
 
     if (matchingVariantIndex > -1) {
       setNoAvailable(false);
@@ -470,37 +471,13 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   width="100%"
                   height={390}
                   src={
-                    allImages[imgIdx] ??
+                    filteredVariants[imgIdx].imageURL ??
                     "https://cdn-icons-png.flaticon.com/512/3770/3770820.png"
                   }
-                  alt={allImages[imgIdx]}
+                  alt={filteredVariants[imgIdx].imageURL}
                   fit="contain"
                   withPlaceholder
                 />
-                {/* <Flex align="center">
-                <ActionIcon onClick={() => navigateThumbnails("left")}>
-                  <IconCaretLeft />
-                </ActionIcon>
-                {allImages
-                  .slice(
-                    thumbnailStartIdx,
-                    thumbnailStartIdx + displayedThumbnails
-                  )
-                  .map((img, idx) => (
-                    <Image
-                      onClick={() => setImgIdx(thumbnailStartIdx + idx)}
-                      key={thumbnailStartIdx + idx}
-                      src={img}
-                      alt={img}
-                      height={100}
-                      fit="contain"
-                      withPlaceholder
-                    />
-                  ))}
-                <ActionIcon onClick={() => navigateThumbnails("right")}>
-                  <IconCaretRight />
-                </ActionIcon>
-              </Flex> */}
               </Stack>
             </MediaQuery>
           </Grid.Col>
@@ -557,16 +534,6 @@ export function DetailedProduct({ product }: { product: Offer }) {
               )}
               {filteredVariants.length > 1 ? <Divider my="sm" /> : null}
               {product.offerAttributes.map((productAttr, index) => {
-                const validValues = [
-                  ...filteredVariants.flatMap((variant) =>
-                    variant.attributes
-                      .filter(
-                        (attr) =>
-                          attr.attributeName === productAttr.attributeName
-                      )
-                      .map((attr) => attr.value)
-                  ),
-                ];
                 return (
                   <div key={index}>
                     <MediaQuery smallerThan="md" styles={{ display: "none" }}>
@@ -577,7 +544,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
                           </Text>
                         </Text>
                         <Select
-                          data={validValues.map((value) => ({
+                          data={productAttr.attribute.values.map((value) => ({
                             value,
                             label: value,
                           }))}
@@ -597,7 +564,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
                     </MediaQuery>
                     <MediaQuery largerThan="md" styles={{ display: "none" }}>
                       <Select
-                        data={validValues.map((value) => ({
+                        data={productAttr.attribute.values.map((value) => ({
                           value,
                           label: value,
                         }))}
@@ -737,8 +704,10 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   <Text fz="xs">
                     <Text span fw="bold">
                       SKU:
-                    </Text>
-                    {product.principalSku}
+                    </Text>{" "}
+                    {(selectedVariant?.variantSku ?? "") == ""
+                      ? product.principalSku
+                      : selectedVariant?.variantSku}
                   </Text>
                 </Center>
                 <Center>

@@ -85,7 +85,7 @@ const CheckoutTemplate = () => {
                 <Divider my={5} style={{ border: "1px solid black" }} />
                 <Group position="apart">
                   <Text>Total:</Text>
-                  <Text>S/.{cart.total}</Text>
+                  <Text>S/.{cart.total + deliveryprice}</Text>
                 </Group>
                 <Space h="lg" />
                 <Text
