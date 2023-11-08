@@ -471,10 +471,10 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   width="100%"
                   height={390}
                   src={
-                    filteredVariants[imgIdx].imageURL ??
+                    filteredVariants[imgIdx]?.imageURL ??
                     "https://cdn-icons-png.flaticon.com/512/3770/3770820.png"
                   }
-                  alt={filteredVariants[imgIdx].imageURL}
+                  alt={filteredVariants[imgIdx]?.imageURL??""}
                   fit="contain"
                   withPlaceholder
                 />
