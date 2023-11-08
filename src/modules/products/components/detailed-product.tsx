@@ -345,6 +345,19 @@ export function DetailedProduct({ product }: { product: Offer }) {
                 )}
               </CopyButton>
             </Group>
+            <List fz={12} spacing="xs" size="sm" type="ordered" p="md">
+              <List.Item>Copia el cupón apretando el botón “Copiar”</List.Item>
+              <List.Item>
+                Sigue las instrucciones señaladas en el detalle del cupón para
+                utilizarlo.
+              </List.Item>
+              <List.Item>
+                El código de este cupón lo podrás encontrar siempre en:{" "}
+                <Anchor c="#31658E" href="/coupons" target="_blank">
+                  Mis Cupones
+                </Anchor>
+              </List.Item>
+            </List>
           </Stack>
         ) : (
           <Stack align="center">
