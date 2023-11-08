@@ -241,11 +241,6 @@ const SuccessMessage = ({
         <Space h="xl" />
         <Title order={3}> Información de Entrega </Title>
         <Paper radius="md" py="md" px="xl" withBorder>
-          <Text fw="bold">Dirección de Entrega</Text>
-          <Text>
-            {report.deliveryInfo?.collaboratoraddress?.address || "-"}
-          </Text>
-          <Divider my="sm" />
           <Text fw="bold">Entregar pedido a:</Text>
           <Text>
             {`Nombre Completo: ${
