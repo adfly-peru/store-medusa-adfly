@@ -1,4 +1,4 @@
-import { VariantDetailed } from "./productInterface";
+import { VariantAttribute, VariantDetailed } from "./productInterface";
 
 export interface Cart {
   uuidcart: string;
@@ -52,6 +52,8 @@ export interface CartItem {
   uuidcartitem: string;
   uuidcartsuborder: string;
   uuidvariant: string;
+  uuidoffer?: string;
+  attributes?: VariantAttribute[];
   variant: VariantDetailed;
   quantity: number;
   subtotal: number;

@@ -158,12 +158,7 @@ const ProductCard = ({ product }: { product: Offer }) => {
           )}
         </Card.Section>
         <Card.Section py="xs" inheritPadding ta="center" h={70}>
-          <Button
-            fullWidth
-            radius="md"
-            component="a"
-            href={"/product/" + product.uuidOffer}
-          >
+          <Button fullWidth radius="md">
             {product.type === "coupon" ? "Generar Cupón" : "Agregar"}
           </Button>
         </Card.Section>

@@ -69,21 +69,17 @@ export function DetailedProduct({ product }: { product: Offer }) {
     setAttributeSelections((prev) => ({ ...prev, [attributeName]: value }));
   };
   const [loading, setLoading] = useState(false);
-  const [filteredVariants, setFilteredVariants] = useState<Variant[]>([]);
   const [opened, setOpen] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState(product.variant[0]);
   const [value, setValue] = useState<number>(0);
   const [cartItem, setCartItem] = useState<CartItem | null>(null);
   const [maxUnits, setMaxUnits] = useState(product.variant[0].maxQuantity);
+  const [currentStock, setCurrentStock] = useState(0);
   const [couponReponse, setCouponResponse] = useState<CouponResponse | null>(
     null
   );
-  const { addProduct, getVariantById, cart, generateCoupon } = useCart();
-  const [imgIdx, setImgIdx] = useState(0);
-  const [thumbnailStartIdx, setThumbnailStartIdx] = useState(0);
-  const displayedThumbnails = 3;
+  const { addProduct, searchVariantAttrs, cart, generateCoupon } = useCart();
   const handlers = useRef<NumberInputHandlers>();
-  const allImages = product.variant.map((v) => v.imageURL);
   let discount =
     ((selectedVariant.refPrice -
       ((selectedVariant.offerPrice ?? 0) > 0
@@ -91,34 +87,45 @@ export function DetailedProduct({ product }: { product: Offer }) {
         : selectedVariant.adflyPrice)) /
       selectedVariant.refPrice) *
     100;
-
-  const navigateThumbnails = (direction: "left" | "right") => {
-    if (direction === "left" && thumbnailStartIdx > 0) {
-      setThumbnailStartIdx(thumbnailStartIdx - 1);
-    }
-    if (
-      direction === "right" &&
-      thumbnailStartIdx < allImages.length - displayedThumbnails
-    ) {
-      setThumbnailStartIdx(thumbnailStartIdx + 1);
-    }
-  };
   useEffect(() => {
-    const matchingVariantIndex = filteredVariants.findIndex((variant) =>
+    const matchingVariants = product.variant.filter((variant) =>
       variant.attributes.every(
         (attr) => attributeSelections[attr.attributeName] === attr.value
       )
     );
-    console.log("variant", filteredVariants[matchingVariantIndex]);
 
-    if (matchingVariantIndex > -1) {
+    if (matchingVariants.length > 0) {
       setNoAvailable(false);
-      setSelectedVariant(filteredVariants[matchingVariantIndex]);
-      setImgIdx(matchingVariantIndex);
+      setCurrentStock(matchingVariants.reduce((p, c) => p + c.stock, 0));
+      setSelectedVariant(matchingVariants[0]);
     } else {
       setNoAvailable(true);
     }
-  }, [attributeSelections, filteredVariants]);
+  }, [attributeSelections, product.variant]);
+
+  useEffect(() => {
+    if (!cart) return;
+    const itemGetted = searchVariantAttrs(
+      product.uuidOffer,
+      product.business.uuidbusiness,
+      selectedVariant.attributes
+    );
+    console.log(selectedVariant, currentStock);
+
+    if (itemGetted) {
+      const allowed = selectedVariant.maxQuantity - itemGetted.quantity;
+      const updatedStock = currentStock - itemGetted.quantity;
+      setMaxUnits(allowed < updatedStock ? allowed : updatedStock);
+      setCartItem(itemGetted);
+    } else {
+      setMaxUnits(
+        selectedVariant.maxQuantity < currentStock
+          ? selectedVariant.maxQuantity
+          : currentStock
+      );
+      setCartItem(null);
+    }
+  }, [cart, selectedVariant, currentStock, searchVariantAttrs]);
 
   useEffect(() => {
     const newDetails: { name: string; value: string }[] = [];
@@ -168,6 +175,11 @@ export function DetailedProduct({ product }: { product: Offer }) {
             name: "¿Qué incluye?",
             value: selectedVariant.coupon?.couponContent,
           });
+        if (product.termConditions)
+          newDetails.push({
+            name: "Términos y Condiciones",
+            value: product.termConditions,
+          });
         break;
       case "service":
         if (selectedVariant.service?.initialDate)
@@ -207,6 +219,11 @@ export function DetailedProduct({ product }: { product: Offer }) {
           newDetails.push({
             name: "¿Qué incluye?",
             value: selectedVariant.service?.contentService,
+          });
+        if (product.termConditions)
+          newDetails.push({
+            name: "Términos y Condiciones",
+            value: product.termConditions,
           });
         break;
       case "product":
@@ -265,46 +282,6 @@ export function DetailedProduct({ product }: { product: Offer }) {
     }
     setDetails(newDetails);
   }, [product]);
-
-  useEffect(() => {
-    if (!cart) return;
-    const itemGetted = getVariantById(
-      selectedVariant.uuidVariant,
-      product.business.uuidbusiness
-    );
-    if (itemGetted) {
-      const allowed = selectedVariant.maxQuantity - itemGetted.quantity;
-      const updatedStock = selectedVariant.stock - itemGetted.quantity;
-      setMaxUnits(allowed < updatedStock ? allowed : updatedStock);
-      setCartItem(itemGetted);
-    } else {
-      setMaxUnits(
-        selectedVariant.maxQuantity < selectedVariant.stock
-          ? selectedVariant.maxQuantity
-          : selectedVariant.stock
-      );
-      setCartItem(null);
-    }
-  }, [cart, selectedVariant]);
-
-  useEffect(() => {
-    const uniqueAttributes = new Set();
-    const uniqueVariants = product.variant.filter((variant) => {
-      const attributesCopy = [...variant.attributes];
-      const attributesString = JSON.stringify(
-        attributesCopy.sort((a, b) =>
-          a.attributeName.localeCompare(b.attributeName)
-        )
-      );
-      if (!uniqueAttributes.has(attributesString)) {
-        uniqueAttributes.add(attributesString);
-        return true;
-      }
-      return false;
-    });
-    setFilteredVariants(uniqueVariants);
-    setSelectedVariant(uniqueVariants[0]);
-  }, [product.variant]);
 
   if (!selectedVariant) {
     return null;
@@ -471,10 +448,10 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   width="100%"
                   height={390}
                   src={
-                    filteredVariants[imgIdx].imageURL ??
+                    selectedVariant?.imageURL ??
                     "https://cdn-icons-png.flaticon.com/512/3770/3770820.png"
                   }
-                  alt={filteredVariants[imgIdx].imageURL}
+                  alt={selectedVariant?.imageURL ?? ""}
                   fit="contain"
                   withPlaceholder
                 />
@@ -532,7 +509,6 @@ export function DetailedProduct({ product }: { product: Offer }) {
                   </Group>
                 </Stack>
               )}
-              {filteredVariants.length > 1 ? <Divider my="sm" /> : null}
               {product.offerAttributes.map((productAttr, index) => {
                 return (
                   <div key={index}>
@@ -596,7 +572,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
                     <Text span fw="bold">
                       - Stock:
                     </Text>
-                    {` ${selectedVariant.stock} unidad(es)`}
+                    {` ${currentStock - (cartItem?.quantity ?? 0)} unidad(es)`}
                   </Text>
                   <Text fz="xs">
                     <Text span fw="bold">

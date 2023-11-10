@@ -13,6 +13,7 @@ const GET_PRODUCT = gql`
       tags
       rejectionComment
       status
+      termConditions
       brand {
         name
       }
@@ -78,7 +79,6 @@ const GET_PRODUCT = gql`
           couponContent
           discountType
           discount
-          couponCode
         }
         service {
           initialDate
@@ -87,7 +87,6 @@ const GET_PRODUCT = gql`
           expirationPurchaseDate
           accessService
           contentService
-          couponCode
         }
       }
     }
@@ -168,7 +167,6 @@ const GET_PRODUCTS = gql`
             couponContent
             discountType
             discount
-            couponCode
           }
           service {
             initialDate
@@ -177,7 +175,6 @@ const GET_PRODUCTS = gql`
             expirationPurchaseDate
             accessService
             contentService
-            couponCode
           }
         }
       }
@@ -275,7 +272,6 @@ const GET_RELATED_PRODUCTS = gql`
             couponContent
             discountType
             discount
-            couponCode
           }
           service {
             initialDate
@@ -284,7 +280,6 @@ const GET_RELATED_PRODUCTS = gql`
             expirationPurchaseDate
             accessService
             contentService
-            couponCode
           }
         }
       }
@@ -392,7 +387,6 @@ const GET_FILTERED_PRODUCTS = gql`
             couponContent
             discountType
             discount
-            couponCode
           }
         }
       }

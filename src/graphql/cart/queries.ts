@@ -62,6 +62,11 @@ const GET_CART = gql`
           uuidcartitem
           uuidcartsuborder
           uuidvariant
+          uuidoffer
+          attributes {
+            attributeName
+            value
+          }
           variant {
             uuidVariant
             attributes {

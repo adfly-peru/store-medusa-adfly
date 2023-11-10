@@ -14,6 +14,32 @@ import { Cart, CartItem } from "@interfaces/cart";
 import { useAccount } from "./account-context";
 import { BillingForm } from "@interfaces/billing";
 import { AddressInfoForm } from "@interfaces/address-interface";
+import { VariantAttribute } from "@interfaces/productInterface";
+
+function areVariantAttributesEqual(
+  list1: VariantAttribute[],
+  list2: VariantAttribute[]
+): boolean {
+  if (list1.length !== list2.length) {
+    return false;
+  }
+  const comparison1 = list1.every((attr1) =>
+    list2.some(
+      (attr2) =>
+        attr1.attributeName === attr2.attributeName &&
+        attr1.value === attr2.value
+    )
+  );
+  const comparison2 = list2.every((attr2) =>
+    list1.some(
+      (attr1) =>
+        attr1.attributeName === attr2.attributeName &&
+        attr1.value === attr2.value
+    )
+  );
+
+  return comparison1 && comparison2;
+}
 
 interface CartContext {
   cart: Cart | null;
@@ -31,6 +57,11 @@ interface CartContext {
   getProductById: (
     uuidproduct: string,
     uuidbusiness: string
+  ) => CartItem | null;
+  searchVariantAttrs: (
+    uuidoffer: string,
+    uuidbusiness: string,
+    attrs: VariantAttribute[]
   ) => CartItem | null;
   generateCoupon: (
     uuid_variant: string,
@@ -139,7 +170,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
           uuidcart: data?.getCart.uuidcart!,
           uuidvariant: uuidvariant,
           uuidbusiness: uuidbusiness,
-          quantity: quantity + cartitem.quantity,
+          quantity: quantity,
           operation: "update",
         });
       }
@@ -222,6 +253,25 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     return item ?? null;
   };
 
+  const searchVariantAttrs = (
+    uuidoffer: string,
+    uuidbusiness: string,
+    attrs: VariantAttribute[]
+  ) => {
+    if (!data?.getCart?.suborders) return null;
+    const suborder = data.getCart.suborders.find(
+      (obj) => obj.uuidbusiness == uuidbusiness
+    );
+    if (!suborder) return null;
+    return (
+      suborder.items.find(
+        (obj) =>
+          obj.uuidoffer === uuidoffer &&
+          areVariantAttributesEqual(obj.attributes ?? [], attrs)
+      ) ?? null
+    );
+  };
+
   const editBilling = async (billingform: BillingForm) => {
     try {
       setLoadingEvent(true);
@@ -301,6 +351,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         refetch: async () => {
           await refetch();
         },
+        searchVariantAttrs,
         removeProduct,
         editProduct,
         getProductById,
