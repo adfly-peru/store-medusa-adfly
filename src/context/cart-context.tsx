@@ -216,7 +216,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         uuidcart: data?.getCart.uuidcart!,
         uuidvariant: cartitem.uuidvariant,
         uuidbusiness: uuidbusiness,
-        quantity: quantity,
+        quantity: quantity - cartitem.quantity,
         operation: "update",
       });
       if (response != null) {
