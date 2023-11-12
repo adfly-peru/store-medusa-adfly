@@ -12,13 +12,6 @@ import DetailedProductCartView from "@modules/my-cart/components/product-cart-vi
 import ProductCartRow from "../components/product-cart-row";
 
 const CartView = ({ cart }: { cart: Cart }) => {
-  const { height } = useViewportSize();
-
-  const allItems = () => {
-    const itemsList = [];
-    return cart.suborders.flatMap((a) => a.items);
-  };
-
   return (
     <Stack align="flex-start">
       <MediaQuery
@@ -92,7 +85,7 @@ const CartView = ({ cart }: { cart: Cart }) => {
       <MediaQuery largerThan="md" styles={{ display: "none" }}>
         <Stack spacing="md" w="100%" align="center">
           {cart.suborders.map((suborder, id) => (
-            <>
+            <div key={suborder.uuidcartsuborder}>
               {suborder.items.map((item) => (
                 <DetailedProductCartView
                   key={item.uuidcartitem}
@@ -102,7 +95,7 @@ const CartView = ({ cart }: { cart: Cart }) => {
                   businessName={suborder.businessName}
                 />
               ))}
-            </>
+            </div>
           ))}
         </Stack>
       </MediaQuery>

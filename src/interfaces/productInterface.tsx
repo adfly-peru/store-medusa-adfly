@@ -70,6 +70,7 @@ export interface VariantDetailed {
   attributes: VariantAttribute[];
   currency: string;
   stock: number;
+  totalStock: number;
   refPrice: number;
   adflyPrice: number;
   offerPrice?: number;

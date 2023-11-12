@@ -46,6 +46,7 @@ export interface CartSubOrder {
     deliveryOnStore: DeliveryStore[];
   };
   items: CartItem[];
+  type: string;
 }
 
 export interface CartItem {

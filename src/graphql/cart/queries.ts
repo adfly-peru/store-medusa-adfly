@@ -36,6 +36,7 @@ const GET_CART = gql`
         deliverymethod
         deliveryprice
         deliverytime
+        type
         availableDeliveryMethods {
           online
           onhome
@@ -75,6 +76,7 @@ const GET_CART = gql`
             }
             currency
             stock
+            totalStock
             refPrice
             adflyPrice
             offerPrice

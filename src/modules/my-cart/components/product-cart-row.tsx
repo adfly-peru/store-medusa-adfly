@@ -31,7 +31,9 @@ const ProductCartRow = ({
   useEffect(() => {
     if (!item) return;
     setMaxUnits(
-      (item.variant.maxQuantity ?? 0) < item.variant.stock ? (item.variant.maxQuantity ?? 0) : item.variant.stock
+      (item.variant.maxQuantity ?? 0) < item.variant.totalStock
+        ? item.variant.maxQuantity ?? 0
+        : item.variant.totalStock
     );
   }, [item]);
 
