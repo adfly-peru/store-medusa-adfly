@@ -451,7 +451,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
                     selectedVariant?.imageURL ??
                     "https://cdn-icons-png.flaticon.com/512/3770/3770820.png"
                   }
-                  alt={selectedVariant?.imageURL ?? ""}
+                  alt={selectedVariant?.imageURL ?? "-"}
                   fit="contain"
                   withPlaceholder
                 />
