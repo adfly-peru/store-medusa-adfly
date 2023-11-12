@@ -270,7 +270,17 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     });
 
     const responseInterceptor = axios.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        // Verificar si el estado de la respuesta es 200 o 201
+        if (response.status === 200 || response.status === 201) {
+          // Si la respuesta contiene un nuevo token
+          if (response.data && response.data.token) {
+            // Actualizar el token en localStorage
+            localStorage.setItem("token", response.data.token);
+          }
+        }
+        return response;
+      },
       async (error) => {
         const originalRequest = error.config;
 

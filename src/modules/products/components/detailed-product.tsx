@@ -110,7 +110,6 @@ export function DetailedProduct({ product }: { product: Offer }) {
       product.business.uuidbusiness,
       selectedVariant.attributes
     );
-    console.log(selectedVariant, currentStock);
 
     if (itemGetted) {
       const allowed = selectedVariant.maxQuantity - itemGetted.quantity;
