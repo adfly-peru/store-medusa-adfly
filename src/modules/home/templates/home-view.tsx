@@ -10,16 +10,15 @@ const HomeView = () => {
     <>
       <Carousel w="90%" mx="auto" withIndicators>
         <Carousel.Slide>
-          <Image
+          <div
             style={{
-              height: "auto",
               width: "100%",
-              backgroundSize: "auto 100%",
-              backgroundPosition: "center",
+              paddingTop: "19.71%",
+              backgroundImage: `url(${homeDesign?.bannerurl ?? ""})`,
+              backgroundPosition: "center center",
+              backgroundSize: "100% 100%",
               backgroundRepeat: "no-repeat",
             }}
-            src={homeDesign?.bannerurl ?? ""}
-            alt={homeDesign?.bannerurl ?? ""}
           />
         </Carousel.Slide>
       </Carousel>

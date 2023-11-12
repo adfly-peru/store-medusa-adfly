@@ -13,6 +13,7 @@ const GET_PRODUCT = gql`
       tags
       rejectionComment
       status
+      termConditions
       brand {
         name
       }
@@ -78,7 +79,6 @@ const GET_PRODUCT = gql`
           couponContent
           discountType
           discount
-          couponCode
         }
         service {
           initialDate
@@ -87,7 +87,6 @@ const GET_PRODUCT = gql`
           expirationPurchaseDate
           accessService
           contentService
-          couponCode
         }
       }
     }
@@ -147,18 +146,6 @@ const GET_PRODUCTS = gql`
           purchasePeriod
           imageURL
           variantSku
-          product {
-            specification
-            condition
-            conditionDetails
-            productWarranty
-            sellerWarranty
-            included
-            width
-            height
-            weight
-            length
-          }
           coupon {
             initialDate
             expirationDate
@@ -168,16 +155,6 @@ const GET_PRODUCTS = gql`
             couponContent
             discountType
             discount
-            couponCode
-          }
-          service {
-            initialDate
-            expirationDate
-            initialPurchaseDate
-            expirationPurchaseDate
-            accessService
-            contentService
-            couponCode
           }
         }
       }
@@ -275,7 +252,6 @@ const GET_RELATED_PRODUCTS = gql`
             couponContent
             discountType
             discount
-            couponCode
           }
           service {
             initialDate
@@ -284,7 +260,6 @@ const GET_RELATED_PRODUCTS = gql`
             expirationPurchaseDate
             accessService
             contentService
-            couponCode
           }
         }
       }
@@ -392,7 +367,6 @@ const GET_FILTERED_PRODUCTS = gql`
             couponContent
             discountType
             discount
-            couponCode
           }
         }
       }

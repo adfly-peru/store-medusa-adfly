@@ -36,6 +36,7 @@ const GET_CART = gql`
         deliverymethod
         deliveryprice
         deliverytime
+        type
         availableDeliveryMethods {
           online
           onhome
@@ -62,6 +63,11 @@ const GET_CART = gql`
           uuidcartitem
           uuidcartsuborder
           uuidvariant
+          uuidoffer
+          attributes {
+            attributeName
+            value
+          }
           variant {
             uuidVariant
             attributes {
@@ -70,6 +76,7 @@ const GET_CART = gql`
             }
             currency
             stock
+            totalStock
             refPrice
             adflyPrice
             offerPrice

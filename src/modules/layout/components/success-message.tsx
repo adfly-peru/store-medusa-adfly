@@ -23,7 +23,8 @@ import { orderStatuses } from "@modules/common/types";
 import SuborderCard from "@modules/order/components/subordercard";
 
 function formatarFecha(fechaStr: string): string {
-  if (fechaStr.length !== 12) {
+  if (fechaStr?.length !== 12) {
+    return "-";
     throw new Error("Formato de fecha no válido.");
   }
 
@@ -140,14 +141,14 @@ const SuccessMessage = ({
           </Stack>
           <Stack spacing="xs">
             <Text fw="bold" span>
-              {formatarFecha(niubizData.order.transactionDate)}
+              {formatarFecha(niubizData?.order?.transactionDate)}
             </Text>
             <Text fw="bold" span>
               {report.order.paymentInfo.purchaseNumber}
             </Text>
             <Text fw="bold" span>
-              {`${niubizData.order.amount.toFixed(2)} ${
-                niubizData.order.currency
+              {`${niubizData?.order?.amount?.toFixed(2)} ${
+                niubizData?.order?.currency
               }`}
             </Text>
           </Stack>
@@ -198,15 +199,15 @@ const SuccessMessage = ({
             <TextInput
               label="Comprobante Pago"
               disabled
-              value={report.order.isBilling ? "Factura" : "Boleta"}
+              value={report.order.details.isbilling ? "Factura" : "Boleta"}
             />
             <TextInput
               label="Nombre Completo / Razón Social"
               disabled
               value={
-                report.order.isBilling
-                  ? report.billingInfo.businessname
-                  : `${report.collaborator.name} ${report.collaborator.lastname}`
+                report.order.details.isbilling
+                  ? report.order.details.billingInfo?.businessname
+                  : `${report.order.details.collaborator?.name} ${report.order.details.collaborator?.lastname}`
               }
             />
           </Group>
@@ -215,18 +216,18 @@ const SuccessMessage = ({
               label="Tipo Documento"
               disabled
               value={
-                report.order.isBilling
+                report.order.details.isbilling
                   ? "RUC"
-                  : report.collaborator.documenttype
+                  : report.order.details.collaborator?.documenttype
               }
             />
             <TextInput
               label="N° Documento"
               disabled
               value={
-                report.order.isBilling
-                  ? report.billingInfo.ruc
-                  : report.collaborator.documentnumber
+                report.order.details.isbilling
+                  ? report.order.details.billingInfo?.ruc
+                  : report.order.details.collaborator?.documentnumber
               }
             />
           </Group>
@@ -234,7 +235,9 @@ const SuccessMessage = ({
             label="Dirección Facturación"
             disabled
             value={
-              report.order.isBilling ? report.billingInfo.fiscaladdress : ""
+              report.order.details.isbilling
+                ? report.order.details.billingInfo?.fiscaladdress
+                : ""
             }
           />
         </Paper>
@@ -244,30 +247,33 @@ const SuccessMessage = ({
           <Text fw="bold">Entregar pedido a:</Text>
           <Text>
             {`Nombre Completo: ${
-              report.order.isReceiver
-                ? report.deliveryInfo?.receivername || "-"
-                : report.collaborator.name + " " + report.collaborator.lastname
+              report.order.details.isreceiver
+                ? report.order.details.deliveryInfo?.receivername || "-"
+                : report.order.details.collaborator?.name +
+                  " " +
+                  report.order.details.collaborator?.lastname
             }`}
           </Text>
           <Text>
             {`Tipo de Documento: ${
-              report.order.isReceiver
-                ? report.deliveryInfo?.receiverdocumentkind || "-"
-                : report.collaborator.documenttype
+              report.order.details.isreceiver
+                ? report.order.details.deliveryInfo?.receiverdocumentkind || "-"
+                : report.order.details.collaborator?.documenttype
             }`}
           </Text>
           <Text>
             {`N° Documento: ${
-              report.order.isReceiver
-                ? report.deliveryInfo?.receiverdocumentnumber || "-"
-                : report.collaborator.documentnumber
+              report.order.details.isreceiver
+                ? report.order.details.deliveryInfo?.receiverdocumentnumber ||
+                  "-"
+                : report.order.details.collaborator?.documentnumber
             }`}
           </Text>
           <Text>
             {`Teléfono de Contacto: ${
-              report.order.isReceiver
-                ? report.deliveryInfo?.receiverphone || "-"
-                : report.billingInfo.phone
+              report.order.details.isreceiver
+                ? report.order.details.deliveryInfo?.phone || "-"
+                : report.order.details.billingInfo?.phone
             }`}
           </Text>
         </Paper>

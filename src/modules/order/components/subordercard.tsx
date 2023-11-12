@@ -11,20 +11,14 @@ import {
   MediaQuery,
   Table,
   Tabs,
+  Grid,
 } from "@mantine/core";
-import { Suborder } from "@interfaces/order";
+import { ItemDetails, Suborder } from "@interfaces/order";
 import { deliveryMethodInfo, suborderStatuses } from "@modules/common/types";
 import { modals } from "@mantine/modals";
-import { Service, VariantDetailed } from "@interfaces/productInterface";
 import { useEffect, useState } from "react";
 
-const DetailModal = ({
-  service,
-  variant,
-}: {
-  service?: Service;
-  variant: VariantDetailed;
-}) => {
+const DetailModal = ({ itemdetails }: { itemdetails: ItemDetails }) => {
   const [details, setDetails] = useState<{ name: string; value: string }[]>([]);
   useEffect(() => {
     const newDetails: { name: string; value: string }[] = [];
@@ -33,50 +27,50 @@ const DetailModal = ({
       month: "2-digit",
       year: "numeric",
     } as Intl.DateTimeFormatOptions;
-    if (service?.initialDate)
+    if (itemdetails.initialdate)
       newDetails.push({
         name: "Fecha Inicio Uso",
-        value: new Date(service?.initialDate).toLocaleString(
+        value: new Date(itemdetails.initialdate).toLocaleString(
           "es-ES",
           dateOptions
         ),
       });
-    if (service?.expirationDate)
+    if (itemdetails.expirationdate)
       newDetails.push({
         name: "Fecha Vencimiento Uso",
-        value: new Date(service?.expirationDate).toLocaleString(
+        value: new Date(itemdetails.expirationdate).toLocaleString(
           "es-ES",
           dateOptions
         ),
       });
-    if (service?.initialPurchaseDate)
+    if (itemdetails.initialpurchasedate)
       newDetails.push({
         name: "Fecha Inicio Compra",
-        value: new Date(service?.initialPurchaseDate).toLocaleString(
+        value: new Date(itemdetails.initialpurchasedate).toLocaleString(
           "es-ES",
           dateOptions
         ),
       });
-    if (service?.expirationPurchaseDate)
+    if (itemdetails.expirationpurchasedate)
       newDetails.push({
         name: "Fecha Vencimiento Compra",
-        value: new Date(service?.expirationPurchaseDate).toLocaleString(
+        value: new Date(itemdetails.expirationpurchasedate).toLocaleString(
           "es-ES",
           dateOptions
         ),
       });
-    if (service?.accessService)
+    if (itemdetails.accessservice)
       newDetails.push({
         name: "¿Cómo acceder al servicio?",
-        value: service?.accessService,
+        value: itemdetails.accessservice,
       });
-    if (service?.contentService)
+    if (itemdetails.contentservice)
       newDetails.push({
         name: "¿Qué incluye?",
-        value: service?.contentService,
+        value: itemdetails.contentservice,
       });
     setDetails(newDetails);
-  }, [service]);
+  }, [itemdetails]);
 
   return (
     <div>
@@ -94,7 +88,7 @@ const DetailModal = ({
         >
           <Accordion.Item value="description">
             <Accordion.Control>Descripción</Accordion.Control>
-            <Accordion.Panel>{variant?.offer.description}</Accordion.Panel>
+            <Accordion.Panel>{itemdetails.description}</Accordion.Panel>
           </Accordion.Item>
           <Accordion.Item value="additional">
             <Accordion.Control>Información Adicional</Accordion.Control>
@@ -155,7 +149,7 @@ const DetailModal = ({
               </Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel value="description" pt="xs">
-              {variant?.offer.description}
+              {itemdetails.description}
             </Tabs.Panel>
             <Tabs.Panel value="details" pt="xs" px="md">
               <Table
@@ -223,14 +217,14 @@ const SuborderCard = ({
         <Text span fw="bold">
           {deliveryMethodInfo[suborder.deliveryMethod ?? "null"]}
           {suborder.deliveryMethod === "pickup"
-            ? ` (${suborder.deliveryAddress?.alias})`
+            ? ` (${suborder.details.name})`
             : ""}
         </Text>
       </Text>
       <Text>
         Dirección Entrega:{" "}
         <Text span fw="bold">
-          {suborder.deliveryAddress?.address || "-"}
+          {suborder.details.address || "-"}
         </Text>
       </Text>
       <Text>
@@ -242,88 +236,90 @@ const SuborderCard = ({
       <Text>
         Especificaciones:{" "}
         <Text span fw="bold">
-          {suborder.deliveryAddress?.additional || "-"}
+          {suborder.details.comments || "-"}
         </Text>
       </Text>
       {suborder.items.map((product, idx) => (
         <div key={idx}>
           <Divider my="sm" />
-          <Group position="apart" spacing="xl" grow>
-            <Group position="left">
-              <Stack w={150}>
-                <Image
-                  src={product.variant.imageURL}
-                  alt={product.variant.imageURL}
-                  height={150}
-                  width="100%"
-                  fit="contain"
-                  withPlaceholder
-                />
-                {product.variant.service ? (
-                  <div>
-                    <UnstyledButton
-                      onClick={() => {
-                        modals.open({
-                          title: "Detalles",
-                          size: "lg",
-                          children: (
-                            <DetailModal
-                              service={product.variant.service}
-                              variant={product.variant}
-                            />
-                          ),
-                        });
-                      }}
-                    >
-                      <Text fz={12} c="#31658e">
-                        Ver detalle
+          <Grid>
+            <Grid.Col span={12} sm={6}>
+              <Group grow align="flex-start">
+                <Stack w={150}>
+                  <Image
+                    src={product.details.imageurl}
+                    alt={product.details.imageurl}
+                    height={150}
+                    width="100%"
+                    fit="contain"
+                    withPlaceholder
+                  />
+                  {product.details?.type === "service" ? (
+                    <div>
+                      <UnstyledButton
+                        onClick={() => {
+                          modals.open({
+                            title: "Detalles",
+                            size: "lg",
+                            children: (
+                              <DetailModal itemdetails={product.details} />
+                            ),
+                          });
+                        }}
+                      >
+                        <Text fz={12} c="#31658e">
+                          Ver detalle
+                        </Text>
+                      </UnstyledButton>
+                      <Text fz={12}>
+                        Código:{" "}
+                        {(product.details.servicesCodes ?? []).join(", ")}
                       </Text>
-                    </UnstyledButton>
-                    <Text fz={12}>
-                      Código: {product.variant.service?.couponCode}
-                    </Text>
-                  </div>
-                ) : (
-                  <div></div>
-                )}
-              </Stack>
-              <Stack spacing={0}>
-                <Title order={5} fw="bold" c="indigo" lineClamp={2}>
-                  {product.variant.offer.offerName}
-                </Title>
-                <Text fz="sm">
-                  <Text fw={500} span>
-                    {"SKU: "}
-                  </Text>
-                  {product.variant.variantSku}
-                </Text>
-                <Text fz="sm">
-                  <Text fw={500} span>
-                    {"Variantes: "}
-                  </Text>
-                  {product.variant.attributes.map(
-                    (attr) => `${attr.attributeName} ${attr.value}, `
+                    </div>
+                  ) : (
+                    <div></div>
                   )}
-                </Text>
-                <Text fz="sm">
-                  <Text fw={500} span>
-                    {"Cantidad: "}
+                </Stack>
+                <Stack spacing={0} align="flex-start">
+                  <Title order={5} fw="bold" c="indigo" lineClamp={2}>
+                    {product.details.productname}
+                  </Title>
+                  <Text fz="sm">
+                    <Text fw={500} span>
+                      {"SKU: "}
+                    </Text>
+                    {product.details.variantsku}
                   </Text>
-                  {product.quantity}
+                  <Text fz="sm">
+                    <Text fw={500} span>
+                      {"Variantes: "}
+                    </Text>
+                    {product.details.attributes?.map(
+                      (attr) => `${attr.attributeName} ${attr.value}, `
+                    )}
+                  </Text>
+                  <Text fz="sm">
+                    <Text fw={500} span>
+                      {"Cantidad: "}
+                    </Text>
+                    {product.quantity}
+                  </Text>
+                </Stack>
+              </Group>
+            </Grid.Col>
+            <Grid.Col span={12} sm={6}>
+              <Stack spacing={0} align="center" justify="center" h="100%">
+                <Text fw={700}>
+                  {`S/.${
+                    product.quantity *
+                    (product.details.offerprice ?? 0 !== 0
+                      ? product.details.offerprice ?? 0
+                      : product.details.adflyprice ?? 0)
+                  }`}
                 </Text>
               </Stack>
-            </Group>
-            <Stack spacing={0}>
-              <Text>
-                {`S/.${
-                  product.quantity *
-                  (product.variant.offerPrice ??
-                    product.variant.adflyPrice ??
-                    0)
-                }`}
-              </Text>
-            </Stack>
-          </Group>
+            </Grid.Col>
+          </Grid>
         </div>
       ))}
     </div>
