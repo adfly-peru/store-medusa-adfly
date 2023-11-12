@@ -146,18 +146,6 @@ const GET_PRODUCTS = gql`
           purchasePeriod
           imageURL
           variantSku
-          product {
-            specification
-            condition
-            conditionDetails
-            productWarranty
-            sellerWarranty
-            included
-            width
-            height
-            weight
-            length
-          }
           coupon {
             initialDate
             expirationDate
@@ -167,14 +155,6 @@ const GET_PRODUCTS = gql`
             couponContent
             discountType
             discount
-          }
-          service {
-            initialDate
-            expirationDate
-            initialPurchaseDate
-            expirationPurchaseDate
-            accessService
-            contentService
           }
         }
       }

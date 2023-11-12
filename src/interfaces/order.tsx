@@ -4,7 +4,7 @@ import {
   SuborderStatus,
 } from "@modules/common/types";
 import { Collaborator } from "./collaborator";
-import { Coupon, VariantDetailed } from "./productInterface";
+import { Coupon, VariantAttribute, VariantDetailed } from "./productInterface";
 
 export interface PaginatedOrders {
   orders: Order[];
@@ -28,6 +28,38 @@ export interface CouponUsage {
   variant?: VariantDetailed;
   couponData?: Coupon;
 }
+
+export interface OrderDetailsDelivery {
+  receivername: string;
+  receiverdocumentkind: string;
+  receiverdocumentnumber: string;
+  phone: string;
+}
+
+export interface OrderDetailsBilling {
+  phone: string;
+  ruc: string;
+  businessname: string;
+  fiscaladdress: string;
+}
+
+export interface OrderDetailsCollaborator {
+  name: string;
+  lastname: string;
+  documenttype: string;
+  documentnumber: string;
+  email: string;
+  phonenumber: string;
+}
+
+export interface OrderDetails {
+  collaborator: OrderDetailsCollaborator;
+  billingInfo: OrderDetailsBilling;
+  deliveryInfo: OrderDetailsDelivery;
+  isreceiver: boolean;
+  isbilling: boolean;
+}
+
 export interface Order {
   uuidOrder: string;
   uuidCollaborator: string;
@@ -42,8 +74,17 @@ export interface Order {
   suborders: [Suborder];
   paymentInfo: PaymentInfo;
   comments: string;
-  isBilling: boolean;
-  isReceiver: boolean;
+  details: OrderDetails;
+}
+
+export interface SubOrderDetails {
+  name?: string;
+  country?: string;
+  department?: string;
+  province?: string;
+  district?: string;
+  address?: string;
+  comments?: string;
 }
 
 export interface Suborder {
@@ -58,26 +99,54 @@ export interface Suborder {
   deliveryMethod?: DeliveryMethod;
   deliveryPrice?: number;
   deliveryTime?: string;
-  deliveryAddress?: {
-    alias: string;
-    address: string;
-    district: string;
-    province: string;
-    department: string;
-    country: string;
-    additional?: string;
-  };
   items: [SuborderItem];
   comments: string;
+  details: SubOrderDetails;
+}
+
+export interface ItemDetails {
+  type?: string;
+  description?: string;
+  refprice?: number;
+  adflyprice?: number;
+  offerprice?: number;
+  imageurl?: string;
+  variantsku?: string;
+  productname?: string;
+  termsconditions?: string;
+  principalsku?: string;
+  attributes: VariantAttribute[];
+  uuidbrand?: string;
+  uuiddepartment?: string;
+  uuidcategory?: string;
+  uuidsubcategory?: string;
+  uuidbusiness?: string;
+  initialdate?: string;
+  expirationdate?: string;
+  initialpurchasedate?: string;
+  expirationpurchasedate?: string;
+  accessservice?: string;
+  contentservice?: string;
+  servicesCodes?: string[];
+  specification?: string;
+  condition?: string;
+  conditiondetails?: string;
+  productwarranty?: string;
+  sellerwarranty?: string;
+  included?: string;
+  width?: number;
+  height?: number;
+  weight?: number;
+  length?: number;
 }
 
 export interface SuborderItem {
   uuidorderitem: string;
   uuidsuborder: string;
   uuidvariant: string;
-  variant: VariantDetailed;
   quantity: number;
   subtotal: number;
+  details: ItemDetails;
 }
 
 export interface PaymentInfo {
@@ -89,8 +158,6 @@ export interface PaymentInfo {
 
 export interface OrderReport {
   order: Order;
-  billingInfo: BillingInfo;
-  deliveryInfo?: DeliveryInfo;
   collaborator: Collaborator;
 }
 
