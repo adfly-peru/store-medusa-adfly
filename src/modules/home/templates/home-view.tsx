@@ -13,7 +13,7 @@ const HomeView = () => {
           <div
             style={{
               width: "100%",
-              paddingTop: "19.71%",
+              paddingTop: "30.98%",
               backgroundImage: `url(${homeDesign?.bannerurl ?? ""})`,
               backgroundPosition: "center center",
               backgroundSize: "100% 100%",
