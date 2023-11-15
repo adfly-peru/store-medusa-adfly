@@ -13,6 +13,7 @@ import {
   Center,
   MediaQuery,
   Divider,
+  ScrollArea,
 } from "@mantine/core";
 import {
   IconBasket,
@@ -203,24 +204,26 @@ const HomeHeader = () => {
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Label>Departamentos</Menu.Label>
-              {departments.map((category, id) => (
-                <Menu.Item
-                  key={id}
-                  icon={
-                    <Image
-                      alt={category.name}
-                      src={category.image}
-                      width={30}
-                      style={{
-                        filter: colorScheme === "dark" ? "invert(1)" : "none",
-                      }}
-                    />
-                  }
-                  onClick={() => searchProductByCategorie(category.name)}
-                >
-                  {category.name}
-                </Menu.Item>
-              ))}
+              <ScrollArea.Autosize mah={300}>
+                {departments.map((category, id) => (
+                  <Menu.Item
+                    key={id}
+                    icon={
+                      <Image
+                        alt={category.name}
+                        src={category.image}
+                        width={30}
+                        style={{
+                          filter: colorScheme === "dark" ? "invert(1)" : "none",
+                        }}
+                      />
+                    }
+                    onClick={() => searchProductByCategorie(category.name)}
+                  >
+                    {category.name}
+                  </Menu.Item>
+                ))}
+              </ScrollArea.Autosize>
             </Menu.Dropdown>
           </Menu>
         </Grid.Col>
