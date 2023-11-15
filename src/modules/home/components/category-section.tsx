@@ -19,7 +19,7 @@ const CategorySection = () => {
   const searchProductByCategorie = (categorieToSearch: string) => {
     router.push({
       pathname: "/search",
-      query: { data: categorieToSearch },
+      query: { department: categorieToSearch },
     });
   };
 
