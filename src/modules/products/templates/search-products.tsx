@@ -72,7 +72,7 @@ const SearchProducts = ({
             />
           </Grid.Col>
         </MediaQuery>
-        <Grid.Col span="auto" px="md">
+        <Grid.Col span="auto" px="md" py={0}>
           <MediaQuery
             smallerThan="md"
             styles={{
@@ -80,7 +80,6 @@ const SearchProducts = ({
             }}
           >
             <div>
-              <Space h="xs" />
               <Group position="apart" bg="#F2F2F3" p="xs">
                 <Group>
                   <Text fw={700}>Ordenar por:</Text>
@@ -122,6 +121,13 @@ const SearchProducts = ({
           </MediaQuery>
           <Space h="md" />
           <FilteredProducts />
+          <Group bg="#F2F2F3" mt="md" position="center">
+            <Pagination
+              currentPage={offset + 1}
+              totalPages={Math.ceil(count / limit)}
+              onPageChange={(page) => setoffset(page - 1)}
+            />
+          </Group>
         </Grid.Col>
       </Grid>{" "}
     </>
