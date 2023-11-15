@@ -29,19 +29,16 @@ const adflyColors = {
   disabled: "#A8C8E1",
 };
 
+const googleMapsLibraries = ["places"];
+
 export default function App({
   Component,
   pageProps: { ...pageProps },
 }: AppProps<{}>) {
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
-  useEffect(() => {
-    if (window.google) {
-      setIsScriptLoaded(true);
-    }
-  }, []);
+
   return (
     <ApolloProvider client={client}>
       <ColorSchemeProvider
@@ -148,19 +145,20 @@ export default function App({
         >
           <DesignProvider>
             <AccountProvider>
-              <ResourcesProvider>
-                {isScriptLoaded ? (
+              <LoadScript
+                googleMapsApiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
+                libraries={googleMapsLibraries as any}
+                onLoad={() => {
+                  console.log("Script Loaded!");
+                }}
+                onError={(error) => {
+                  console.error("Error cargando Google Maps", error);
+                }}
+              >
+                <ResourcesProvider>
                   <Component {...pageProps} />
-                ) : (
-                  <LoadScript
-                    googleMapsApiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
-                    libraries={["places"]}
-                    onLoad={() => setIsScriptLoaded(true)}
-                  >
-                    <Component {...pageProps} />
-                  </LoadScript>
-                )}
-              </ResourcesProvider>
+                </ResourcesProvider>
+              </LoadScript>
             </AccountProvider>
           </DesignProvider>
         </MantineProvider>
