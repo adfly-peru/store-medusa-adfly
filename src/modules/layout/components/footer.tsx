@@ -1,3 +1,4 @@
+import { useAccount } from "@context/account-context";
 import {
   ActionIcon,
   Footer,
@@ -23,6 +24,7 @@ import {
 } from "@tabler/icons-react";
 
 const FooterComponent = () => {
+  const { homeDesign } = useAccount();
   return (
     <Footer height="100%" pt={10} mt={20} fz={15}>
       <Center>
@@ -72,7 +74,7 @@ const FooterComponent = () => {
           <Stack spacing="xs" align="center">
             <Stack>
               <Title order={3}>NOSOTROS</Title>
-              <Text>¿Qué es ADLY?</Text>
+              <Text>¿Qué es ADFLY?</Text>
               <Image
                 radius="md"
                 height={100}
@@ -86,7 +88,12 @@ const FooterComponent = () => {
           </Stack>
         </Group>
       </Center>
-      <Group position="apart" pb="lg" bg="#2A6595" px="md">
+      <Group
+        position="apart"
+        pb="lg"
+        bg={homeDesign?.backcolor ?? "#2A6595"}
+        px="md"
+      >
         <Group mt="md">
           <ActionIcon
             size="lg"

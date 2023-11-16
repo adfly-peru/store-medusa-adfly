@@ -31,28 +31,6 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   }
 
   if (!collaborator.emailVerify || !collaborator.changePassword) {
-    if (isAllow) {
-      return (
-        <AppShell
-          fixed={false}
-          padding={0}
-          header={
-            <Header fixed height={120} p="xs">
-              <SimpleHeader />
-            </Header>
-          }
-          footer={<FooterComponent />}
-          styles={(theme) => ({
-            main: {
-              paddingTop: 140,
-              minHeight: height - 120,
-            },
-          })}
-        >
-          {children}
-        </AppShell>
-      );
-    }
     return (
       <AppShell
         fixed={false}
@@ -62,7 +40,6 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             <SimpleHeader />
           </Header>
         }
-        footer={<FooterComponent />}
         styles={(theme) => ({
           main: {
             paddingTop: 140,
