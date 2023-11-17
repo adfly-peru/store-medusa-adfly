@@ -9,6 +9,7 @@ import {
   Center,
   Loader,
   SimpleGrid,
+  Alert,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
@@ -68,9 +69,13 @@ const PersonalDataFormRegister = ({
           phone: form.values.cellPhone,
         };
         const res = await verify(profileform);
-        setMessage(res ?? "success");
-        handleNextStep();
+        setMessage(
+          res === "email already exists"
+            ? "Ya existe un usuario con el correo enviado."
+            : res ?? "success"
+        );
         if (!res) {
+          handleNextStep();
           const timerId = setTimeout(() => {
             router.push("/");
           }, 3000);
@@ -103,6 +108,19 @@ const PersonalDataFormRegister = ({
           <Loader />
         </Center>
       </Modal>
+      {message != "" && (
+        <Alert
+          title={message == "success" ? "Felicidades!" : "Error!"}
+          color={message == "success" ? "green" : "red"}
+          onClose={() => setMessage("")}
+          my="lg"
+          withCloseButton
+        >
+          {message == "success"
+            ? "Se ha actualizado el perfil de manera exitosa."
+            : message}
+        </Alert>
+      )}
       <Stack spacing="xs">
         <SimpleGrid
           cols={2}
