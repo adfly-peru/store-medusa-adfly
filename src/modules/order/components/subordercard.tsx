@@ -69,6 +69,10 @@ const DetailModal = ({ itemdetails }: { itemdetails: ItemDetails }) => {
         name: "¿Qué incluye?",
         value: itemdetails.contentservice,
       });
+    newDetails.push({
+      name: "Términos y Condiciones",
+      value: itemdetails.termsconditions ?? "-",
+    });
     setDetails(newDetails);
   }, [itemdetails]);
 

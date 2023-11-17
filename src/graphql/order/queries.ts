@@ -232,6 +232,7 @@ const GET_COUPON_REPORT = gql`
           offerName
           description
           type
+          termConditions
         }
       }
     }
