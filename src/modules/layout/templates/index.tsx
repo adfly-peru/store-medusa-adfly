@@ -35,11 +35,6 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       <AppShell
         fixed={false}
         padding={0}
-        header={
-          <Header fixed height={120} p="xs">
-            <SimpleHeader />
-          </Header>
-        }
         styles={(theme) => ({
           main: {
             paddingTop: 140,
@@ -47,17 +42,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           },
         })}
       >
-        <BackgroundImage
-          src={homeDesign?.bannerurl ?? ""}
-          radius="xs"
-          sx={{
-            height: 300,
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        ></BackgroundImage>
+        <div></div>
       </AppShell>
     );
   }
