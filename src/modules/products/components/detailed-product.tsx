@@ -71,7 +71,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
   const [loading, setLoading] = useState(false);
   const [opened, setOpen] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState(product.variant[0]);
-  const [value, setValue] = useState<number>(0);
+  const [value, setValue] = useState<number>(1);
   const [cartItem, setCartItem] = useState<CartItem | null>(null);
   const [maxUnits, setMaxUnits] = useState(product.variant[0].maxQuantity);
   const [currentStock, setCurrentStock] = useState(0);
@@ -93,6 +93,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
         (attr) => attributeSelections[attr.attributeName] === attr.value
       )
     );
+    console.log(matchingVariants);
 
     if (matchingVariants.length > 0) {
       setNoAvailable(false);
@@ -288,6 +289,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
 
   return (
     <Card py="xl" radius="md">
+      <Text>{product.uuidOffer}</Text>
       <LoadingOverlay overlayBlur={2} overlayOpacity={0.9} visible={loading} />
       <Modal opened={opened} onClose={() => setOpen(false)}>
         {couponReponse?.status === "success" ? (
@@ -602,7 +604,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
                         <Group spacing={5} position="center">
                           <ActionIcon
                             variant="transparent"
-                            color="dark"
+                            c="black"
                             disabled={value === 0}
                             bg="#F2F2F3"
                             radius="md"
@@ -630,7 +632,7 @@ export function DetailedProduct({ product }: { product: Offer }) {
                           />
                           <ActionIcon
                             variant="transparent"
-                            color="dark"
+                            c="black"
                             disabled={value === maxUnits}
                             bg="#F2F2F3"
                             radius="md"

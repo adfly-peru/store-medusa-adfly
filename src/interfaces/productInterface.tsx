@@ -82,6 +82,7 @@ export interface VariantDetailed {
     offerName: string;
     description: string;
     type: string;
+    termConditions: string;
   };
   service?: Service;
 }

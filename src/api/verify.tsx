@@ -34,6 +34,9 @@ export const verifyAccount = async (
               const respImg = await uploadImage(url, profileForm.image);
               console.log(respImg);
             }
+            if (response.data.data.errors) {
+              return (response.data.data.errors as []).join("-");
+            }
             return null;
           }
         }

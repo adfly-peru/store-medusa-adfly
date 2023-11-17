@@ -16,7 +16,7 @@ const ProductInfo = ({ productId }: { productId: string }) => {
 
   useEffect(() => {
     fetchProduct(productId);
-  }, []);
+  }, [productId]);
 
   useEffect(() => {
     if (product) {
