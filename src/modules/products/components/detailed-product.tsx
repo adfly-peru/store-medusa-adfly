@@ -289,7 +289,6 @@ export function DetailedProduct({ product }: { product: Offer }) {
 
   return (
     <Card py="xl" radius="md">
-      <Text>{product.uuidOffer}</Text>
       <LoadingOverlay overlayBlur={2} overlayOpacity={0.9} visible={loading} />
       <Modal opened={opened} onClose={() => setOpen(false)}>
         {couponReponse?.status === "success" ? (

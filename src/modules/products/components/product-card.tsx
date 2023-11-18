@@ -82,7 +82,6 @@ const ProductCard = ({ product }: { product: Offer }) => {
 
   return (
     <Link href={"/product/" + product.uuidOffer}>
-      <Text>{product.uuidOffer}</Text>
       <Card shadow="sm" radius="md" className={classes.card} px="sm" w={272}>
         <Card.Section py="xs" inheritPadding>
           <Group position="right">
