@@ -184,6 +184,16 @@ const ShipmentCard = ({
                   radius="lg"
                   value={1}
                   label="Recojo en Tienda"
+                  disabled={
+                    (suborder?.availableDeliveryMethods?.deliveryOnStore
+                      ?.length ?? 0) == 0
+                  }
+                  description={
+                    (suborder?.availableDeliveryMethods?.deliveryOnStore
+                      ?.length ?? 0) == 0
+                      ? "El partner aún no tiene tiendas de recojo habilitadas."
+                      : null
+                  }
                 />
                 {selected === "pickup" ? (
                   <Stack pl={20} spacing={0} fz={11}>
