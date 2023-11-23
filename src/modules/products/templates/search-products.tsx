@@ -123,9 +123,9 @@ const SearchProducts = ({
           <FilteredProducts />
           <Group bg="#F2F2F3" mt="md" position="center">
             <Pagination
-              currentPage={offset + 1}
+              currentPage={Math.ceil(offset / limit) + 1}
               totalPages={Math.ceil(count / limit)}
-              onPageChange={(page) => setoffset(page - 1)}
+              onPageChange={(page) => setoffset((page - 1) * limit)}
             />
           </Group>
         </Grid.Col>
