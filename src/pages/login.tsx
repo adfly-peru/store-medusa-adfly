@@ -26,7 +26,6 @@ import { useDesign } from "@context/design-context";
 const Login = () => {
   const router = useRouter();
   const [modalError, setModalError] = useState(false);
-  const { height, width } = useViewportSize();
   const { loginDesign } = useDesign();
   const { login, status, loading, errorText } = useAccount();
   const form = useForm({
@@ -54,11 +53,10 @@ const Login = () => {
         overlayBlur={2}
         overlayOpacity={0.9}
       />
-      <Grid>
+      <Grid m={0} style={{ height: "100vh" }}>
         <Grid.Col
           span="auto"
           sx={{
-            height: height - 8,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
