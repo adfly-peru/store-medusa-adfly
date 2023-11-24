@@ -3,6 +3,7 @@ import SimilarProducts from "@modules/products/components/similar-products";
 import { DetailedProduct } from "@modules/products/components/detailed-product";
 import { useSingleProduct } from "@context/single-product-context";
 import { useEffect } from "react";
+import { useAccount } from "@context/account-context";
 
 const ProductInfo = ({ productId }: { productId: string }) => {
   const {
@@ -13,10 +14,12 @@ const ProductInfo = ({ productId }: { productId: string }) => {
     loadingProduct,
     loadingRelateds,
   } = useSingleProduct();
+  const { collaborator } = useAccount();
 
   useEffect(() => {
-    fetchProduct(productId);
-  }, [productId]);
+    if (collaborator?.uuidcollaborator)
+      fetchProduct(productId, collaborator.uuidcollaborator);
+  }, [productId, collaborator]);
 
   useEffect(() => {
     if (product) {
@@ -35,7 +38,10 @@ const ProductInfo = ({ productId }: { productId: string }) => {
   return (
     <>
       <Container maw="100%">
-        <DetailedProduct product={product} />
+        <DetailedProduct
+          product={product.offer}
+          totalOrdered={product.totalLastPeriod}
+        />
       </Container>
       <Stack align="center" justify="flex-end" spacing="xl">
         <SimilarProducts products={relatedProducts} loading={loadingRelateds} />

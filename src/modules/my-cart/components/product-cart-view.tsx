@@ -44,8 +44,9 @@ const DetailedProductCartView = ({
   useEffect(() => {
     if (!item) return;
     setMaxUnits(
-      (item.variant.maxQuantity ?? 0) < item.variant.totalStock
-        ? item.variant.maxQuantity ?? 0
+      (item.variant.maxQuantity ?? 0) - (item.variant.totalLastPeriod ?? 0) <
+        item.variant.totalStock
+        ? (item.variant.maxQuantity ?? 0) - (item.variant.totalLastPeriod ?? 0)
         : item.variant.totalStock
     );
   }, [item]);
