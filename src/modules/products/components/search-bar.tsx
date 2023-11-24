@@ -27,7 +27,7 @@ const SearchBar = ({
   searchable: string;
   departmentName: string;
 }) => {
-  const { setOptions, products } = useFilteredProducts();
+  const { setOptions, products, setoffset } = useFilteredProducts();
   const [department, setDepartment] = useState<string[]>([]);
   const [category, setCategory] = useState<string[]>([]);
   const [subcategory, setSubcategory] = useState<string[]>([]);
@@ -45,12 +45,14 @@ const SearchBar = ({
     if (department.length > 0) fetchOptions.departmentName = department.at(0);
     setCategory([]);
     setOptions(fetchOptions);
+    setoffset(0);
   }, [department]);
 
   useEffect(() => {
     const fetchOptions: FilterOptions = {};
     setOptions(fetchOptions);
     setDepartment([]);
+    setoffset(0);
   }, [searchable]);
 
   useEffect(() => {
@@ -62,6 +64,7 @@ const SearchBar = ({
     fetchOptions.subcategoryName = undefined;
     setSubcategory([]);
     setOptions(fetchOptions);
+    setoffset(0);
   }, [category]);
 
   useEffect(() => {
@@ -73,6 +76,7 @@ const SearchBar = ({
       fetchOptions.subcategoryName = subcategory.at(0);
     if (brand.length > 0) fetchOptions.brandName = brand.at(0);
     setOptions(fetchOptions);
+    setoffset(0);
   }, [subcategory]);
 
   useEffect(() => {
@@ -84,6 +88,7 @@ const SearchBar = ({
       fetchOptions.subcategoryName = subcategory.at(0);
     if (brand.length > 0) fetchOptions.brandName = brand.at(0);
     setOptions(fetchOptions);
+    setoffset(0);
   }, [brand]);
 
   return (
