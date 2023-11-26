@@ -32,10 +32,11 @@ const FooterComponent = () => {
           <Stack spacing="xs" align="center" h="100%">
             <Image
               radius="md"
-              height={50}
+              height={80}
               width="inherit"
               fit="contain"
-              src="https://www.adfly.pe/Content/logo.png"
+              p={0}
+              src="/logo_adfly.svg"
               alt="Adfly"
               sx={{ padding: 10 }}
             />

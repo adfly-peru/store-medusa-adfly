@@ -135,10 +135,11 @@ const Login = () => {
                   <Text color="gray.6">Por:</Text>
                   <Image
                     radius="md"
-                    height={50}
+                    p={0}
+                    height={80}
                     width="inherit"
                     fit="contain"
-                    src="https://www.adfly.pe/Content/logo.png"
+                    src="/logo_adfly.svg"
                     alt="Adfly"
                     sx={{ padding: 10 }}
                   />

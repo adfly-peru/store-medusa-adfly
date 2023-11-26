@@ -1,94 +1,97 @@
 import { gql } from "@apollo/client";
 
 const GET_PRODUCT = gql`
-  query SingleOffer($id: ID!) {
-    offer(id: $id) {
-      uuidOffer
-      offerName
-      description
-      principalSku
-      type
-      creationDate
-      updateDate
-      tags
-      rejectionComment
-      status
-      termConditions
-      brand {
-        name
-      }
-      offerAttributes {
-        attribute {
+  query SingleOffer($id: ID!, $collaboratorId: ID!) {
+    offerForCollaborator(id: $id, uuidcollaborator: $collaboratorId) {
+      offer {
+        uuidOffer
+        offerName
+        description
+        principalSku
+        type
+        creationDate
+        updateDate
+        tags
+        rejectionComment
+        status
+        termConditions
+        brand {
+          name
+        }
+        offerAttributes {
+          attribute {
+            attributeName
+            values
+          }
           attributeName
-          values
         }
-        attributeName
-      }
-      department {
-        name
-      }
-      category {
-        name
-      }
-      subCategory {
-        name
-      }
-      business {
-        uuidbusiness
-        businessname
-        commercialname
-        deliveryMethods {
-          deliveryonline
-          deliveryonhome
-          deliveryonstore
+        department {
+          name
         }
-      }
-      variant {
-        uuidVariant
-        attributes {
-          attributeName
-          value
+        category {
+          name
         }
-        currency
-        stock
-        refPrice
-        adflyPrice
-        offerPrice
-        maxQuantity
-        purchasePeriod
-        imageURL
-        variantSku
-        product {
-          specification
-          condition
-          conditionDetails
-          productWarranty
-          sellerWarranty
-          included
-          width
-          height
-          weight
-          length
+        subCategory {
+          name
         }
-        coupon {
-          initialDate
-          expirationDate
-          initialPurchaseDate
-          expirationPurchaseDate
-          couponUsage
-          couponContent
-          discountType
-          discount
+        business {
+          uuidbusiness
+          businessname
+          commercialname
+          deliveryMethods {
+            deliveryonline
+            deliveryonhome
+            deliveryonstore
+          }
         }
-        service {
-          initialDate
-          expirationDate
-          initialPurchaseDate
-          expirationPurchaseDate
-          accessService
-          contentService
+        variant {
+          uuidVariant
+          attributes {
+            attributeName
+            value
+          }
+          currency
+          stock
+          refPrice
+          adflyPrice
+          offerPrice
+          maxQuantity
+          purchasePeriod
+          imageURL
+          variantSku
+          product {
+            specification
+            condition
+            conditionDetails
+            productWarranty
+            sellerWarranty
+            included
+            width
+            height
+            weight
+            length
+          }
+          coupon {
+            initialDate
+            expirationDate
+            initialPurchaseDate
+            expirationPurchaseDate
+            couponUsage
+            couponContent
+            discountType
+            discount
+          }
+          service {
+            initialDate
+            expirationDate
+            initialPurchaseDate
+            expirationPurchaseDate
+            accessService
+            contentService
+          }
         }
       }
+      totalLastPeriod
     }
   }
 `;

@@ -77,6 +77,7 @@ export interface VariantDetailed {
   maxQuantity?: number;
   imageURL: string;
   variantSku?: string;
+  totalLastPeriod?: number;
   offer: {
     uuidOffer: string;
     offerName: string;
@@ -85,6 +86,11 @@ export interface VariantDetailed {
     termConditions: string;
   };
   service?: Service;
+}
+
+export interface OfferForCollaborator {
+  offer: Offer;
+  totalLastPeriod: number;
 }
 
 export interface Offer {

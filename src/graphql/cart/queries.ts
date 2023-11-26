@@ -84,6 +84,7 @@ const GET_CART = gql`
             purchasePeriod
             imageURL
             variantSku
+            totalLastPeriod
             offer {
               uuidOffer
               offerName

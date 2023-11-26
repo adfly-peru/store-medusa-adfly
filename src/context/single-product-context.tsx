@@ -1,13 +1,17 @@
 import { useLazyQuery } from "@apollo/client";
 import { GET_PRODUCT, GET_RELATED_PRODUCTS } from "@graphql/products/queries";
-import { Offer, OfferResult } from "@interfaces/productInterface";
+import {
+  Offer,
+  OfferForCollaborator,
+  OfferResult,
+} from "@interfaces/productInterface";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface SingleProductContext {
-  product: Offer | null;
+  product: OfferForCollaborator | null;
   relatedProducts: Offer[];
   relatedCount: number;
-  fetchProduct: (id: string) => void;
+  fetchProduct: (id: string, collaboratorId: string) => void;
   fetchRelatedProducts: (id: string, offset?: number) => void;
   loadingProduct: boolean;
   loadingRelateds: boolean;
@@ -22,13 +26,13 @@ interface SingleProductProviderProps {
 export const SingleProductProvider = ({
   children,
 }: SingleProductProviderProps) => {
-  const [product, setProduct] = useState<Offer | null>(null);
+  const [product, setProduct] = useState<OfferForCollaborator | null>(null);
   const [relatedCount, setRelatedCount] = useState(0);
   const [relatedProducts, setRelatedProducts] = useState<Offer[]>([]);
 
   const [getProduct, { data: productData, loading: loadingProduct }] =
     useLazyQuery<{
-      offer: Offer;
+      offerForCollaborator: OfferForCollaborator;
     }>(GET_PRODUCT);
   const [
     getRelatedProducts,
@@ -37,14 +41,14 @@ export const SingleProductProvider = ({
     availableOffers: OfferResult;
   }>(GET_RELATED_PRODUCTS);
 
-  const fetchProduct = (id: string) => {
-    getProduct({ variables: { id } });
+  const fetchProduct = (id: string, collaboratorId: string) => {
+    getProduct({ variables: { id, collaboratorId } });
   };
 
   const fetchRelatedProducts = (id: string, offset: number = 0) => {
     getRelatedProducts({
       variables: {
-        departmentName: product?.department.name,
+        departmentName: product?.offer?.department?.name,
         excludedId: id,
         limit: 4,
         offset,
@@ -53,8 +57,8 @@ export const SingleProductProvider = ({
   };
 
   useEffect(() => {
-    if (productData && productData.offer) {
-      setProduct(productData.offer);
+    if (productData && productData.offerForCollaborator) {
+      setProduct(productData.offerForCollaborator);
     }
 
     if (relatedProductsData && relatedProductsData.availableOffers) {

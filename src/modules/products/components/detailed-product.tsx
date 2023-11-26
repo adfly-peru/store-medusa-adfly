@@ -51,8 +51,15 @@ import { useCart } from "@context/cart-context";
 import { Offer, Variant } from "@interfaces/productInterface";
 import { CartItem } from "@interfaces/cart";
 import { CouponResponse } from "api/cart";
+import { TimePeriod, purchasePeriodTime } from "@modules/common/types";
 
-export function DetailedProduct({ product }: { product: Offer }) {
+export function DetailedProduct({
+  product,
+  totalOrdered,
+}: {
+  product: Offer;
+  totalOrdered: number;
+}) {
   const [details, setDetails] = useState<{ name: string; value: string }[]>([]);
   const [noAvailable, setNoAvailable] = useState(false);
   const defaultAttributeSelections: Record<string, string> = {};
@@ -93,7 +100,6 @@ export function DetailedProduct({ product }: { product: Offer }) {
         (attr) => attributeSelections[attr.attributeName] === attr.value
       )
     );
-    console.log(matchingVariants);
 
     if (matchingVariants.length > 0) {
       setNoAvailable(false);
@@ -113,7 +119,8 @@ export function DetailedProduct({ product }: { product: Offer }) {
     );
 
     if (itemGetted) {
-      const allowed = selectedVariant.maxQuantity - itemGetted.quantity;
+      const allowed =
+        selectedVariant.maxQuantity - (totalOrdered + itemGetted.quantity);
       const updatedStock = currentStock - itemGetted.quantity;
       setMaxUnits(allowed < updatedStock ? allowed : updatedStock);
       setCartItem(itemGetted);
@@ -578,7 +585,13 @@ export function DetailedProduct({ product }: { product: Offer }) {
                     <Text span fw="bold">
                       - Máximo pedido:
                     </Text>
-                    {` ${selectedVariant.maxQuantity} unidad(es)`}
+                    {` Te quedan ${
+                      selectedVariant.maxQuantity - totalOrdered
+                    } para este(a) ${
+                      purchasePeriodTime[
+                        (selectedVariant.purchasePeriod ?? "null") as TimePeriod
+                      ]
+                    }`}
                   </Text>
                   {product.type === "coupon" ? (
                     <Button

@@ -30,10 +30,10 @@ const ProductCartRow = ({
 
   useEffect(() => {
     if (!item) return;
+    const allowed =
+      (item.variant.maxQuantity ?? 0) - (item.variant.totalLastPeriod ?? 0);
     setMaxUnits(
-      (item.variant.maxQuantity ?? 0) < item.variant.totalStock
-        ? item.variant.maxQuantity ?? 0
-        : item.variant.totalStock
+      allowed < item.variant.totalStock ? allowed : item.variant.totalStock
     );
   }, [item]);
 
