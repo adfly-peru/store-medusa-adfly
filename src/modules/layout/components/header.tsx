@@ -157,11 +157,12 @@ const HomeHeader = () => {
             <Group align="center" position="center" spacing={0}>
               <Text color="gray.6">Por:</Text>
               <Image
+                p={0}
                 radius="md"
-                height={35}
+                height={50}
                 width="inherit"
                 fit="contain"
-                src="https://www.adfly.pe/Content/logo.png"
+                src="/logo_adfly.svg"
                 alt="Adfly"
                 sx={{ padding: 10 }}
               />
