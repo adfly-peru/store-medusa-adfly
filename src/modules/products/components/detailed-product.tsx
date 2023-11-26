@@ -51,6 +51,7 @@ import { useCart } from "@context/cart-context";
 import { Offer, Variant } from "@interfaces/productInterface";
 import { CartItem } from "@interfaces/cart";
 import { CouponResponse } from "api/cart";
+import { TimePeriod, purchasePeriodTime } from "@modules/common/types";
 
 export function DetailedProduct({
   product,
@@ -99,7 +100,6 @@ export function DetailedProduct({
         (attr) => attributeSelections[attr.attributeName] === attr.value
       )
     );
-    console.log(matchingVariants);
 
     if (matchingVariants.length > 0) {
       setNoAvailable(false);
@@ -120,7 +120,7 @@ export function DetailedProduct({
 
     if (itemGetted) {
       const allowed =
-        selectedVariant.maxQuantity - totalOrdered - itemGetted.quantity;
+        selectedVariant.maxQuantity - (totalOrdered + itemGetted.quantity);
       const updatedStock = currentStock - itemGetted.quantity;
       setMaxUnits(allowed < updatedStock ? allowed : updatedStock);
       setCartItem(itemGetted);
@@ -587,9 +587,11 @@ export function DetailedProduct({
                     </Text>
                     {` Te quedan ${
                       selectedVariant.maxQuantity - totalOrdered
-                    } de ${
-                      selectedVariant.maxQuantity
-                    } unidad(es) disponibles este mes`}
+                    } para este(a) ${
+                      purchasePeriodTime[
+                        (selectedVariant.purchasePeriod ?? "null") as TimePeriod
+                      ]
+                    }`}
                   </Text>
                   {product.type === "coupon" ? (
                     <Button
