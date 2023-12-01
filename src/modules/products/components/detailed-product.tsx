@@ -56,9 +56,11 @@ import { TimePeriod, purchasePeriodTime } from "@modules/common/types";
 export function DetailedProduct({
   product,
   totalOrdered,
+  refetchFunction,
 }: {
   product: Offer;
   totalOrdered: number;
+  refetchFunction: () => void;
 }) {
   const [details, setDetails] = useState<{ name: string; value: string }[]>([]);
   const [noAvailable, setNoAvailable] = useState(false);
@@ -125,11 +127,8 @@ export function DetailedProduct({
       setMaxUnits(allowed < updatedStock ? allowed : updatedStock);
       setCartItem(itemGetted);
     } else {
-      setMaxUnits(
-        selectedVariant.maxQuantity < currentStock
-          ? selectedVariant.maxQuantity
-          : currentStock
-      );
+      const allowed = selectedVariant.maxQuantity - totalOrdered;
+      setMaxUnits(allowed < currentStock ? allowed : currentStock);
       setCartItem(null);
     }
   }, [cart, selectedVariant, currentStock, searchVariantAttrs]);
@@ -606,6 +605,7 @@ export function DetailedProduct({
                         setCouponResponse(response ?? null);
                         setOpen(true);
                         setLoading(false);
+                        refetchFunction();
                       }}
                     >
                       Generar Cupón

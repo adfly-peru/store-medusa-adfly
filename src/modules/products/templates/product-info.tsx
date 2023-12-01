@@ -13,6 +13,7 @@ const ProductInfo = ({ productId }: { productId: string }) => {
     fetchRelatedProducts,
     loadingProduct,
     loadingRelateds,
+    refetchProduct,
   } = useSingleProduct();
   const { collaborator } = useAccount();
 
@@ -41,6 +42,10 @@ const ProductInfo = ({ productId }: { productId: string }) => {
         <DetailedProduct
           product={product.offer}
           totalOrdered={product.totalLastPeriod}
+          refetchFunction={() => {
+            if (collaborator?.uuidcollaborator)
+              refetchProduct(productId, collaborator.uuidcollaborator);
+          }}
         />
       </Container>
       <Stack align="center" justify="flex-end" spacing="xl">
