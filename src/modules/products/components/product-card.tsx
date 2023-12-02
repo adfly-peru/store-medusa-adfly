@@ -2,22 +2,16 @@ import {
   Card,
   Group,
   Text,
-  ActionIcon,
   Image,
   Badge,
   Button,
   createStyles,
-  NumberInput,
-  NumberInputHandlers,
   Title,
   Stack,
 } from "@mantine/core";
-import { IconPlus, IconMinus } from "@tabler/icons-react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { useCart } from "@context/cart-context";
+import { useEffect, useState } from "react";
 import { Offer } from "@interfaces/productInterface";
-import { CartItem } from "@interfaces/cart";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -44,39 +38,21 @@ const useStyles = createStyles((theme) => ({
 
 const ProductCard = ({ product }: { product: Offer }) => {
   const { classes } = useStyles();
-  const [selectedVariant, _] = useState(product.variant[0]);
-  const [cartItem, setCartItem] = useState<CartItem | null>(null);
-  const handlers = useRef<NumberInputHandlers>();
-  const { addProduct, editProduct, removeProduct, getProductById, cart } =
-    useCart();
-  const setZero = () => {
-    if (cartItem) {
-      removeProduct(cartItem.uuidcartitem, product.business.uuidbusiness);
-    }
-  };
-
-  let discount =
-    ((selectedVariant.refPrice -
-      ((selectedVariant.offerPrice ?? 0) > 0
-        ? selectedVariant.offerPrice ?? 0
-        : selectedVariant.adflyPrice)) /
-      selectedVariant.refPrice) *
-    100;
+  const [discount, setDiscount] = useState(0);
 
   useEffect(() => {
-    if (!cart) return;
-    const itemGetted = getProductById(
-      product.uuidOffer,
-      product.business.uuidbusiness
-    );
-    if (itemGetted) {
-      setCartItem(itemGetted);
-    } else {
-      setCartItem(null);
-    }
-  }, [cart]);
+    if (!product.details) return;
+    let newDiscount =
+      ((product.details.refPrice -
+        ((product.details.offerPrice ?? 0) > 0
+          ? product.details.offerPrice ?? 0
+          : product.details.adflyPrice)) /
+        product.details.refPrice) *
+      100;
+    setDiscount(newDiscount);
+  }, [product]);
 
-  if (!selectedVariant) {
+  if (!product.details) {
     return <></>;
   }
 
@@ -89,9 +65,9 @@ const ProductCard = ({ product }: { product: Offer }) => {
               -
               {product.type === "coupon"
                 ? `${
-                    selectedVariant.coupon?.discountType === "monetary"
-                      ? ` S/.${selectedVariant.coupon.discount.toFixed(2)}`
-                      : ` ${selectedVariant.coupon?.discount}%`
+                    product.details.discountType === "monetary"
+                      ? ` S/.${product.details.discount?.toFixed(2)}`
+                      : ` ${product.details.discount}%`
                   }`
                 : ` ${discount.toFixed(0)}%`}
             </Badge>
@@ -99,8 +75,8 @@ const ProductCard = ({ product }: { product: Offer }) => {
         </Card.Section>
         <Card.Section inheritPadding>
           <Image
-            src={selectedVariant.imageURL}
-            alt={selectedVariant.imageURL}
+            src={product.details.imageURL}
+            alt={product.details.imageURL}
             height={200}
             fit="contain"
             withPlaceholder
@@ -128,30 +104,30 @@ const ProductCard = ({ product }: { product: Offer }) => {
                 <Text fz="sm">Descuento</Text>
                 <Text>
                   -
-                  {selectedVariant.coupon?.discountType === "monetary"
-                    ? ` S/. ${selectedVariant.coupon?.discount}`
-                    : ` ${selectedVariant.coupon?.discount}%`}
+                  {product.details.discountType === "monetary"
+                    ? ` S/. ${product.details.discount}`
+                    : ` ${product.details.discount}%`}
                 </Text>
               </Group>
             </Stack>
           ) : (
             <Stack justify="center" h="100%" spacing="xs">
-              {selectedVariant.offerPrice ? (
+              {product.details.offerPrice ? (
                 <Group c="red" position="apart" fw="bold">
                   <Text fz="sm">Oferta</Text>
-                  <Text>S/. {selectedVariant.offerPrice.toFixed(2)}</Text>
+                  <Text>S/. {product.details.offerPrice.toFixed(2)}</Text>
                 </Group>
               ) : null}
               <Group position="apart" fw="bold">
                 <Text fz="sm">Precio ADFLY</Text>
-                <Text td={selectedVariant.offerPrice ? "line-through" : "none"}>
-                  S/. {selectedVariant.adflyPrice.toFixed(2)}
+                <Text td={product.details.offerPrice ? "line-through" : "none"}>
+                  S/. {product.details.adflyPrice.toFixed(2)}
                 </Text>
               </Group>
               <Group position="apart">
                 <Text fz="sm">Precio Mercado</Text>
                 <Text td="line-through">
-                  S/. {selectedVariant.refPrice.toFixed(2)}
+                  S/. {product.details.refPrice.toFixed(2)}
                 </Text>
               </Group>
             </Stack>
