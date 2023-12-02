@@ -47,3 +47,32 @@ export const verifyAccount = async (
     return "Error in account verification";
   }
 };
+
+export const changePasswordQuery = async (
+  old_password: string,
+  new_password: string,
+  token: string
+): Promise<string | null> => {
+  try {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/verify`,
+      {
+        old_password,
+        new_password,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
+    );
+    const status = response.status;
+    if (status == 201 || status == 200) {
+      return null;
+    }
+    return "Error in change password";
+  } catch (error) {
+    return "Error in change password";
+  }
+};
