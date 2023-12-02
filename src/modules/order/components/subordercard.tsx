@@ -23,6 +23,7 @@ const DetailModal = ({ itemdetails }: { itemdetails: ItemDetails }) => {
   useEffect(() => {
     const newDetails: { name: string; value: string }[] = [];
     const dateOptions = {
+      timeZone: "UTC",
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
