@@ -143,31 +143,51 @@ const HomeHeader = () => {
     <>
       <Grid justify="center" align="center" columns={24} m={0}>
         <Grid.Col span={24} bg="white" p={0}>
-          <Group position="apart" py={0} px={15}>
-            <UnstyledButton onClick={() => router.push("/")}>
-              <Image
-                radius="md"
-                height={60}
-                width="inherit"
-                fit="contain"
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "0 15px",
+              height: "60px",
+            }}
+          >
+            <div
+              onClick={() => router.push("/")}
+              style={{
+                flex: "1",
+                maxWidth: "50%",
+                height: "60px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <img
                 src={homeDesign?.logourl}
                 alt="Enterprise Logo"
+                style={{
+                  maxHeight: "60px",
+                  maxWidth: "100%",
+                  height: "auto",
+                  width: "auto",
+                }}
               />
-            </UnstyledButton>
-            <Group align="center" position="center" spacing={0}>
-              <Text color="gray.6">Por:</Text>
-              <Image
-                p={0}
-                radius="md"
-                height={50}
-                width="inherit"
-                fit="contain"
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flex: "0 1 auto",
+              }}
+            >
+              <span style={{ color: "#808080" }}>Por:</span>
+              <img
                 src="/logo_adfly.svg"
                 alt="Adfly"
-                sx={{ padding: 10 }}
+                style={{ height: "50px", width: "auto", padding: "0px" }}
               />
-            </Group>
-          </Group>
+            </div>
+          </div>
         </Grid.Col>
         <Grid.Col span={6} md={3}>
           <Menu
