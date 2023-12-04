@@ -40,7 +40,6 @@ interface AccountContext {
     termsconditions: boolean
   ) => Promise<{ success: boolean; message: string }>;
   changePassword: (
-    old_password: string,
     new_password: string,
     token: string
   ) => Promise<string | null>;
@@ -369,16 +368,8 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     return response;
   };
 
-  const changePassword = async (
-    old_password: string,
-    new_password: string,
-    token: string
-  ) => {
-    const response = await changePasswordQuery(
-      old_password,
-      new_password,
-      token
-    );
+  const changePassword = async (new_password: string, token: string) => {
+    const response = await changePasswordQuery(new_password, token);
     return response;
   };
 

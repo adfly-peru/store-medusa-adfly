@@ -47,13 +47,9 @@ const RecoveryFormPage = ({ token }: { token: string }) => {
     setError("");
     form.validate();
     if (form.isValid()) {
-      //   const response = await changePassword(
-      //     form.values.newPassword,
-      //     form.values.newPassword,
-      //     token
-      //   );
-      //   if (!response) setMessage("Contraseña actualiza de manera exitosa!");
-      //   else setError(response);
+      const response = await changePassword(form.values.newPassword, token);
+      if (!response) setMessage("Contraseña actualiza de manera exitosa!");
+      else setError(response);
     } else {
       setError("Completa los campos obligatorios");
     }

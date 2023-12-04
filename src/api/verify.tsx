@@ -49,7 +49,6 @@ export const verifyAccount = async (
 };
 
 export const changePasswordQuery = async (
-  old_password: string,
   new_password: string,
   token: string
 ): Promise<string | null> => {
@@ -57,7 +56,6 @@ export const changePasswordQuery = async (
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/verify`,
       {
-        old_password,
         new_password,
       },
       {
