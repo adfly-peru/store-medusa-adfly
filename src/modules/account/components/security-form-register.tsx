@@ -78,18 +78,15 @@ const SecurityFormRegister = ({
 }) => {
   const router = useRouter();
   const [popoverOpened, setPopoverOpened] = useState(false);
-  const { verify } = useAccount();
+  const { collaborator, verify } = useAccount();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const form = useForm({
     initialValues: {
-      currentPassword: "",
       newPassword: "",
       confPassword: "",
     },
     validate: {
-      currentPassword: (value) =>
-        value.length > 0 ? null : "Este campo no puede estar vacío",
       confPassword: (value, values) =>
         value !== values.newPassword ? "Las contraseñas no coinciden" : null,
     },
@@ -101,11 +98,11 @@ const SecurityFormRegister = ({
 
   const handleUpdate = async () => {
     form.validate();
-    if (form.isValid()) {
+    if (form.isValid() && collaborator?.documentnumber) {
       setLoading(true);
       try {
         const securityform: SecurityForm = {
-          oldpassword: form.values.currentPassword,
+          oldpassword: collaborator.documentnumber,
           newpassword: form.values.newPassword,
         };
         const res = await verify(undefined, securityform);
@@ -147,12 +144,6 @@ const SecurityFormRegister = ({
       >
         <Stack w="80%">
           <Stack spacing="xs">
-            <TextInput
-              label="Contraseña Actual"
-              radius="xs"
-              size="sm"
-              {...form.getInputProps("currentPassword")}
-            />
             <Popover
               opened={popoverOpened}
               position="bottom"
