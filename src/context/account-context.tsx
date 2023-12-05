@@ -13,20 +13,35 @@ import jwtDecode from "jwt-decode";
 import { Address } from "@interfaces/address-interface";
 import { DesignConfig } from "@interfaces/design";
 import { GET_HOME_DESIGN } from "@graphql/design/queries";
-import { verifyAccount } from "api/verify";
+import { changePasswordQuery, verifyAccount } from "api/verify";
 import {
   createAddress,
   deleteAddressQuery,
   updateAddressQuery,
 } from "api/delivery";
+import { recoverPasswordQuery, requestAccessQuery } from "api/auth";
 
 interface AccountContext {
   daysInApp: number;
-  login: (values: { email: string; password: string }) => void;
+  login: (values: { email: string; password: string }) => Promise<string>;
   logout: () => void;
   verify: (
     profileForm?: ProfileForm,
     securityForm?: SecurityForm
+  ) => Promise<string | null>;
+  recoverPassword: (
+    credential: string
+  ) => Promise<{ success: boolean; message: string }>;
+  requestAccess: (
+    name: string,
+    lastname: string,
+    documenttype: string,
+    documentnumber: string,
+    termsconditions: boolean
+  ) => Promise<{ success: boolean; message: string }>;
+  changePassword: (
+    new_password: string,
+    token: string
   ) => Promise<string | null>;
   collaborator: Collaborator | undefined;
   homeDesign: DesignConfig | null;
@@ -36,7 +51,6 @@ interface AccountContext {
   editAddress: (newAddress: Address) => Promise<string | null>;
   deleteAddress: (addressId: string) => Promise<string | null>;
   loading: boolean;
-  errorText: string;
 }
 
 const AccountContext = createContext<AccountContext | null>(null);
@@ -49,7 +63,6 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   const router = useRouter();
   const [daysInApp, setDaysInApp] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [errorText, setErrorText] = useState("");
   const [collaborator, setCollaborator] = useState<Collaborator | undefined>(
     undefined
   );
@@ -202,10 +215,55 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     }
   };
 
+  const recoverPassword = async (credential: string) => {
+    if (!subdomain)
+      return {
+        success: false,
+        message: "Subdominion invalido",
+      };
+    setLoading(true);
+    const response = await recoverPasswordQuery(credential, subdomain);
+    setLoading(false);
+    return {
+      success: response === null,
+      message: response ?? `Se ha enviado un correo a ${credential}`,
+    };
+  };
+
+  const requestAccess = async (
+    name: string,
+    lastname: string,
+    documenttype: string,
+    documentnumber: string,
+    termsconditions: boolean
+  ) => {
+    if (!subdomain)
+      return {
+        success: false,
+        message: "Subdominion invalido",
+      };
+    setLoading(true);
+    const response = await requestAccessQuery({
+      name,
+      lastname,
+      documenttype,
+      documentnumber,
+      termsconditions,
+      sub_domain: subdomain,
+    });
+    setLoading(false);
+    return {
+      success: response === null,
+      message:
+        response ??
+        `Gracias por solicitar una cuenta, te estaremos respondiendo en breve.`,
+    };
+  };
+
   const login = async (values: { email: string; password: string }) => {
+    let errorText = "";
     try {
       setLoading(true);
-      setErrorText("");
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/auth/signin`,
         {
@@ -237,14 +295,14 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       setLoading(false);
       if (error.response && error.response.data) {
         // Aquí se maneja el error específico de axios con mensaje desde el servidor
-        setErrorText(`Error al iniciar sesión: ${error.response.data.error}`);
+        errorText = `Error al iniciar sesión: ${error.response.data.error}`;
       } else {
         // Aquí se manejan otros errores que pueden no ser específicos de axios
-        setErrorText(`Error al iniciar sesión: ${error}`);
+        errorText = `Error al iniciar sesión: ${error}`;
       }
-
       console.error("Error al iniciar sesión:", error);
     }
+    return errorText;
   };
 
   const logout = () => {
@@ -310,12 +368,20 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     return response;
   };
 
+  const changePassword = async (new_password: string, token: string) => {
+    const response = await changePasswordQuery(new_password, token);
+    return response;
+  };
+
   return (
     <AccountContext.Provider
       value={{
         daysInApp,
         collaborator,
         verify,
+        recoverPassword,
+        requestAccess,
+        changePassword,
         homeDesign,
         login,
         logout,
@@ -325,7 +391,6 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         editAddress,
         deleteAddress,
         loading,
-        errorText,
       }}
     >
       {children}

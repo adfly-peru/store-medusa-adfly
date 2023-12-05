@@ -22,6 +22,7 @@ const CouponDetailModal = ({ coupon }: { coupon: CouponUsage }) => {
   useEffect(() => {
     const newDetails: { name: string; value: string }[] = [];
     const dateOptions = {
+      timeZone: "UTC",
       day: "2-digit",
       month: "2-digit",
       year: "numeric",

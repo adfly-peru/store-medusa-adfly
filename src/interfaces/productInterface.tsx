@@ -93,6 +93,15 @@ export interface OfferForCollaborator {
   totalLastPeriod: number;
 }
 
+export interface OfferDetails {
+  refPrice: number;
+  adflyPrice: number;
+  offerPrice: number;
+  imageURL: string;
+  discountType?: string;
+  discount?: number;
+}
+
 export interface Offer {
   uuidOffer: string;
   offerName: string;
@@ -105,6 +114,7 @@ export interface Offer {
   tags: string[];
   rejectionComment?: string;
   termConditions?: string;
+  details?: OfferDetails;
   variant: Variant[];
   brand: {
     name: string;

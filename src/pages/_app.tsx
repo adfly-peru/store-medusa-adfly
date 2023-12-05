@@ -15,12 +15,13 @@ import {
   rem,
 } from "@mantine/core";
 import { OrderProvider } from "@context/order-context";
-import { DesignProvider } from "@context/design-context";
+import { DesignProvider, useDesign } from "@context/design-context";
 import RegistrationStepsModal from "@modules/layout/templates/registration-steps-modal";
 import { LoadScript } from "@react-google-maps/api";
 import "@fontsource/rubik";
 import "@fontsource/open-sans";
 import { CouponProvider } from "@context/coupon-context";
+import Head from "next/head";
 
 const adflyColors = {
   default: "#31658E",
@@ -171,24 +172,69 @@ const ResourcesProvider: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
   const { status, collaborator } = useAccount();
+  const { loginDesign } = useDesign();
 
   if (status == "authenticated") {
     if (!collaborator) {
-      return <LoadingOverlay visible={true} />;
+      return (
+        <>
+          <Head>
+            <title>
+              {loginDesign?.commercialname
+                ? `${loginDesign?.commercialname}`
+                : "Tienda Adfly"}
+            </title>
+          </Head>
+          <LoadingOverlay visible={true} />
+        </>
+      );
     }
     if (collaborator.emailVerify && collaborator.changePassword) {
       return (
-        <ProductProvider>
-          <CartProvider>
-            <CouponProvider>
-              <OrderProvider>{children}</OrderProvider>
-            </CouponProvider>
-          </CartProvider>
-        </ProductProvider>
+        <>
+          <Head>
+            <title>
+              {loginDesign?.commercialname
+                ? `${loginDesign?.commercialname}`
+                : "Tienda Adfly"}
+            </title>
+          </Head>
+          <ProductProvider>
+            <CartProvider>
+              <CouponProvider>
+                <OrderProvider>{children}</OrderProvider>
+              </CouponProvider>
+            </CartProvider>
+          </ProductProvider>
+        </>
       );
     }
-    return <RegistrationStepsModal>{children}</RegistrationStepsModal>;
+    return (
+      <>
+        <Head>
+          <title>
+            {loginDesign?.commercialname
+              ? `${loginDesign?.commercialname}`
+              : "Tienda Adfly"}
+          </title>
+        </Head>
+        <RegistrationStepsModal>{children}</RegistrationStepsModal>
+      </>
+    );
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <>
+        <Head>
+          <title>
+            {loginDesign?.commercialname
+              ? `${loginDesign?.commercialname}`
+              : "Tienda Adfly"}
+          </title>
+        </Head>
+        {children}
+      </>
+    </>
+  );
 };

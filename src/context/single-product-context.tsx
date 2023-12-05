@@ -12,6 +12,7 @@ interface SingleProductContext {
   relatedProducts: Offer[];
   relatedCount: number;
   fetchProduct: (id: string, collaboratorId: string) => void;
+  refetchProduct: (id: string, collaboratorId: string) => void;
   fetchRelatedProducts: (id: string, offset?: number) => void;
   loadingProduct: boolean;
   loadingRelateds: boolean;
@@ -30,7 +31,7 @@ export const SingleProductProvider = ({
   const [relatedCount, setRelatedCount] = useState(0);
   const [relatedProducts, setRelatedProducts] = useState<Offer[]>([]);
 
-  const [getProduct, { data: productData, loading: loadingProduct }] =
+  const [getProduct, { data: productData, loading: loadingProduct, refetch }] =
     useLazyQuery<{
       offerForCollaborator: OfferForCollaborator;
     }>(GET_PRODUCT);
@@ -43,6 +44,10 @@ export const SingleProductProvider = ({
 
   const fetchProduct = (id: string, collaboratorId: string) => {
     getProduct({ variables: { id, collaboratorId } });
+  };
+
+  const refetchProduct = (id: string, collaboratorId: string) => {
+    refetch({ variables: { id, collaboratorId } });
   };
 
   const fetchRelatedProducts = (id: string, offset: number = 0) => {
@@ -74,6 +79,7 @@ export const SingleProductProvider = ({
         relatedProducts,
         relatedCount,
         fetchProduct,
+        refetchProduct,
         fetchRelatedProducts,
         loadingProduct,
         loadingRelateds,

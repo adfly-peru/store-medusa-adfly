@@ -134,31 +134,13 @@ const GET_PRODUCTS = gql`
           uuidbusiness
           businessname
         }
-        variant {
-          uuidVariant
-          attributes {
-            attributeName
-            value
-          }
-          currency
-          stock
+        details {
           refPrice
           adflyPrice
           offerPrice
-          maxQuantity
-          purchasePeriod
           imageURL
-          variantSku
-          coupon {
-            initialDate
-            expirationDate
-            initialPurchaseDate
-            expirationPurchaseDate
-            couponUsage
-            couponContent
-            discountType
-            discount
-          }
+          discountType
+          discount
         }
       }
     }
@@ -219,51 +201,13 @@ const GET_RELATED_PRODUCTS = gql`
           uuidbusiness
           businessname
         }
-        variant {
-          uuidVariant
-          attributes {
-            attributeName
-            value
-          }
-          currency
-          stock
+        details {
           refPrice
           adflyPrice
           offerPrice
-          maxQuantity
-          purchasePeriod
           imageURL
-          variantSku
-          product {
-            specification
-            condition
-            conditionDetails
-            productWarranty
-            sellerWarranty
-            included
-            width
-            height
-            weight
-            length
-          }
-          coupon {
-            initialDate
-            expirationDate
-            initialPurchaseDate
-            expirationPurchaseDate
-            couponUsage
-            couponContent
-            discountType
-            discount
-          }
-          service {
-            initialDate
-            expirationDate
-            initialPurchaseDate
-            expirationPurchaseDate
-            accessService
-            contentService
-          }
+          discountType
+          discount
         }
       }
     }
@@ -346,31 +290,13 @@ const GET_FILTERED_PRODUCTS = gql`
           uuidbusiness
           businessname
         }
-        variant {
-          uuidVariant
-          attributes {
-            attributeName
-            value
-          }
-          currency
-          stock
+        details {
           refPrice
           adflyPrice
           offerPrice
-          maxQuantity
-          purchasePeriod
           imageURL
-          variantSku
-          coupon {
-            initialDate
-            expirationDate
-            initialPurchaseDate
-            expirationPurchaseDate
-            couponUsage
-            couponContent
-            discountType
-            discount
-          }
+          discountType
+          discount
         }
       }
     }

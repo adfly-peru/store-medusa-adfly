@@ -5,16 +5,12 @@ import {
   TextInput,
   Box,
   Space,
-  Divider,
   PasswordInput,
   Progress,
   Popover,
   Center,
   Loader,
   Modal,
-  Title,
-  Alert,
-  Burger,
   MediaQuery,
   Group,
 } from "@mantine/core";
@@ -26,7 +22,7 @@ import { useState } from "react";
 import { SecurityForm } from "@interfaces/collaborator";
 import { useRouter } from "next/router";
 
-const PasswordRequirement = ({
+export const PasswordRequirement = ({
   meets,
   label,
 }: {
@@ -46,14 +42,14 @@ const PasswordRequirement = ({
   );
 };
 
-const requirements = [
+export const requirements = [
   { re: /[0-9]/, label: "Incluye un número" },
   { re: /[a-z]/, label: "Incluye una letra en minúscula" },
   { re: /[A-Z]/, label: "Incluye una letra en mayúscula" },
   // { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Incluye un símbolo especial" },
 ];
 
-const getStrength = (password: string) => {
+export const getStrength = (password: string) => {
   let multiplier = password.length > 7 ? 0 : 1;
 
   requirements.forEach((requirement) => {
@@ -65,7 +61,7 @@ const getStrength = (password: string) => {
   return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
 };
 
-const doesPasswordMeetRequirements = (password: string) => {
+export const doesPasswordMeetRequirements = (password: string) => {
   if (password.length <= 5) return false;
   for (const requirement of requirements) {
     if (!requirement.re.test(password)) {
