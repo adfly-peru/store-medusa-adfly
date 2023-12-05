@@ -149,47 +149,55 @@ const LoginPage = () => {
                   Ingresar a tu cuenta
                 </Text>
               </Stack>
-              <Stack
-                spacing="xl"
-                px="sm"
-                style={{
-                  fontSize: 16,
-                }}
-                align="center"
-              >
-                <TextInput
-                  placeholder="E-mail / Doc. Identidad"
-                  radius="xs"
-                  size="md"
-                  w={320}
-                  {...form.getInputProps("email")}
-                />
-                <PasswordInput
-                  placeholder="Contraseña"
-                  radius="xs"
-                  size="md"
-                  inputWrapperOrder={["label", "input", "description", "error"]}
-                  styles={{
-                    description: {
-                      textAlign: "right",
-                      fontSize: 13,
-                    },
+              <form onSubmit={form.onSubmit((_) => handleSubmit())}>
+                <Stack
+                  spacing="xl"
+                  px="sm"
+                  style={{
+                    fontSize: 16,
                   }}
-                  description={
-                    <Anchor href="/recovery">¿Olvidaste tu contraseña?</Anchor>
-                  }
-                  w={320}
-                  {...form.getInputProps("password")}
-                />
-                <Button
-                  w={320}
-                  size="lg"
-                  onClick={handleSubmit}
-                  disabled={loading}
+                  align="center"
                 >
-                  {loading ? <Loader variant="dots" /> : <Text>Ingresar</Text>}
-                </Button>
-              </Stack>
+                  <TextInput
+                    placeholder="E-mail / Doc. Identidad"
+                    radius="xs"
+                    size="md"
+                    w={320}
+                    {...form.getInputProps("email")}
+                  />
+                  <PasswordInput
+                    placeholder="Contraseña"
+                    radius="xs"
+                    size="md"
+                    inputWrapperOrder={[
+                      "label",
+                      "input",
+                      "description",
+                      "error",
+                    ]}
+                    styles={{
+                      description: {
+                        textAlign: "right",
+                        fontSize: 13,
+                      },
+                    }}
+                    description={
+                      <Anchor href="/recovery">
+                        ¿Olvidaste tu contraseña?
+                      </Anchor>
+                    }
+                    w={320}
+                    {...form.getInputProps("password")}
+                  />
+                  <Button w={320} size="lg" disabled={loading} type="submit">
+                    {loading ? (
+                      <Loader variant="dots" />
+                    ) : (
+                      <Text>Ingresar</Text>
+                    )}
+                  </Button>
+                </Stack>
+              </form>
               <Space h={60} />
               <Text ta="center" fz={13}>
                 ¿Aún no tienes cuenta?{" "}
