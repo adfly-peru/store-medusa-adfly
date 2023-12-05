@@ -180,7 +180,6 @@ const HomeHeader = () => {
                 flex: "0 1 auto",
               }}
             >
-              <span style={{ color: "#808080" }}>Por:</span>
               <img
                 src="/logo_adfly.svg"
                 alt="Adfly"

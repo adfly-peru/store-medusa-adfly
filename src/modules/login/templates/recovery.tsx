@@ -103,7 +103,6 @@ const RecoveryPage = () => {
       </Stack>
       <Space h={100} />
       <Group align="center" position="center" spacing={0}>
-        <Text color="gray.6">Por:</Text>
         <Image
           radius="md"
           p={0}

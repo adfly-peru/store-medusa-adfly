@@ -216,7 +216,6 @@ const LoginPage = () => {
               </Text>
               <Space h={20} />
               <Group align="center" position="center" spacing={0}>
-                <Text color="gray.6">Por:</Text>
                 <Image
                   radius="md"
                   p={0}
