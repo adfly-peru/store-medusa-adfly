@@ -83,6 +83,7 @@ const RecoveryPage = () => {
           radius="xs"
           size="md"
           w={320}
+          disabled={message !== ""}
           {...form.getInputProps("email")}
         />
         {message === "" ? (

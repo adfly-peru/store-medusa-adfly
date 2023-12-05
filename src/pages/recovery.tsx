@@ -1,43 +1,19 @@
 import {
-  Text,
   Grid,
-  Stack,
-  Button,
-  TextInput,
-  Image,
-  Space,
-  Title,
   LoadingOverlay,
-  Loader,
-  Alert,
-  Group,
   BackgroundImage,
   MediaQuery,
-  Popover,
-  Progress,
-  PasswordInput,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { useRouter } from "next/router";
 import { useAccount } from "@context/account-context";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDesign } from "@context/design-context";
-import {
-  PasswordRequirement,
-  doesPasswordMeetRequirements,
-  getStrength,
-  requirements,
-} from "@modules/account/components/security-form-register";
 import RecoveryPage from "@modules/login/templates/recovery";
 import RecoveryFormPage from "@modules/login/templates/recovery-form";
 
 const RegisterPage = () => {
   const router = useRouter();
-  const [popoverOpened, setPopoverOpened] = useState(false);
-  const [error, setError] = useState("");
   const { token } = router.query;
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
   const { loginDesign } = useDesign();
   const { status } = useAccount();
 

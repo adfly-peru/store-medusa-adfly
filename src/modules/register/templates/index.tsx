@@ -123,7 +123,7 @@ const RegisterModal = ({
             {loading ? <Loader variant="dots" /> : <Text>Continuar</Text>}
           </Button>
         </Center>
-        <Text ta="center" fz={12}>
+        <Text ta="center" fz={13}>
           ¿No tienes acceso?{" "}
           <Text
             span

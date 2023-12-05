@@ -172,7 +172,7 @@ const LoginPage = () => {
                   styles={{
                     description: {
                       textAlign: "right",
-                      fontSize: 12,
+                      fontSize: 13,
                     },
                   }}
                   description={
@@ -191,7 +191,7 @@ const LoginPage = () => {
                 </Button>
               </Stack>
               <Space h={60} />
-              <Text ta="center" fz={12}>
+              <Text ta="center" fz={13}>
                 ¿Aún no tienes cuenta?{" "}
                 <Text
                   span

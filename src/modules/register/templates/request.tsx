@@ -103,11 +103,13 @@ const RequestModal = ({ businessname }: { businessname: string }) => {
           <TextInput
             label="Nombres"
             withAsterisk
+            disabled={message !== ""}
             {...form.getInputProps("name")}
           />
           <TextInput
             label="Apellidos"
             withAsterisk
+            disabled={message !== ""}
             {...form.getInputProps("lastname")}
           />
           <Select
@@ -118,26 +120,32 @@ const RequestModal = ({ businessname }: { businessname: string }) => {
             ]}
             label="Tipo Documento"
             withAsterisk
+            disabled={message !== ""}
             {...form.getInputProps("documenttype")}
           />
           <TextInput
             label="N° Documento"
             withAsterisk
+            disabled={message !== ""}
             {...form.getInputProps("documentnumber")}
           />
         </SimpleGrid>
-        <Checkbox
-          label={
-            <>
-              Acepto los{" "}
-              <Anchor href="/terms" target="_blank">
-                Términos y Condiciones
-              </Anchor>
-              de ADFLY y autorizo la política de privacidad.
-            </>
-          }
-          {...form.getInputProps("termsOfService")}
-        />
+        {message === "" ? (
+          <Checkbox
+            label={
+              <>
+                Acepto los{" "}
+                <Anchor href="/terms" target="_blank">
+                  Términos y Condiciones
+                </Anchor>
+                de ADFLY y autorizo la política de privacidad.
+              </>
+            }
+            {...form.getInputProps("termsOfService")}
+          />
+        ) : (
+          <></>
+        )}
         <Space h="xl" />
         <Center py="md">
           {message === "" ? (
