@@ -80,7 +80,7 @@ const SimpleCouponView = ({ couponId }: { couponId: string }) => {
             </Text>
           </Text>
           <Text>
-            Vendido y entrago por{" "}
+            Vendido y entregado por{" "}
             <Text fw="bold" span>
               {report.businessname}
             </Text>
