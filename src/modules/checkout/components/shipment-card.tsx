@@ -103,7 +103,10 @@ const ShipmentCard = ({
                           {"Subtotal: "}
                         </Text>
                         {`S/.${
-                          product.quantity * (product.variant.adflyPrice ?? 0)
+                          product.quantity *
+                          (product.variant.offerPrice ?? 0 !== 0
+                            ? product.variant.offerPrice ?? 0
+                            : product.variant.adflyPrice ?? 0)
                         }`}
                       </Text>
                       <Text>
