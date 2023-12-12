@@ -22,6 +22,7 @@ import "@fontsource/rubik";
 import "@fontsource/open-sans";
 import { CouponProvider } from "@context/coupon-context";
 import Head from "next/head";
+import { ModalsProvider } from "@mantine/modals";
 
 const adflyColors = {
   default: "#31658E",
@@ -42,128 +43,132 @@ export default function App({
 
   return (
     <ApolloProvider client={client}>
-      <ColorSchemeProvider
-        colorScheme={colorScheme}
-        toggleColorScheme={toggleColorScheme}
-      >
-        <MantineProvider
-          theme={{
-            fontFamily: "Open Sans, sans-serif",
-            colorScheme,
-            components: {
-              Button: {
-                styles: (theme, params: ButtonStylesParams, { variant }) => ({
-                  root: {
-                    borderRadius: rem(8),
-                    backgroundColor:
-                      variant === "filled" ? adflyColors.default : undefined,
-                    "&:hover": {
-                      backgroundColor:
-                        variant === "filled" ? adflyColors.hover : undefined,
-                    },
-                    "&:active": {
-                      backgroundColor:
-                        variant === "filled" ? adflyColors.pressed : undefined,
-                    },
-                    "&:disabled": {
-                      backgroundColor: "#CECECE",
-                      color: "white",
-                    },
-                  },
-                  label: {
-                    whiteSpace: "pre-line",
-                  },
-                }),
-              },
-              NavLink: {
-                styles: (theme) => ({
-                  root: {
-                    backgroundColor: "white",
-                    "&[data-active]": {
-                      backgroundColor: "white",
-                      color: "black",
-                      fontWeight: 700,
-                      "&:hover": {
-                        backgroundColor: "#f8f9fa",
-                      },
-                    },
-                  },
-                }),
-              },
-              Checkbox: {
-                styles: (theme) => ({
-                  icon: {
-                    color: "#5C98C7 !important",
-                  },
-                  input: {
-                    "&:checked": {
-                      border: "2px solid #5C98C7",
-                      backgroundColor: "white",
-                    },
-                    border: "2px solid #5C98C7",
-                  },
-                }),
-              },
-              InputWrapper: {
-                styles: (theme) => ({
-                  label: {
-                    fontWeight: 600,
-                    fontSize: 15,
-                  },
-                }),
-              },
-              Input: {
-                styles: (theme) => ({
-                  input: {
-                    "&[data-disabled]": {
-                      border: "0px",
-                      backgroundColor: "#F2F2F3",
-                      color: "#86888A",
-                    },
-                    borderColor: "#737A82",
-                    color: "#737A82",
-                    borderRadius: rem(8),
-                  },
-                }),
-              },
-              Select: {
-                styles: (theme) => ({
-                  item: {
-                    "&[data-selected]": {
-                      backgroundColor: adflyColors.default,
-                      "&, &:hover": {
-                        backgroundColor: adflyColors.default,
-                      },
-                    },
-                    "&[data-hovered]": {},
-                  },
-                }),
-              },
-            },
-          }}
-          withGlobalStyles
-          withNormalizeCSS
+      <ModalsProvider>
+        <ColorSchemeProvider
+          colorScheme={colorScheme}
+          toggleColorScheme={toggleColorScheme}
         >
-          <DesignProvider>
-            <AccountProvider>
-              <LoadScript
-                googleMapsApiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
-                libraries={googleMapsLibraries as any}
-                onLoad={() => {
-                  console.log("Script Loaded!");
-                }}
-                onError={(error) => {
-                  console.error("Error cargando Google Maps", error);
-                }}
-              >
-                <ResourcesProvider>
-                  <Component {...pageProps} />
-                </ResourcesProvider>
-              </LoadScript>
-            </AccountProvider>
-          </DesignProvider>
-        </MantineProvider>
-      </ColorSchemeProvider>
+          <MantineProvider
+            theme={{
+              fontFamily: "Open Sans, sans-serif",
+              colorScheme,
+              components: {
+                Button: {
+                  styles: (theme, params: ButtonStylesParams, { variant }) => ({
+                    root: {
+                      borderRadius: rem(8),
+                      backgroundColor:
+                        variant === "filled" ? adflyColors.default : undefined,
+                      "&:hover": {
+                        backgroundColor:
+                          variant === "filled" ? adflyColors.hover : undefined,
+                      },
+                      "&:active": {
+                        backgroundColor:
+                          variant === "filled"
+                            ? adflyColors.pressed
+                            : undefined,
+                      },
+                      "&:disabled": {
+                        backgroundColor: "#CECECE",
+                        color: "white",
+                      },
+                    },
+                    label: {
+                      whiteSpace: "pre-line",
+                    },
+                  }),
+                },
+                NavLink: {
+                  styles: (theme) => ({
+                    root: {
+                      backgroundColor: "white",
+                      "&[data-active]": {
+                        backgroundColor: "white",
+                        color: "black",
+                        fontWeight: 700,
+                        "&:hover": {
+                          backgroundColor: "#f8f9fa",
+                        },
+                      },
+                    },
+                  }),
+                },
+                Checkbox: {
+                  styles: (theme) => ({
+                    icon: {
+                      color: "#5C98C7 !important",
+                    },
+                    input: {
+                      "&:checked": {
+                        border: "2px solid #5C98C7",
+                        backgroundColor: "white",
+                      },
+                      border: "2px solid #5C98C7",
+                    },
+                  }),
+                },
+                InputWrapper: {
+                  styles: (theme) => ({
+                    label: {
+                      fontWeight: 600,
+                      fontSize: 15,
+                    },
+                  }),
+                },
+                Input: {
+                  styles: (theme) => ({
+                    input: {
+                      "&[data-disabled]": {
+                        border: "0px",
+                        backgroundColor: "#F2F2F3",
+                        color: "#86888A",
+                      },
+                      borderColor: "#737A82",
+                      color: "#737A82",
+                      borderRadius: rem(8),
+                    },
+                  }),
+                },
+                Select: {
+                  styles: (theme) => ({
+                    item: {
+                      "&[data-selected]": {
+                        backgroundColor: adflyColors.default,
+                        "&, &:hover": {
+                          backgroundColor: adflyColors.default,
+                        },
+                      },
+                      "&[data-hovered]": {},
+                    },
+                  }),
+                },
+              },
+            }}
+            withGlobalStyles
+            withNormalizeCSS
+          >
+            <DesignProvider>
+              <AccountProvider>
+                <LoadScript
+                  googleMapsApiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
+                  libraries={googleMapsLibraries as any}
+                  onLoad={() => {
+                    console.log("Script Loaded!");
+                  }}
+                  onError={(error) => {
+                    console.error("Error cargando Google Maps", error);
+                  }}
+                >
+                  <ResourcesProvider>
+                    <Component {...pageProps} />
+                  </ResourcesProvider>
+                </LoadScript>
+              </AccountProvider>
+            </DesignProvider>
+          </MantineProvider>
+        </ColorSchemeProvider>
+      </ModalsProvider>
     </ApolloProvider>
   );
 }
