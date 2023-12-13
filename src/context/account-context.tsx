@@ -20,6 +20,7 @@ import {
   updateAddressQuery,
 } from "api/delivery";
 import { recoverPasswordQuery, requestAccessQuery } from "api/auth";
+import * as amplitude from "@amplitude/analytics-browser";
 
 interface AccountContext {
   daysInApp: number;
@@ -307,6 +308,8 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
   const logout = () => {
     if (typeof window !== "undefined") {
+      amplitude.track("User Logged Out");
+      amplitude.reset();
       localStorage.removeItem("collaboratortoken");
     }
     setUserId(null);
@@ -316,6 +319,19 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     setAddresses([]);
     setStatus("unauthenticated");
   };
+
+  useEffect(() => {
+    if (collaborator && subdomain) {
+      amplitude.setUserId(collaborator.uuidcollaborator);
+      const identify = new amplitude.Identify();
+      identify.set("dni", collaborator.documentnumber);
+      identify.set("email", collaborator.email ?? "No Email");
+      identify.set("status", collaborator.status);
+      amplitude.identify(identify);
+      amplitude.setGroup("tienda", subdomain);
+      amplitude.track("User Logged In");
+    }
+  }, [collaborator, subdomain]);
 
   useEffect(() => {
     const requestInterceptor = axios.interceptors.request.use((config) => {
