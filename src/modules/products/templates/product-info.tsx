@@ -4,6 +4,7 @@ import { DetailedProduct } from "@modules/products/components/detailed-product";
 import { useSingleProduct } from "@context/single-product-context";
 import { useEffect } from "react";
 import { useAccount } from "@context/account-context";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const ProductInfo = ({ productId }: { productId: string }) => {
   const {
@@ -24,6 +25,11 @@ const ProductInfo = ({ productId }: { productId: string }) => {
 
   useEffect(() => {
     if (product) {
+      amplitude.track("Producto Visualizado", {
+        productId: productId,
+        productName: product.offer.offerName,
+        business: product.offer.business.commercialname,
+      });
       fetchRelatedProducts(productId);
     }
   }, [product]);

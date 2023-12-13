@@ -52,6 +52,7 @@ import { Offer, Variant } from "@interfaces/productInterface";
 import { CartItem } from "@interfaces/cart";
 import { CouponResponse } from "api/cart";
 import { TimePeriod, purchasePeriodTime } from "@modules/common/types";
+import * as amplitude from "@amplitude/analytics-browser";
 
 export function DetailedProduct({
   product,
@@ -604,6 +605,12 @@ export function DetailedProduct({
                           product.uuidOffer
                         );
                         setCouponResponse(response ?? null);
+                        amplitude.track("Cupon Generado", {
+                          productId: product.uuidOffer,
+                          productName: product.offerName,
+                          business: product.business.commercialname,
+                          success: response?.status,
+                        });
                         setOpen(true);
                         setLoading(false);
                         refetchFunction();
@@ -661,6 +668,12 @@ export function DetailedProduct({
                           radius="md"
                           disabled={maxUnits <= 0 || value === 0}
                           onClick={() => {
+                            amplitude.track("Producto Agregado a Carrito", {
+                              productId: product.uuidOffer,
+                              productName: product.offerName,
+                              business: product.business.commercialname,
+                              quantity: value,
+                            });
                             addProduct(
                               selectedVariant.uuidVariant,
                               product.business.uuidbusiness,

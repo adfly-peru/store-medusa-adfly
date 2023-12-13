@@ -23,6 +23,7 @@ import "@fontsource/open-sans";
 import { CouponProvider } from "@context/coupon-context";
 import Head from "next/head";
 import { ModalsProvider } from "@mantine/modals";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const adflyColors = {
   default: "#31658E",
@@ -40,6 +41,12 @@ export default function App({
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      amplitude.init("17d5496d832d039b1eb6e91b0ac04b78");
+    }
+  }, []);
 
   return (
     <ApolloProvider client={client}>

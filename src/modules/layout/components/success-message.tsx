@@ -21,6 +21,7 @@ import { OrderReport } from "@interfaces/order";
 import { useState, useEffect } from "react";
 import { orderStatuses } from "@modules/common/types";
 import SuborderCard from "@modules/order/components/subordercard";
+import * as amplitude from "@amplitude/analytics-browser";
 
 function formatarFecha(fechaStr: string): string {
   if (fechaStr?.length !== 12) {
@@ -69,6 +70,11 @@ const SuccessMessage = ({
 
   useEffect(() => {
     getOrderReport();
+    amplitude.track("Order Procesada", {
+      purchaseNumber: number,
+      id,
+      ...niubizData,
+    });
   }, []);
 
   if (loading || !report) {
