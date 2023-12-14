@@ -40,11 +40,7 @@ const ErrorMessage = ({
   const { width } = useViewportSize();
 
   useEffect(() => {
-    amplitude.track("Order Procesada", {
-      purchaseNumber: purchase,
-      message,
-      ...orderData,
-    });
+    amplitude.track("Order Procesada");
   }, []);
 
   return (

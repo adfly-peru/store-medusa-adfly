@@ -70,11 +70,7 @@ const SuccessMessage = ({
 
   useEffect(() => {
     getOrderReport();
-    amplitude.track("Order Procesada", {
-      purchaseNumber: number,
-      id,
-      ...niubizData,
-    });
+    amplitude.track("Order Procesada");
   }, []);
 
   if (loading || !report) {
