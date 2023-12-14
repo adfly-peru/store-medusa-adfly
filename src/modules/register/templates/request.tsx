@@ -17,6 +17,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const RequestModal = ({ businessname }: { businessname: string }) => {
   const [error, setError] = useState("");
@@ -56,8 +57,13 @@ const RequestModal = ({ businessname }: { businessname: string }) => {
         form.values.documentnumber,
         form.values.termsOfService
       );
-      if (response.success) setMessage(response.message);
-      else setError(response.message);
+      if (response.success) {
+        setMessage(response.message);
+        amplitude.track("Request Sended");
+      } else {
+        setError(response.message);
+        amplitude.track("Error while sending request");
+      }
     } else {
       setError("Completa los campos obligatorios");
     }

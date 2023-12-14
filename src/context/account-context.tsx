@@ -129,6 +129,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       if (typeof window !== "undefined") {
         const storedToken = localStorage.getItem("collaboratortoken");
         if (storedToken) {
+          amplitude.track("User is Authenticated");
           setStatus("authenticated");
           setToken(storedToken);
           const decodedToken: IToken = jwtDecode(storedToken);
@@ -145,11 +146,13 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
           setDaysInApp(daysInStore);
           setUserId(decodeduserid);
         } else {
+          amplitude.track("User is not Authenticated");
           setStatus("unauthenticated");
         }
       }
     } catch (error) {
       console.error(error);
+      amplitude.track("User is not Authenticated");
       setStatus("unauthenticated");
     }
   }, []);
@@ -302,6 +305,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         errorText = `Error al iniciar sesión: ${error}`;
       }
       console.error("Error al iniciar sesión:", error);
+      amplitude.track("Error in Login", { error: errorText });
     }
     return errorText;
   };
@@ -309,7 +313,9 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   const logout = () => {
     if (typeof window !== "undefined") {
       amplitude.track("User Logged Out");
-      amplitude.reset();
+      const identify = new amplitude.Identify();
+      amplitude.identify(identify);
+      // amplitude.reset();
       localStorage.removeItem("collaboratortoken");
     }
     setUserId(null);
@@ -321,17 +327,22 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   };
 
   useEffect(() => {
-    if (collaborator && subdomain) {
-      amplitude.setUserId(collaborator.uuidcollaborator);
+    if (subdomain) {
+      amplitude.setGroup("tienda", subdomain);
+    }
+  }, [subdomain]);
+
+  useEffect(() => {
+    if (collaborator) {
       const identify = new amplitude.Identify();
+      identify.set("id", collaborator.uuidcollaborator);
       identify.set("dni", collaborator.documentnumber);
       identify.set("email", collaborator.email ?? "No Email");
       identify.set("status", collaborator.status);
       amplitude.identify(identify);
-      amplitude.setGroup("tienda", subdomain);
       amplitude.track("User Logged In");
     }
-  }, [collaborator, subdomain]);
+  }, [collaborator]);
 
   useEffect(() => {
     const requestInterceptor = axios.interceptors.request.use((config) => {

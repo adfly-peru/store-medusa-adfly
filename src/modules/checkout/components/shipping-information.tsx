@@ -32,6 +32,7 @@ import AddressView from "./address-view";
 import { UseFormReturnType } from "@mantine/form";
 import { formatAddress } from "@modules/common/functions/format-place";
 import EmptyCart from "./empty-cart";
+import * as amplitude from "@amplitude/analytics-browser";
 
 export interface ShipmentData {
   uuidcartsuborder: string;
@@ -68,6 +69,15 @@ const ShippingInformation = ({
       },
       uuidcollaboratoraddress
     );
+    if (uuidcollaboratoraddress === "")
+      amplitude.track("Continue without address");
+    else
+      amplitude.track("Address Selected", {
+        adddress:
+          addresses.find(
+            (a) => a.uuidcollaboratoraddress === uuidcollaboratoraddress
+          ) ?? "-",
+      });
     setAddressSelected(true);
   };
 
@@ -315,6 +325,10 @@ const ShippingInformation = ({
                   total={cart.suborders.length}
                   suborder={suborder}
                   updateShipmentData={async (data) => {
+                    amplitude.track("Select Method for suborder", {
+                      partner: suborder.businessName,
+                      method: data.method,
+                    });
                     await selectDeliveryMethod(
                       data.uuidcartsuborder,
                       data.method,

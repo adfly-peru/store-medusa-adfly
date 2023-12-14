@@ -21,6 +21,7 @@ import { useAccount } from "@context/account-context";
 import { useState } from "react";
 import { SecurityForm } from "@interfaces/collaborator";
 import { useRouter } from "next/router";
+import * as amplitude from "@amplitude/analytics-browser";
 
 export const PasswordRequirement = ({
   meets,
@@ -108,6 +109,7 @@ const SecurityFormRegister = ({
         const res = await verify(undefined, securityform);
         setMessage(res ?? "success");
         if (!res) {
+          amplitude.track("Step 3 Completed: Password Changed");
           const timerId = setTimeout(() => {
             router.push("/");
           }, 3000);

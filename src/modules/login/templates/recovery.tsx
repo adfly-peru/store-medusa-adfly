@@ -12,8 +12,9 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDesign } from "@context/design-context";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const RecoveryPage = () => {
   const [error, setError] = useState("");
@@ -43,6 +44,10 @@ const RecoveryPage = () => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    amplitude.track("User Go to Recovery Password with Token");
+  }, []);
 
   return (
     <Stack>
