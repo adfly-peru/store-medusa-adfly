@@ -91,7 +91,6 @@ const PaymentButton = ({
     if (!sessionToken) return;
     amplitude.track("Boton de Pago Clickeado", {
       purchaseNumber: cart.purchaseNumber,
-      total: totalAmount,
     });
     window.VisanetCheckout.configure({
       sessiontoken: `${sessionToken}`,
