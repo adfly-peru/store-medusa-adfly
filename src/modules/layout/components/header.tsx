@@ -32,6 +32,7 @@ import CartDrawer from "@modules/layout/components/cart-drawer";
 import { useRouter } from "next/router";
 import { useForm } from "@mantine/form";
 import { useCart } from "@context/cart-context";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -108,6 +109,10 @@ const HomeHeader = () => {
   // ];
 
   const searchProduct = () => {
+    amplitude.track("Search Product", {
+      data: searchable,
+      origin: "Search Bar",
+    });
     router.push({
       pathname: "/search",
       query: { data: searchable },
@@ -115,6 +120,10 @@ const HomeHeader = () => {
     setSearchable("");
   };
   const searchProductByCategorie = (categorieToSearch: string) => {
+    amplitude.track("Search Product", {
+      department: categorieToSearch,
+      origin: "Menu Header",
+    });
     router.push({
       pathname: "/search",
       query: { department: categorieToSearch },
@@ -325,7 +334,10 @@ const HomeHeader = () => {
               <Center>
                 <UnstyledButton
                   c={homeDesign?.fontcolor}
-                  onClick={() => router.push("/orders")}
+                  onClick={() => {
+                    amplitude.track("Go to Cart");
+                    router.push("/orders");
+                  }}
                 >
                   <Center>
                     <IconBasket size={24} stroke={1.5} />

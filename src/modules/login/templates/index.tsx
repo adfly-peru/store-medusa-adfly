@@ -25,6 +25,7 @@ import RegisterModal from "@modules/register/templates";
 import RequestModal from "@modules/register/templates/request";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -205,6 +206,7 @@ const LoginPage = () => {
                   span
                   component="a"
                   onClick={() => {
+                    amplitude.track("User Click Register Button");
                     setModalState("register");
                     open();
                   }}

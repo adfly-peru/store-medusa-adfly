@@ -17,6 +17,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const RegisterModal = ({
   businessname,
@@ -128,7 +129,10 @@ const RegisterModal = ({
           <Text
             span
             component="a"
-            onClick={() => goRequest()}
+            onClick={() => {
+              amplitude.track("User Go To Send Request");
+              goRequest();
+            }}
             style={{ cursor: "pointer" }}
             c="blue"
           >

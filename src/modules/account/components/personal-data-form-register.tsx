@@ -16,6 +16,7 @@ import { useAccount } from "@context/account-context";
 import { ProfileForm } from "@interfaces/collaborator";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import * as amplitude from "@amplitude/analytics-browser";
 
 interface FormValues {
   name: string;
@@ -76,6 +77,9 @@ const PersonalDataFormRegister = ({
         );
         if (!res) {
           handleNextStep();
+          amplitude.track(
+            "Step 1 Completed: Profile and Send email verification"
+          );
           const timerId = setTimeout(() => {
             router.push("/");
           }, 3000);

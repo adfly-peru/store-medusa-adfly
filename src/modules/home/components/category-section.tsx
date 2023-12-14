@@ -11,12 +11,17 @@ import {
 } from "@mantine/core";
 import router from "next/router";
 import { useEffect, useState } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const CategorySection = () => {
   const { departments } = useProduct();
   const [departmentsToShow, setDepartmentsToShow] = useState<Department[]>([]);
 
   const searchProductByCategorie = (categorieToSearch: string) => {
+    amplitude.track("Search Product", {
+      department: categorieToSearch,
+      origin: "Home Departments",
+    });
     router.push({
       pathname: "/search",
       query: { department: categorieToSearch },
