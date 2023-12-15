@@ -75,6 +75,11 @@ const CategorySection = () => {
                   size={60}
                   variant="transparent"
                   onClick={() => searchProductByCategorie(category.name)}
+                  style={{
+                    border: "0.89px solid black",
+                    borderRadius: 89.28,
+                    padding: 10,
+                  }}
                 >
                   <Image src={category.image} alt={category.name} />
                 </ActionIcon>

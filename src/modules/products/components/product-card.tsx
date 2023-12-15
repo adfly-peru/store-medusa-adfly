@@ -8,6 +8,7 @@ import {
   createStyles,
   Title,
   Stack,
+  Space,
 } from "@mantine/core";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -15,7 +16,7 @@ import { Offer } from "@interfaces/productInterface";
 
 const useStyles = createStyles((theme) => ({
   card: {
-    border: "1px solid #242529",
+    boxShadow: "0px 4px 4px 0px #00000040",
     "&:hover": {
       transform: "scale(1.01)",
       boxShadow: theme.shadows.md,
@@ -81,60 +82,60 @@ const ProductCard = ({ product }: { product: Offer }) => {
             fit="contain"
             withPlaceholder
             radius="8px"
-            styles={{
-              figure: {
-                border: "1px solid #737A82",
-                borderRadius: "8px",
-              },
-            }}
           />
         </Card.Section>
-        <Card.Section py="xs" inheritPadding ta="left" h={95}>
-          <Text lineClamp={1} mt={5}>
-            {product.brand.name}
-          </Text>
-          <Title lineClamp={2} order={3}>
-            {product.offerName}
-          </Title>
-        </Card.Section>
-        <Card.Section py="xs" inheritPadding ta="center" h={130}>
-          {product.type === "coupon" ? (
-            <Stack justify="center" h="100%">
-              <Group c="red" position="apart" fw="bold">
-                <Text fz="sm">Descuento</Text>
-                <Text>
-                  -
-                  {product.details.discountType === "monetary"
-                    ? ` S/. ${product.details.discount}`
-                    : ` ${product.details.discount}%`}
-                </Text>
-              </Group>
+        <Card.Section py="xs" inheritPadding ta="left">
+          <Stack spacing={32} h={200}>
+            <Stack spacing={8} h={80}>
+              <Text lineClamp={1} mt={5} fw={700}>
+                {product.brand.name}
+              </Text>
+              <Text lineClamp={2} fw={400}>
+                {product.offerName}
+              </Text>
             </Stack>
-          ) : (
-            <Stack justify="center" h="100%" spacing="xs">
-              {product.details.offerPrice ? (
-                <Group c="red" position="apart" fw="bold">
-                  <Text fz="sm">Oferta</Text>
-                  <Text>S/. {product.details.offerPrice.toFixed(2)}</Text>
-                </Group>
-              ) : null}
-              <Group position="apart" fw="bold">
-                <Text fz="sm">Precio ADFLY</Text>
-                <Text td={product.details.offerPrice ? "line-through" : "none"}>
-                  S/. {product.details.adflyPrice.toFixed(2)}
-                </Text>
-              </Group>
-              <Group position="apart">
-                <Text fz="sm">Precio Mercado</Text>
-                <Text td="line-through">
-                  S/. {product.details.refPrice.toFixed(2)}
-                </Text>
-              </Group>
+            <Stack>
+              {product.type === "coupon" ? (
+                <Stack justify="center" h="100%">
+                  <Group c="red" position="apart" fw="bold">
+                    <Text fz="sm">Descuento</Text>
+                    <Text>
+                      -
+                      {product.details.discountType === "monetary"
+                        ? ` S/. ${product.details.discount}`
+                        : ` ${product.details.discount}%`}
+                    </Text>
+                  </Group>
+                </Stack>
+              ) : (
+                <Stack justify="center" h="100%" spacing={0}>
+                  {product.details.offerPrice ? (
+                    <Group c="red" position="apart" fw="bold">
+                      <Text fz="sm">Oferta</Text>
+                      <Text>S/. {product.details.offerPrice.toFixed(2)}</Text>
+                    </Group>
+                  ) : null}
+                  <Group position="apart" fw="bold">
+                    <Text fz="sm">Precio ADFLY</Text>
+                    <Text
+                      td={product.details.offerPrice ? "line-through" : "none"}
+                    >
+                      S/. {product.details.adflyPrice.toFixed(2)}
+                    </Text>
+                  </Group>
+                  <Group position="apart">
+                    <Text fz="sm">Precio Mercado</Text>
+                    <Text td="line-through">
+                      S/. {product.details.refPrice.toFixed(2)}
+                    </Text>
+                  </Group>
+                </Stack>
+              )}
             </Stack>
-          )}
+          </Stack>
         </Card.Section>
-        <Card.Section py="xs" inheritPadding ta="center" h={70}>
-          <Button fullWidth radius="md">
+        <Card.Section py="xs" inheritPadding ta="center">
+          <Button fullWidth radius="md" h={48}>
             {product.type === "coupon" ? "Generar Cupón" : "Agregar"}
           </Button>
         </Card.Section>
