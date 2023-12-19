@@ -13,9 +13,11 @@ import {
 import EmptyCart from "../components/empty-cart";
 import CheckoutForm from "./checkout-form";
 import { useEffect, useState } from "react";
+import { useAccount } from "@context/account-context";
 
 const CheckoutTemplate = () => {
-  const { cart } = useCart();
+  const { collaborator } = useAccount();
+  const { cart, useStars } = useCart();
   const [saving, setSaving] = useState(0);
   const [deliveryprice, setDeliveryprice] = useState(0);
 
@@ -72,7 +74,7 @@ const CheckoutTemplate = () => {
                 <Space h="md" />
                 <Group position="apart">
                   <Text>Subtotal:</Text>
-                  <Text>S/.{cart.total}</Text>
+                  <Text>S/.{cart.total.toFixed(2)}</Text>
                 </Group>
                 <Group position="apart">
                   <Text>Envío:</Text>
@@ -82,10 +84,40 @@ const CheckoutTemplate = () => {
                       : `S/.${deliveryprice.toFixed(2)}`}
                   </Text>
                 </Group>
+                {useStars ? (
+                  <Group position="apart" c="red">
+                    <Text>Dscto. Estrellas:</Text>
+                    <Text>
+                      {`- S/.${(
+                        ((cart.total + deliveryprice) * 100 <
+                        (collaborator?.stars ?? 0)
+                          ? parseFloat(
+                              ((cart.total + deliveryprice) * 100).toFixed(0)
+                            )
+                          : collaborator?.stars ?? 0) / 100
+                      ).toFixed(2)}`}
+                    </Text>
+                  </Group>
+                ) : (
+                  <></>
+                )}
                 <Divider my={5} style={{ border: "1px solid black" }} />
                 <Group position="apart">
                   <Text>Total:</Text>
-                  <Text>S/.{cart.total + deliveryprice}</Text>
+                  <Text>
+                    S/.
+                    {(
+                      cart.total +
+                      deliveryprice -
+                      ((cart.total + deliveryprice) * 100 <
+                      (collaborator?.stars ?? 0)
+                        ? parseFloat(
+                            ((cart.total + deliveryprice) * 100).toFixed(0)
+                          )
+                        : collaborator?.stars ?? 0) /
+                        100
+                    ).toFixed(2)}
+                  </Text>
                 </Group>
                 <Space h="lg" />
                 <Text

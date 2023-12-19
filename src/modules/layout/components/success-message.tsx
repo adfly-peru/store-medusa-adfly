@@ -130,7 +130,7 @@ const SuccessMessage = ({
           Detalle Pedido
           <Text color="dimmed" component="span">
             {" "}
-            #{report.order.paymentInfo.purchaseNumber}
+            #{number}
           </Text>
         </Title>
       </Group>
@@ -146,11 +146,11 @@ const SuccessMessage = ({
               {formatarFecha(niubizData?.order?.transactionDate)}
             </Text>
             <Text fw="bold" span>
-              {report.order.paymentInfo.purchaseNumber}
+              {number}
             </Text>
             <Text fw="bold" span>
-              {`${niubizData?.order?.amount?.toFixed(2)} ${
-                niubizData?.order?.currency
+              {`${(niubizData?.order?.amount ?? 0).toFixed(2)} ${
+                niubizData?.order?.currency ?? ""
               }`}
             </Text>
           </Stack>
@@ -186,13 +186,13 @@ const SuccessMessage = ({
           <Text fw="bold">
             Método de Pago:{" "}
             <Text fw="normal" span>
-              {`Pago ${report.order.paymentInfo.canal || "-"}`}
+              {`Pago ${report.order.paymentInfo?.canal || "-"}`}
             </Text>
           </Text>
           <Text fw="bold">
             Detalle de Pago:{" "}
             <Text fw="normal" span>
-              {`${report.order.paymentInfo.brand} ${report.order.paymentInfo.card}`}
+              {`${report.order.paymentInfo?.brand} ${report.order.paymentInfo?.card}`}
             </Text>
           </Text>
           <Divider mb="sm" />

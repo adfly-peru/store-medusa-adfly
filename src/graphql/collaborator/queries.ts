@@ -14,6 +14,7 @@ const GET_COLLABORATOR = gql`
       changePassword
       emailVerify
       urlprofile
+      stars
     }
   }
 `;

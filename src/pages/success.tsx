@@ -6,7 +6,9 @@ import SuccessMessage from "@modules/layout/components/success-message";
 const SuccesPage = () => {
   const router = useRouter();
   const { number, id, data } = router.query;
-  const orderData = data ? JSON.parse(data as string) : null;
+  const orderData = data
+    ? JSON.parse(data === "undefined" ? "{}" : (data as string))
+    : null;
   return (
     <Layout>
       <Center>

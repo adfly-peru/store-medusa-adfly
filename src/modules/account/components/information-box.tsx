@@ -140,6 +140,21 @@ const InformationBox = ({
             }
             active={router.asPath.startsWith("/coupons")}
           />
+          <NavLink
+            component={Link}
+            href="/stars"
+            label="Mis Estrellas"
+            disabled={!collaborator.changePassword}
+            icon={
+              <Badge
+                bg={router.asPath.startsWith("/stars") ? "#31658E" : "#D9D9D9"}
+                radius="xs"
+                variant="filled"
+                p={2}
+              />
+            }
+            active={router.asPath.startsWith("/stars")}
+          />
         </Stack>
       </Card.Section>
     </Card>

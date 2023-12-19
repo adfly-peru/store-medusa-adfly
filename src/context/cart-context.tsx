@@ -9,12 +9,14 @@ import {
   editDeliveryMethod,
   generateCouponRequest,
   manageItem,
+  payCart,
 } from "api/cart";
 import { Cart, CartItem } from "@interfaces/cart";
 import { useAccount } from "./account-context";
 import { BillingForm } from "@interfaces/billing";
 import { AddressInfoForm } from "@interfaces/address-interface";
 import { VariantAttribute } from "@interfaces/productInterface";
+import { useRouter } from "next/router";
 
 function areVariantAttributesEqual(
   list1: VariantAttribute[],
@@ -83,6 +85,13 @@ interface CartContext {
   ) => Promise<string | null>;
   loadingEvent: boolean;
   refetch: () => Promise<void>;
+  useStars: boolean;
+  setUseStars: (value: boolean) => void;
+  payCartWithStars: (
+    purchaseNumber: string,
+    amount: number,
+    stars: number
+  ) => Promise<void>;
 }
 
 const CartContext = createContext<CartContext | null>(null);
@@ -92,10 +101,12 @@ interface CartProviderProps {
 }
 
 export const CartProvider = ({ children }: CartProviderProps) => {
+  const router = useRouter();
   const { collaborator } = useAccount();
   const [collaboratorId, setCollaboratorId] = useState<string | null>(null);
   const [cart, setCart] = useState<Cart | null>(null);
   const [loadingEvent, setLoadingEvent] = useState(false);
+  const [useStars, setUseStars] = useState(false);
   const { data, error, loading, refetch } = useQuery<{ getCart: Cart }>(
     GET_CART,
     {
@@ -318,6 +329,18 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     }
   };
 
+  const payCartWithStars = async (
+    purchaseNumber: string,
+    amount: number,
+    stars: number
+  ) => {
+    if (!cart) return;
+    const location =
+      (await payCart(purchaseNumber, cart, amount, stars)) ??
+      "/error?message=desconocido";
+    router.push(location);
+  };
+
   const selectDeliveryMethod = async (
     uuidcartsuborder: string,
     deliverymethod: string,
@@ -361,6 +384,9 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         generateCoupon,
         selectDeliveryMethod,
         loadingEvent,
+        useStars,
+        setUseStars,
+        payCartWithStars,
       }}
     >
       {children}

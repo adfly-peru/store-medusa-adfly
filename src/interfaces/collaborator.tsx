@@ -17,6 +17,7 @@ export interface Collaborator {
   changePassword: boolean;
   emailVerify: boolean;
   urlprofile?: string;
+  stars: number;
 }
 
 export interface ProfileForm {

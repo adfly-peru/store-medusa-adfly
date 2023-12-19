@@ -24,6 +24,7 @@ import { CouponProvider } from "@context/coupon-context";
 import Head from "next/head";
 import { ModalsProvider } from "@mantine/modals";
 import * as amplitude from "@amplitude/analytics-browser";
+import { StarProvider } from "@context/stars-context";
 
 const adflyColors = {
   default: "#31658E",
@@ -213,9 +214,11 @@ const ResourcesProvider: React.FC<{ children?: React.ReactNode }> = ({
           </Head>
           <ProductProvider>
             <CartProvider>
-              <CouponProvider>
-                <OrderProvider>{children}</OrderProvider>
-              </CouponProvider>
+              <StarProvider>
+                <CouponProvider>
+                  <OrderProvider>{children}</OrderProvider>
+                </CouponProvider>
+              </StarProvider>
             </CartProvider>
           </ProductProvider>
         </>
