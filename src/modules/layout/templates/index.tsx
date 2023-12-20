@@ -1,11 +1,11 @@
-import { AppShell, BackgroundImage, Header } from "@mantine/core";
+import { AppShell, Header } from "@mantine/core";
 import HomeHeader from "@modules/layout/components/header";
 import React, { useEffect } from "react";
 import FooterComponent from "@modules/layout/components/footer";
 import { useViewportSize } from "@mantine/hooks";
 import { useAccount } from "@context/account-context";
 import { useRouter } from "next/router";
-import SimpleHeader from "../components/simple-header";
+import { ModalsProvider } from "@mantine/modals";
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { height } = useViewportSize();
@@ -70,7 +70,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         },
       }}
     >
-      {children}
+      <ModalsProvider>{children}</ModalsProvider>
     </AppShell>
   );
 };

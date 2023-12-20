@@ -6,9 +6,6 @@ import { IconSearch } from "@tabler/icons-react";
 const CouponRow = ({ coupon }: { coupon: CouponUsage }) => {
   return (
     <tr key={coupon.uuidcouponcollaboratorusage}>
-      {/* <td>
-        <Text>{coupon.paymentInfo.purchaseNumber}</Text>
-      </td> */}
       <td>
         <Text>{formatDate(coupon.dateused)}</Text>
       </td>

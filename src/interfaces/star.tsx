@@ -4,7 +4,8 @@ export interface CollaboratorStars {
   operation: string;
   amount: number;
   message: string;
-  reason: String;
+  reason: string;
+  uuidorder: string;
 }
 
 export interface PaginatedCollaboratorStars {

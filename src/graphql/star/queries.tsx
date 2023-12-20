@@ -22,6 +22,7 @@ const GET_STARS = gql`
         amount
         message
         reason
+        uuidorder
       }
       totalStars
     }

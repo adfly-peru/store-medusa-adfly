@@ -75,6 +75,8 @@ export interface Order {
   paymentInfo: PaymentInfo;
   comments: string;
   details: OrderDetails;
+  starsUsed: number;
+  starspurchasenumber: string;
 }
 
 export interface SubOrderDetails {

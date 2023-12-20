@@ -255,6 +255,9 @@ const PaymentButton = ({
             <Radio
               labelPosition="left"
               checked={toPay}
+              disabled={
+                useStars && (collaborator?.stars ?? 0) / 100 > totalAmount
+              }
               onChange={(event) => setToPay(event.currentTarget.checked)}
             />
           </Group>
@@ -278,7 +281,12 @@ const PaymentButton = ({
             <Button w={200} h={48} onClick={() => handlePrevStep()}>
               {"Regresar"}
             </Button>
-            <Button w={200} h={48} onClick={() => payment()}>
+            <Button
+              w={200}
+              h={48}
+              disabled={!hasAcceptedTerms}
+              onClick={() => payment()}
+            >
               {"Pagar"}
             </Button>
           </Group>
