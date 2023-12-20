@@ -129,6 +129,18 @@ const ProductCard = ({ product }: { product: Offer }) => {
                       S/. {product.details.refPrice.toFixed(2)}
                     </Text>
                   </Group>
+                  <Group position="apart" fw="bold">
+                    <Text fz="sm" c="yellow">
+                      Estrellas ⭐
+                    </Text>
+                    <Text>
+                      {(
+                        ((product.details.offerPrice ?? 0) > 0
+                          ? product.details.offerPrice
+                          : product.details.adflyPrice) * 100
+                      ).toFixed(0)}
+                    </Text>
+                  </Group>
                 </Stack>
               )}
             </Stack>
