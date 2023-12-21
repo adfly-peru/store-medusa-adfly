@@ -15,6 +15,7 @@ const GET_COLLABORATOR = gql`
       emailVerify
       urlprofile
       stars
+      newsletters
     }
   }
 `;

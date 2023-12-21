@@ -388,7 +388,15 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     profileForm?: ProfileForm,
     securityForm?: SecurityForm
   ) => {
-    const response = await verifyAccount(profileForm, securityForm);
+    if (!collaborator) return "Collaborator null";
+    const response = await verifyAccount(
+      profileForm ?? {
+        phone: "",
+        acceptPublicity: collaborator.newsletters,
+        terms: collaborator.emailVerify,
+      },
+      securityForm
+    );
     if (response == null) {
       refetch();
     }
