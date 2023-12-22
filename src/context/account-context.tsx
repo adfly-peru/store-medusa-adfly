@@ -11,8 +11,12 @@ import {
 } from "@interfaces/collaborator";
 import jwtDecode from "jwt-decode";
 import { Address } from "@interfaces/address-interface";
-import { DesignConfig } from "@interfaces/design";
-import { GET_HOME_DESIGN } from "@graphql/design/queries";
+import {
+  AdflyBanner,
+  DesignConfig,
+  PaginatedAdflyBanners,
+} from "@interfaces/design";
+import { GET_BANNERS, GET_HOME_DESIGN } from "@graphql/design/queries";
 import { changePasswordQuery, verifyAccount } from "api/verify";
 import {
   createAddress,
@@ -52,6 +56,7 @@ interface AccountContext {
   editAddress: (newAddress: Address) => Promise<string | null>;
   deleteAddress: (addressId: string) => Promise<string | null>;
   loading: boolean;
+  banners: AdflyBanner[];
 }
 
 const AccountContext = createContext<AccountContext | null>(null);
@@ -62,6 +67,7 @@ interface AccountProviderProps {
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
   const router = useRouter();
+  const [banners, setBanners] = useState<AdflyBanner[]>([]);
   const [daysInApp, setDaysInApp] = useState(0);
   const [loading, setLoading] = useState(false);
   const [collaborator, setCollaborator] = useState<Collaborator | undefined>(
@@ -91,6 +97,17 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     variables: { uuidcollaborator: userId },
     skip: !userId,
   });
+  const { data: dataBanners } = useQuery<{
+    getAllBanners: PaginatedAdflyBanners;
+  }>(GET_BANNERS, {
+    variables: {
+      limit: 20,
+      offset: 0,
+      sortBy: "priority",
+      asc: true,
+    },
+    skip: !userId,
+  });
 
   const fetchCollaborator = async () => {
     if (data) {
@@ -107,6 +124,12 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       setAddresses(dataAddresses.collaboratoraddresses);
     }
   };
+
+  useEffect(() => {
+    if (dataBanners?.getAllBanners) {
+      setBanners(dataBanners.getAllBanners.banners);
+    }
+  }, [dataBanners]);
 
   useEffect(() => {
     fetchCollaborator();
@@ -426,6 +449,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         editAddress,
         deleteAddress,
         loading,
+        banners,
       }}
     >
       {children}
