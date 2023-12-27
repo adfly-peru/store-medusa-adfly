@@ -8,39 +8,35 @@ import {
   rem,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import InformationForm from "@modules/checkout/components/information-form";
 import ShippingInformation from "@modules/checkout/components/shipping-information";
 import PaymentButton from "../components/payment-button";
 import { useAccount } from "@context/account-context";
-import { useForm } from "@mantine/form";
+import { UseFormReturnType, useForm } from "@mantine/form";
 import { BillingForm } from "@interfaces/billing";
 import { useCart } from "@context/cart-context";
 import { AddressInfoForm } from "@interfaces/address-interface";
 import * as amplitude from "@amplitude/analytics-browser";
 
-const CheckoutForm = () => {
+const CheckoutForm = ({
+  billingform,
+  active,
+  setActive,
+  nextStep,
+  prevStep,
+}: {
+  billingform: UseFormReturnType<
+    BillingForm,
+    (values: BillingForm) => BillingForm
+  >;
+  active: number;
+  setActive: Dispatch<SetStateAction<number>>;
+  nextStep: () => void;
+  prevStep: () => void;
+}) => {
   const { height } = useViewportSize();
-  const { collaborator } = useAccount();
   const { editBilling, editDelivery, cart, loadingEvent } = useCart();
-  const [active, setActive] = useState(0);
-  const billingform = useForm<BillingForm>({
-    initialValues: {
-      name: collaborator?.name ?? "",
-      lastname: collaborator?.lastname ?? "",
-      doctype: collaborator?.documenttype ?? "",
-      doc: collaborator?.documentnumber ?? "",
-      email: collaborator?.email ?? "",
-      phone: cart?.billingInfo?.phone ?? collaborator?.phonenumber ?? "",
-      ruc: cart?.billingInfo?.ruc ?? "",
-      businessname: cart?.billingInfo?.businessname ?? "",
-      fiscaladdress: cart?.billingInfo?.fiscaladdress ?? "",
-    },
-    validate: {
-      phone: (value) =>
-        value?.length ?? 0 > 0 ? null : "Este campo es requerido",
-    },
-  });
   const deliveryform = useForm<AddressInfoForm>({
     initialValues: {
       receivername: cart?.deliveryInfo?.receivername ?? "",
@@ -49,10 +45,6 @@ const CheckoutForm = () => {
       receiverphone: cart?.deliveryInfo?.receiverphone ?? "",
     },
   });
-  const nextStep = () =>
-    setActive((current) => (current < 3 ? current + 1 : current));
-  const prevStep = () =>
-    setActive((current) => (current > 0 ? current - 1 : current));
   const handleNextStep = async () => {
     if (active === 0) {
       const formValues = billingform.values;
@@ -198,11 +190,7 @@ const CheckoutForm = () => {
             allowStepSelect={active > 2}
             completedIcon={3}
           >
-            <PaymentButton
-              form={billingform}
-              submitInfo={funcOnPaymentButton}
-              handlePrevStep={prevStep}
-            />
+            <PaymentButton form={billingform} />
           </Stepper.Step>
         </Stepper>
       </Card>

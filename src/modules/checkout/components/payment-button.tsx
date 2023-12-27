@@ -29,99 +29,19 @@ declare global {
   }
 }
 
-const createSessionToken = async (
-  productAmount: number,
-  customerEmail: string,
-  activeCustomer: boolean,
-  documentNumber: string,
-  daysInApp: number
-): Promise<string | null> => {
-  try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_API}/store/session`,
-      {
-        amount: productAmount,
-        customerEmail: customerEmail,
-        activeCustomer: activeCustomer,
-        documentNumber: documentNumber,
-        daysInApp: daysInApp,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const status = response.status;
-    if (status == 201 || status == 200) {
-      return response.data.data.data.sessionKey;
-    }
-    return null;
-  } catch (error) {
-    return null;
-  }
-};
-
-const PaymentButton = ({
-  form,
-  submitInfo,
-  handlePrevStep,
-}: {
-  form: UseFormReturnType<BillingForm>;
-  submitInfo: (checked: string) => Promise<string | null>;
-  handlePrevStep: () => void;
-}) => {
-  const { cart, useStars, setUseStars, payCartWithStars } = useCart();
-  const { collaborator, daysInApp } = useAccount();
-  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
+const PaymentButton = ({ form }: { form: UseFormReturnType<BillingForm> }) => {
+  const {
+    cart,
+    useStars,
+    setUseStars,
+    checked,
+    setChecked,
+    hasAcceptedTerms,
+    setHasAcceptedTerms,
+  } = useCart();
+  const { collaborator } = useAccount();
   const [totalAmount, setTotalAmount] = useState(0);
-  const [checked, setChecked] = useState("ticket");
   const [toPay, setToPay] = useState(false);
-
-  const payment = async () => {
-    if (!cart || !collaborator) return;
-    const infoerror = await submitInfo(checked);
-    if (infoerror) return;
-    let totalAmountFixed = parseFloat(totalAmount.toFixed(2));
-    let starsToUse = 0;
-    if (useStars) {
-      starsToUse =
-        totalAmount * 100 < (collaborator?.stars ?? 0)
-          ? parseFloat((totalAmount * 100).toFixed(0))
-          : collaborator?.stars ?? 0;
-      totalAmountFixed = totalAmountFixed - starsToUse / 100;
-    }
-    if (totalAmountFixed === 0) {
-      await payCartWithStars(cart.purchaseNumber, totalAmountFixed, starsToUse);
-      return;
-    }
-    const sessionToken = await createSessionToken(
-      totalAmountFixed,
-      collaborator.email ?? "",
-      true,
-      collaborator.documentnumber,
-      daysInApp
-    );
-    if (!sessionToken) return;
-    amplitude.track("Boton de Pago Clickeado", {
-      purchaseNumber: cart.purchaseNumber,
-    });
-    window.VisanetCheckout.configure({
-      sessiontoken: `${sessionToken}`,
-      channel: "web",
-      merchantid: process.env.NEXT_PUBLIC_MERCHANT_ID,
-      purchasenumber: cart.purchaseNumber,
-      amount: totalAmountFixed,
-      expirationminutes: "20",
-      timeouturl: "about:blank",
-      merchantlogo: "https://www.adfly.pe/Content/logo.png",
-      merchantname: "Adfly",
-      formbuttoncolor: "#31658E",
-      action: `api/payment?purchaseNumber=${cart.purchaseNumber}&amount=${totalAmount}&collaboratorid=${collaborator?.uuidcollaborator}&stars=${starsToUse}`,
-    });
-
-    window.VisanetCheckout.open();
-  };
 
   useEffect(() => {
     if (
@@ -131,6 +51,8 @@ const PaymentButton = ({
     ) {
       setChecked("bill");
     }
+    setHasAcceptedTerms(false);
+    setUseStars(false);
   }, []);
 
   useEffect(() => {
@@ -276,21 +198,6 @@ const PaymentButton = ({
           checked={hasAcceptedTerms}
           onChange={(e) => setHasAcceptedTerms(e.currentTarget.checked)}
         />
-        <Center>
-          <Group w="60%" position="center" mt="xl">
-            <Button w={200} h={48} onClick={() => handlePrevStep()}>
-              {"Regresar"}
-            </Button>
-            <Button
-              w={200}
-              h={48}
-              disabled={!hasAcceptedTerms}
-              onClick={() => payment()}
-            >
-              {"Pagar"}
-            </Button>
-          </Group>
-        </Center>
       </Stack>
     </Center>
   );

@@ -92,6 +92,10 @@ interface CartContext {
     amount: number,
     stars: number
   ) => Promise<void>;
+  checked: string;
+  setChecked: (v: string) => void;
+  hasAcceptedTerms: boolean;
+  setHasAcceptedTerms: (v: boolean) => void;
 }
 
 const CartContext = createContext<CartContext | null>(null);
@@ -102,6 +106,8 @@ interface CartProviderProps {
 
 export const CartProvider = ({ children }: CartProviderProps) => {
   const router = useRouter();
+  const [checked, setChecked] = useState("ticket");
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
   const { collaborator } = useAccount();
   const [collaboratorId, setCollaboratorId] = useState<string | null>(null);
   const [cart, setCart] = useState<Cart | null>(null);
@@ -369,6 +375,10 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   return (
     <CartContext.Provider
       value={{
+        hasAcceptedTerms,
+        setHasAcceptedTerms,
+        checked,
+        setChecked,
         cart,
         addProduct,
         refetch: async () => {
