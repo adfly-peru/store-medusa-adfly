@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.3.7",
     "@apollo/client": "^3.8.2",
     "@apollo/react-hooks": "^4.0.0",
     "@emotion/react": "^11.11.1",

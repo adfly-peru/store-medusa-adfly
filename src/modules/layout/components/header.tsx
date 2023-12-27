@@ -13,6 +13,7 @@ import {
   Center,
   MediaQuery,
   Divider,
+  ScrollArea,
 } from "@mantine/core";
 import {
   IconBasket,
@@ -31,6 +32,7 @@ import CartDrawer from "@modules/layout/components/cart-drawer";
 import { useRouter } from "next/router";
 import { useForm } from "@mantine/form";
 import { useCart } from "@context/cart-context";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -107,6 +109,10 @@ const HomeHeader = () => {
   // ];
 
   const searchProduct = () => {
+    amplitude.track("Search Product", {
+      data: searchable,
+      origin: "Search Bar",
+    });
     router.push({
       pathname: "/search",
       query: { data: searchable },
@@ -114,6 +120,10 @@ const HomeHeader = () => {
     setSearchable("");
   };
   const searchProductByCategorie = (categorieToSearch: string) => {
+    amplitude.track("Search Product", {
+      department: categorieToSearch,
+      origin: "Menu Header",
+    });
     router.push({
       pathname: "/search",
       query: { department: categorieToSearch },
@@ -142,30 +152,50 @@ const HomeHeader = () => {
     <>
       <Grid justify="center" align="center" columns={24} m={0}>
         <Grid.Col span={24} bg="white" p={0}>
-          <Group position="apart" py={0} px={15}>
-            <UnstyledButton onClick={() => router.push("/")}>
-              <Image
-                radius="md"
-                height={60}
-                width="inherit"
-                fit="contain"
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "0 15px",
+              height: "60px",
+            }}
+          >
+            <div
+              onClick={() => router.push("/")}
+              style={{
+                flex: "1",
+                maxWidth: "50%",
+                height: "60px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <img
                 src={homeDesign?.logourl}
                 alt="Enterprise Logo"
+                style={{
+                  maxHeight: "60px",
+                  maxWidth: "100%",
+                  height: "auto",
+                  width: "auto",
+                }}
               />
-            </UnstyledButton>
-            <Group align="center" position="center" spacing={0}>
-              <Text color="gray.6">Por:</Text>
-              <Image
-                radius="md"
-                height={35}
-                width="inherit"
-                fit="contain"
-                src="https://www.adfly.pe/Content/logo.png"
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flex: "0 1 auto",
+              }}
+            >
+              <img
+                src="/logo_adfly.svg"
                 alt="Adfly"
-                sx={{ padding: 10 }}
+                style={{ height: "50px", width: "auto", padding: "0px" }}
               />
-            </Group>
-          </Group>
+            </div>
+          </div>
         </Grid.Col>
         <Grid.Col span={6} md={3}>
           <Menu
@@ -203,24 +233,26 @@ const HomeHeader = () => {
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Label>Departamentos</Menu.Label>
-              {departments.map((category, id) => (
-                <Menu.Item
-                  key={id}
-                  icon={
-                    <Image
-                      alt={category.name}
-                      src={category.image}
-                      width={30}
-                      style={{
-                        filter: colorScheme === "dark" ? "invert(1)" : "none",
-                      }}
-                    />
-                  }
-                  onClick={() => searchProductByCategorie(category.name)}
-                >
-                  {category.name}
-                </Menu.Item>
-              ))}
+              <ScrollArea.Autosize mah={300}>
+                {departments.map((category, id) => (
+                  <Menu.Item
+                    key={id}
+                    icon={
+                      <Image
+                        alt={category.name}
+                        src={category.image}
+                        width={30}
+                        style={{
+                          filter: colorScheme === "dark" ? "invert(1)" : "none",
+                        }}
+                      />
+                    }
+                    onClick={() => searchProductByCategorie(category.name)}
+                  >
+                    {category.name}
+                  </Menu.Item>
+                ))}
+              </ScrollArea.Autosize>
             </Menu.Dropdown>
           </Menu>
         </Grid.Col>
@@ -302,7 +334,10 @@ const HomeHeader = () => {
               <Center>
                 <UnstyledButton
                   c={homeDesign?.fontcolor}
-                  onClick={() => router.push("/orders")}
+                  onClick={() => {
+                    amplitude.track("Go to Cart");
+                    router.push("/orders");
+                  }}
                 >
                   <Center>
                     <IconBasket size={24} stroke={1.5} />

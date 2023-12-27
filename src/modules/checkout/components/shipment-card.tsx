@@ -76,41 +76,48 @@ const ShipmentCard = ({
           <Stack spacing="xl">
             {suborder.items.map((product, _) => (
               <div key={product.uuidcartitem}>
-                <Group position="left" spacing="xl">
-                  <Image
-                    src={product.variant.imageURL}
-                    alt={product.variant.imageURL}
-                    height={100}
-                    width={100}
-                    fit="contain"
-                    withPlaceholder
-                  />
-                  <Stack fz={10} spacing={0}>
-                    <Text fz={15} lineClamp={2}>
-                      {product.variant.offer.offerName}
-                    </Text>
-                    <Text>
-                      <Text fw={500} span>
-                        {"Cantidad: "}
+                <Grid gutter="xl">
+                  <Grid.Col span="content">
+                    <Image
+                      src={product.variant.imageURL}
+                      alt={product.variant.imageURL}
+                      height={100}
+                      width={100}
+                      fit="contain"
+                      withPlaceholder
+                    />
+                  </Grid.Col>
+                  <Grid.Col sm="auto" span={12}>
+                    <Stack fz={10} spacing={0}>
+                      <Text fz={15} lineClamp={2}>
+                        {product.variant.offer.offerName}
                       </Text>
-                      {product.quantity}
-                    </Text>
-                    <Text>
-                      <Text fw={500} span>
-                        {"Subtotal: "}
+                      <Text>
+                        <Text fw={500} span>
+                          {"Cantidad: "}
+                        </Text>
+                        {product.quantity}
                       </Text>
-                      {`S/.${
-                        product.quantity * (product.variant.adflyPrice ?? 0)
-                      }`}
-                    </Text>
-                    <Text>
-                      <Text fw={500} span>
-                        {"Vendido y Entregado por: "}
+                      <Text>
+                        <Text fw={500} span>
+                          {"Subtotal: "}
+                        </Text>
+                        {`S/.${
+                          product.quantity *
+                          (product.variant.offerPrice ?? 0 !== 0
+                            ? product.variant.offerPrice ?? 0
+                            : product.variant.adflyPrice ?? 0)
+                        }`}
                       </Text>
-                      {suborder.businessName}
-                    </Text>
-                  </Stack>
-                </Group>
+                      <Text>
+                        <Text fw={500} span>
+                          {"Vendido y Entregado por: "}
+                        </Text>
+                        {suborder.businessName}
+                      </Text>
+                    </Stack>
+                  </Grid.Col>
+                </Grid>
               </div>
             ))}
           </Stack>
@@ -184,6 +191,16 @@ const ShipmentCard = ({
                   radius="lg"
                   value={1}
                   label="Recojo en Tienda"
+                  disabled={
+                    (suborder?.availableDeliveryMethods?.deliveryOnStore
+                      ?.length ?? 0) == 0
+                  }
+                  description={
+                    (suborder?.availableDeliveryMethods?.deliveryOnStore
+                      ?.length ?? 0) == 0
+                      ? "El partner aún no tiene tiendas de recojo habilitadas."
+                      : null
+                  }
                 />
                 {selected === "pickup" ? (
                   <Stack pl={20} spacing={0} fz={11}>

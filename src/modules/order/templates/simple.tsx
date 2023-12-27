@@ -134,15 +134,15 @@ const SimpleOrderView = ({ orderId }: { orderId: string }) => {
               <TextInput
                 label="Comprobante Pago"
                 disabled
-                value={report.order.isBilling ? "Factura" : "Boleta"}
+                value={report.order.details.isbilling ? "Factura" : "Boleta"}
               />
               <TextInput
                 label="Nombre Completo / Razón Social"
                 disabled
                 value={
-                  report.order.isBilling
-                    ? report.billingInfo.businessname
-                    : `${report.collaborator.name} ${report.collaborator.lastname}`
+                  report.order.details.isbilling
+                    ? report.order.details.billingInfo?.businessname
+                    : `${report.order.details.collaborator?.name} ${report.order.details.collaborator?.lastname}`
                 }
               />
             </Group>
@@ -151,18 +151,18 @@ const SimpleOrderView = ({ orderId }: { orderId: string }) => {
                 label="Tipo Documento"
                 disabled
                 value={
-                  report.order.isBilling
+                  report.order.details.isbilling
                     ? "RUC"
-                    : report.collaborator.documenttype
+                    : report.order.details.collaborator?.documenttype
                 }
               />
               <TextInput
                 label="N° Documento"
                 disabled
                 value={
-                  report.order.isBilling
-                    ? report.billingInfo.ruc
-                    : report.collaborator.documentnumber
+                  report.order.details.isbilling
+                    ? report.order.details.billingInfo?.ruc
+                    : report.order.details.collaborator?.documentnumber
                 }
               />
             </Group>
@@ -170,7 +170,9 @@ const SimpleOrderView = ({ orderId }: { orderId: string }) => {
               label="Dirección Facturación"
               disabled
               value={
-                report.order.isBilling ? report.billingInfo.fiscaladdress : ""
+                report.order.details.isbilling
+                  ? report.order.details.billingInfo?.fiscaladdress
+                  : ""
               }
             />
           </Paper>
@@ -180,32 +182,34 @@ const SimpleOrderView = ({ orderId }: { orderId: string }) => {
             <Text fw="bold">Entregar pedido a:</Text>
             <Text>
               {`Nombre Completo: ${
-                report.order.isReceiver
-                  ? report.deliveryInfo?.receivername || "-"
-                  : report.collaborator.name +
+                report.order.details.isreceiver
+                  ? report.order.details.deliveryInfo?.receivername || "-"
+                  : report.order.details.collaborator?.name +
                     " " +
-                    report.collaborator.lastname
+                    report.order.details.collaborator?.lastname
               }`}
             </Text>
             <Text>
               {`Tipo de Documento: ${
-                report.order.isReceiver
-                  ? report.deliveryInfo?.receiverdocumentkind || "-"
-                  : report.collaborator.documenttype
+                report.order.details.isreceiver
+                  ? report.order.details.deliveryInfo?.receiverdocumentkind ||
+                    "-"
+                  : report.order.details.collaborator?.documenttype
               }`}
             </Text>
             <Text>
               {`N° Documento: ${
-                report.order.isReceiver
-                  ? report.deliveryInfo?.receiverdocumentnumber || "-"
-                  : report.collaborator.documentnumber
+                report.order.details.isreceiver
+                  ? report.order.details.deliveryInfo?.receiverdocumentnumber ||
+                    "-"
+                  : report.order.details.collaborator?.documentnumber
               }`}
             </Text>
             <Text>
               {`Teléfono de Contacto: ${
-                report.order.isReceiver
-                  ? report.deliveryInfo?.receiverphone || "-"
-                  : report.billingInfo.phone
+                report.order.details.isreceiver
+                  ? report.order.details.deliveryInfo?.phone || "-"
+                  : report.order.details.billingInfo?.phone
               }`}
             </Text>
           </Paper>
@@ -214,9 +218,6 @@ const SimpleOrderView = ({ orderId }: { orderId: string }) => {
           <Paper radius="md" py="md" px="xl" withBorder>
             <Text>{`Sub total: S/.${report.order.totalIgv.toFixed(2)}`}</Text>
             <Text>{`Envío: S/.${(report.order.deliveryPrice || 0).toFixed(
-              2
-            )}`}</Text>
-            <Text>{`Impuestos pagados (IGV 18%): S/.${report.order.igv.toFixed(
               2
             )}`}</Text>
             <Text fw="bold">{`Total del Pedido: S/.${report.order.finalTotal.toFixed(

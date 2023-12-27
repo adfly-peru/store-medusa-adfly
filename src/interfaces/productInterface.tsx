@@ -70,19 +70,36 @@ export interface VariantDetailed {
   attributes: VariantAttribute[];
   currency: string;
   stock: number;
+  totalStock: number;
   refPrice: number;
   adflyPrice: number;
   offerPrice?: number;
   maxQuantity?: number;
   imageURL: string;
   variantSku?: string;
+  totalLastPeriod?: number;
   offer: {
     uuidOffer: string;
     offerName: string;
     description: string;
     type: string;
+    termConditions: string;
   };
   service?: Service;
+}
+
+export interface OfferForCollaborator {
+  offer: Offer;
+  totalLastPeriod: number;
+}
+
+export interface OfferDetails {
+  refPrice: number;
+  adflyPrice: number;
+  offerPrice: number;
+  imageURL: string;
+  discountType?: string;
+  discount?: number;
 }
 
 export interface Offer {
@@ -97,6 +114,7 @@ export interface Offer {
   tags: string[];
   rejectionComment?: string;
   termConditions?: string;
+  details?: OfferDetails;
   variant: Variant[];
   brand: {
     name: string;

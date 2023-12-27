@@ -22,6 +22,7 @@ const CouponDetailModal = ({ coupon }: { coupon: CouponUsage }) => {
   useEffect(() => {
     const newDetails: { name: string; value: string }[] = [];
     const dateOptions = {
+      timeZone: "UTC",
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -67,6 +68,10 @@ const CouponDetailModal = ({ coupon }: { coupon: CouponUsage }) => {
         name: "¿Qué incluye?",
         value: coupon.couponData?.couponContent,
       });
+    newDetails.push({
+      name: "Términos y Condiciones",
+      value: coupon.variant?.offer?.termConditions ?? "-",
+    });
     setDetails(newDetails);
   }, [coupon]);
 

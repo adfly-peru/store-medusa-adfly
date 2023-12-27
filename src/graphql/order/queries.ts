@@ -42,8 +42,6 @@ const GET_ORDER_REPORT = gql`
     getOrderReport(uuidorder: $uuidorder) {
       order {
         comments
-        isBilling
-        isReceiver
         uuidOrder
         uuidCollaborator
         creationDate
@@ -54,6 +52,30 @@ const GET_ORDER_REPORT = gql`
         totalIgv
         deliveryPrice
         businessName
+        details {
+          collaborator {
+            name
+            lastname
+            documenttype
+            documentnumber
+            email
+            phonenumber
+          }
+          billingInfo {
+            phone
+            ruc
+            businessname
+            fiscaladdress
+          }
+          deliveryInfo {
+            receivername
+            receiverdocumentkind
+            receiverdocumentnumber
+            phone
+          }
+          isreceiver
+          isbilling
+        }
         suborders {
           comments
           uuidBusiness
@@ -62,16 +84,14 @@ const GET_ORDER_REPORT = gql`
           deliveryMethod
           deliveryPrice
           deliveryTime
-          deliveryAddress {
-            alias
-            address
-            lat
-            lng
-            district
-            province
-            department
+          details {
+            name
             country
-            additional
+            department
+            province
+            district
+            address
+            comments
           }
           total
           status
@@ -79,37 +99,46 @@ const GET_ORDER_REPORT = gql`
             uuidorderitem
             uuidsuborder
             uuidvariant
-            variant {
-              uuidVariant
+            quantity
+            subtotal
+            details {
+              type
+              description
+              refprice
+              adflyprice
+              offerprice
+              imageurl
+              variantsku
+              productname
+              termsconditions
+              principalsku
               attributes {
                 attributeName
                 value
               }
-              currency
-              stock
-              refPrice
-              adflyPrice
-              offerPrice
-              maxQuantity
-              imageURL
-              variantSku
-              offer {
-                offerName
-                description
-                type
-              }
-              service {
-                initialDate
-                expirationDate
-                initialPurchaseDate
-                expirationPurchaseDate
-                accessService
-                contentService
-                couponCode
-              }
+              uuidbrand
+              uuiddepartment
+              uuidcategory
+              uuidsubcategory
+              uuidbusiness
+              initialdate
+              expirationdate
+              initialpurchasedate
+              expirationpurchasedate
+              accessservice
+              contentservice
+              servicesCodes
+              specification
+              condition
+              conditiondetails
+              productwarranty
+              sellerwarranty
+              included
+              width
+              height
+              weight
+              length
             }
-            quantity
-            subtotal
           }
         }
         paymentInfo {
@@ -117,28 +146,6 @@ const GET_ORDER_REPORT = gql`
           card
           brand
           purchaseNumber
-        }
-      }
-      billingInfo {
-        phone
-        ruc
-        businessname
-        fiscaladdress
-      }
-      deliveryInfo {
-        receivername
-        receiverphone
-        receiverdocumentkind
-        receiverdocumentnumber
-        collaboratoraddress {
-          address
-          lat
-          lng
-          district
-          province
-          department
-          country
-          additional
         }
       }
       collaborator {
@@ -225,6 +232,7 @@ const GET_COUPON_REPORT = gql`
           offerName
           description
           type
+          termConditions
         }
       }
     }

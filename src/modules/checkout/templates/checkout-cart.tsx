@@ -17,6 +17,7 @@ import CartView from "@modules/my-cart/templates/cart-view";
 import { useRouter } from "next/router";
 import EmptyCart from "../components/empty-cart";
 import { useEffect, useState } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const CheckoutCart = () => {
   const { cart } = useCart();
@@ -49,6 +50,7 @@ const CheckoutCart = () => {
   }
 
   const GoToPay = () => {
+    amplitude.track("Finalizar Compra Button");
     router.push("/checkout");
   };
 

@@ -17,6 +17,7 @@ import { useForm } from "@mantine/form";
 import { BillingForm } from "@interfaces/billing";
 import { useCart } from "@context/cart-context";
 import { AddressInfoForm } from "@interfaces/address-interface";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const CheckoutForm = () => {
   const { height } = useViewportSize();
@@ -58,6 +59,7 @@ const CheckoutForm = () => {
       billingform.validate();
       if (billingform.isValid("phone")) {
         await editBilling(formValues);
+        amplitude.track("Checkout: Step 1 completed");
         nextStep();
       }
     } else if (active === 1) {
@@ -68,6 +70,7 @@ const CheckoutForm = () => {
           cart.deliveryInfo?.collaboratoraddress?.uuidcollaboratoraddress ?? ""
         );
       }
+      amplitude.track("Checkout: Step 2 completed");
       nextStep();
     }
   };

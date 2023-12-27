@@ -5,16 +5,12 @@ import {
   TextInput,
   Box,
   Space,
-  Divider,
   PasswordInput,
   Progress,
   Popover,
   Center,
   Loader,
   Modal,
-  Title,
-  Alert,
-  Burger,
   MediaQuery,
   Group,
 } from "@mantine/core";
@@ -25,8 +21,9 @@ import { useAccount } from "@context/account-context";
 import { useState } from "react";
 import { SecurityForm } from "@interfaces/collaborator";
 import { useRouter } from "next/router";
+import * as amplitude from "@amplitude/analytics-browser";
 
-const PasswordRequirement = ({
+export const PasswordRequirement = ({
   meets,
   label,
 }: {
@@ -46,14 +43,14 @@ const PasswordRequirement = ({
   );
 };
 
-const requirements = [
+export const requirements = [
   { re: /[0-9]/, label: "Incluye un número" },
   { re: /[a-z]/, label: "Incluye una letra en minúscula" },
   { re: /[A-Z]/, label: "Incluye una letra en mayúscula" },
   // { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Incluye un símbolo especial" },
 ];
 
-const getStrength = (password: string) => {
+export const getStrength = (password: string) => {
   let multiplier = password.length > 7 ? 0 : 1;
 
   requirements.forEach((requirement) => {
@@ -65,7 +62,7 @@ const getStrength = (password: string) => {
   return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
 };
 
-const doesPasswordMeetRequirements = (password: string) => {
+export const doesPasswordMeetRequirements = (password: string) => {
   if (password.length <= 5) return false;
   for (const requirement of requirements) {
     if (!requirement.re.test(password)) {
@@ -82,18 +79,15 @@ const SecurityFormRegister = ({
 }) => {
   const router = useRouter();
   const [popoverOpened, setPopoverOpened] = useState(false);
-  const { verify } = useAccount();
+  const { collaborator, verify } = useAccount();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const form = useForm({
     initialValues: {
-      currentPassword: "",
       newPassword: "",
       confPassword: "",
     },
     validate: {
-      currentPassword: (value) =>
-        value.length > 0 ? null : "Este campo no puede estar vacío",
       confPassword: (value, values) =>
         value !== values.newPassword ? "Las contraseñas no coinciden" : null,
     },
@@ -105,16 +99,17 @@ const SecurityFormRegister = ({
 
   const handleUpdate = async () => {
     form.validate();
-    if (form.isValid()) {
+    if (form.isValid() && collaborator?.documentnumber) {
       setLoading(true);
       try {
         const securityform: SecurityForm = {
-          oldpassword: form.values.currentPassword,
+          oldpassword: collaborator.documentnumber,
           newpassword: form.values.newPassword,
         };
         const res = await verify(undefined, securityform);
         setMessage(res ?? "success");
         if (!res) {
+          amplitude.track("Step 3 Completed: Password Changed");
           const timerId = setTimeout(() => {
             router.push("/");
           }, 3000);
@@ -151,12 +146,6 @@ const SecurityFormRegister = ({
       >
         <Stack w="80%">
           <Stack spacing="xs">
-            <TextInput
-              label="Contraseña Actual"
-              radius="xs"
-              size="sm"
-              {...form.getInputProps("currentPassword")}
-            />
             <Popover
               opened={popoverOpened}
               position="bottom"

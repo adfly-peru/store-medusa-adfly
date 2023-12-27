@@ -14,6 +14,7 @@ import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
 import { CartItem } from "@interfaces/cart";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const ProductCartRow = ({
   item,
@@ -30,8 +31,10 @@ const ProductCartRow = ({
 
   useEffect(() => {
     if (!item) return;
+    const allowed =
+      (item.variant.maxQuantity ?? 0) - (item.variant.totalLastPeriod ?? 0);
     setMaxUnits(
-      (item.variant.maxQuantity ?? 0) < item.variant.stock ? (item.variant.maxQuantity ?? 0) : item.variant.stock
+      allowed < item.variant.totalStock ? allowed : item.variant.totalStock
     );
   }, [item]);
 
@@ -97,9 +100,15 @@ const ProductCartRow = ({
             <NumberInput
               hideControls
               value={item.quantity}
-              onChange={(val) =>
-                editProduct(item, businessid, val == "" ? 0 : val)
-              }
+              onChange={(val) => {
+                amplitude.track("Producto Editado", {
+                  productId: item.variant.offer.uuidOffer,
+                  productName: item.variant.offer.offerName,
+                  business: businessName,
+                  quantity: val == "" ? 0 : val,
+                });
+                editProduct(item, businessid, val == "" ? 0 : val);
+              }}
               fz={15}
               handlersRef={handlers}
               max={maxUnits}
@@ -140,7 +149,14 @@ const ProductCartRow = ({
       >{`S/${item.subtotal.toFixed(2)}`}</td>
       <td>
         <ActionIcon
-          onClick={() => removeProduct(item.uuidcartitem, businessid)}
+          onClick={() => {
+            amplitude.track("Producto Removido", {
+              productId: item.variant.offer.uuidOffer,
+              productName: item.variant.offer.offerName,
+              business: businessName,
+            });
+            removeProduct(item.uuidcartitem, businessid);
+          }}
         >
           <IconTrash color="red" />
         </ActionIcon>

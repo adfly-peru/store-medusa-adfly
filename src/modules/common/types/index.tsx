@@ -44,3 +44,26 @@ export const deliveryMethodInfo: Record<DeliveryMethod, string> = {
   online: "En linea",
   null: "No delivery",
 };
+
+export type TimePeriod =
+  | "weekly"
+  | "monthly"
+  | "daily"
+  | "yearly"
+  | "Weekly"
+  | "Monthly"
+  | "Daily"
+  | "Yearly"
+  | "null";
+
+export const purchasePeriodTime: Record<TimePeriod, string> = {
+  weekly: "semana",
+  monthly: "mes",
+  daily: "día",
+  yearly: "año",
+  Weekly: "semana",
+  Monthly: "mes",
+  Daily: "día",
+  Yearly: "año",
+  null: "-",
+};

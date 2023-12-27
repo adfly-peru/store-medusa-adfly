@@ -34,6 +34,9 @@ export const verifyAccount = async (
               const respImg = await uploadImage(url, profileForm.image);
               console.log(respImg);
             }
+            if (response.data.data.errors) {
+              return (response.data.data.errors as []).join("-");
+            }
             return null;
           }
         }
@@ -42,5 +45,32 @@ export const verifyAccount = async (
     return "Error in account verification";
   } catch (error) {
     return "Error in account verification";
+  }
+};
+
+export const changePasswordQuery = async (
+  new_password: string,
+  token: string
+): Promise<string | null> => {
+  try {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/verify`,
+      {
+        new_password,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
+    );
+    const status = response.status;
+    if (status == 201 || status == 200) {
+      return null;
+    }
+    return "Error in change password";
+  } catch (error) {
+    return "Error in change password";
   }
 };

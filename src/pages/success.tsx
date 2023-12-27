@@ -1,6 +1,6 @@
 import Layout from "@modules/layout/templates";
 import { useRouter } from "next/router";
-import { Center, Stack } from "@mantine/core";
+import { Center } from "@mantine/core";
 import SuccessMessage from "@modules/layout/components/success-message";
 
 const SuccesPage = () => {

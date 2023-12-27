@@ -29,7 +29,7 @@ export const FeaturedProductsProvider = ({
   }>(GET_PRODUCTS);
 
   const fetchProducts = (offset: number = 0) => {
-    getProducts({ variables: { limit: 10, offset } });
+    getProducts({ variables: { limit: 16, offset } });
   };
 
   useEffect(() => {

@@ -14,6 +14,7 @@ import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useCart } from "@context/cart-context";
 import { CartItem } from "@interfaces/cart";
 import { useState } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const ProductCartView = ({
   cartItem,
@@ -29,12 +30,23 @@ const ProductCartView = ({
 
   const handleEditProduct = async (delta: number) => {
     setUpdating(true);
+    amplitude.track("Producto Editado", {
+      productId: cartItem.variant.offer.uuidOffer,
+      productName: cartItem.variant.offer.offerName,
+      business: businessName,
+      quantity: cartItem.quantity + delta,
+    });
     await editProduct(cartItem, uuidbusiness, cartItem.quantity + delta);
     setUpdating(false);
   };
 
   const handleRemoveProduct = async () => {
     setUpdating(true);
+    amplitude.track("Producto Removido", {
+      productId: cartItem.variant.offer.uuidOffer,
+      productName: cartItem.variant.offer.offerName,
+      business: businessName,
+    });
     await removeProduct(cartItem.uuidcartitem, uuidbusiness);
     setUpdating(false);
   };

@@ -20,6 +20,7 @@ import { IconCircleFilled, IconCreditCard } from "@tabler/icons-react";
 import { UseFormReturnType } from "@mantine/form";
 import { BillingForm } from "@interfaces/billing";
 import { useAccount } from "@context/account-context";
+import * as amplitude from "@amplitude/analytics-browser";
 
 declare global {
   interface Window {
@@ -88,6 +89,9 @@ const PaymentButton = ({
       daysInApp
     );
     if (!sessionToken) return;
+    amplitude.track("Boton de Pago Clickeado", {
+      purchaseNumber: cart.purchaseNumber,
+    });
     window.VisanetCheckout.configure({
       sessiontoken: `${sessionToken}`,
       channel: "web",

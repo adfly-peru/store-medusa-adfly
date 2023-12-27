@@ -15,12 +15,15 @@ import {
   rem,
 } from "@mantine/core";
 import { OrderProvider } from "@context/order-context";
-import { DesignProvider } from "@context/design-context";
+import { DesignProvider, useDesign } from "@context/design-context";
 import RegistrationStepsModal from "@modules/layout/templates/registration-steps-modal";
 import { LoadScript } from "@react-google-maps/api";
 import "@fontsource/rubik";
 import "@fontsource/open-sans";
 import { CouponProvider } from "@context/coupon-context";
+import Head from "next/head";
+import { ModalsProvider } from "@mantine/modals";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const adflyColors = {
   default: "#31658E",
@@ -29,142 +32,150 @@ const adflyColors = {
   disabled: "#A8C8E1",
 };
 
+const googleMapsLibraries = ["places"];
+
 export default function App({
   Component,
   pageProps: { ...pageProps },
 }: AppProps<{}>) {
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
   useEffect(() => {
-    if (window.google) {
-      setIsScriptLoaded(true);
+    if (typeof window !== "undefined") {
+      amplitude.init("17d5496d832d039b1eb6e91b0ac04b78");
     }
   }, []);
+
   return (
     <ApolloProvider client={client}>
-      <ColorSchemeProvider
-        colorScheme={colorScheme}
-        toggleColorScheme={toggleColorScheme}
-      >
-        <MantineProvider
-          theme={{
-            fontFamily: "Open Sans, sans-serif",
-            colorScheme,
-            components: {
-              Button: {
-                styles: (theme, params: ButtonStylesParams, { variant }) => ({
-                  root: {
-                    borderRadius: rem(8),
-                    backgroundColor:
-                      variant === "filled" ? adflyColors.default : undefined,
-                    "&:hover": {
-                      backgroundColor:
-                        variant === "filled" ? adflyColors.hover : undefined,
-                    },
-                    "&:active": {
-                      backgroundColor:
-                        variant === "filled" ? adflyColors.pressed : undefined,
-                    },
-                    "&:disabled": {
-                      backgroundColor: "#CECECE",
-                      color: "white",
-                    },
-                  },
-                  label: {
-                    whiteSpace: "pre-line",
-                  },
-                }),
-              },
-              NavLink: {
-                styles: (theme) => ({
-                  root: {
-                    backgroundColor: "white",
-                    "&[data-active]": {
-                      backgroundColor: "white",
-                      color: "black",
-                      fontWeight: 700,
-                      "&:hover": {
-                        backgroundColor: "#f8f9fa",
-                      },
-                    },
-                  },
-                }),
-              },
-              Checkbox: {
-                styles: (theme) => ({
-                  icon: {
-                    color: "#5C98C7 !important",
-                  },
-                  input: {
-                    "&:checked": {
-                      border: "2px solid #5C98C7",
-                      backgroundColor: "white",
-                    },
-                    border: "2px solid #5C98C7",
-                  },
-                }),
-              },
-              InputWrapper: {
-                styles: (theme) => ({
-                  label: {
-                    fontWeight: 600,
-                    fontSize: 15,
-                  },
-                }),
-              },
-              Input: {
-                styles: (theme) => ({
-                  input: {
-                    "&[data-disabled]": {
-                      border: "0px",
-                      backgroundColor: "#F2F2F3",
-                      color: "#86888A",
-                    },
-                    borderColor: "#737A82",
-                    color: "#737A82",
-                    borderRadius: rem(8),
-                  },
-                }),
-              },
-              Select: {
-                styles: (theme) => ({
-                  item: {
-                    "&[data-selected]": {
-                      backgroundColor: adflyColors.default,
-                      "&, &:hover": {
-                        backgroundColor: adflyColors.default,
-                      },
-                    },
-                    "&[data-hovered]": {},
-                  },
-                }),
-              },
-            },
-          }}
-          withGlobalStyles
-          withNormalizeCSS
+      <ModalsProvider>
+        <ColorSchemeProvider
+          colorScheme={colorScheme}
+          toggleColorScheme={toggleColorScheme}
         >
-          <DesignProvider>
-            <AccountProvider>
-              <ResourcesProvider>
-                {isScriptLoaded ? (
-                  <Component {...pageProps} />
-                ) : (
-                  <LoadScript
-                    googleMapsApiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
-                    libraries={["places"]}
-                    onLoad={() => setIsScriptLoaded(true)}
-                  >
+          <MantineProvider
+            theme={{
+              fontFamily: "Open Sans, sans-serif",
+              colorScheme,
+              components: {
+                Button: {
+                  styles: (theme, params: ButtonStylesParams, { variant }) => ({
+                    root: {
+                      borderRadius: rem(8),
+                      backgroundColor:
+                        variant === "filled" ? adflyColors.default : undefined,
+                      "&:hover": {
+                        backgroundColor:
+                          variant === "filled" ? adflyColors.hover : undefined,
+                      },
+                      "&:active": {
+                        backgroundColor:
+                          variant === "filled"
+                            ? adflyColors.pressed
+                            : undefined,
+                      },
+                      "&:disabled": {
+                        backgroundColor: "#CECECE",
+                        color: "white",
+                      },
+                    },
+                    label: {
+                      whiteSpace: "pre-line",
+                    },
+                  }),
+                },
+                NavLink: {
+                  styles: (theme) => ({
+                    root: {
+                      backgroundColor: "white",
+                      "&[data-active]": {
+                        backgroundColor: "white",
+                        color: "black",
+                        fontWeight: 700,
+                        "&:hover": {
+                          backgroundColor: "#f8f9fa",
+                        },
+                      },
+                    },
+                  }),
+                },
+                Checkbox: {
+                  styles: (theme) => ({
+                    icon: {
+                      color: "#5C98C7 !important",
+                    },
+                    input: {
+                      "&:checked": {
+                        border: "2px solid #5C98C7",
+                        backgroundColor: "white",
+                      },
+                      border: "2px solid #5C98C7",
+                    },
+                  }),
+                },
+                InputWrapper: {
+                  styles: (theme) => ({
+                    label: {
+                      fontWeight: 600,
+                      fontSize: 15,
+                    },
+                  }),
+                },
+                Input: {
+                  styles: (theme) => ({
+                    input: {
+                      "&[data-disabled]": {
+                        border: "0px",
+                        backgroundColor: "#F2F2F3",
+                        color: "#86888A",
+                      },
+                      borderColor: "#737A82",
+                      color: "#737A82",
+                      borderRadius: rem(8),
+                    },
+                  }),
+                },
+                Select: {
+                  styles: (theme) => ({
+                    item: {
+                      "&[data-selected]": {
+                        backgroundColor: adflyColors.default,
+                        "&, &:hover": {
+                          backgroundColor: adflyColors.default,
+                        },
+                      },
+                      "&[data-hovered]": {},
+                    },
+                  }),
+                },
+              },
+            }}
+            withGlobalStyles
+            withNormalizeCSS
+          >
+            <DesignProvider>
+              <AccountProvider>
+                <LoadScript
+                  googleMapsApiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
+                  libraries={googleMapsLibraries as any}
+                  onLoad={() => {
+                    console.log("Script Loaded!");
+                  }}
+                  onError={(error) => {
+                    console.error("Error cargando Google Maps", error);
+                  }}
+                >
+                  <ResourcesProvider>
                     <Component {...pageProps} />
-                  </LoadScript>
-                )}
-              </ResourcesProvider>
-            </AccountProvider>
-          </DesignProvider>
-        </MantineProvider>
-      </ColorSchemeProvider>
+                  </ResourcesProvider>
+                </LoadScript>
+              </AccountProvider>
+            </DesignProvider>
+          </MantineProvider>
+        </ColorSchemeProvider>
+      </ModalsProvider>
     </ApolloProvider>
   );
 }
@@ -173,24 +184,69 @@ const ResourcesProvider: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
   const { status, collaborator } = useAccount();
+  const { loginDesign } = useDesign();
 
   if (status == "authenticated") {
     if (!collaborator) {
-      return <LoadingOverlay visible={true} />;
+      return (
+        <>
+          <Head>
+            <title>
+              {loginDesign?.commercialname
+                ? `${loginDesign?.commercialname}`
+                : "Tienda Adfly"}
+            </title>
+          </Head>
+          <LoadingOverlay visible={true} />
+        </>
+      );
     }
     if (collaborator.emailVerify && collaborator.changePassword) {
       return (
-        <ProductProvider>
-          <CartProvider>
-            <CouponProvider>
-              <OrderProvider>{children}</OrderProvider>
-            </CouponProvider>
-          </CartProvider>
-        </ProductProvider>
+        <>
+          <Head>
+            <title>
+              {loginDesign?.commercialname
+                ? `${loginDesign?.commercialname}`
+                : "Tienda Adfly"}
+            </title>
+          </Head>
+          <ProductProvider>
+            <CartProvider>
+              <CouponProvider>
+                <OrderProvider>{children}</OrderProvider>
+              </CouponProvider>
+            </CartProvider>
+          </ProductProvider>
+        </>
       );
     }
-    return <RegistrationStepsModal>{children}</RegistrationStepsModal>;
+    return (
+      <>
+        <Head>
+          <title>
+            {loginDesign?.commercialname
+              ? `${loginDesign?.commercialname}`
+              : "Tienda Adfly"}
+          </title>
+        </Head>
+        <RegistrationStepsModal>{children}</RegistrationStepsModal>
+      </>
+    );
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <>
+        <Head>
+          <title>
+            {loginDesign?.commercialname
+              ? `${loginDesign?.commercialname}`
+              : "Tienda Adfly"}
+          </title>
+        </Head>
+        {children}
+      </>
+    </>
+  );
 };

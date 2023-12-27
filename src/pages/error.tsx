@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { ActionIcon, Center, Stack, Text } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { IconMoodSad } from "@tabler/icons-react";
+import ErrorMessage from "@modules/layout/components/error-message";
 
 function formatarFecha(fechaStr: string): string {
   if (fechaStr.length !== 12) {
@@ -31,29 +32,14 @@ function formatarFecha(fechaStr: string): string {
 const ErrorPage = () => {
   const router = useRouter();
   const { message, data, purchase } = router.query;
-  const { width, height } = useViewportSize();
   const orderData = (data ? JSON.parse(data as string) : null)?.data;
   return (
     <Layout>
-      <Center>
-        <Stack align="center" fz={18}>
-          <ActionIcon variant="transparent" disabled size={width / 8}>
-            <IconMoodSad size={width / 8} />
-          </ActionIcon>
-          <Text fw={500} fz={24}>
-            Ups! Ocurrió un error
-          </Text>
-          {orderData ? (
-            <>
-              <Text>Transacción rechazada para el Pedido {purchase}</Text>
-              <Text>Fecha: {formatarFecha(orderData.TRANSACTION_DATE)}</Text>
-              <Text>Motivo del rechazo: {orderData.ACTION_DESCRIPTION}</Text>
-            </>
-          ) : (
-            <Text>{message}</Text>
-          )}
-        </Stack>
-      </Center>
+      <ErrorMessage
+        purchase={purchase}
+        message={message}
+        orderData={orderData}
+      />
     </Layout>
   );
 };

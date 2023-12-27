@@ -13,20 +13,36 @@ import jwtDecode from "jwt-decode";
 import { Address } from "@interfaces/address-interface";
 import { DesignConfig } from "@interfaces/design";
 import { GET_HOME_DESIGN } from "@graphql/design/queries";
-import { verifyAccount } from "api/verify";
+import { changePasswordQuery, verifyAccount } from "api/verify";
 import {
   createAddress,
   deleteAddressQuery,
   updateAddressQuery,
 } from "api/delivery";
+import { recoverPasswordQuery, requestAccessQuery } from "api/auth";
+import * as amplitude from "@amplitude/analytics-browser";
 
 interface AccountContext {
   daysInApp: number;
-  login: (values: { email: string; password: string }) => void;
+  login: (values: { email: string; password: string }) => Promise<string>;
   logout: () => void;
   verify: (
     profileForm?: ProfileForm,
     securityForm?: SecurityForm
+  ) => Promise<string | null>;
+  recoverPassword: (
+    credential: string
+  ) => Promise<{ success: boolean; message: string }>;
+  requestAccess: (
+    name: string,
+    lastname: string,
+    documenttype: string,
+    documentnumber: string,
+    termsconditions: boolean
+  ) => Promise<{ success: boolean; message: string }>;
+  changePassword: (
+    new_password: string,
+    token: string
   ) => Promise<string | null>;
   collaborator: Collaborator | undefined;
   homeDesign: DesignConfig | null;
@@ -36,7 +52,6 @@ interface AccountContext {
   editAddress: (newAddress: Address) => Promise<string | null>;
   deleteAddress: (addressId: string) => Promise<string | null>;
   loading: boolean;
-  errorText: string;
 }
 
 const AccountContext = createContext<AccountContext | null>(null);
@@ -49,7 +64,6 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   const router = useRouter();
   const [daysInApp, setDaysInApp] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [errorText, setErrorText] = useState("");
   const [collaborator, setCollaborator] = useState<Collaborator | undefined>(
     undefined
   );
@@ -115,6 +129,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       if (typeof window !== "undefined") {
         const storedToken = localStorage.getItem("collaboratortoken");
         if (storedToken) {
+          amplitude.track("User is Authenticated");
           setStatus("authenticated");
           setToken(storedToken);
           const decodedToken: IToken = jwtDecode(storedToken);
@@ -131,11 +146,13 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
           setDaysInApp(daysInStore);
           setUserId(decodeduserid);
         } else {
+          amplitude.track("User is not Authenticated");
           setStatus("unauthenticated");
         }
       }
     } catch (error) {
       console.error(error);
+      amplitude.track("User is not Authenticated");
       setStatus("unauthenticated");
     }
   }, []);
@@ -202,10 +219,55 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     }
   };
 
+  const recoverPassword = async (credential: string) => {
+    if (!subdomain)
+      return {
+        success: false,
+        message: "Subdominion invalido",
+      };
+    setLoading(true);
+    const response = await recoverPasswordQuery(credential, subdomain);
+    setLoading(false);
+    return {
+      success: response === null,
+      message: response ?? `Se ha enviado un correo a ${credential}`,
+    };
+  };
+
+  const requestAccess = async (
+    name: string,
+    lastname: string,
+    documenttype: string,
+    documentnumber: string,
+    termsconditions: boolean
+  ) => {
+    if (!subdomain)
+      return {
+        success: false,
+        message: "Subdominion invalido",
+      };
+    setLoading(true);
+    const response = await requestAccessQuery({
+      name,
+      lastname,
+      documenttype,
+      documentnumber,
+      termsconditions,
+      sub_domain: subdomain,
+    });
+    setLoading(false);
+    return {
+      success: response === null,
+      message:
+        response ??
+        `Gracias por solicitar una cuenta, te estaremos respondiendo en breve.`,
+    };
+  };
+
   const login = async (values: { email: string; password: string }) => {
+    let errorText = "";
     try {
       setLoading(true);
-      setErrorText("");
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/auth/signin`,
         {
@@ -237,18 +299,23 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       setLoading(false);
       if (error.response && error.response.data) {
         // Aquí se maneja el error específico de axios con mensaje desde el servidor
-        setErrorText(`Error al iniciar sesión: ${error.response.data.error}`);
+        errorText = `Error al iniciar sesión: ${error.response.data.error}`;
       } else {
         // Aquí se manejan otros errores que pueden no ser específicos de axios
-        setErrorText(`Error al iniciar sesión: ${error}`);
+        errorText = `Error al iniciar sesión: ${error}`;
       }
-
       console.error("Error al iniciar sesión:", error);
+      amplitude.track("Error in Login", { error: errorText });
     }
+    return errorText;
   };
 
   const logout = () => {
     if (typeof window !== "undefined") {
+      amplitude.track("User Logged Out");
+      const identify = new amplitude.Identify();
+      amplitude.identify(identify);
+      // amplitude.reset();
       localStorage.removeItem("collaboratortoken");
     }
     setUserId(null);
@@ -258,6 +325,24 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     setAddresses([]);
     setStatus("unauthenticated");
   };
+
+  useEffect(() => {
+    if (subdomain) {
+      amplitude.setGroup("tienda", subdomain);
+    }
+  }, [subdomain]);
+
+  useEffect(() => {
+    if (collaborator) {
+      const identify = new amplitude.Identify();
+      identify.set("id", collaborator.uuidcollaborator);
+      identify.set("dni", collaborator.documentnumber);
+      identify.set("email", collaborator.email ?? "No Email");
+      identify.set("status", collaborator.status);
+      amplitude.identify(identify);
+      amplitude.track("User Logged In");
+    }
+  }, [collaborator]);
 
   useEffect(() => {
     const requestInterceptor = axios.interceptors.request.use((config) => {
@@ -270,7 +355,17 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     });
 
     const responseInterceptor = axios.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        // Verificar si el estado de la respuesta es 200 o 201
+        if (response.status === 200 || response.status === 201) {
+          // Si la respuesta contiene un nuevo token
+          if (response.data && response.data.token) {
+            // Actualizar el token en localStorage
+            localStorage.setItem("token", response.data.token);
+          }
+        }
+        return response;
+      },
       async (error) => {
         const originalRequest = error.config;
 
@@ -300,12 +395,20 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     return response;
   };
 
+  const changePassword = async (new_password: string, token: string) => {
+    const response = await changePasswordQuery(new_password, token);
+    return response;
+  };
+
   return (
     <AccountContext.Provider
       value={{
         daysInApp,
         collaborator,
         verify,
+        recoverPassword,
+        requestAccess,
+        changePassword,
         homeDesign,
         login,
         logout,
@@ -315,7 +418,6 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         editAddress,
         deleteAddress,
         loading,
-        errorText,
       }}
     >
       {children}
