@@ -18,6 +18,7 @@ import { useRouter } from "next/router";
 import EmptyCart from "../components/empty-cart";
 import { useEffect, useState } from "react";
 import * as amplitude from "@amplitude/analytics-browser";
+import { IconStarFilled } from "@tabler/icons-react";
 
 const CheckoutCart = () => {
   const { cart } = useCart();
@@ -117,6 +118,18 @@ const CheckoutCart = () => {
                     Finalizar Compra
                   </Button>
                 </Center>
+              </Card>
+              <Card w="100%" p="sm" radius="xs" withBorder fz={15}>
+                <Title order={3} fz={20}>
+                  Resumen en estrellas
+                </Title>
+                <Group mt="sm" position="apart" fw="bold" fz="sm" c="yellow">
+                  <Group spacing="xs">
+                    <Text>Estrellas</Text>
+                    <IconStarFilled size={20} />
+                  </Group>
+                  <Text>{(cart.total * 100).toFixed(0)}</Text>
+                </Group>
               </Card>
             </Stack>
           </Grid.Col>

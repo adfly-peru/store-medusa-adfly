@@ -43,6 +43,8 @@ import {
   IconMoodSad,
   IconPlus,
   IconShoppingCartCheck,
+  IconStar,
+  IconStarFilled,
   IconTruckDelivery,
   IconX,
 } from "@tabler/icons-react";
@@ -494,7 +496,7 @@ export function DetailedProduct({
                   </Group>
                 </Stack>
               ) : (
-                <Stack justify="center" h="100%" spacing="xs">
+                <Stack justify="center" h="100%" spacing={3}>
                   {selectedVariant.offerPrice ? (
                     <Group c="red" position="apart" fw="bold">
                       <Text fz="sm">Oferta</Text>
@@ -513,6 +515,16 @@ export function DetailedProduct({
                     <Text fz="sm">Precio Mercado</Text>
                     <Text td="line-through">
                       S/. {selectedVariant.refPrice.toFixed(2)}
+                    </Text>
+                  </Group>
+                  <Group mt="md" position="apart" c="yellow" fw="bold">
+                    <Text fz="sm">Estrellas</Text>
+                    <IconStarFilled size={20} />
+                    <Text td="line-through">
+                      S/.{" "}
+                      {(selectedVariant.offerPrice ?? 0 > 0
+                        ? selectedVariant.offerPrice ?? 0
+                        : selectedVariant.adflyPrice) * 100}
                     </Text>
                   </Group>
                 </Stack>

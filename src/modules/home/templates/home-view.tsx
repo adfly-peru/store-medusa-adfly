@@ -10,7 +10,26 @@ const HomeView = () => {
   const router = useRouter();
   return (
     <>
-      <Carousel w="90%" mx="auto" withIndicators>
+      <Carousel
+        w="90%"
+        mx="auto"
+        withIndicators
+        mb={96}
+        styles={{
+          indicators: {
+            bottom: -32,
+          },
+          indicator: {
+            height: 16,
+            width: 16,
+            borderRadius: "50%",
+            backgroundColor: "#C7CACD",
+            "&[data-active]": {
+              backgroundColor: "black",
+            },
+          },
+        }}
+      >
         <Carousel.Slide>
           <div
             style={{
@@ -39,9 +58,9 @@ const HomeView = () => {
           </Carousel.Slide>
         ))}
       </Carousel>
-      <Stack align="center" justify="flex-end" spacing="xl" px={15}>
-        <Space />
+      <Stack align="center" justify="flex-end" spacing={32} px={15}>
         <CategorySection />
+        <Space h={36} />
         <FeaturedProducts />
       </Stack>
     </>
