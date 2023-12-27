@@ -518,9 +518,11 @@ export function DetailedProduct({
                     </Text>
                   </Group>
                   <Group mt="md" position="apart" c="yellow" fw="bold">
-                    <Text fz="sm">Estrellas</Text>
-                    <IconStarFilled size={20} />
-                    <Text td="line-through">
+                    <Group spacing="xs">
+                      <Text fz="sm">Estrellas</Text>
+                      <IconStarFilled size={20} />
+                    </Group>
+                    <Text>
                       S/.{" "}
                       {(selectedVariant.offerPrice ?? 0 > 0
                         ? selectedVariant.offerPrice ?? 0

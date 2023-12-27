@@ -20,7 +20,7 @@ import axios from "axios";
 import * as amplitude from "@amplitude/analytics-browser";
 import { BillingForm } from "@interfaces/billing";
 import { useForm } from "@mantine/form";
-import { IconCreditCard } from "@tabler/icons-react";
+import { IconCreditCard, IconStarFilled } from "@tabler/icons-react";
 
 declare global {
   interface Window {
@@ -278,13 +278,14 @@ const CheckoutTemplate = () => {
                     {(
                       cart.total +
                       deliveryprice -
-                      ((cart.total + deliveryprice) * 100 <
-                      (collaborator?.stars ?? 0)
-                        ? parseFloat(
-                            ((cart.total + deliveryprice) * 100).toFixed(0)
-                          )
-                        : collaborator?.stars ?? 0) /
-                        100
+                      (useStars
+                        ? ((cart.total + deliveryprice) * 100 <
+                          (collaborator?.stars ?? 0)
+                            ? parseFloat(
+                                ((cart.total + deliveryprice) * 100).toFixed(0)
+                              )
+                            : collaborator?.stars ?? 0) / 100
+                        : 0)
                     ).toFixed(2)}
                   </Text>
                 </Group>
@@ -294,6 +295,18 @@ const CheckoutTemplate = () => {
                   color="gray.6"
                 >{`(Ahorro estimado: S/.${saving.toFixed(2)})`}</Text>
                 <Space h="xl" />
+              </Card>
+              <Card w="100%" p="sm" radius="xs" withBorder fz={15}>
+                <Title order={3} fz={20}>
+                  Resumen en estrellas
+                </Title>
+                <Group mt="sm" position="apart" fw="bold" fz="sm" c="yellow">
+                  <Group spacing="xs">
+                    <Text>Estrellas</Text>
+                    <IconStarFilled size={20} />
+                  </Group>
+                  <Text>{((cart.total + deliveryprice) * 100).toFixed(0)}</Text>
+                </Group>
               </Card>
               {active === 2 ? (
                 <Stack w="100%" spacing="xl">
