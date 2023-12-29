@@ -42,7 +42,8 @@ interface AccountContext {
     lastname: string,
     documenttype: string,
     documentnumber: string,
-    termsconditions: boolean
+    termsconditions: boolean,
+    email: string
   ) => Promise<{ success: boolean; message: string }>;
   changePassword: (
     new_password: string,
@@ -262,7 +263,8 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     lastname: string,
     documenttype: string,
     documentnumber: string,
-    termsconditions: boolean
+    termsconditions: boolean,
+    email: string
   ) => {
     if (!subdomain)
       return {
@@ -277,6 +279,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       documentnumber,
       termsconditions,
       sub_domain: subdomain,
+      email,
     });
     setLoading(false);
     return {

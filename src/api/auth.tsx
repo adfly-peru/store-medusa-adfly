@@ -34,6 +34,7 @@ export const requestAccessQuery = async ({
   documentnumber,
   termsconditions,
   sub_domain,
+  email,
 }: {
   name: string;
   lastname: string;
@@ -41,6 +42,7 @@ export const requestAccessQuery = async ({
   documentnumber: string;
   termsconditions: boolean;
   sub_domain: string;
+  email: string;
 }): Promise<string | null> => {
   try {
     const response = await axios.post(
@@ -52,6 +54,7 @@ export const requestAccessQuery = async ({
         documentnumber,
         termsconditions,
         sub_domain,
+        email,
       },
       {
         headers: {
