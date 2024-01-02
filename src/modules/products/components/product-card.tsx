@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Offer } from "@interfaces/productInterface";
+import { IconStarFilled } from "@tabler/icons-react";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -85,7 +86,7 @@ const ProductCard = ({ product }: { product: Offer }) => {
           />
         </Card.Section>
         <Card.Section py="xs" inheritPadding ta="left">
-          <Stack spacing={32} h={200}>
+          <Stack spacing={32} h={220}>
             <Stack spacing={8} h={80}>
               <Text lineClamp={1} mt={5} fw={700}>
                 {product.brand.name}
@@ -127,6 +128,19 @@ const ProductCard = ({ product }: { product: Offer }) => {
                     <Text fz="sm">Precio Mercado</Text>
                     <Text td="line-through">
                       S/. {product.details.refPrice.toFixed(2)}
+                    </Text>
+                  </Group>
+                  <Group mt="sm" position="apart" fw="bold" fz="sm" c="yellow">
+                    <Group spacing="xs">
+                      <Text>Estrellas</Text>
+                      <IconStarFilled size={20} />
+                    </Group>
+                    <Text>
+                      {(
+                        ((product.details.offerPrice ?? 0) > 0
+                          ? product.details.offerPrice
+                          : product.details.adflyPrice) * 100
+                      ).toFixed(0)}
                     </Text>
                   </Group>
                 </Stack>

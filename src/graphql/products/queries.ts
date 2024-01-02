@@ -98,7 +98,13 @@ const GET_PRODUCT = gql`
 
 const GET_PRODUCTS = gql`
   query FeaturedOffers($limit: Int, $offset: Int) {
-    availableOffers(limit: $limit, offset: $offset) {
+    availableOffers(
+      limit: $limit
+      offset: $offset
+      featured: true
+      sortBy: "priority"
+      asc: true
+    ) {
       totalOffers
       offers {
         uuidOffer

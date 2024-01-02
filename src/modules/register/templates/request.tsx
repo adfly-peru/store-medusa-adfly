@@ -30,11 +30,13 @@ const RequestModal = ({ businessname }: { businessname: string }) => {
       lastname: "",
       documenttype: "",
       documentnumber: "",
+      email: "",
       termsOfService: false,
     },
     validate: {
       name: (val) => (val === "" ? "Este campo es obligatorio" : null),
       lastname: (val) => (val === "" ? "Este campo es obligatorio" : null),
+      email: (val) => (val === "" ? "Este campo es obligatorio" : null),
       documenttype: (val) => (val === "" ? "Este campo es obligatorio" : null),
       documentnumber: (val) =>
         val === "" ? "Este campo es obligatorio" : null,
@@ -55,7 +57,8 @@ const RequestModal = ({ businessname }: { businessname: string }) => {
         form.values.lastname,
         form.values.documenttype,
         form.values.documentnumber,
-        form.values.termsOfService
+        form.values.termsOfService,
+        form.values.email
       );
       if (response.success) {
         setMessage(response.message);
@@ -117,6 +120,12 @@ const RequestModal = ({ businessname }: { businessname: string }) => {
             withAsterisk
             disabled={message !== ""}
             {...form.getInputProps("lastname")}
+          />
+          <TextInput
+            label="Correo de Contacto"
+            withAsterisk
+            disabled={message !== ""}
+            {...form.getInputProps("email")}
           />
           <Select
             data={[

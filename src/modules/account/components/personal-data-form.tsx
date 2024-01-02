@@ -32,6 +32,7 @@ interface FormValues {
   email: string;
   cellPhone: string;
   termsOfService: boolean;
+  acceptPublicity: boolean;
 }
 
 const PersonalDataForm = () => {
@@ -48,7 +49,8 @@ const PersonalDataForm = () => {
       documentnumber: collaborator?.documentnumber ?? "",
       email: collaborator?.email ?? "",
       cellPhone: collaborator?.phonenumber ?? "",
-      termsOfService: false,
+      termsOfService: collaborator?.emailVerify ?? false,
+      acceptPublicity: collaborator?.newsletters ?? false,
     },
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
@@ -67,6 +69,8 @@ const PersonalDataForm = () => {
         const profileform: ProfileForm = {
           email: form.values.email,
           phone: form.values.cellPhone,
+          acceptPublicity: form.values.acceptPublicity,
+          terms: form.values.termsOfService,
         };
         const res = await verify(profileform);
         setMessage(res ?? "success");

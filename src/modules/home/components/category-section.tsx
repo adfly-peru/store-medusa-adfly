@@ -8,6 +8,7 @@ import {
   Text,
   Stack,
   MediaQuery,
+  Space,
 } from "@mantine/core";
 import router from "next/router";
 import { useEffect, useState } from "react";
@@ -50,6 +51,7 @@ const CategorySection = () => {
       >
         ¿Qué estás buscando?
       </Title>
+      {/* <Space h={32} /> */}
       <MediaQuery
         smallerThan="sm"
         styles={{

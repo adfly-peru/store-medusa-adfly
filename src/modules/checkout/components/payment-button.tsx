@@ -15,6 +15,7 @@ import {
   Title,
   Image,
   Divider,
+  Card,
 } from "@mantine/core";
 import { IconCircleFilled, IconCreditCard } from "@tabler/icons-react";
 import { UseFormReturnType } from "@mantine/form";
@@ -28,86 +29,19 @@ declare global {
   }
 }
 
-const createSessionToken = async (
-  productAmount: number,
-  customerEmail: string,
-  activeCustomer: boolean,
-  documentNumber: string,
-  daysInApp: number
-): Promise<string | null> => {
-  try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_API}/store/session`,
-      {
-        amount: productAmount,
-        customerEmail: customerEmail,
-        activeCustomer: activeCustomer,
-        documentNumber: documentNumber,
-        daysInApp: daysInApp,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const status = response.status;
-    if (status == 201 || status == 200) {
-      return response.data.data.data.sessionKey;
-    }
-    return null;
-  } catch (error) {
-    return null;
-  }
-};
-
-const PaymentButton = ({
-  form,
-  submitInfo,
-  handlePrevStep,
-}: {
-  form: UseFormReturnType<BillingForm>;
-  submitInfo: (checked: string) => Promise<string | null>;
-  handlePrevStep: () => void;
-}) => {
-  const { cart } = useCart();
-  const { collaborator, daysInApp } = useAccount();
-  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
+const PaymentButton = ({ form }: { form: UseFormReturnType<BillingForm> }) => {
+  const {
+    cart,
+    useStars,
+    setUseStars,
+    checked,
+    setChecked,
+    hasAcceptedTerms,
+    setHasAcceptedTerms,
+  } = useCart();
+  const { collaborator } = useAccount();
   const [totalAmount, setTotalAmount] = useState(0);
-  const [checked, setChecked] = useState("ticket");
-
-  const payment = async () => {
-    if (!cart || !collaborator) return;
-    const infoerror = await submitInfo(checked);
-    if (infoerror) return;
-    const totalAmountFixed = parseFloat(totalAmount.toFixed(2));
-    const sessionToken = await createSessionToken(
-      totalAmountFixed,
-      collaborator.email ?? "",
-      true,
-      collaborator.documentnumber,
-      daysInApp
-    );
-    if (!sessionToken) return;
-    amplitude.track("Boton de Pago Clickeado", {
-      purchaseNumber: cart.purchaseNumber,
-    });
-    window.VisanetCheckout.configure({
-      sessiontoken: `${sessionToken}`,
-      channel: "web",
-      merchantid: process.env.NEXT_PUBLIC_MERCHANT_ID,
-      purchasenumber: cart.purchaseNumber,
-      amount: totalAmount,
-      expirationminutes: "20",
-      timeouturl: "about:blank",
-      merchantlogo: "https://www.adfly.pe/Content/logo.png",
-      merchantname: "Adfly",
-      formbuttoncolor: "#31658E",
-      action: `api/payment?purchaseNumber=${cart.purchaseNumber}&amount=${totalAmount}&collaboratorid=${collaborator?.uuidcollaborator}`,
-    });
-
-    window.VisanetCheckout.open();
-  };
+  const [toPay, setToPay] = useState(false);
 
   useEffect(() => {
     if (
@@ -117,6 +51,8 @@ const PaymentButton = ({
     ) {
       setChecked("bill");
     }
+    setHasAcceptedTerms(false);
+    setUseStars(false);
   }, []);
 
   useEffect(() => {
@@ -142,127 +78,126 @@ const PaymentButton = ({
   return (
     <Center py="md" px="lg">
       <Stack w="100%">
-        <Stack spacing={0}>
-          <Text fz={20} fw={700}>
-            Datos de Envío
-          </Text>
-          <Divider m={0} />
-        </Stack>
-        <Group position="left">
-          <Checkbox
-            checked={checked == "ticket"}
-            onChange={(_) => {
-              setChecked("ticket");
-              form.setValues({
-                ruc: "",
-                businessname: "",
-                fiscaladdress: "",
-              });
-            }}
-            icon={IconCircleFilled}
-            radius="lg"
-            value={"ticket"}
-            label="Boleta"
-          />
-          <Checkbox
-            checked={checked == "bill"}
-            onChange={(_) => setChecked("bill")}
-            radius="lg"
-            icon={IconCircleFilled}
-            value={"bill"}
-            label="Factura"
-          />
-        </Group>
-        {/* <Radio.Group value={checked} onChange={setChecked} withAsterisk>
-          <Radio value="ticket" label="Boleta" />
-          <Radio value="bill" label="Factura" />
-        </Radio.Group> */}
-        {checked === "bill" ? (
-          <Stack px={0} spacing="sm">
-            <Group position="apart" spacing="xl" grow>
-              <TextInput
-                withAsterisk
-                label="Ruc:"
-                {...form.getInputProps("ruc")}
+        <Card withBorder>
+          <Stack>
+            <Text fz={20} fw={700}>
+              Datos de Facturación
+            </Text>
+            <Group position="left">
+              <Checkbox
+                checked={checked == "ticket"}
+                onChange={(_) => {
+                  setChecked("ticket");
+                  form.setValues({
+                    ruc: "",
+                    businessname: "",
+                    fiscaladdress: "",
+                  });
+                }}
+                icon={IconCircleFilled}
+                radius="lg"
+                value={"ticket"}
+                label="Boleta"
               />
-              <TextInput
-                withAsterisk
-                label="Razón Social:"
-                {...form.getInputProps("businessname")}
+              <Checkbox
+                checked={checked == "bill"}
+                onChange={(_) => setChecked("bill")}
+                radius="lg"
+                icon={IconCircleFilled}
+                value={"bill"}
+                label="Factura"
               />
             </Group>
-            <TextInput
-              withAsterisk
-              label="Dirección Fiscal:"
-              {...form.getInputProps("fiscaladdress")}
-            />
-          </Stack>
-        ) : null}
-        <Stack spacing={0}>
-          <Text fz={20} fw={700}>
-            Métodos de Pago
-          </Text>
-          <Divider m={0} />
-        </Stack>
-        {/* <Text>
-          El pedido equivale a {(cart.total / 0.1).toFixed(2)} Estrellas. Sin
-          embargo, en caso tenga un costo de delivery, este deberá ser pagado
-          por separado utilizando alguna otra de las alternativas. Además, si la
-          cantidad de estrellas que tiene no alcanza para todo el pedido, esa
-          diferencia también tendrá que pagarla con otro medio de pago.
-        </Text> */}
-        <Accordion variant="separated">
-          <Accordion.Item value="online">
-            <Accordion.Control bg="#F2F2F3" icon={<IconCreditCard />}>
-              Pago en Línea
-            </Accordion.Control>
-            <Accordion.Panel>
-              <Stack>
-                <Text>
-                  Paga en línea de manera simple, segura y rápida. Trabajamos
-                  con NIUBIZ para garantizar un pago exitoso. Aceptamos las
-                  siguientes tarjetas:
-                </Text>
-                <Image
-                  src="https://adfly.pe/Content/backend/img/payment/online.png"
-                  width="50%"
-                  fit="contain"
+            {checked === "bill" ? (
+              <Stack px={0} spacing="sm">
+                <Group position="apart" spacing="xl" grow>
+                  <TextInput
+                    withAsterisk
+                    label="Ruc:"
+                    {...form.getInputProps("ruc")}
+                  />
+                  <TextInput
+                    withAsterisk
+                    label="Razón Social:"
+                    {...form.getInputProps("businessname")}
+                  />
+                </Group>
+                <TextInput
+                  withAsterisk
+                  label="Dirección Fiscal:"
+                  {...form.getInputProps("fiscaladdress")}
                 />
-                <Checkbox
-                  m="md"
-                  label={
-                    <>
-                      He leído y acepto los{" "}
-                      <Anchor href="/terms" target="_blank">
-                        Términos y Condiciones
-                      </Anchor>{" "}
-                      de este sitio
-                    </>
-                  }
-                  checked={hasAcceptedTerms}
-                  onChange={(e) => setHasAcceptedTerms(e.currentTarget.checked)}
-                />
-                <Stack align="flex-end">
-                  <Button
-                    leftIcon={<IconCreditCard />}
-                    onClick={payment}
-                    radius="md"
-                    disabled={!hasAcceptedTerms}
-                  >
-                    Pagar: S/.{totalAmount.toFixed(2)}
-                  </Button>
-                </Stack>
               </Stack>
-            </Accordion.Panel>
-          </Accordion.Item>
-        </Accordion>
-        <Center>
-          <Group w="60%" position="center" mt="xl">
-            <Button w={200} h={48} onClick={() => handlePrevStep()}>
-              {"Regresar"}
-            </Button>
+            ) : null}
+          </Stack>
+        </Card>
+        <Card withBorder>
+          <Text fz={20} fw={700} mb="xs">
+            Usar Estrellas
+          </Text>
+          <Text>{`Valor del pedido: ${(totalAmount * 100).toFixed(
+            0
+          )} estrellas`}</Text>
+          <Text>{`Cuentas con: ${collaborator?.stars ?? 0} estrellas`}</Text>
+          <Checkbox
+            mt="xs"
+            label={`Deseo usar ${
+              totalAmount * 100 < (collaborator?.stars ?? 0)
+                ? (totalAmount * 100).toFixed(0)
+                : collaborator?.stars ?? 0
+            } estrellas para pagar este pedido`}
+            checked={useStars}
+            onChange={(e) => setUseStars(e.currentTarget.checked)}
+          />
+        </Card>
+        <Text fz={20} fw={700}>
+          Métodos de Pago
+        </Text>
+        <Card withBorder>
+          <Text fz={20} fw={700} mb="xs">
+            Pago en Línea
+          </Text>
+          <Group position="apart" pr="xl">
+            <Stack>
+              <Group spacing={5}>
+                <Text>{"Garantizamos un pago 100% seguro y exitoso con "}</Text>
+                <Image
+                  height={13}
+                  width="inherit"
+                  fit="contain"
+                  src="/niubiz.svg"
+                />
+              </Group>
+              <Image
+                src="https://adfly.pe/Content/backend/img/payment/online.png"
+                width="70%"
+                fit="contain"
+              />
+            </Stack>
+            <Radio
+              labelPosition="left"
+              checked={toPay}
+              disabled={
+                useStars && (collaborator?.stars ?? 0) / 100 > totalAmount
+              }
+              onChange={(event) => setToPay(event.currentTarget.checked)}
+            />
           </Group>
-        </Center>
+        </Card>
+        <Checkbox
+          m="md"
+          label={
+            <>
+              He leído y acepto los{" "}
+              <Anchor href="/terms" target="_blank">
+                Términos y Condiciones
+              </Anchor>{" "}
+              de este sitio
+            </>
+          }
+          checked={hasAcceptedTerms}
+          onChange={(e) => setHasAcceptedTerms(e.currentTarget.checked)}
+        />
       </Stack>
     </Center>
   );

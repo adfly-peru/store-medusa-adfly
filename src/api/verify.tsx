@@ -18,6 +18,8 @@ export const verifyAccount = async (
             new_password: securityForm?.newpassword ?? "",
             phone: profileForm?.phone ?? "",
             extension: getExtension(profileForm?.image?.type ?? "") ?? "",
+            newsletters: profileForm?.acceptPublicity ?? false,
+            terms: profileForm?.terms ?? false,
           },
           {
             headers: {

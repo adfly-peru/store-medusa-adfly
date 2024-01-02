@@ -24,7 +24,7 @@ interface AdflyResponse {
 export default async function handler(req: any, res: any) {
   if (req.method === "POST") {
     const { transactionToken } = req.body;
-    const { purchaseNumber, amount, collaboratorid } = req.query;
+    const { purchaseNumber, amount, collaboratorid, stars } = req.query;
 
     try {
       const { data } = await client.query<{ getCart: Cart }>({
@@ -50,6 +50,7 @@ export default async function handler(req: any, res: any) {
           uuidbillinginfo: cartdata.billingInfo?.uuidbillinginfo,
           isreceiver: hasReceiverName,
           isbilling: hasRUC,
+          stars: Number(stars),
         },
         {
           headers: {

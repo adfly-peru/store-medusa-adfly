@@ -17,12 +17,16 @@ export interface Collaborator {
   changePassword: boolean;
   emailVerify: boolean;
   urlprofile?: string;
+  stars: number;
+  newsletters: boolean;
 }
 
 export interface ProfileForm {
   email?: string;
   phone: string;
   image?: File;
+  acceptPublicity: boolean;
+  terms: boolean;
 }
 
 export interface SecurityForm {

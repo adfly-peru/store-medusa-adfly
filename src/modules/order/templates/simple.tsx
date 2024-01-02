@@ -61,7 +61,10 @@ const SimpleOrderView = ({ orderId }: { orderId: string }) => {
             Detalle Pedido
             <Text color="dimmed" component="span" fz={25}>
               {" "}
-              #{report.order.paymentInfo.purchaseNumber}
+              #
+              {report.order.paymentInfo?.purchaseNumber ??
+                report.order.starspurchasenumber ??
+                "-"}
             </Text>
           </Title>
           <Button component="a" href="/orders">
@@ -78,7 +81,9 @@ const SimpleOrderView = ({ orderId }: { orderId: string }) => {
           <Text>
             N° Pedido:{" "}
             <Text fw="bold" span>
-              {report.order.paymentInfo.purchaseNumber}
+              {report.order.paymentInfo?.purchaseNumber ??
+                report.order.starspurchasenumber ??
+                "-"}
             </Text>
           </Text>
           <Text>
@@ -119,13 +124,19 @@ const SimpleOrderView = ({ orderId }: { orderId: string }) => {
             <Text fw="bold">
               Método de Pago:{" "}
               <Text fw="normal" span>
-                {`Pago ${report.order.paymentInfo.canal || "-"}`}
+                {`Pago ${
+                  (report.order.starsUsed ?? 0) > 0
+                    ? "con estrellas"
+                    : report.order.paymentInfo?.canal
+                }`}
               </Text>
             </Text>
             <Text fw="bold">
               Detalle de Pago:{" "}
               <Text fw="normal" span>
-                {`${report.order.paymentInfo.brand} ${report.order.paymentInfo.card}`}
+                {(report.order.starsUsed ?? 0) > 0
+                  ? `${report.order.starsUsed} estrellas`
+                  : `${report.order.paymentInfo?.brand} ${report.order.paymentInfo?.card}`}
               </Text>
             </Text>
             <Divider mb="sm" />

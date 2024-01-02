@@ -30,10 +30,9 @@ const FeaturedProducts = () => {
   }
   return (
     <Center w="100%">
-      <Stack>
+      <Stack spacing={48}>
         <Title
           align="center"
-          mb="lg"
           style={{
             fontSize: "31px",
             fontWeight: 400,

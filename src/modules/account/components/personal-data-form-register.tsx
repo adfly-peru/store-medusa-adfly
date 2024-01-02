@@ -14,7 +14,7 @@ import {
 import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
 import { ProfileForm } from "@interfaces/collaborator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import * as amplitude from "@amplitude/analytics-browser";
 
@@ -26,6 +26,7 @@ interface FormValues {
   email: string;
   cellPhone: string;
   termsOfService: boolean;
+  acceptPublicity: boolean;
 }
 
 const PersonalDataFormRegister = ({
@@ -45,7 +46,8 @@ const PersonalDataFormRegister = ({
       documentnumber: collaborator?.documentnumber ?? "",
       email: collaborator?.email ?? "",
       cellPhone: collaborator?.phonenumber ?? "",
-      termsOfService: false,
+      termsOfService: collaborator?.emailVerify ?? false,
+      acceptPublicity: collaborator?.newsletters ?? false,
     },
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
@@ -68,6 +70,8 @@ const PersonalDataFormRegister = ({
         const profileform: ProfileForm = {
           email: form.values.email,
           phone: form.values.cellPhone,
+          acceptPublicity: form.values.acceptPublicity,
+          terms: form.values.termsOfService,
         };
         const res = await verify(profileform);
         setMessage(
@@ -198,11 +202,23 @@ const PersonalDataFormRegister = ({
                   </Anchor>
                 </>
               }
-              {...form.getInputProps("termsOfService")}
+              checked={form.values.termsOfService}
+              onChange={(event) =>
+                form.setFieldValue(
+                  "termsOfService",
+                  event.currentTarget.checked
+                )
+              }
             />
             <Checkbox
               label="Acepto recibir publicidad"
-              {...form.getInputProps("acceptPublicity")}
+              checked={form.values.acceptPublicity}
+              onChange={(event) =>
+                form.setFieldValue(
+                  "acceptPublicity",
+                  event.currentTarget.checked
+                )
+              }
             />
           </>
         ) : (

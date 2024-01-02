@@ -31,6 +31,8 @@ const GET_ORDERS = gql`
         finalTotal
         totalIgv
         deliveryPrice
+        starsUsed
+        starspurchasenumber
       }
       totalOrders
     }
@@ -41,6 +43,8 @@ const GET_ORDER_REPORT = gql`
   query getOrderReport($uuidorder: ID!) {
     getOrderReport(uuidorder: $uuidorder) {
       order {
+        starsUsed
+        starspurchasenumber
         comments
         uuidOrder
         uuidCollaborator

@@ -55,13 +55,7 @@ const SimpleCouponView = ({ couponId }: { couponId: string }) => {
           </div>
         </MediaQuery>
         <Group position="apart">
-          <Title>
-            Detalle Pedido
-            {/* <Text color="dimmed" component="span" fz={25}>
-              {" "}
-              #{report.order.paymentInfo.purchaseNumber}
-            </Text> */}
-          </Title>
+          <Title>Detalle Pedido</Title>
           <Button component="a" href="/coupons">
             Volver
           </Button>
