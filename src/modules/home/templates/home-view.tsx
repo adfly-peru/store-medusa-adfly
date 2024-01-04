@@ -14,6 +14,7 @@ const HomeView = () => {
         w="90%"
         mx="auto"
         withIndicators
+        mt={46}
         mb={96}
         styles={{
           indicators: {
