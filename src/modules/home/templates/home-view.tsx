@@ -49,7 +49,7 @@ const HomeView = () => {
               onClick={() => router.push(b.bannerlink)}
               style={{
                 width: "100%",
-                paddingTop: "19.71%",
+                paddingTop: "30.98%",
                 backgroundImage: `url(${b.bannerimageurl ?? ""})`,
                 backgroundPosition: "center center",
                 backgroundSize: "100% 100%",
