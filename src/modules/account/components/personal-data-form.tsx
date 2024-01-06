@@ -20,7 +20,7 @@ import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { useAccount } from "@context/account-context";
 import { ProfileForm } from "@interfaces/collaborator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import InformationBox from "./information-box";
 
@@ -67,19 +67,12 @@ const PersonalDataForm = () => {
       setLoading(true);
       try {
         const profileform: ProfileForm = {
-          email: form.values.email,
           phone: form.values.cellPhone,
           acceptPublicity: form.values.acceptPublicity,
-          terms: form.values.termsOfService,
+          terms: collaborator?.emailVerify ?? false,
         };
         const res = await verify(profileform);
         setMessage(res ?? "success");
-        if (!res) {
-          const timerId = setTimeout(() => {
-            router.push("/");
-          }, 3000);
-          return () => clearTimeout(timerId);
-        }
       } catch (error) {
         setMessage("Ha ocurrido un error durante la verificación");
       } finally {
@@ -117,7 +110,7 @@ const PersonalDataForm = () => {
             withCloseButton
           >
             {message == "success"
-              ? "Se ha actualizado el perfil de manera exitosa. Será redirigido a la página principal en unos segundos..."
+              ? "Se ha actualizado el perfil de manera exitosa."
               : message}
           </Alert>
         )}
@@ -193,6 +186,13 @@ const PersonalDataForm = () => {
           />
         </SimpleGrid>
         <Space h="md" />
+        <Checkbox
+          label="Acepto recibir publicidad"
+          checked={form.values.acceptPublicity}
+          onChange={(event) =>
+            form.setFieldValue("acceptPublicity", event.currentTarget.checked)
+          }
+        />
         {!collaborator.emailVerify && (
           <>
             {" "}
@@ -206,10 +206,6 @@ const PersonalDataForm = () => {
                 </>
               }
               {...form.getInputProps("termsOfService")}
-            />
-            <Checkbox
-              label="Acepto recibir publicidad"
-              {...form.getInputProps("acceptPublicity")}
             />
           </>
         )}

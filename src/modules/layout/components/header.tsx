@@ -305,7 +305,10 @@ const HomeHeader = () => {
                   >
                     Mi cuenta
                   </Menu.Item>
-                  <Menu.Item icon={<IconSettings size={14} />}>
+                  <Menu.Item
+                    icon={<IconSettings size={14} />}
+                    onClick={() => router.push("/account/profile")}
+                  >
                     Configuracion
                   </Menu.Item>
                   <Menu.Item
