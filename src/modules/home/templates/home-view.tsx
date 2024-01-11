@@ -4,31 +4,33 @@ import FeaturedProducts from "../components/featured-products";
 import { useAccount } from "@context/account-context";
 import { Carousel, Embla } from "@mantine/carousel";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Autoplay from "embla-carousel-autoplay";
 
 const HomeView = () => {
   const { homeDesign, banners } = useAccount();
   const router = useRouter();
-  const [embla, setEmbla] = useState<Embla | null>(null);
-  const [autoplayDelay, setAutoplayDelay] = useState(3000);
-  useEffect(() => {
-    if (embla) {
-      const autoplay = () => {
-        if (embla.canScrollNext()) {
-          embla.scrollNext();
-        } else {
-          embla.scrollTo(0);
-        }
-      };
+  const autoplay = useRef(Autoplay({ delay: 4000 }));
+  // const [embla, setEmbla] = useState<Embla | null>(null);
+  // const [autoplayDelay, setAutoplayDelay] = useState(3000);
+  // useEffect(() => {
+  //   if (embla) {
+  //     const autoplay = () => {
+  //       if (embla.canScrollNext()) {
+  //         embla.scrollNext();
+  //       } else {
+  //         embla.scrollTo(0);
+  //       }
+  //     };
 
-      const autoplayInterval = setInterval(autoplay, autoplayDelay);
-      return () => clearInterval(autoplayInterval);
-    }
-  }, [embla, autoplayDelay]);
+  //     const autoplayInterval = setInterval(autoplay, autoplayDelay);
+  //     return () => clearInterval(autoplayInterval);
+  //   }
+  // }, [embla, autoplayDelay]);
 
-  const increaseDelay = () => {
-    setAutoplayDelay((currentDelay) => currentDelay + 5000);
-  };
+  // const increaseDelay = () => {
+  //   setAutoplayDelay((currentDelay) => currentDelay + 5000);
+  // };
   return (
     <>
       <Carousel
@@ -38,13 +40,9 @@ const HomeView = () => {
         mt={46}
         mb={96}
         loop
-        getEmblaApi={setEmbla}
-        onNextSlide={() => {
-          increaseDelay();
-        }}
-        onPreviousSlide={() => {
-          increaseDelay();
-        }}
+        plugins={[autoplay.current]}
+        onMouseEnter={autoplay.current.stop}
+        onMouseLeave={autoplay.current.reset}
         styles={{
           indicators: {
             bottom: -32,
