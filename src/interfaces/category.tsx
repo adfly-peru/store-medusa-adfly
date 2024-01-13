@@ -32,3 +32,9 @@ export interface Brand {
   id: string;
   name: string;
 }
+
+export interface Campaign {
+  uuidcampaign: string;
+  name: string;
+  description: string;
+}

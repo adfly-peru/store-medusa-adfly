@@ -142,6 +142,7 @@ export interface Offer {
 }
 
 export interface OfferResult {
+  campaignCounts?: FieldCount[];
   departmentCounts?: FieldCount[];
   brandCounts?: FieldCount[];
   categoryCounts?: FieldCount[];

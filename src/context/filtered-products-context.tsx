@@ -1,11 +1,12 @@
 import { useLazyQuery } from "@apollo/client";
 import { GET_FILTERED_PRODUCTS } from "@graphql/products/queries";
-import { Offer, OfferResult } from "@interfaces/productInterface";
+import { OfferResult } from "@interfaces/productInterface";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface FilterOptions {
   sortBy?: string;
   offerSearch?: string;
+  campaign?: string;
   departmentName?: string;
   categoryName?: string;
   subcategoryName?: string;

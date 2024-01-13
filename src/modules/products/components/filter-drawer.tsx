@@ -1,14 +1,4 @@
-import {
-  Text,
-  Title,
-  Center,
-  Divider,
-  Accordion,
-  Stack,
-  Chip,
-  Container,
-  Group,
-} from "@mantine/core";
+import { Title, Divider, Accordion, Container } from "@mantine/core";
 import { useEffect, useState } from "react";
 import CheckGroup from "@modules/common/components/checkbox-group";
 import {
@@ -16,75 +6,65 @@ import {
   useFilteredProducts,
 } from "@context/filtered-products-context";
 
-const capitalizeText = (text: string) => {
-  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-};
-
 const FilterDrawer = ({
   searchable,
-  departmentName,
+  kind,
 }: {
   searchable: string;
-  departmentName: string;
+  kind: "campaign" | "department" | "search";
 }) => {
   const { setOptions, products } = useFilteredProducts();
+  const [campaigns, setCampaigns] = useState<string[]>([]);
   const [department, setDepartment] = useState<string[]>([]);
   const [category, setCategory] = useState<string[]>([]);
   const [subcategory, setSubcategory] = useState<string[]>([]);
   const [brand, setBrand] = useState<string[]>([]);
-  const [seller, setSeller] = useState<string[]>([]);
-  const [delivery, setDelivery] = useState<string[]>([]);
+  const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
-    if (departmentName.length > 0) setDepartment([departmentName]);
-  }, [departmentName]);
-
-  useEffect(() => {
-    const fetchOptions: FilterOptions = {};
-    if (searchable) fetchOptions.offerSearch = searchable;
-    if (department.length > 0) fetchOptions.departmentName = department.at(0);
+    setBrand([]);
     setCategory([]);
-    setOptions(fetchOptions);
+    setSubcategory([]);
+    switch (kind) {
+      case "search":
+        setDepartment([]);
+        setCampaigns([]);
+        setSearch(searchable);
+        break;
+      case "department":
+        setSearch("");
+        setCampaigns([]);
+        setDepartment([searchable]);
+        break;
+      case "campaign":
+        setSearch("");
+        setDepartment([]);
+        setCampaigns([searchable]);
+        break;
+      default:
+        break;
+    }
+  }, [kind, searchable]);
+
+  useEffect(() => {
+    setCategory([]);
   }, [department]);
 
   useEffect(() => {
-    const fetchOptions: FilterOptions = {};
-    setOptions(fetchOptions);
-    setDepartment([]);
-  }, [searchable]);
-
-  useEffect(() => {
-    const fetchOptions: FilterOptions = {};
-    if (searchable) fetchOptions.offerSearch = searchable;
-    if (departmentName) fetchOptions.departmentName = departmentName;
-    if (category.length > 0) fetchOptions.categoryName = category.at(0);
-    if (brand.length > 0) fetchOptions.brandName = brand.at(0);
-    fetchOptions.subcategoryName = undefined;
     setSubcategory([]);
-    setOptions(fetchOptions);
   }, [category]);
 
   useEffect(() => {
     const fetchOptions: FilterOptions = {};
-    if (searchable) fetchOptions.offerSearch = searchable;
-    if (departmentName) fetchOptions.departmentName = departmentName;
+    if (search !== "") fetchOptions.offerSearch = search;
+    if (campaigns.length > 0) fetchOptions.campaign = campaigns.at(0);
+    if (department.length > 0) fetchOptions.departmentName = department.at(0);
     if (category.length > 0) fetchOptions.categoryName = category.at(0);
     if (subcategory.length > 0)
       fetchOptions.subcategoryName = subcategory.at(0);
     if (brand.length > 0) fetchOptions.brandName = brand.at(0);
     setOptions(fetchOptions);
-  }, [subcategory]);
-
-  useEffect(() => {
-    const fetchOptions: FilterOptions = {};
-    if (searchable) fetchOptions.offerSearch = searchable;
-    if (departmentName) fetchOptions.departmentName = departmentName;
-    if (category.length > 0) fetchOptions.categoryName = category.at(0);
-    if (subcategory.length > 0)
-      fetchOptions.subcategoryName = subcategory.at(0);
-    if (brand.length > 0) fetchOptions.brandName = brand.at(0);
-    setOptions(fetchOptions);
-  }, [brand]);
+  }, [brand, department, category, subcategory, search, campaigns]);
 
   return (
     <Container p={0}>
@@ -98,7 +78,34 @@ const FilterDrawer = ({
           },
         }}
       >
-        {searchable.length > 0 ? (
+        {kind !== "campaign" && products?.campaignCounts?.length ? (
+          <Accordion.Item value="campaign">
+            <Accordion.Control>
+              <Title order={6} fw={400} fz={20}>
+                Campaña
+              </Title>
+            </Accordion.Control>
+            <Accordion.Panel>
+              <CheckGroup
+                values={
+                  new Map<string, string>(
+                    Array.from(
+                      products?.campaignCounts?.map((c) => [
+                        c.uuid ?? "",
+                        `${c.name} (${c.count})`,
+                      ]) ?? []
+                    )
+                  )
+                }
+                currentValues={campaigns}
+                changeValues={setCampaigns}
+              />
+            </Accordion.Panel>
+          </Accordion.Item>
+        ) : (
+          <></>
+        )}
+        {kind !== "department" ? (
           <Accordion.Item value="department">
             <Accordion.Control>
               <Title order={6} fw={400} fz={20}>
@@ -125,7 +132,7 @@ const FilterDrawer = ({
         ) : (
           <></>
         )}
-        {searchable.length === 0 || department.length > 0 ? (
+        {department.length > 0 ? (
           <Accordion.Item value="category">
             <Accordion.Control>
               <Title order={6} fw={400} fz={20}>

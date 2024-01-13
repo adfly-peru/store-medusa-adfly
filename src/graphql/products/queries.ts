@@ -224,6 +224,7 @@ const GET_FILTERED_PRODUCTS = gql`
   query FilteredProducts(
     $sortBy: String
     $offerSearch: String
+    $campaign: String
     $departmentName: String
     $categoryName: String
     $subcategoryName: String
@@ -234,6 +235,7 @@ const GET_FILTERED_PRODUCTS = gql`
     availableOffers(
       sortBy: $sortBy
       offerSearch: $offerSearch
+      campaign: $campaign
       departmentName: $departmentName
       categoryName: $categoryName
       subcategoryName: $subcategoryName
@@ -241,6 +243,11 @@ const GET_FILTERED_PRODUCTS = gql`
       limit: $limit
       offset: $offset
     ) {
+      campaignCounts {
+        uuid
+        name
+        count
+      }
       departmentCounts {
         uuid
         name

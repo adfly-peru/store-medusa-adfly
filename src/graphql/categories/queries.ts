@@ -63,4 +63,22 @@ const GET_BRANDS = gql`
   }
 `;
 
-export { GET_CATEGORIES, GET_DEPARTMENTS, GET_SUBCATEGORIES, GET_BRANDS };
+const GET_CAMPAIGNS = gql`
+  query getCampaigns {
+    getAllCampaigns(limit: 20, offset: 0, sortBy: "name", onlyAccepted: true) {
+      campaigns {
+        uuidcampaign
+        name
+        description
+      }
+    }
+  }
+`;
+
+export {
+  GET_CATEGORIES,
+  GET_DEPARTMENTS,
+  GET_SUBCATEGORIES,
+  GET_BRANDS,
+  GET_CAMPAIGNS,
+};

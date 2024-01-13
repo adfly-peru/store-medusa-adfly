@@ -1,8 +1,15 @@
 import React, { createContext, useContext } from "react";
 import { useQuery } from "@apollo/client";
-import { Brand, Category, Department, Subcategory } from "@interfaces/category";
+import {
+  Brand,
+  Campaign,
+  Category,
+  Department,
+  Subcategory,
+} from "@interfaces/category";
 import {
   GET_BRANDS,
+  GET_CAMPAIGNS,
   GET_CATEGORIES,
   GET_DEPARTMENTS,
   GET_SUBCATEGORIES,
@@ -13,6 +20,7 @@ interface ProductContext {
   categories: Category[];
   subCategories: Subcategory[];
   brands: Brand[];
+  campaigns: Campaign[];
 }
 
 const ProductContext = createContext<ProductContext | null>(null);
@@ -32,6 +40,9 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
     GET_SUBCATEGORIES
   );
   const { data: brands } = useQuery<{ brands: Brand[] }>(GET_BRANDS);
+  const { data: campaigns } = useQuery<{
+    getAllCampaigns: { campaigns: Campaign[] };
+  }>(GET_CAMPAIGNS);
 
   return (
     <ProductContext.Provider
@@ -40,6 +51,7 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
         categories: categories?.categories ?? [],
         subCategories: subcategories?.subcategories ?? [],
         brands: brands?.brands ?? [],
+        campaigns: campaigns?.getAllCampaigns?.campaigns ?? [],
       }}
     >
       {children}
