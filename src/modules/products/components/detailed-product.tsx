@@ -524,9 +524,11 @@ export function DetailedProduct({
                     </Group>
                     <Text>
                       S/.{" "}
-                      {(selectedVariant.offerPrice ?? 0 > 0
-                        ? selectedVariant.offerPrice ?? 0
-                        : selectedVariant.adflyPrice) * 100}
+                      {(
+                        (selectedVariant.offerPrice ?? 0 > 0
+                          ? selectedVariant.offerPrice ?? 0
+                          : selectedVariant.adflyPrice) * 100
+                      ).toFixed(0)}
                     </Text>
                   </Group>
                 </Stack>
