@@ -20,6 +20,9 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (status == "unauthenticated") {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("lastpage", router.asPath);
+      }
       router.push("/login");
     }
   });

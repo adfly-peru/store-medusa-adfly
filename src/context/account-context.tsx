@@ -320,7 +320,13 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       refetch();
       refetchDesign();
       setLoading(false);
-      router.push("/");
+      if (typeof window !== "undefined") {
+        const currentPage = localStorage.getItem("lastpage");
+        if (currentPage) {
+          localStorage.removeItem("lastpage");
+          router.push(currentPage);
+        } else router.push("/");
+      } else router.push("/");
     } catch (error: any) {
       setLoading(false);
       if (error.response && error.response.data) {
