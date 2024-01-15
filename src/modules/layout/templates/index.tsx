@@ -11,7 +11,6 @@ import { useProduct } from "@context/product-context";
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { height } = useViewportSize();
   const { status, collaborator, homeDesign } = useAccount();
-  const { campaigns } = useProduct();
   const router = useRouter();
   const isAllow = router.asPath.startsWith("/account/profile")
     ? true
@@ -61,8 +60,8 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       footer={<FooterComponent />}
       styles={(theme) => ({
         main: {
-          paddingTop: campaigns.length ? 188 : 150,
-          minHeight: height - (campaigns.length ? 188 : 150),
+          paddingTop: 188,
+          minHeight: height - 188,
         },
       })}
       sx={{
