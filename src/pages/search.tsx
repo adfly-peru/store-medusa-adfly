@@ -7,6 +7,7 @@ export default function Search() {
   const router = useRouter();
   const searchable = router.query.data || "";
   const departmentName = router.query.department || "";
+  const campaignName = router.query.campaign || "";
   return (
     <Layout>
       <FilteredProductsProvider>
@@ -15,6 +16,7 @@ export default function Search() {
           departmentName={
             typeof departmentName == "string" ? departmentName : ""
           }
+          campaign={typeof campaignName == "string" ? campaignName : ""}
         />
       </FilteredProductsProvider>
     </Layout>

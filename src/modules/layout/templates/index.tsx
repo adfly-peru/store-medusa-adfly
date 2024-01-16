@@ -6,6 +6,7 @@ import { useViewportSize } from "@mantine/hooks";
 import { useAccount } from "@context/account-context";
 import { useRouter } from "next/router";
 import { ModalsProvider } from "@mantine/modals";
+import { useProduct } from "@context/product-context";
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { height } = useViewportSize();
@@ -19,6 +20,9 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (status == "unauthenticated") {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("lastpage", router.asPath);
+      }
       router.push("/login");
     }
   });
@@ -59,8 +63,8 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       footer={<FooterComponent />}
       styles={(theme) => ({
         main: {
-          paddingTop: 150,
-          minHeight: height - 150,
+          paddingTop: 188,
+          minHeight: height - 188,
         },
       })}
       sx={{

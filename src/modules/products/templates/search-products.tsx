@@ -16,17 +16,21 @@ import SearchBar from "@modules/products/components/search-bar";
 import { IconChevronDown, IconFilter, IconList } from "@tabler/icons-react";
 import { useState } from "react";
 import FilterDrawer from "../components/filter-drawer";
+import { useProduct } from "@context/product-context";
 
 const SearchProducts = ({
   searchable,
   departmentName,
+  campaign,
 }: {
   searchable: string;
   departmentName: string;
+  campaign: string;
 }) => {
   const [opened, setOpened] = useState(false);
   const { setSortBy, sortBy, offset, count, setoffset, limit } =
     useFilteredProducts();
+  const { campaigns: originalCampaigns } = useProduct();
   return (
     <>
       <Drawer
@@ -56,7 +60,22 @@ const SearchProducts = ({
           },
         }}
       >
-        <FilterDrawer searchable={searchable} departmentName={departmentName} />
+        <FilterDrawer
+          searchable={
+            searchable !== ""
+              ? searchable
+              : departmentName !== ""
+              ? departmentName
+              : campaign
+          }
+          kind={
+            searchable !== ""
+              ? "search"
+              : departmentName !== ""
+              ? "department"
+              : "campaign"
+          }
+        />
       </Drawer>
       <Grid w="100%">
         <MediaQuery
@@ -67,8 +86,20 @@ const SearchProducts = ({
         >
           <Grid.Col span={2} bg="#F2F2F3" px={0} ml="lg" mr="xs">
             <SearchBar
-              searchable={searchable}
-              departmentName={departmentName}
+              searchable={
+                searchable !== ""
+                  ? searchable
+                  : departmentName !== ""
+                  ? departmentName
+                  : campaign
+              }
+              kind={
+                searchable !== ""
+                  ? "search"
+                  : departmentName !== ""
+                  ? "department"
+                  : "campaign"
+              }
             />
           </Grid.Col>
         </MediaQuery>
@@ -106,7 +137,12 @@ const SearchProducts = ({
           </MediaQuery>
           <MediaQuery largerThan="md" styles={{ display: "none" }}>
             <div>
-              <Text>{searchable + departmentName}</Text>
+              <Text>
+                {searchable +
+                  departmentName +
+                  originalCampaigns.find((v) => v.uuidcampaign === campaign)
+                    ?.name}
+              </Text>
               <Space h="md" />
               <Group grow>
                 <Button

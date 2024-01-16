@@ -46,6 +46,7 @@ const RegisterModal = ({
     setError("");
     form.validate();
     if (form.isValid()) {
+      amplitude.track("User Clicks Login From Register");
       const response = await login({
         email: form.values.documentnumber,
         password: form.values.documentnumber,

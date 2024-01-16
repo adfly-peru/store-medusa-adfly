@@ -14,10 +14,16 @@ import {
   MediaQuery,
   Divider,
   ScrollArea,
+  Tabs,
+  Drawer,
+  Title,
+  NavLink,
+  rem,
 } from "@mantine/core";
 import {
   IconBasket,
   IconChevronDown,
+  IconChevronRight,
   IconSearch,
   IconSettings,
   IconShoppingCart,
@@ -33,6 +39,8 @@ import { useRouter } from "next/router";
 import { useForm } from "@mantine/form";
 import { useCart } from "@context/cart-context";
 import * as amplitude from "@amplitude/analytics-browser";
+import HeaderTabs from "./header-tabs";
+import { useDisclosure } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -92,21 +100,14 @@ const useStyles = createStyles((theme) => ({
 
 const HomeHeader = () => {
   const router = useRouter();
-  const { departments } = useProduct();
-  const [opened, setOpened] = useState(false);
+  const { departments, campaigns } = useProduct();
+  const [opened, { open, close }] = useDisclosure(false);
   const { collaborator, logout, homeDesign } = useAccount();
   const [searchable, setSearchable] = useState("");
   const form = useForm();
   const [cartLength, setCartLength] = useState(0);
   const { cart } = useCart();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-
-  // let tabs = [
-  //   "Menú",
-  //   "Ofertas del día",
-  //   "Envío Gratis",
-  //   "Entrega en Centro de Trabajo",
-  // ];
 
   const searchProduct = () => {
     amplitude.track("Search Product", {
@@ -147,9 +148,76 @@ const HomeHeader = () => {
     )
   );
   AutoCompleteItem.displayName = "AutoCompleteItem";
-
   return (
     <>
+      <Drawer
+        opened={opened}
+        onClose={close}
+        size="xs"
+        styles={{
+          body: {
+            padding: 0,
+          },
+        }}
+      >
+        <Title pl="xl" fz={26} fw={700} mb="xs">
+          Departamentos
+        </Title>
+        {departments.map((category, id) => (
+          <NavLink
+            key={id}
+            rightSection={<IconChevronRight size="1rem" stroke={1.5} />}
+            icon={
+              <Image
+                alt={category.name}
+                src={category.image}
+                width={30}
+                style={{
+                  filter: colorScheme === "dark" ? "invert(1)" : "none",
+                }}
+              />
+            }
+            onClick={() => searchProductByCategorie(category.name)}
+            label={
+              <Text py={10} fz={18}>
+                {category.name}
+              </Text>
+            }
+            styles={{
+              root: {
+                paddingLeft: 30,
+              },
+            }}
+          />
+        ))}
+        <Divider my="md" />
+        <Title pl="xl" fz={26} fw={700} mb="xs">
+          Campañas
+        </Title>
+        {campaigns.map((category, id) => (
+          <NavLink
+            key={id}
+            rightSection={<IconChevronRight size="1rem" stroke={1.5} />}
+            onClick={() => {
+              amplitude.track("Search Product", {
+                campaign: category.name,
+                origin: "Campaign Menu",
+              });
+              router.push(`/search?campaign=${category.uuidcampaign}`);
+            }}
+            label={
+              <Text py={10} fz={18}>
+                {category.name}
+              </Text>
+            }
+            styles={{
+              root: {
+                paddingLeft: 30,
+              },
+            }}
+          />
+        ))}
+      </Drawer>
       <Grid justify="center" align="center" columns={24} m={0}>
         <Grid.Col span={24} bg="white" p={0}>
           <div
@@ -198,7 +266,31 @@ const HomeHeader = () => {
           </div>
         </Grid.Col>
         <Grid.Col span={6} md={3}>
-          <Menu
+          <Center>
+            <UnstyledButton
+              onClick={open}
+              p="0.4rem"
+              style={{
+                border: "2px solid #ffffff",
+                borderRadius: "6px",
+              }}
+            >
+              <Group spacing="xs" align="center" position="apart">
+                <Text fz={20} color={homeDesign?.fontcolor}>
+                  Menú
+                </Text>
+                <MediaQuery
+                  smallerThan="lg"
+                  styles={{
+                    display: "none",
+                  }}
+                >
+                  <IconChevronDown color={homeDesign?.fontcolor} />
+                </MediaQuery>
+              </Group>
+            </UnstyledButton>
+          </Center>
+          {/* <Menu
             trigger="click"
             openDelay={100}
             closeDelay={400}
@@ -254,7 +346,7 @@ const HomeHeader = () => {
                 ))}
               </ScrollArea.Autosize>
             </Menu.Dropdown>
-          </Menu>
+          </Menu> */}
         </Grid.Col>
         <Grid.Col span="auto" py={16}>
           <form onSubmit={form.onSubmit((_) => searchProduct())}>
@@ -388,6 +480,9 @@ const HomeHeader = () => {
               </Indicator>
             </Center>
           </Group>
+        </Grid.Col>
+        <Grid.Col span={24} bg="white" p={0}>
+          <HeaderTabs />
         </Grid.Col>
       </Grid>
     </>
