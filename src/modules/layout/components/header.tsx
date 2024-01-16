@@ -198,9 +198,13 @@ const HomeHeader = () => {
           <NavLink
             key={id}
             rightSection={<IconChevronRight size="1rem" stroke={1.5} />}
-            onClick={() =>
-              router.push(`/search?campaign=${category.uuidcampaign}`)
-            }
+            onClick={() => {
+              amplitude.track("Search Product", {
+                campaign: category.name,
+                origin: "Campaign Menu",
+              });
+              router.push(`/search?campaign=${category.uuidcampaign}`);
+            }}
             label={
               <Text py={10} fz={18}>
                 {category.name}

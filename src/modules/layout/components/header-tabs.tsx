@@ -2,6 +2,7 @@ import { useProduct } from "@context/product-context";
 import { ScrollArea, Tabs } from "@mantine/core";
 import { useRouter } from "next/router";
 import React from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const HeaderTabs = () => {
   const router = useRouter();
@@ -16,7 +17,14 @@ const HeaderTabs = () => {
         radius="xs"
         color="gray"
         value={""}
-        onTabChange={(value) => router.push(`/search?campaign=${value}`)}
+        onTabChange={(value) => {
+          amplitude.track("Search Product", {
+            campaign:
+              campaigns.find((v) => v.uuidcampaign === value)?.name ?? "",
+            origin: "Campaign Tabs",
+          });
+          router.push(`/search?campaign=${value}`);
+        }}
       >
         <ScrollArea scrollbarSize={2}>
           <Tabs.List style={{ display: "flex", flexWrap: "nowrap" }}>

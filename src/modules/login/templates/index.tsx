@@ -55,6 +55,7 @@ const LoginPage = () => {
     setError("");
     form.validate();
     if (form.isValid()) {
+      amplitude.track("User Clicks Login");
       const response = await login(form.values);
       setError(response);
     } else {
