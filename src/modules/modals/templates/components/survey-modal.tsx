@@ -1,0 +1,306 @@
+import { Collaborator, Preferences } from "@interfaces/collaborator";
+import { useState } from "react";
+import SurveyModalTemplate from "./survey-modal-template";
+import {
+  IconBallAmericanFootball,
+  IconBarbell,
+  IconBed,
+  IconBooks,
+  IconCashBanknote,
+  IconCheese,
+  IconDeviceTv,
+  IconDiscount2,
+  IconGift,
+  IconHome,
+  IconHorseToy,
+  IconMovie,
+  IconPawFilled,
+  IconPerfume,
+  IconPlaneTilt,
+  IconShirt,
+  IconShoppingCart,
+  IconStethoscope,
+  IconTags,
+  IconToolsKitchen,
+  IconTruckDelivery,
+  IconVocabulary,
+  IconWashMachine,
+  IconWheel,
+} from "@tabler/icons-react";
+import SurveyWelcomeModal from "./survey-welcome-modal";
+import SurveyFinalModal from "./survey-final-modal";
+import { useAccount } from "@context/account-context";
+
+const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
+  const [step, setStep] = useState(0);
+  const { survey } = useAccount();
+
+  switch (step) {
+    case 0:
+      return (
+        <SurveyWelcomeModal
+          key="welcome"
+          setStep={() => {
+            if (!collaborator.preferences) setStep(1);
+            else if (!collaborator.preferences.whatdoyouwant) setStep(1);
+            else if (!collaborator.preferences.topproducts) setStep(2);
+            else if (!collaborator.preferences.topservices) setStep(3);
+            else if (!collaborator.preferences.toppromotions) setStep(4);
+            else if (!collaborator.preferences.prefercommunication) setStep(5);
+            else setStep(5);
+          }}
+          name={collaborator.name}
+        />
+      );
+    case 1:
+      return (
+        <SurveyModalTemplate
+          key="whatdoyouwant"
+          step={step}
+          setStep={setStep}
+          title={"¿Qué esperas de la tienda?"}
+          maxSelections={4}
+          subtitle={"Puedes escoger más de una opción"}
+          onSelectionComplete={async (options) => {
+            const preferences: Preferences = {
+              whatdoyouwant: options,
+            };
+            await survey(preferences);
+          }}
+          defaultSelectedKeys={collaborator.preferences?.whatdoyouwant}
+          options={[
+            {
+              title: "Descuentos",
+              key: "discounts",
+              icon: <IconDiscount2 size={80} />,
+            },
+            {
+              title: "Variedad de ofertas",
+              key: "variety",
+              icon: <IconShoppingCart size={80} />,
+            },
+            {
+              title: "Facilidades de pago",
+              key: "payment_facilities",
+              icon: <IconCashBanknote size={80} />,
+            },
+            {
+              title: "Facilidades de entrega",
+              key: "shipping_facilities",
+              icon: <IconTruckDelivery size={80} />,
+            },
+          ]}
+        />
+      );
+    case 2:
+      return (
+        <SurveyModalTemplate
+          key="topproducts"
+          step={step}
+          setStep={setStep}
+          title={"¿Qué productos te gustaría encontrar?"}
+          subtitle={"Escoge hasta 5 opciones"}
+          maxSelections={5}
+          onSelectionComplete={async (options) => {
+            const preferences: Preferences = {
+              topproducts: options,
+            };
+            await survey(preferences);
+          }}
+          defaultSelectedKeys={collaborator.preferences?.topproducts}
+          options={[
+            {
+              title: "Alimentos y abarrotes",
+              key: "food_and_grocery",
+              icon: <IconCheese size={50} />,
+            },
+            {
+              title: "Automotriz e industrial",
+              key: "automotive_and_industrial",
+              icon: <IconWheel size={50} />,
+            },
+            {
+              title: "Belleza y salud",
+              key: "beauty_and_health",
+              icon: <IconPerfume size={50} />,
+            },
+            {
+              title: "Bebés y niños",
+              key: "baby_and_children",
+              icon: <IconHorseToy size={50} />,
+            },
+            {
+              title: "Deportes y exterior",
+              key: "sports_and_outdoors",
+              icon: <IconBallAmericanFootball size={50} />,
+            },
+            {
+              title: "Dormitorio",
+              description: "(Camas, sábanas, colchones)",
+              key: "bedroom",
+              icon: <IconBed size={50} />,
+            },
+            {
+              title: "Electrohogar",
+              description: "(Lavadora, refrigeradora)",
+              key: "electrohome",
+              icon: <IconWashMachine size={50} />,
+            },
+            {
+              title: "Hogar",
+              description: "(Cocina, muebles, baño, menaje)",
+              key: "home",
+              icon: <IconHome size={50} />,
+            },
+            {
+              title: "Libros, películas y música",
+              key: "books_movies_and_music",
+              icon: <IconBooks size={50} />,
+            },
+            {
+              title: "Moda",
+              description: "(Ropa, zapatos, accesorios)",
+              key: "fashion",
+              icon: <IconShirt size={50} />,
+            },
+            {
+              title: "Mascotas",
+              description: "(Accesorios, comida)",
+              key: "pets",
+              icon: <IconPawFilled size={50} />,
+            },
+            {
+              title: "Tecnología",
+              description: "(Televisores, computadoras)",
+              key: "technology",
+              icon: <IconDeviceTv size={50} />,
+            },
+          ]}
+        />
+      );
+    case 3:
+      return (
+        <SurveyModalTemplate
+          key="topservices"
+          step={step}
+          setStep={setStep}
+          title={"¿Qué servicios te gustaría encontrar?"}
+          subtitle={"Escoge hasta 3 opciones"}
+          maxSelections={3}
+          onSelectionComplete={async (options) => {
+            const preferences: Preferences = {
+              topservices: options,
+            };
+            await survey(preferences);
+          }}
+          defaultSelectedKeys={collaborator.preferences?.topservices}
+          options={[
+            {
+              title: "Comidas",
+              description: "(Restaurantes, cafés)",
+              key: "food",
+              icon: <IconToolsKitchen size={60} />,
+            },
+            {
+              title: "Deportes",
+              description: "(Clases yoga, gimnasios)",
+              key: "sports",
+              icon: <IconBarbell size={60} />,
+            },
+            {
+              title: "Educación",
+              description: "(Cursos, programas)",
+              key: "education",
+              icon: <IconVocabulary size={60} />,
+            },
+            {
+              title: "Entretenimiento",
+              description: "(Cine, teatros, museos)",
+              key: "entertainment",
+              icon: <IconMovie size={60} />,
+            },
+            {
+              title: "Salud",
+              description: "(Consulta médica, dentistas)",
+              key: "health",
+              icon: <IconStethoscope size={60} />,
+            },
+            {
+              title: "Viajes",
+              description: "(Pasajes, hoteles)",
+              key: "travel",
+              icon: <IconPlaneTilt size={60} />,
+            },
+          ]}
+        />
+      );
+    case 4:
+      return (
+        <SurveyModalTemplate
+          key="toppromotions"
+          step={step}
+          setStep={setStep}
+          title={"¿Qué promociones te gustaría encontrar?"}
+          subtitle={"Puedes marcar más de una opción"}
+          maxSelections={5}
+          onSelectionComplete={async (options) => {
+            const preferences: Preferences = {
+              toppromotions: options,
+            };
+            await survey(preferences);
+          }}
+          defaultSelectedKeys={collaborator.preferences?.toppromotions}
+          options={[
+            {
+              title: "Envío Gratis",
+              key: "free_shipping",
+              icon: <IconTruckDelivery size={60} />,
+            },
+            {
+              title: "Descuentos",
+              key: "discounts",
+              icon: <IconDiscount2 size={60} />,
+            },
+            {
+              title: "Regalos",
+              key: "gifts",
+              icon: <IconGift size={60} />,
+            },
+            {
+              title: "Sorteos",
+              key: "give_aways",
+              icon: <IconWheel size={60} />,
+            },
+            {
+              title: "2x1",
+              key: "promotions_2x1",
+              icon: <IconTags size={60} />,
+            },
+          ]}
+        />
+      );
+
+    case 5:
+      return (
+        <SurveyFinalModal
+          key="prefercommunication"
+          step={step}
+          setStep={setStep}
+          onSelectionComplete={async (options, other) => {
+            const preferences: Preferences = {
+              prefercommunication: options,
+              otherprefercommunication: other,
+            };
+            await survey(preferences);
+          }}
+          defaultOther={collaborator.preferences?.otherprefercommunication}
+          defaultValue={collaborator.preferences?.prefercommunication}
+        />
+      );
+
+    default:
+      return <></>;
+  }
+};
+
+export default SurveyModal;

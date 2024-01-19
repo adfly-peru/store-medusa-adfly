@@ -19,6 +19,16 @@ export interface Collaborator {
   urlprofile?: string;
   stars: number;
   newsletters: boolean;
+  preferences?: Preferences;
+}
+
+export interface Preferences {
+  whatdoyouwant?: string[];
+  topproducts?: string[];
+  topservices?: string[];
+  toppromotions?: string[];
+  prefercommunication?: string[];
+  otherprefercommunication?: string;
 }
 
 export interface ProfileForm {

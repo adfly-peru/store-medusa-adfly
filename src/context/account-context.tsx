@@ -6,6 +6,7 @@ import { GET_ADDRESSES, GET_COLLABORATOR } from "@graphql/collaborator/queries";
 import {
   Collaborator,
   IToken,
+  Preferences,
   ProfileForm,
   SecurityForm,
 } from "@interfaces/collaborator";
@@ -23,7 +24,11 @@ import {
   deleteAddressQuery,
   updateAddressQuery,
 } from "api/delivery";
-import { recoverPasswordQuery, requestAccessQuery } from "api/auth";
+import {
+  recoverPasswordQuery,
+  requestAccessQuery,
+  surveyQuery,
+} from "api/auth";
 import * as amplitude from "@amplitude/analytics-browser";
 
 interface AccountContext {
@@ -34,6 +39,7 @@ interface AccountContext {
     profileForm?: ProfileForm,
     securityForm?: SecurityForm
   ) => Promise<string | null>;
+  survey: (preferences: Preferences) => Promise<string | null>;
   recoverPassword: (
     credential: string
   ) => Promise<{ success: boolean; message: string }>;
@@ -243,6 +249,29 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     }
   };
 
+  const survey = async (preferences: Preferences) => {
+    const response = await surveyQuery({
+      preferences: {
+        whatdoyouwant:
+          preferences.whatdoyouwant ?? collaborator?.preferences?.whatdoyouwant,
+        topproducts:
+          preferences.topproducts ?? collaborator?.preferences?.topproducts,
+        topservices:
+          preferences.topservices ?? collaborator?.preferences?.topservices,
+        toppromotions:
+          preferences.toppromotions ?? collaborator?.preferences?.toppromotions,
+        prefercommunication:
+          preferences.prefercommunication ??
+          collaborator?.preferences?.prefercommunication,
+        otherprefercommunication:
+          preferences.otherprefercommunication ??
+          collaborator?.preferences?.otherprefercommunication,
+      },
+    });
+    await refetch();
+    return response;
+  };
+
   const recoverPassword = async (credential: string) => {
     if (!subdomain)
       return {
@@ -443,6 +472,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   return (
     <AccountContext.Provider
       value={{
+        survey,
         daysInApp,
         collaborator,
         verify,
