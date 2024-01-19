@@ -105,8 +105,15 @@ const SurveyFinalModal = ({
           >
             Atras
           </Button>
-          <Button fw={700} fz={18} h={45} w={120} onClick={handleContinue}>
-            Continuar
+          <Button
+            fw={700}
+            fz={18}
+            h={45}
+            w={120}
+            onClick={handleContinue}
+            disabled={value.length === 0}
+          >
+            Finalizar
           </Button>
         </Group>
       </Stack>

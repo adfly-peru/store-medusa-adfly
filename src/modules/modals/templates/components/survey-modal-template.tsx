@@ -143,7 +143,14 @@ const SurveyModalTemplate = ({
           >
             Atras
           </Button>
-          <Button fw={700} fz={18} h={45} w={120} onClick={handleContinue}>
+          <Button
+            fw={700}
+            fz={18}
+            h={45}
+            w={120}
+            onClick={handleContinue}
+            disabled={selectedKeys.length === 0}
+          >
             Continuar
           </Button>
         </Group>

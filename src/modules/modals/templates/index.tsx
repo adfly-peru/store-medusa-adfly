@@ -11,14 +11,7 @@ const CollaboratorModals: React.FC<{ children?: React.ReactNode }> = ({
   useEffect(() => {
     if (!collaborator) return;
     if (!collaborator.emailVerify || !collaborator.changePassword) return;
-    if (
-      collaborator.preferences?.whatdoyouwant &&
-      collaborator.preferences?.topproducts &&
-      collaborator.preferences?.prefercommunication &&
-      collaborator.preferences?.toppromotions &&
-      collaborator.preferences?.topservices
-    )
-      return;
+
     modals.open({
       withCloseButton: false,
       size: 680,
