@@ -898,7 +898,13 @@ export function DetailedProduct({
               >
                 <Accordion.Item value="description">
                   <Accordion.Control>Descripción</Accordion.Control>
-                  <Accordion.Panel>{product.description}</Accordion.Panel>
+                  <Accordion.Panel
+                    sx={{
+                      whiteSpace: "pre-line",
+                    }}
+                  >
+                    {product.description}
+                  </Accordion.Panel>
                 </Accordion.Item>
                 <Accordion.Item value="additional">
                   <Accordion.Control>Información Adicional</Accordion.Control>
@@ -925,7 +931,14 @@ export function DetailedProduct({
                                   width: 140,
                                 }}
                               >
-                                <Text fw="bold">{d.name}</Text>{" "}
+                                <Text
+                                  fw="bold"
+                                  sx={{
+                                    whiteSpace: "pre-line",
+                                  }}
+                                >
+                                  {d.name}
+                                </Text>{" "}
                               </td>
                               <td>{d.value}</td>
                             </tr>
@@ -961,7 +974,13 @@ export function DetailedProduct({
                 Información Adicional
               </Tabs.Tab>
             </Tabs.List>
-            <Tabs.Panel value="description" pt="xs">
+            <Tabs.Panel
+              value="description"
+              pt="xs"
+              sx={{
+                whiteSpace: "pre-line",
+              }}
+            >
               {product.description}
             </Tabs.Panel>
             <Tabs.Panel value="details" pt="xs" px="md">
