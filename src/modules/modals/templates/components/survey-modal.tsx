@@ -72,22 +72,22 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
             {
               title: "Descuentos",
               key: "discounts",
-              icon: <IconDiscount2 size={80} />,
+              size: 80,
             },
             {
               title: "Variedad de ofertas",
               key: "variety",
-              icon: <IconShoppingCart size={80} />,
+              size: 80,
             },
             {
               title: "Facilidades de pago",
               key: "payment_facilities",
-              icon: <IconCashBanknote size={80} />,
+              size: 80,
             },
             {
               title: "Facilidades de entrega",
               key: "shipping_facilities",
-              icon: <IconTruckDelivery size={80} />,
+              size: 80,
             },
           ]}
         />
@@ -112,68 +112,67 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
             {
               title: "Alimentos y abarrotes",
               key: "food_and_grocery",
-              icon: <IconCheese size={50} />,
+              size: 50,
             },
             {
               title: "Automotriz e industrial",
               key: "automotive_and_industrial",
-              icon: <IconWheel size={50} />,
+              size: 50,
             },
             {
               title: "Belleza y salud",
               key: "beauty_and_health",
-              icon: <IconPerfume size={50} />,
+              size: 50,
             },
             {
               title: "Bebés y niños",
               key: "baby_and_children",
-              icon: <IconHorseToy size={50} />,
+              size: 50,
             },
             {
               title: "Deportes y exterior",
               key: "sports_and_outdoors",
-              icon: <IconBallAmericanFootball size={50} />,
+              size: 50,
             },
             {
-              title: "Dormitorio",
-              description: "(Camas, sábanas, colchones)",
-              key: "bedroom",
-              icon: <IconBed size={50} />,
+              title: "Limpieza",
+              key: "clean",
+              size: 50,
             },
             {
               title: "Electrohogar",
               description: "(Lavadora, refrigeradora)",
               key: "electrohome",
-              icon: <IconWashMachine size={50} />,
+              size: 50,
             },
             {
               title: "Hogar",
               description: "(Cocina, muebles, baño, menaje)",
               key: "home",
-              icon: <IconHome size={50} />,
+              size: 50,
             },
             {
               title: "Libros, películas y música",
               key: "books_movies_and_music",
-              icon: <IconBooks size={50} />,
+              size: 50,
             },
             {
               title: "Moda",
               description: "(Ropa, zapatos, accesorios)",
               key: "fashion",
-              icon: <IconShirt size={50} />,
+              size: 50,
             },
             {
               title: "Mascotas",
               description: "(Accesorios, comida)",
               key: "pets",
-              icon: <IconPawFilled size={50} />,
+              size: 50,
             },
             {
               title: "Tecnología",
               description: "(Televisores, computadoras)",
               key: "technology",
-              icon: <IconDeviceTv size={50} />,
+              size: 50,
             },
           ]}
         />
@@ -199,37 +198,37 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
               title: "Comidas",
               description: "(Restaurantes, cafés)",
               key: "food",
-              icon: <IconToolsKitchen size={60} />,
+              size: 60,
             },
             {
               title: "Deportes",
               description: "(Clases yoga, gimnasios)",
               key: "sports",
-              icon: <IconBarbell size={60} />,
+              size: 60,
             },
             {
               title: "Educación",
               description: "(Cursos, programas)",
               key: "education",
-              icon: <IconVocabulary size={60} />,
+              size: 60,
             },
             {
               title: "Entretenimiento",
               description: "(Cine, teatros, museos)",
               key: "entertainment",
-              icon: <IconMovie size={60} />,
+              size: 60,
             },
             {
               title: "Salud",
               description: "(Consulta médica, dentistas)",
               key: "health",
-              icon: <IconStethoscope size={60} />,
+              size: 60,
             },
             {
               title: "Viajes",
               description: "(Pasajes, hoteles)",
               key: "travel",
-              icon: <IconPlaneTilt size={60} />,
+              size: 60,
             },
           ]}
         />
@@ -254,27 +253,27 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
             {
               title: "Envío Gratis",
               key: "free_shipping",
-              icon: <IconTruckDelivery size={60} />,
+              size: 60,
             },
             {
               title: "Descuentos",
               key: "discounts",
-              icon: <IconDiscount2 size={60} />,
+              size: 60,
             },
             {
               title: "Regalos",
               key: "gifts",
-              icon: <IconGift size={60} />,
+              size: 60,
             },
             {
               title: "Sorteos",
               key: "give_aways",
-              icon: <IconWheel size={60} />,
+              size: 60,
             },
             {
               title: "2x1",
               key: "promotions_2x1",
-              icon: <IconTags size={60} />,
+              size: 60,
             },
           ]}
         />

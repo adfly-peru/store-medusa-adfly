@@ -84,6 +84,11 @@ const SurveyFinalModal = ({
             label="Portal de tu empresa (Página Web, Intranet)"
             fz={20}
           />
+          <Checkbox
+            value="workplace_web_page"
+            label="Página web de la tienda"
+            fz={20}
+          />
           <Checkbox value="other" fz={20} label="Otros" />
         </Checkbox.Group>
         {value.includes("other") && (

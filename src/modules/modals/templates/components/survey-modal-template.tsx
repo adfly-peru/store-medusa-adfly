@@ -16,7 +16,7 @@ interface OptionCard {
   title: string;
   key: string;
   description?: string;
-  icon: React.ReactNode;
+  size: number;
 }
 
 const getColumnsCount = (optionsLength: number): number => {
@@ -121,7 +121,12 @@ const SurveyModalTemplate = ({
               }}
               c={selectedKeys.includes(option.key) ? "white" : "dark"}
             >
-              {option.icon}
+              <img
+                src={`/icons/${option.key}.png`}
+                alt={option.key}
+                width={option.size}
+                height={option.size}
+              />
               <Text style={{ fontSize: 15, fontWeight: 700 }} ta="center">
                 {option.title}
               </Text>
