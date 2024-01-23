@@ -110,10 +110,6 @@ const SecurityFormRegister = ({
         setMessage(res ?? "success");
         if (!res) {
           amplitude.track("Step 3 Completed: Password Changed");
-          const timerId = setTimeout(() => {
-            router.push("/");
-          }, 3000);
-          return () => clearTimeout(timerId);
         }
       } catch (error) {
         setMessage("Ha ocurrido un error durante la verificación");
