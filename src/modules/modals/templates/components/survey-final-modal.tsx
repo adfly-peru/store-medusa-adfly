@@ -19,12 +19,14 @@ const SurveyFinalModal = ({
   defaultOther,
   defaultValue,
   onSelectionComplete,
+  onBefore,
 }: {
   step: number;
   setStep: (val: number) => void;
   defaultOther?: string;
   defaultValue?: string[];
   onSelectionComplete: (options: string[], other: string) => Promise<void>;
+  onBefore: (options: string[], other: string) => void;
 }) => {
   const [value, setValue] = useState<string[]>(defaultValue ?? []);
   const [otherValue, setOtherValue] = useState<string>(defaultOther ?? "");
@@ -34,6 +36,10 @@ const SurveyFinalModal = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setOtherValue(event.currentTarget.value);
+  };
+  const handleBefore = () => {
+    onBefore(value, otherValue);
+    setStep(step - 1);
   };
   const handleContinue = async () => {
     setLoading(true);

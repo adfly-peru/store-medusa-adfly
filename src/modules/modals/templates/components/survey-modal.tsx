@@ -1,39 +1,19 @@
 import { Collaborator, Preferences } from "@interfaces/collaborator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SurveyModalTemplate from "./survey-modal-template";
-import {
-  IconBallAmericanFootball,
-  IconBarbell,
-  IconBed,
-  IconBooks,
-  IconCashBanknote,
-  IconCheese,
-  IconDeviceTv,
-  IconDiscount2,
-  IconGift,
-  IconHome,
-  IconHorseToy,
-  IconMovie,
-  IconPawFilled,
-  IconPerfume,
-  IconPlaneTilt,
-  IconShirt,
-  IconShoppingCart,
-  IconStethoscope,
-  IconTags,
-  IconToolsKitchen,
-  IconTruckDelivery,
-  IconVocabulary,
-  IconWashMachine,
-  IconWheel,
-} from "@tabler/icons-react";
 import SurveyWelcomeModal from "./survey-welcome-modal";
 import SurveyFinalModal from "./survey-final-modal";
 import { useAccount } from "@context/account-context";
 
 const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
   const [step, setStep] = useState(0);
+  const [preferences, setPreferences] = useState<Preferences | null>(null);
   const { survey } = useAccount();
+
+  useEffect(() => {
+    if (!collaborator) return;
+    setPreferences(collaborator.preferences ?? {});
+  }, [collaborator]);
 
   switch (step) {
     case 0:
@@ -67,7 +47,14 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
             };
             await survey(preferences);
           }}
-          defaultSelectedKeys={collaborator.preferences?.whatdoyouwant}
+          onBefore={(options) => {
+            const newpreferences: Preferences = {
+              ...preferences,
+              whatdoyouwant: options,
+            };
+            setPreferences(newpreferences);
+          }}
+          defaultSelectedKeys={preferences?.whatdoyouwant}
           options={[
             {
               title: "Descuentos",
@@ -107,7 +94,14 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
             };
             await survey(preferences);
           }}
-          defaultSelectedKeys={collaborator.preferences?.topproducts}
+          onBefore={(options) => {
+            const newpreferences: Preferences = {
+              ...preferences,
+              topproducts: options,
+            };
+            setPreferences(newpreferences);
+          }}
+          defaultSelectedKeys={preferences?.topproducts}
           options={[
             {
               title: "Alimentos y abarrotes",
@@ -192,7 +186,14 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
             };
             await survey(preferences);
           }}
-          defaultSelectedKeys={collaborator.preferences?.topservices}
+          onBefore={(options) => {
+            const newpreferences: Preferences = {
+              ...preferences,
+              topservices: options,
+            };
+            setPreferences(newpreferences);
+          }}
+          defaultSelectedKeys={preferences?.topservices}
           options={[
             {
               title: "Comidas",
@@ -248,7 +249,14 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
             };
             await survey(preferences);
           }}
-          defaultSelectedKeys={collaborator.preferences?.toppromotions}
+          onBefore={(options) => {
+            const newpreferences: Preferences = {
+              ...preferences,
+              toppromotions: options,
+            };
+            setPreferences(newpreferences);
+          }}
+          defaultSelectedKeys={preferences?.toppromotions}
           options={[
             {
               title: "Envío Gratis",
@@ -292,8 +300,16 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
             };
             await survey(preferences);
           }}
-          defaultOther={collaborator.preferences?.otherprefercommunication}
-          defaultValue={collaborator.preferences?.prefercommunication}
+          onBefore={(options, other) => {
+            const newpreferences: Preferences = {
+              ...preferences,
+              prefercommunication: options,
+              otherprefercommunication: other,
+            };
+            setPreferences(newpreferences);
+          }}
+          defaultOther={preferences?.otherprefercommunication}
+          defaultValue={preferences?.prefercommunication}
         />
       );
 

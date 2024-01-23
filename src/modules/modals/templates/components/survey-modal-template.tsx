@@ -35,6 +35,7 @@ const SurveyModalTemplate = ({
   maxSelections,
   defaultSelectedKeys,
   onSelectionComplete,
+  onBefore,
 }: {
   title: string;
   subtitle: string;
@@ -44,6 +45,7 @@ const SurveyModalTemplate = ({
   maxSelections: number;
   defaultSelectedKeys?: string[];
   onSelectionComplete: (options: string[]) => Promise<void>;
+  onBefore: (options: string[]) => void;
 }) => {
   const columnsCount = getColumnsCount(options.length);
   const [selectedKeys, setSelectedKeys] = useState<string[]>(
@@ -59,6 +61,11 @@ const SurveyModalTemplate = ({
         setSelectedKeys([...selectedKeys, key]);
       }
     }
+  };
+
+  const handleBefore = () => {
+    onBefore(selectedKeys);
+    setStep(step - 1);
   };
 
   const handleContinue = async () => {
@@ -139,13 +146,7 @@ const SurveyModalTemplate = ({
           ))}
         </SimpleGrid>
         <Group position="center" mt="xl" mb="xs">
-          <Button
-            fw={700}
-            fz={18}
-            h={45}
-            w={120}
-            onClick={() => setStep(step - 1)}
-          >
+          <Button fw={700} fz={18} h={45} w={120} onClick={handleBefore}>
             Atras
           </Button>
           <Button
