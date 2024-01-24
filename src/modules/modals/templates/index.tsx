@@ -16,7 +16,7 @@ const CollaboratorModals: React.FC<{ children?: React.ReactNode }> = ({
     const now = new Date().getTime();
 
     // const fiveHoursInMs = 5 * 60 * 60 * 1000;
-    const fiveHoursInMs = 5 * 60 * 1000;
+    const fiveHoursInMs = 10 * 60 * 1000;
 
     if (lastOpened && now - parseInt(lastOpened) < fiveHoursInMs) {
       return;
