@@ -38,7 +38,7 @@ const CollaboratorModals: React.FC<{ children?: React.ReactNode }> = ({
           borderRadius: "0.5rem",
         },
       },
-      children: <SurveyModal collaborator={collaborator} />,
+      children: <SurveyModal />,
     });
   }, [collaborator]);
 

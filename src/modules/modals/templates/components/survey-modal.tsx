@@ -5,15 +5,26 @@ import SurveyWelcomeModal from "./survey-welcome-modal";
 import SurveyFinalModal from "./survey-final-modal";
 import { useAccount } from "@context/account-context";
 
-const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
+const SurveyModal = () => {
+  const { collaborator } = useAccount();
   const [step, setStep] = useState(0);
-  const [preferences, setPreferences] = useState<Preferences | null>(null);
+  const [preferences, setPreferences] = useState<Preferences>({});
   const { survey } = useAccount();
 
+  const updatePreferences = (newPreferences: Preferences) => {
+    setPreferences((prevPreferences) => ({
+      ...prevPreferences,
+      ...newPreferences,
+    }));
+  };
+
   useEffect(() => {
-    if (!collaborator) return;
-    setPreferences(collaborator.preferences ?? {});
+    if (collaborator && collaborator.preferences) {
+      updatePreferences(collaborator.preferences);
+    }
   }, [collaborator]);
+
+  if (!collaborator) return <></>;
 
   switch (step) {
     case 0:
@@ -96,10 +107,9 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
           }}
           onBefore={(options) => {
             const newpreferences: Preferences = {
-              ...preferences,
               topproducts: options,
             };
-            setPreferences(newpreferences);
+            updatePreferences(newpreferences);
           }}
           defaultSelectedKeys={preferences?.topproducts}
           options={[
@@ -188,10 +198,9 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
           }}
           onBefore={(options) => {
             const newpreferences: Preferences = {
-              ...preferences,
               topservices: options,
             };
-            setPreferences(newpreferences);
+            updatePreferences(newpreferences);
           }}
           defaultSelectedKeys={preferences?.topservices}
           options={[
@@ -251,10 +260,9 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
           }}
           onBefore={(options) => {
             const newpreferences: Preferences = {
-              ...preferences,
               toppromotions: options,
             };
-            setPreferences(newpreferences);
+            updatePreferences(newpreferences);
           }}
           defaultSelectedKeys={preferences?.toppromotions}
           options={[
@@ -302,11 +310,10 @@ const SurveyModal = ({ collaborator }: { collaborator: Collaborator }) => {
           }}
           onBefore={(options, other) => {
             const newpreferences: Preferences = {
-              ...preferences,
               prefercommunication: options,
               otherprefercommunication: other,
             };
-            setPreferences(newpreferences);
+            updatePreferences(newpreferences);
           }}
           defaultOther={preferences?.otherprefercommunication}
           defaultValue={preferences?.prefercommunication}
