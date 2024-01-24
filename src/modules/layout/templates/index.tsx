@@ -25,7 +25,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       }
       router.push("/login");
     }
-  });
+  }, [status]);
 
   if (status == "unauthenticated") {
     return <div></div>;

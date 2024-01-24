@@ -16,6 +16,14 @@ const GET_COLLABORATOR = gql`
       urlprofile
       stars
       newsletters
+      preferences {
+        whatdoyouwant
+        topproducts
+        topservices
+        toppromotions
+        prefercommunication
+        otherprefercommunication
+      }
     }
   }
 `;
