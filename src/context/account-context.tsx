@@ -64,6 +64,7 @@ interface AccountContext {
   deleteAddress: (addressId: string) => Promise<string | null>;
   loading: boolean;
   banners: AdflyBanner[];
+  refetch: () => void;
 }
 
 const AccountContext = createContext<AccountContext | null>(null);
@@ -489,6 +490,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
         deleteAddress,
         loading,
         banners,
+        refetch: () => refetch(),
       }}
     >
       {children}
