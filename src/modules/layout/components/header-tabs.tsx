@@ -27,7 +27,13 @@ const HeaderTabs = () => {
         }}
       >
         <ScrollArea scrollbarSize={2}>
-          <Tabs.List style={{ display: "flex", flexWrap: "nowrap" }}>
+          <Tabs.List
+            style={{
+              display: "flex",
+              flexWrap: "nowrap",
+              justifyContent: "center",
+            }}
+          >
             {campaigns.map((c) => (
               <Tabs.Tab key={c.uuidcampaign} value={c.uuidcampaign}>
                 {c.name}
