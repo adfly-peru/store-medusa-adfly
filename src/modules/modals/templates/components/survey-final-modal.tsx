@@ -104,6 +104,7 @@ const SurveyFinalModal = ({
             value={otherValue}
             onChange={handleOtherInputChange}
             mt="md"
+            withAsterisk
           />
         )}
         <Group position="center" mt="xl" mb="xs">
@@ -122,7 +123,10 @@ const SurveyFinalModal = ({
             h={45}
             w={120}
             onClick={handleContinue}
-            disabled={value.length === 0}
+            disabled={
+              value.length === 0 ||
+              (value.includes("other") && otherValue === "")
+            }
           >
             Finalizar
           </Button>
