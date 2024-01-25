@@ -6,17 +6,11 @@ import { useViewportSize } from "@mantine/hooks";
 import { useAccount } from "@context/account-context";
 import { useRouter } from "next/router";
 import { ModalsProvider } from "@mantine/modals";
-import { useProduct } from "@context/product-context";
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { height } = useViewportSize();
-  const { status, collaborator, homeDesign } = useAccount();
+  const { status, collaborator, homeDesign, refetch } = useAccount();
   const router = useRouter();
-  const isAllow = router.asPath.startsWith("/account/profile")
-    ? true
-    : router.asPath.startsWith("/account/security") && collaborator?.emailVerify
-    ? true
-    : false;
 
   useEffect(() => {
     if (status == "unauthenticated") {
@@ -26,6 +20,10 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       router.push("/login");
     }
   }, [status]);
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   if (status == "unauthenticated") {
     return <div></div>;
