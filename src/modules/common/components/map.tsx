@@ -155,7 +155,7 @@ export const MapForm: React.FC<MapProps> = ({ onSelectPlace }) => {
   const reverseGeocode = async (lat: number, lng: number) => {
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&language=es&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`
       );
       const data: ReverseGeocodeResponse = await response.json();
       return data.results;
