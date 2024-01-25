@@ -11,7 +11,10 @@ const CollaboratorModals: React.FC<{ children?: React.ReactNode }> = ({
   useEffect(() => {
     if (!collaborator) return;
     if (!collaborator.emailVerify || !collaborator.changePassword) return;
-    if ((collaborator.preferences?.prefercommunication ?? []).length === 0) {
+    if (
+      (collaborator.preferences?.prefercommunication ?? []).length === 0 &&
+      typeof window !== "undefined"
+    ) {
       const lastOpened = localStorage.getItem("surveyModalTime");
       const now = new Date().getTime();
 
