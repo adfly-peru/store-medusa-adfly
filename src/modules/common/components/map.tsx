@@ -172,6 +172,7 @@ export const MapForm: React.FC<MapProps> = ({ onSelectPlace }) => {
   ) => {
     const fullPlaceData = await reverseGeocode(lat, lng);
     if (!fullPlaceData) return null;
+    console.log({ fullPlaceData });
 
     const districtComponent = filterByType(fullPlaceData, [
       "administrative_area_level_3",
