@@ -10,16 +10,13 @@ import {
   Button,
   NumberInputHandlers,
   Stack,
-  Flex,
   Title,
   Divider,
   Space,
   Breadcrumbs,
   Anchor,
-  SegmentedControl,
   List,
   Center,
-  ThemeIcon,
   Table,
   Tabs,
   Grid,
@@ -28,33 +25,29 @@ import {
   Select,
   Modal,
   CopyButton,
-  rem,
   Accordion,
   LoadingOverlay,
 } from "@mantine/core";
 import {
   IconBuildingStore,
-  IconCheck,
   IconChevronRight,
-  IconDatabase,
   IconHome,
   IconMail,
   IconMinus,
   IconMoodSad,
   IconPlus,
   IconShoppingCartCheck,
-  IconStar,
   IconStarFilled,
   IconTruckDelivery,
-  IconX,
 } from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
-import { Offer, Variant } from "@interfaces/productInterface";
+import { Offer } from "@interfaces/productInterface";
 import { CartItem } from "@interfaces/cart";
 import { CouponResponse } from "api/cart";
 import { TimePeriod, purchasePeriodTime } from "@modules/common/types";
 import * as amplitude from "@amplitude/analytics-browser";
+import { Carousel } from "@mantine/carousel";
 
 export function DetailedProduct({
   product,
@@ -454,17 +447,66 @@ export function DetailedProduct({
                   </Badge>
                 </Group>
                 <Space h="lg" />
-                <Image
-                  width="100%"
-                  height={390}
-                  src={
-                    selectedVariant?.imageURL ??
-                    "https://cdn-icons-png.flaticon.com/512/3770/3770820.png"
-                  }
-                  alt={selectedVariant?.imageURL ?? "-"}
-                  fit="contain"
-                  withPlaceholder
-                />
+                <Carousel
+                  withIndicators
+                  slideSize="100%"
+                  slideGap="md"
+                  align="center"
+                  slidesToScroll={1}
+                  loop
+                  styles={{
+                    control: {
+                      borderRadius: 0,
+                      width: 34,
+                      height: 64,
+                      background: "transparent",
+                      backgroundColor: "rgba(255,255,255,0.4)",
+                      boxShadow: "-2px 0 5px -2px rgba(0,0,0,0.2)",
+                      border: "0px",
+                    },
+                    indicators: {
+                      bottom: -30,
+                    },
+                    indicator: {
+                      height: 16,
+                      width: 16,
+                      borderRadius: "50%",
+                      backgroundColor: "#C7CACD",
+                      "&[data-active]": {
+                        backgroundColor: "black",
+                      },
+                    },
+                  }}
+                >
+                  <Carousel.Slide>
+                    <Image
+                      width="100%"
+                      height={390}
+                      src={
+                        selectedVariant.imageURL ??
+                        "https://cdn-icons-png.flaticon.com/512/3770/3770820.png"
+                      }
+                      alt={selectedVariant.imageURL}
+                      fit="contain"
+                      withPlaceholder
+                    />
+                  </Carousel.Slide>
+                  {selectedVariant.additionalimages.map((s, index) => (
+                    <Carousel.Slide key={index}>
+                      <Image
+                        width="100%"
+                        height={390}
+                        src={
+                          s ??
+                          "https://cdn-icons-png.flaticon.com/512/3770/3770820.png"
+                        }
+                        alt={s}
+                        fit="contain"
+                        withPlaceholder
+                      />
+                    </Carousel.Slide>
+                  ))}
+                </Carousel>
               </Stack>
             </MediaQuery>
           </Grid.Col>

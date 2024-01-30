@@ -58,6 +58,7 @@ const GET_PRODUCT = gql`
           maxQuantity
           purchasePeriod
           imageURL
+          additionalimages
           variantSku
           product {
             specification

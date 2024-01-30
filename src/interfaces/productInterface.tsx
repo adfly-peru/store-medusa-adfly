@@ -63,6 +63,7 @@ export interface Variant {
   product?: Product;
   coupon?: Coupon;
   service?: Service;
+  additionalimages: string[];
 }
 
 export interface VariantDetailed {
