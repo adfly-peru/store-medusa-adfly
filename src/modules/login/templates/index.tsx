@@ -20,6 +20,8 @@ import {
   Modal,
   Box,
   Center,
+  em,
+  rem,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -105,13 +107,14 @@ const LoginPage = () => {
         overlayBlur={2}
         overlayOpacity={0.9}
       />
-      <Grid m={0} style={{ height: "100vh" }}>
+      <Grid m={0} style={{ minHeight: "100vh" }}>
         <Grid.Col
           span="auto"
           sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            padding: "0 10px",
           }}
         >
           <MediaQuery
@@ -119,15 +122,12 @@ const LoginPage = () => {
             styles={{
               paddingLeft: 10,
               paddingRight: 10,
-              h1: {
-                fontSize: "20px",
-              },
             }}
           >
             <Stack>
               <Image
                 radius="md"
-                height={100}
+                height="6.25rem"
                 fit="contain"
                 src={loginDesign?.logourl ?? ""}
                 alt="Login Logo"
@@ -145,28 +145,38 @@ const LoginPage = () => {
                   {error}
                 </Alert>
               )}
-              <Stack spacing="md" my="xl">
-                <Title fz={20} align="center">
+              <Stack spacing="md" my="0.75rem">
+                <Title
+                  style={{
+                    fontSize: "1.25rem",
+                  }}
+                  align="center"
+                >
                   ¡Descubre lo que tenemos para ti!
                 </Title>
-                <Text align="center" color="gray.7">
+                <Text
+                  style={{
+                    fontSize: "1rem",
+                  }}
+                  align="center"
+                  color="gray.7"
+                >
                   Ingresar a tu cuenta
                 </Text>
               </Stack>
               <form onSubmit={form.onSubmit((_) => handleSubmit())}>
-                <Stack
-                  spacing="xl"
-                  px="sm"
-                  style={{
-                    fontSize: 16,
-                  }}
-                  align="center"
-                >
+                <Stack spacing="xl" px="sm" style={{}} align="center">
                   <TextInput
                     placeholder="E-mail / Doc. Identidad"
                     radius="xs"
                     size="md"
                     w={320}
+                    styles={{
+                      input: {
+                        fontSize: "1rem",
+                        height: "1rem",
+                      },
+                    }}
                     {...form.getInputProps("email")}
                   />
                   <PasswordInput
@@ -180,9 +190,14 @@ const LoginPage = () => {
                       "error",
                     ]}
                     styles={{
+                      innerInput: {
+                        fontSize: "1rem",
+                      },
+                      input: {
+                        height: "1rem",
+                      },
                       description: {
                         textAlign: "right",
-                        fontSize: 13,
                       },
                     }}
                     description={
@@ -202,7 +217,7 @@ const LoginPage = () => {
                   </Button>
                 </Stack>
               </form>
-              <Space h="xs" />
+              <Space h="0.5rem" m={0} />
               <Box style={{ display: "flex", alignItems: "center" }}>
                 <div
                   style={{ flexGrow: 1, height: 1, backgroundColor: "#d1d1d1" }}
@@ -244,7 +259,7 @@ const LoginPage = () => {
                   Regístrate Aquí
                 </Button>
               </Center>
-              <Space h={20} />
+              <Space h="1rem" m={0} />
               <Group align="center" position="center" spacing={0}>
                 <Image
                   radius="md"
