@@ -18,6 +18,8 @@ import {
   Group,
   BackgroundImage,
   Modal,
+  Box,
+  Center,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -200,23 +202,48 @@ const LoginPage = () => {
                   </Button>
                 </Stack>
               </form>
-              <Space h={60} />
-              <Text ta="center" fz={13}>
-                ¿Aún no tienes cuenta?{" "}
+              <Space h="xs" />
+              <Box style={{ display: "flex", alignItems: "center" }}>
+                <div
+                  style={{ flexGrow: 1, height: 1, backgroundColor: "#d1d1d1" }}
+                ></div>
                 <Text
-                  span
-                  component="a"
+                  style={{
+                    margin: "0 8px",
+                    width: 20,
+                    height: 20,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  O
+                </Text>
+                <div
+                  style={{ flexGrow: 1, height: 1, backgroundColor: "#d1d1d1" }}
+                ></div>
+              </Box>
+              <Center>
+                <Button
+                  variant="outline"
                   onClick={() => {
                     amplitude.track("User Click Register Button");
                     setModalState("register");
                     open();
                   }}
-                  style={{ cursor: "pointer" }}
-                  c="blue"
+                  w={250}
+                  h={48}
+                  c="#31658E"
+                  fz={16}
+                  fw={700}
+                  style={{
+                    borderColor: "#8F959B",
+                  }}
                 >
-                  Regístrate
-                </Text>
-              </Text>
+                  Regístrate Aquí
+                </Button>
+              </Center>
               <Space h={20} />
               <Group align="center" position="center" spacing={0}>
                 <Image
