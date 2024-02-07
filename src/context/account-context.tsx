@@ -65,6 +65,7 @@ interface AccountContext {
   loading: boolean;
   banners: AdflyBanner[];
   refetch: () => void;
+  loginWithToken: (authToken: string) => void;
 }
 
 const AccountContext = createContext<AccountContext | null>(null);
@@ -320,6 +321,22 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     };
   };
 
+  const loginWithToken = (authToken: string) => {
+    setLoading(true);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("collaboratortoken", authToken);
+      const decodedToken: IToken = jwtDecode(authToken);
+      const decodeduserid = decodedToken.uuid_collaborator;
+      setUserId(decodeduserid);
+      amplitude.track("login with route token");
+    }
+    setToken(authToken);
+    setStatus("authenticated");
+    refetch();
+    refetchDesign();
+    setLoading(false);
+  };
+
   const login = async (values: { email: string; password: string }) => {
     let errorText = "";
     try {
@@ -474,6 +491,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     <AccountContext.Provider
       value={{
         survey,
+        loginWithToken,
         daysInApp,
         collaborator,
         verify,
