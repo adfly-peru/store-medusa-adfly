@@ -565,7 +565,6 @@ export function DetailedProduct({
                       <IconStarFilled size={20} />
                     </Group>
                     <Text>
-                      S/.{" "}
                       {(
                         (selectedVariant.offerPrice ?? 0 > 0
                           ? selectedVariant.offerPrice ?? 0
