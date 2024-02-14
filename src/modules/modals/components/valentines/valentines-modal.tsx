@@ -110,8 +110,8 @@ const ValentinesModal = () => {
                   color: "#31658E",
                 }}
               >
-                <Text>FRYDAYSAD25</Text>
-                <CopyButton value={"FRYDAYSAD25"}>
+                <Text>FRIDAYSAD25</Text>
+                <CopyButton value={"FRIDAYSAD25"}>
                   {({ copied, copy }) => (
                     <Button w="100%" h={50} fz={20} onClick={copy}>
                       Copiar Cupón
