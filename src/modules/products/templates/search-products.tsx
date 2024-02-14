@@ -14,7 +14,7 @@ import Pagination from "@modules/common/components/pagination";
 import FilteredProducts from "@modules/products/components/filtered-products";
 import SearchBar from "@modules/products/components/search-bar";
 import { IconChevronDown, IconFilter, IconList } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterDrawer from "../components/filter-drawer";
 import { useProduct } from "@context/product-context";
 
@@ -140,8 +140,8 @@ const SearchProducts = ({
               <Text>
                 {searchable +
                   departmentName +
-                  originalCampaigns.find((v) => v.uuidcampaign === campaign)
-                    ?.name}
+                  (originalCampaigns.find((v) => v.uuidcampaign === campaign)
+                    ?.name ?? "")}
               </Text>
               <Space h="md" />
               <Group grow>
