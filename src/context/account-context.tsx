@@ -65,7 +65,7 @@ interface AccountContext {
   loading: boolean;
   banners: AdflyBanner[];
   refetch: () => void;
-  loginWithToken: (authToken: string) => void;
+  loginWithToken: (authToken: string, url?: string) => void;
 }
 
 const AccountContext = createContext<AccountContext | null>(null);
@@ -76,6 +76,7 @@ interface AccountProviderProps {
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
   const router = useRouter();
+  const { token: urltoken } = router.query;
   const [banners, setBanners] = useState<AdflyBanner[]>([]);
   const [daysInApp, setDaysInApp] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -321,20 +322,25 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     };
   };
 
-  const loginWithToken = (authToken: string) => {
+  const loginWithToken = (authToken: string, url?: string) => {
     setLoading(true);
     if (typeof window !== "undefined") {
       localStorage.setItem("collaboratortoken", authToken);
       const decodedToken: IToken = jwtDecode(authToken);
       const decodeduserid = decodedToken.uuid_collaborator;
+      const expirationDate = new Date(decodedToken.exp * 1000);
+      if (expirationDate.getTime() - new Date().getTime() <= 0) return;
       setUserId(decodeduserid);
       amplitude.track("login with route token");
+      setToken(authToken);
+      setStatus("authenticated");
+      refetch();
+      refetchDesign();
+      if (url) {
+        router.push(url);
+      } else router.push("/");
+      setLoading(false);
     }
-    setToken(authToken);
-    setStatus("authenticated");
-    refetch();
-    refetchDesign();
-    setLoading(false);
   };
 
   const login = async (values: { email: string; password: string }) => {
@@ -391,18 +397,19 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
   const logout = () => {
     if (typeof window !== "undefined") {
+      router.push("/");
       amplitude.track("User Logged Out");
       const identify = new amplitude.Identify();
       amplitude.identify(identify);
       // amplitude.reset();
       localStorage.removeItem("collaboratortoken");
+      setUserId(null);
+      setToken(null);
+      setCollaborator(undefined);
+      setHomeDesign(null);
+      setAddresses([]);
+      setStatus("unauthenticated");
     }
-    setUserId(null);
-    setToken(null);
-    setCollaborator(undefined);
-    setHomeDesign(null);
-    setAddresses([]);
-    setStatus("unauthenticated");
   };
 
   useEffect(() => {
