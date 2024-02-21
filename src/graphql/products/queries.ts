@@ -3,6 +3,7 @@ import { gql } from "@apollo/client";
 const GET_PRODUCT = gql`
   query SingleOffer($id: ID!, $collaboratorId: ID!) {
     offerForCollaborator(id: $id, uuidcollaborator: $collaboratorId) {
+      lastcoupon
       offer {
         uuidOffer
         offerName

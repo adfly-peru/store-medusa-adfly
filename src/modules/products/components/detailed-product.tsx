@@ -53,10 +53,12 @@ export function DetailedProduct({
   product,
   totalOrdered,
   refetchFunction,
+  lastcoupon,
 }: {
   product: Offer;
   totalOrdered: number;
   refetchFunction: () => void;
+  lastcoupon?: string;
 }) {
   const [details, setDetails] = useState<{ name: string; value: string }[]>([]);
   const [noAvailable, setNoAvailable] = useState(false);
@@ -673,7 +675,9 @@ export function DetailedProduct({
                         refetchFunction();
                       }}
                     >
-                      Generar Cupón
+                      {maxUnits <= 0
+                        ? `Último cupón generado: ${lastcoupon ?? ""}`
+                        : "Generar Cupón"}
                     </Button>
                   ) : (
                     <Stack spacing="md">

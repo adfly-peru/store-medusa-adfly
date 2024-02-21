@@ -92,6 +92,7 @@ export interface VariantDetailed {
 export interface OfferForCollaborator {
   offer: Offer;
   totalLastPeriod: number;
+  lastcoupon?: string;
 }
 
 export interface OfferDetails {
