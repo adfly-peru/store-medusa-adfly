@@ -17,9 +17,9 @@ import {
 
 interface ProductContext {
   departments: Department[];
-  categories: Category[];
-  subCategories: Subcategory[];
-  brands: Brand[];
+  // categories: Category[];
+  // subCategories: Subcategory[];
+  // brands: Brand[];
   campaigns: Campaign[];
 }
 
@@ -33,13 +33,13 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
   const { data: departments } = useQuery<{ departments: Department[] }>(
     GET_DEPARTMENTS
   );
-  const { data: categories } = useQuery<{ categories: Category[] }>(
-    GET_CATEGORIES
-  );
-  const { data: subcategories } = useQuery<{ subcategories: Subcategory[] }>(
-    GET_SUBCATEGORIES
-  );
-  const { data: brands } = useQuery<{ brands: Brand[] }>(GET_BRANDS);
+  // const { data: categories } = useQuery<{ categories: Category[] }>(
+  //   GET_CATEGORIES
+  // );
+  // const { data: subcategories } = useQuery<{ subcategories: Subcategory[] }>(
+  //   GET_SUBCATEGORIES
+  // );
+  // const { data: brands } = useQuery<{ brands: Brand[] }>(GET_BRANDS);
   const { data: campaigns } = useQuery<{
     getAllCampaigns: { campaigns: Campaign[] };
   }>(GET_CAMPAIGNS);
@@ -48,9 +48,9 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
     <ProductContext.Provider
       value={{
         departments: departments?.departments ?? [],
-        categories: categories?.categories ?? [],
-        subCategories: subcategories?.subcategories ?? [],
-        brands: brands?.brands ?? [],
+        // categories: categories?.categories ?? [],
+        // subCategories: subcategories?.subcategories ?? [],
+        // brands: brands?.brands ?? [],
         campaigns: campaigns?.getAllCampaigns?.campaigns ?? [],
       }}
     >
