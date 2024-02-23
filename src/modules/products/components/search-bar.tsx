@@ -24,9 +24,11 @@ const capitalizeText = (text: string) => {
 const SearchBar = ({
   searchable,
   kind,
+  departmentname,
 }: {
   searchable: string;
   kind: "campaign" | "department" | "search";
+  departmentname: string;
 }) => {
   const { setOptions, products, setoffset } = useFilteredProducts();
   const { campaigns: originalCampaigns } = useProduct();
@@ -105,6 +107,8 @@ const SearchBar = ({
           {kind === "campaign"
             ? originalCampaigns.find((v) => v.uuidcampaign === searchable)
                 ?.name ?? "------"
+            : kind === "department"
+            ? departmentname
             : searchable !== ""
             ? capitalizeText(searchable)
             : "Departamento"}

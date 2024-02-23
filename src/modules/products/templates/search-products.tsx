@@ -153,6 +153,7 @@ const SearchProducts = ({
                   ? "department"
                   : "campaign"
               }
+              departmentname={departmentName}
             />
           </Grid.Col>
         </MediaQuery>
