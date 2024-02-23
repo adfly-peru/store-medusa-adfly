@@ -74,6 +74,7 @@ const SearchBar = ({
 
   useEffect(() => {
     setoffset(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [brand, department, category, subcategory, search, campaigns]);
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const SearchBar = ({
       fetchOptions.subcategoryName = subcategory.at(0);
     if (brand.length > 0) fetchOptions.brandName = brand.at(0);
     setOptions(fetchOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [brand, department, category, subcategory, search, campaigns]);
 
   return (
@@ -102,7 +104,7 @@ const SearchBar = ({
         >
           {kind === "campaign"
             ? originalCampaigns.find((v) => v.uuidcampaign === searchable)
-                ?.name ?? capitalizeText(searchable)
+                ?.name ?? "------"
             : searchable !== ""
             ? capitalizeText(searchable)
             : "Departamento"}
@@ -142,7 +144,8 @@ const SearchBar = ({
                     radius="sm"
                     color="dark"
                   >
-                    {e}
+                    {products?.campaignCounts?.find((f) => f.uuid === e)
+                      ?.name ?? "-"}
                   </Chip>
                 ))}
               </>
@@ -161,7 +164,8 @@ const SearchBar = ({
                     radius="sm"
                     color="dark"
                   >
-                    {e}
+                    {products?.departmentCounts?.find((f) => f.uuid === e)
+                      ?.name ?? "-"}
                   </Chip>
                 ))}
               </>
@@ -178,7 +182,8 @@ const SearchBar = ({
                 radius="sm"
                 color="dark"
               >
-                {e}
+                {products?.categoryCounts?.find((f) => f.uuid === e)?.name ??
+                  "-"}
               </Chip>
             ))}
             {subcategory.map((e) => (
@@ -191,7 +196,8 @@ const SearchBar = ({
                 radius="sm"
                 color="dark"
               >
-                {e}
+                {products?.subcategoryCounts?.find((f) => f.uuid === e)?.name ??
+                  "-"}
               </Chip>
             ))}
             {brand.map((e) => (
@@ -202,7 +208,7 @@ const SearchBar = ({
                 radius="sm"
                 color="dark"
               >
-                {e}
+                {products?.brandCounts?.find((f) => f.uuid === e)?.name ?? "-"}
               </Chip>
             ))}
             {seller.map((e) => (
@@ -282,7 +288,7 @@ const SearchBar = ({
                   new Map<string, string>(
                     Array.from(
                       products?.departmentCounts?.map((c) => [
-                        c.name ?? "",
+                        c.uuid ?? "",
                         `${c.name} (${c.count})`,
                       ]) ?? []
                     )
@@ -309,7 +315,7 @@ const SearchBar = ({
                   new Map<string, string>(
                     Array.from(
                       products?.categoryCounts?.map((c) => [
-                        c.name ?? "",
+                        c.uuid ?? "",
                         `${c.name} (${c.count})`,
                       ]) ?? []
                     )
@@ -336,7 +342,7 @@ const SearchBar = ({
                   new Map<string, string>(
                     Array.from(
                       products?.subcategoryCounts?.map((c) => [
-                        c.name ?? "",
+                        c.uuid ?? "",
                         `${c.name} (${c.count})`,
                       ]) ?? []
                     )
@@ -360,7 +366,7 @@ const SearchBar = ({
                 new Map<string, string>(
                   Array.from(
                     products?.brandCounts?.map((c) => [
-                      c.name ?? "",
+                      c.uuid ?? "",
                       `${c.name} (${c.count})`,
                     ]) ?? []
                   )

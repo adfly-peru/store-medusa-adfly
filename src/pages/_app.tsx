@@ -149,6 +149,27 @@ export default function App({
                   },
                 }),
               },
+              Radio: {
+                styles: (theme) => ({
+                  body: {
+                    marginTop: 10,
+                    marginBottom: 10,
+                  },
+                  icon: {
+                    width: "1rem",
+                    height: "1rem",
+                    top: "calc(50% - 1rem / 2)",
+                    left: "calc(50% - 1rem / 2)",
+                  },
+                  radio: {
+                    "&:checked": {
+                      borderColor: "#5C98C7",
+                      backgroundColor: "#5C98C7",
+                    },
+                    borderRadius: 0,
+                  },
+                }),
+              },
             },
           }}
           withGlobalStyles

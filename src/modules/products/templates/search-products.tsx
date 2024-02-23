@@ -9,12 +9,20 @@ import {
   Button,
   Drawer,
   Title,
+  Radio,
+  Divider,
+  Container,
 } from "@mantine/core";
 import Pagination from "@modules/common/components/pagination";
 import FilteredProducts from "@modules/products/components/filtered-products";
 import SearchBar from "@modules/products/components/search-bar";
-import { IconChevronDown, IconFilter, IconList } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import {
+  IconCheck,
+  IconChevronDown,
+  IconFilter,
+  IconList,
+} from "@tabler/icons-react";
+import { useState } from "react";
 import FilterDrawer from "../components/filter-drawer";
 import { useProduct } from "@context/product-context";
 
@@ -28,11 +36,53 @@ const SearchProducts = ({
   campaign: string;
 }) => {
   const [opened, setOpened] = useState(false);
+  const [openedSort, setOpenedSort] = useState(false);
   const { setSortBy, sortBy, offset, count, setoffset, limit } =
     useFilteredProducts();
+  const { departments } = useProduct();
   const { campaigns: originalCampaigns } = useProduct();
   return (
     <>
+      <Drawer
+        opened={openedSort}
+        onClose={() => setOpenedSort(false)}
+        title={
+          <Title
+            order={2}
+            styles={{
+              fontSize: "20px",
+              fontweight: 700,
+              lineheight: "30px",
+              letterSpacing: "0.05em",
+            }}
+          >
+            Ordenar por:
+          </Title>
+        }
+        padding={0}
+        size="md"
+        position="right"
+        styles={{
+          header: {
+            padding: 18,
+            backgroundColor: "#31658E",
+            color: "white",
+          },
+          close: {
+            color: "white",
+          },
+        }}
+      >
+        <Container p={0}>
+          <Divider size="md" style={{ borderColor: "black" }} />
+          <Radio.Group value={sortBy} onChange={setSortBy} m={20}>
+            <Radio value="name" label="Nombre" icon={IconCheck} />
+            <Radio value="adflyprice" label="Precio Adfly" icon={IconCheck} />
+            <Radio value="refprice" label="Precio Original" icon={IconCheck} />
+            <Radio value="stock" label="Stock" icon={IconCheck} />
+          </Radio.Group>
+        </Container>
+      </Drawer>
       <Drawer
         opened={opened}
         onClose={() => setOpened(false)}
@@ -58,6 +108,9 @@ const SearchProducts = ({
             backgroundColor: "#31658E",
             color: "white",
           },
+          close: {
+            color: "white",
+          },
         }}
       >
         <FilterDrawer
@@ -65,7 +118,7 @@ const SearchProducts = ({
             searchable !== ""
               ? searchable
               : departmentName !== ""
-              ? departmentName
+              ? departments.find((d) => d.name === departmentName)?.id ?? ""
               : campaign
           }
           kind={
@@ -90,7 +143,7 @@ const SearchProducts = ({
                 searchable !== ""
                   ? searchable
                   : departmentName !== ""
-                  ? departmentName
+                  ? departments.find((d) => d.name === departmentName)?.id ?? ""
                   : campaign
               }
               kind={
@@ -120,10 +173,9 @@ const SearchProducts = ({
                     onChange={setSortBy}
                     data={[
                       { label: "Nombre", value: "name" },
-                      { label: "Marca", value: "brand" },
-                      { label: "Departamento", value: "department" },
-                      { label: "Categoria", value: "category" },
-                      { label: "Subcategoria", value: "subcategory" },
+                      { label: "Precio Adfly", value: "adflyprice" },
+                      { label: "Precio Original", value: "refprice" },
+                      { label: "Stock", value: "stock" },
                     ]}
                   />
                 </Group>
@@ -151,7 +203,12 @@ const SearchProducts = ({
                 >
                   Filtrar
                 </Button>
-                <Button leftIcon={<IconList />}>Ordenar</Button>
+                <Button
+                  onClick={() => setOpenedSort(true)}
+                  leftIcon={<IconList />}
+                >
+                  Ordenar
+                </Button>
               </Group>
             </div>
           </MediaQuery>
