@@ -4,13 +4,19 @@ import { modals } from "@mantine/modals";
 import SurveyModal from "../components/survey-modal";
 import ValentinesModal from "../components/valentines/valentines-modal";
 import { Image } from "@mantine/core";
+import TadaMarchModal from "../components/tada/tada-march-modal";
 
 function isTodayValentinesDay(): boolean {
   const today = new Date();
   const day = today.getDate();
-  const month = today.getMonth() + 1; // Los meses en JavaScript comienzan en 0
-
+  const month = today.getMonth() + 1;
   return day === 14 && month === 2;
+}
+
+function isMonth(m: number): boolean {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  return month === m;
 }
 
 const CollaboratorModals: React.FC<{ children?: React.ReactNode }> = ({
@@ -51,11 +57,14 @@ const CollaboratorModals: React.FC<{ children?: React.ReactNode }> = ({
         children: <SurveyModal />,
       });
     }
-    // Valentines day modal
-    const valentinesmodal = localStorage.getItem("valentinesmodalviewed");
-    if (isTodayValentinesDay() && valentinesmodal === null) {
-      localStorage.setItem("valentinesmodalviewed", "viewed");
+    // Tada March Modal
+    const valentinesmodal = localStorage.getItem("tadamarchmodal");
+    if (isMonth(3) && valentinesmodal === null) {
       modals.open({
+        onClose: () => {
+          localStorage.setItem("tadamarchmodal", "closed");
+          modals.closeAll();
+        },
         closeOnClickOutside: false,
         closeOnEscape: false,
         size: 880,
@@ -83,10 +92,7 @@ const CollaboratorModals: React.FC<{ children?: React.ReactNode }> = ({
           close: {
             marginRight: "1rem",
             marginTop: 30,
-            color: "white",
-            "@media (max-width: 62em)": {
-              color: "red",
-            },
+            color: "#31658E",
           },
           header: {
             position: "relative",
@@ -110,7 +116,7 @@ const CollaboratorModals: React.FC<{ children?: React.ReactNode }> = ({
             boxShadow: "unset",
           },
         },
-        children: <ValentinesModal />,
+        children: <TadaMarchModal />,
       });
     }
   }, [collaborator]);
