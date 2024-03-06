@@ -64,6 +64,7 @@ const FilterDrawer = ({
       fetchOptions.subcategoryName = subcategory.at(0);
     if (brand.length > 0) fetchOptions.brandName = brand.at(0);
     setOptions(fetchOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [brand, department, category, subcategory, search, campaigns]);
 
   return (
@@ -118,7 +119,7 @@ const FilterDrawer = ({
                   new Map<string, string>(
                     Array.from(
                       products?.departmentCounts?.map((c) => [
-                        c.name ?? "",
+                        c.uuid ?? "",
                         `${c.name} (${c.count})`,
                       ]) ?? []
                     )
@@ -145,7 +146,7 @@ const FilterDrawer = ({
                   new Map<string, string>(
                     Array.from(
                       products?.categoryCounts?.map((c) => [
-                        c.name ?? "",
+                        c.uuid ?? "",
                         `${c.name} (${c.count})`,
                       ]) ?? []
                     )
@@ -172,7 +173,7 @@ const FilterDrawer = ({
                   new Map<string, string>(
                     Array.from(
                       products?.subcategoryCounts?.map((c) => [
-                        c.name ?? "",
+                        c.uuid ?? "",
                         `${c.name} (${c.count})`,
                       ]) ?? []
                     )
@@ -196,7 +197,7 @@ const FilterDrawer = ({
                 new Map<string, string>(
                   Array.from(
                     products?.brandCounts?.map((c) => [
-                      c.name ?? "",
+                      c.uuid ?? "",
                       `${c.name} (${c.count})`,
                     ]) ?? []
                   )

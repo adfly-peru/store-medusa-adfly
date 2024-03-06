@@ -63,6 +63,7 @@ export interface Variant {
   product?: Product;
   coupon?: Coupon;
   service?: Service;
+  additionalimages: string[];
 }
 
 export interface VariantDetailed {
@@ -91,6 +92,7 @@ export interface VariantDetailed {
 export interface OfferForCollaborator {
   offer: Offer;
   totalLastPeriod: number;
+  lastcoupon?: string;
 }
 
 export interface OfferDetails {

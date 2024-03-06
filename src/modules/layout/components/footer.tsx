@@ -26,7 +26,7 @@ import {
 const FooterComponent = () => {
   const { homeDesign } = useAccount();
   return (
-    <Footer height="100%" pt={10} mt={20} fz={15}>
+    <Footer height="100%" pt={20} mt={60} fz={15}>
       <Center>
         <Group w="85%" align="start" position="apart" px="xl">
           <Stack spacing="xs" align="center" h="100%">
@@ -94,6 +94,7 @@ const FooterComponent = () => {
         pb="lg"
         bg={homeDesign?.backcolor ?? "#2A6595"}
         px="md"
+        mt={20}
       >
         <Group mt="md">
           <ActionIcon

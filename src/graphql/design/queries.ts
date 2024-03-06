@@ -8,6 +8,7 @@ const GET_LOGIN__DESIGN = gql`
       logourl
       bannerurl
       commercialname
+      href
     }
   }
 `;
@@ -20,6 +21,7 @@ const GET_HOME_DESIGN = gql`
       logourl
       bannerurl
       commercialname
+      href
     }
   }
 `;

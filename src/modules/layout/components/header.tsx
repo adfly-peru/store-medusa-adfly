@@ -125,6 +125,7 @@ const HomeHeader = () => {
       department: categorieToSearch,
       origin: "Menu Header",
     });
+    close();
     router.push({
       pathname: "/search",
       query: { department: categorieToSearch },
@@ -290,63 +291,6 @@ const HomeHeader = () => {
               </Group>
             </UnstyledButton>
           </Center>
-          {/* <Menu
-            trigger="click"
-            openDelay={100}
-            closeDelay={400}
-            shadow="md"
-            width={200}
-            position="bottom"
-          >
-            <Menu.Target>
-              <Center>
-                <UnstyledButton
-                  p="0.4rem"
-                  style={{
-                    border: "2px solid #ffffff",
-                    borderRadius: "6px",
-                  }}
-                >
-                  <Group spacing="xs" align="center" position="apart">
-                    <Text fz={20} color={homeDesign?.fontcolor}>
-                      Menú
-                    </Text>
-                    <MediaQuery
-                      smallerThan="lg"
-                      styles={{
-                        display: "none",
-                      }}
-                    >
-                      <IconChevronDown color={homeDesign?.fontcolor} />
-                    </MediaQuery>
-                  </Group>
-                </UnstyledButton>
-              </Center>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <Menu.Label>Departamentos</Menu.Label>
-              <ScrollArea.Autosize mah={300}>
-                {departments.map((category, id) => (
-                  <Menu.Item
-                    key={id}
-                    icon={
-                      <Image
-                        alt={category.name}
-                        src={category.image}
-                        width={30}
-                        style={{
-                          filter: colorScheme === "dark" ? "invert(1)" : "none",
-                        }}
-                      />
-                    }
-                    onClick={() => searchProductByCategorie(category.name)}
-                  >
-                    {category.name}
-                  </Menu.Item>
-                ))}
-              </ScrollArea.Autosize>
-            </Menu.Dropdown>
-          </Menu> */}
         </Grid.Col>
         <Grid.Col span="auto" py={16}>
           <form onSubmit={form.onSubmit((_) => searchProduct())}>

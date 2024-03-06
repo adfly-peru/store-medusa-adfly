@@ -91,7 +91,11 @@ const CouponDetailModal = ({ coupon }: { coupon: CouponUsage }) => {
         >
           <Accordion.Item value="description">
             <Accordion.Control>Descripción</Accordion.Control>
-            <Accordion.Panel>
+            <Accordion.Panel
+              sx={{
+                whiteSpace: "pre-line",
+              }}
+            >
               {coupon.variant?.offer.description}
             </Accordion.Panel>
           </Accordion.Item>
@@ -153,7 +157,13 @@ const CouponDetailModal = ({ coupon }: { coupon: CouponUsage }) => {
                 Información Adicional
               </Tabs.Tab>
             </Tabs.List>
-            <Tabs.Panel value="description" pt="xs">
+            <Tabs.Panel
+              value="description"
+              pt="xs"
+              sx={{
+                whiteSpace: "pre-line",
+              }}
+            >
               {coupon.variant?.offer.description}
             </Tabs.Panel>
             <Tabs.Panel value="details" pt="xs" px="md">

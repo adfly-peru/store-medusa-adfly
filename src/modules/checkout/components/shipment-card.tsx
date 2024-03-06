@@ -221,10 +221,9 @@ const ShipmentCard = ({
                         Dirección:
                       </Text>
                       {` ${
-                        suborder.availableDeliveryMethods.deliveryOnStore
-                          .find((v) => v.uuiddeliverystore === uuidstore)
-                          ?.line?.split(",")
-                          ?.at(0) ?? "-"
+                        suborder.availableDeliveryMethods.deliveryOnStore.find(
+                          (v) => v.uuiddeliverystore === uuidstore
+                        )?.line ?? "-"
                       }`}
                     </Text>
                     <Text>

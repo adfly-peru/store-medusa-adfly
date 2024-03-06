@@ -21,7 +21,6 @@ import { IconCircleFilled, IconCreditCard } from "@tabler/icons-react";
 import { UseFormReturnType } from "@mantine/form";
 import { BillingForm } from "@interfaces/billing";
 import { useAccount } from "@context/account-context";
-import * as amplitude from "@amplitude/analytics-browser";
 
 declare global {
   interface Window {
@@ -168,11 +167,20 @@ const PaymentButton = ({ form }: { form: UseFormReturnType<BillingForm> }) => {
                   src="/niubiz.svg"
                 />
               </Group>
-              <Image
-                src="https://adfly.pe/Content/backend/img/payment/online.png"
-                width="70%"
-                fit="contain"
-              />
+              <Group spacing={0} position="left">
+                <Image
+                  src="https://adfly.pe/Content/backend/img/payment/online.png"
+                  height={30}
+                  width="inherit"
+                  fit="contain"
+                />
+                <Image
+                  height={43}
+                  width="inherit"
+                  fit="contain"
+                  src="/yape.png"
+                />
+              </Group>
             </Stack>
             <Radio
               labelPosition="left"

@@ -52,6 +52,7 @@ const ProductInfo = ({ productId }: { productId: string }) => {
             if (collaborator?.uuidcollaborator)
               refetchProduct(productId, collaborator.uuidcollaborator);
           }}
+          lastcoupon={product.lastcoupon}
         />
       </Container>
       <Stack align="center" justify="flex-end" spacing="xl">

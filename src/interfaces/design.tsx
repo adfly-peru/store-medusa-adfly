@@ -4,6 +4,7 @@ export interface DesignConfig {
   backcolor: string;
   logourl: string;
   bannerurl: string;
+  href: string;
 }
 
 export interface AdflyBanner {

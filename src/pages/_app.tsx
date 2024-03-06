@@ -25,6 +25,7 @@ import Head from "next/head";
 import * as amplitude from "@amplitude/analytics-browser";
 import { StarProvider } from "@context/stars-context";
 import { ModalsProvider } from "@mantine/modals";
+import { useRouter } from "next/router";
 
 const adflyColors = {
   default: "#31658E",
@@ -148,6 +149,27 @@ export default function App({
                   },
                 }),
               },
+              Radio: {
+                styles: (theme) => ({
+                  body: {
+                    marginTop: 10,
+                    marginBottom: 10,
+                  },
+                  icon: {
+                    width: "1rem",
+                    height: "1rem",
+                    top: "calc(50% - 1rem / 2)",
+                    left: "calc(50% - 1rem / 2)",
+                  },
+                  radio: {
+                    "&:checked": {
+                      borderColor: "#5C98C7",
+                      backgroundColor: "#5C98C7",
+                    },
+                    borderRadius: 0,
+                  },
+                }),
+              },
             },
           }}
           withGlobalStyles
@@ -180,8 +202,16 @@ export default function App({
 const ResourcesProvider: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
-  const { status, collaborator } = useAccount();
+  const router = useRouter();
+  const { token } = router.query;
+  const { status, collaborator, loginWithToken } = useAccount();
   const { loginDesign } = useDesign();
+
+  useEffect(() => {
+    if (token && router.pathname !== "/recovery") {
+      loginWithToken(token.toString(), router.asPath);
+    }
+  }, [token, router.asPath, router.pathname]);
 
   if (status == "authenticated") {
     if (!collaborator) {

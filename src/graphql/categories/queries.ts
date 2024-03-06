@@ -10,13 +10,13 @@ const GET_DEPARTMENTS = gql`
       visible
       outstanding
       image
-      categories {
-        uuidCategory
-        name
-        description
-        active
-        visible
-      }
+      # categories {
+      #   uuidCategory
+      #   name
+      #   description
+      #   active
+      #   visible
+      # }
     }
   }
 `;

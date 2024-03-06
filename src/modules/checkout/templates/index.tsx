@@ -197,7 +197,7 @@ const CheckoutTemplate = () => {
       amount: totalAmountFixed,
       expirationminutes: "20",
       timeouturl: "about:blank",
-      merchantlogo: "https://www.adfly.pe/Content/logo.png",
+      merchantlogo: "https://tienda.adfly.com.pe/logo_adfly.svg",
       merchantname: "Adfly",
       formbuttoncolor: "#31658E",
       action: `api/payment?purchaseNumber=${cart.purchaseNumber}&amount=${totalAmount}&collaboratorid=${collaborator?.uuidcollaborator}&stars=${starsToUse}`,

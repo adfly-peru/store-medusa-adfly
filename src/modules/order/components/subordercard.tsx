@@ -93,7 +93,13 @@ const DetailModal = ({ itemdetails }: { itemdetails: ItemDetails }) => {
         >
           <Accordion.Item value="description">
             <Accordion.Control>Descripción</Accordion.Control>
-            <Accordion.Panel>{itemdetails.description}</Accordion.Panel>
+            <Accordion.Panel
+              sx={{
+                whiteSpace: "pre-line",
+              }}
+            >
+              {itemdetails.description}
+            </Accordion.Panel>
           </Accordion.Item>
           <Accordion.Item value="additional">
             <Accordion.Control>Información Adicional</Accordion.Control>
@@ -153,7 +159,13 @@ const DetailModal = ({ itemdetails }: { itemdetails: ItemDetails }) => {
                 Información Adicional
               </Tabs.Tab>
             </Tabs.List>
-            <Tabs.Panel value="description" pt="xs">
+            <Tabs.Panel
+              value="description"
+              pt="xs"
+              sx={{
+                whiteSpace: "pre-line",
+              }}
+            >
               {itemdetails.description}
             </Tabs.Panel>
             <Tabs.Panel value="details" pt="xs" px="md">

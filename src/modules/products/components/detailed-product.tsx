@@ -10,16 +10,13 @@ import {
   Button,
   NumberInputHandlers,
   Stack,
-  Flex,
   Title,
   Divider,
   Space,
   Breadcrumbs,
   Anchor,
-  SegmentedControl,
   List,
   Center,
-  ThemeIcon,
   Table,
   Tabs,
   Grid,
@@ -28,42 +25,40 @@ import {
   Select,
   Modal,
   CopyButton,
-  rem,
   Accordion,
   LoadingOverlay,
 } from "@mantine/core";
 import {
   IconBuildingStore,
-  IconCheck,
   IconChevronRight,
-  IconDatabase,
   IconHome,
   IconMail,
   IconMinus,
   IconMoodSad,
   IconPlus,
   IconShoppingCartCheck,
-  IconStar,
   IconStarFilled,
   IconTruckDelivery,
-  IconX,
 } from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@context/cart-context";
-import { Offer, Variant } from "@interfaces/productInterface";
+import { Offer } from "@interfaces/productInterface";
 import { CartItem } from "@interfaces/cart";
 import { CouponResponse } from "api/cart";
 import { TimePeriod, purchasePeriodTime } from "@modules/common/types";
 import * as amplitude from "@amplitude/analytics-browser";
+import { Carousel } from "@mantine/carousel";
 
 export function DetailedProduct({
   product,
   totalOrdered,
   refetchFunction,
+  lastcoupon,
 }: {
   product: Offer;
   totalOrdered: number;
   refetchFunction: () => void;
+  lastcoupon?: string;
 }) {
   const [details, setDetails] = useState<{ name: string; value: string }[]>([]);
   const [noAvailable, setNoAvailable] = useState(false);
@@ -454,17 +449,66 @@ export function DetailedProduct({
                   </Badge>
                 </Group>
                 <Space h="lg" />
-                <Image
-                  width="100%"
-                  height={390}
-                  src={
-                    selectedVariant?.imageURL ??
-                    "https://cdn-icons-png.flaticon.com/512/3770/3770820.png"
-                  }
-                  alt={selectedVariant?.imageURL ?? "-"}
-                  fit="contain"
-                  withPlaceholder
-                />
+                <Carousel
+                  withIndicators
+                  slideSize="100%"
+                  slideGap="md"
+                  align="center"
+                  slidesToScroll={1}
+                  loop
+                  styles={{
+                    control: {
+                      borderRadius: 0,
+                      width: 34,
+                      height: 64,
+                      background: "transparent",
+                      backgroundColor: "rgba(255,255,255,0.4)",
+                      boxShadow: "-2px 0 5px -2px rgba(0,0,0,0.2)",
+                      border: "0px",
+                    },
+                    indicators: {
+                      bottom: -30,
+                    },
+                    indicator: {
+                      height: 16,
+                      width: 16,
+                      borderRadius: "50%",
+                      backgroundColor: "#C7CACD",
+                      "&[data-active]": {
+                        backgroundColor: "black",
+                      },
+                    },
+                  }}
+                >
+                  <Carousel.Slide>
+                    <Image
+                      width="100%"
+                      height={390}
+                      src={
+                        selectedVariant.imageURL ??
+                        "https://cdn-icons-png.flaticon.com/512/3770/3770820.png"
+                      }
+                      alt={selectedVariant.imageURL}
+                      fit="contain"
+                      withPlaceholder
+                    />
+                  </Carousel.Slide>
+                  {selectedVariant.additionalimages.map((s, index) => (
+                    <Carousel.Slide key={index}>
+                      <Image
+                        width="100%"
+                        height={390}
+                        src={
+                          s ??
+                          "https://cdn-icons-png.flaticon.com/512/3770/3770820.png"
+                        }
+                        alt={s}
+                        fit="contain"
+                        withPlaceholder
+                      />
+                    </Carousel.Slide>
+                  ))}
+                </Carousel>
               </Stack>
             </MediaQuery>
           </Grid.Col>
@@ -523,7 +567,6 @@ export function DetailedProduct({
                       <IconStarFilled size={20} />
                     </Group>
                     <Text>
-                      S/.{" "}
                       {(
                         (selectedVariant.offerPrice ?? 0 > 0
                           ? selectedVariant.offerPrice ?? 0
@@ -632,7 +675,9 @@ export function DetailedProduct({
                         refetchFunction();
                       }}
                     >
-                      Generar Cupón
+                      {maxUnits <= 0
+                        ? `Último cupón generado: ${lastcoupon ?? ""}`
+                        : "Generar Cupón"}
                     </Button>
                   ) : (
                     <Stack spacing="md">
@@ -898,7 +943,13 @@ export function DetailedProduct({
               >
                 <Accordion.Item value="description">
                   <Accordion.Control>Descripción</Accordion.Control>
-                  <Accordion.Panel>{product.description}</Accordion.Panel>
+                  <Accordion.Panel
+                    sx={{
+                      whiteSpace: "pre-line",
+                    }}
+                  >
+                    {product.description}
+                  </Accordion.Panel>
                 </Accordion.Item>
                 <Accordion.Item value="additional">
                   <Accordion.Control>Información Adicional</Accordion.Control>
@@ -925,7 +976,14 @@ export function DetailedProduct({
                                   width: 140,
                                 }}
                               >
-                                <Text fw="bold">{d.name}</Text>{" "}
+                                <Text
+                                  fw="bold"
+                                  sx={{
+                                    whiteSpace: "pre-line",
+                                  }}
+                                >
+                                  {d.name}
+                                </Text>{" "}
                               </td>
                               <td>{d.value}</td>
                             </tr>
@@ -961,7 +1019,13 @@ export function DetailedProduct({
                 Información Adicional
               </Tabs.Tab>
             </Tabs.List>
-            <Tabs.Panel value="description" pt="xs">
+            <Tabs.Panel
+              value="description"
+              pt="xs"
+              sx={{
+                whiteSpace: "pre-line",
+              }}
+            >
               {product.description}
             </Tabs.Panel>
             <Tabs.Panel value="details" pt="xs" px="md">
