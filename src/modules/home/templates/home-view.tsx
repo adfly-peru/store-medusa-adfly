@@ -4,7 +4,7 @@ import FeaturedProducts from "../components/featured-products";
 import { useAccount } from "@context/account-context";
 import { Carousel, Embla } from "@mantine/carousel";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import Autoplay from "embla-carousel-autoplay";
 
 const HomeView = () => {
@@ -61,6 +61,7 @@ const HomeView = () => {
       >
         <Carousel.Slide>
           <div
+            onClick={() => router.push(homeDesign?.href ?? "")}
             style={{
               width: "100%",
               paddingTop: "30.98%",
@@ -68,6 +69,7 @@ const HomeView = () => {
               backgroundPosition: "center center",
               backgroundSize: "100% 100%",
               backgroundRepeat: "no-repeat",
+              cursor: "pointer",
             }}
           />
         </Carousel.Slide>
@@ -82,6 +84,7 @@ const HomeView = () => {
                 backgroundPosition: "center center",
                 backgroundSize: "100% 100%",
                 backgroundRepeat: "no-repeat",
+                cursor: "pointer",
               }}
             />
           </Carousel.Slide>
