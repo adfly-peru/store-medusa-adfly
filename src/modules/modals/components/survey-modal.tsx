@@ -5,7 +5,7 @@ import SurveyWelcomeModal from "./survey-welcome-modal";
 import SurveyFinalModal from "./survey-final-modal";
 import { useAccount } from "@context/account-context";
 
-const SurveyModal = () => {
+const SurveyModal = ({ onClose }: { onClose: () => void }) => {
   const { collaborator } = useAccount();
   const [step, setStep] = useState(0);
   const [preferences, setPreferences] = useState<Preferences>({});
@@ -41,6 +41,7 @@ const SurveyModal = () => {
             else setStep(5);
           }}
           name={collaborator.name}
+          onClose={onClose}
         />
       );
     case 1:
