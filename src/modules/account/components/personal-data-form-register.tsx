@@ -50,7 +50,8 @@ const PersonalDataFormRegister = ({
       acceptPublicity: collaborator?.newsletters ?? false,
     },
     validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
+      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Correo inválido"),
+      cellPhone: (val) => (val.length > 8 ? null : "Ingrese un número válido"),
       termsOfService: (val: boolean) =>
         val == true
           ? null
@@ -186,6 +187,7 @@ const PersonalDataFormRegister = ({
             label="Celular"
             radius="xs"
             size="sm"
+            withAsterisk
             {...form.getInputProps("cellPhone")}
           />
         </SimpleGrid>
