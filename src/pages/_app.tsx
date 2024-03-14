@@ -192,7 +192,7 @@ export default function App({
               >
                 <ResourcesProvider>
                   <Component {...pageProps} />
-                  <Affix position={{ bottom: "1rem", left: "1rem" }}>
+                  <Affix position={{ bottom: "1rem", right: "1rem" }}>
                     <ActionIcon
                       bg="#31658E"
                       variant="filled"
