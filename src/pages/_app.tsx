@@ -7,6 +7,8 @@ import client from "lib/apollo-config";
 import { ApolloProvider } from "@apollo/client";
 import { useEffect, useState } from "react";
 import {
+  ActionIcon,
+  Affix,
   ButtonStylesParams,
   ColorScheme,
   ColorSchemeProvider,
@@ -26,6 +28,7 @@ import * as amplitude from "@amplitude/analytics-browser";
 import { StarProvider } from "@context/stars-context";
 import { ModalsProvider } from "@mantine/modals";
 import { useRouter } from "next/router";
+import { IconBrandWhatsapp } from "@tabler/icons-react";
 
 const adflyColors = {
   default: "#31658E",
@@ -189,6 +192,21 @@ export default function App({
               >
                 <ResourcesProvider>
                   <Component {...pageProps} />
+                  <Affix position={{ bottom: "1rem", left: "1rem" }}>
+                    <ActionIcon
+                      bg="#31658E"
+                      variant="filled"
+                      radius="xl"
+                      size={60}
+                      onClick={() =>
+                        window.open(
+                          "https://wa.me/51970802065?text=Hola,%20tengo%20una%20consulta"
+                        )
+                      }
+                    >
+                      <IconBrandWhatsapp stroke={1.5} size={35} />
+                    </ActionIcon>
+                  </Affix>
                 </ResourcesProvider>
               </LoadScript>
             </AccountProvider>
