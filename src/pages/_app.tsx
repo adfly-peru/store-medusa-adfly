@@ -192,21 +192,6 @@ export default function App({
               >
                 <ResourcesProvider>
                   <Component {...pageProps} />
-                  <Affix position={{ bottom: "1rem", right: "1rem" }}>
-                    <ActionIcon
-                      bg="#31658E"
-                      variant="filled"
-                      radius="xl"
-                      size={60}
-                      onClick={() =>
-                        window.open(
-                          "https://wa.me/51970802065?text=Hola,%20tengo%20una%20consulta"
-                        )
-                      }
-                    >
-                      <IconBrandWhatsapp stroke={1.5} size={35} />
-                    </ActionIcon>
-                  </Affix>
                 </ResourcesProvider>
               </LoadScript>
             </AccountProvider>
@@ -265,6 +250,21 @@ const ResourcesProvider: React.FC<{ children?: React.ReactNode }> = ({
               </StarProvider>
             </CartProvider>
           </ProductProvider>
+          <Affix position={{ bottom: "1rem", right: "1rem" }}>
+            <ActionIcon
+              bg="#31658E"
+              variant="filled"
+              radius="xl"
+              size={60}
+              onClick={() =>
+                window.open(
+                  "https://wa.me/51970802065?text=Hola,%20tengo%20una%20consulta"
+                )
+              }
+            >
+              <IconBrandWhatsapp stroke={1.5} size={35} />
+            </ActionIcon>
+          </Affix>
         </>
       );
     }
@@ -280,6 +280,21 @@ const ResourcesProvider: React.FC<{ children?: React.ReactNode }> = ({
         <ModalsProvider>
           <RegistrationStepsModal>{children}</RegistrationStepsModal>
         </ModalsProvider>
+        <Affix position={{ bottom: "1rem", right: "1rem" }}>
+          <ActionIcon
+            bg="#31658E"
+            variant="filled"
+            radius="xl"
+            size={60}
+            onClick={() =>
+              window.open(
+                "https://wa.me/51970802065?text=Hola,%20tengo%20una%20consulta"
+              )
+            }
+          >
+            <IconBrandWhatsapp stroke={1.5} size={35} />
+          </ActionIcon>
+        </Affix>
       </>
     );
   }
@@ -295,6 +310,21 @@ const ResourcesProvider: React.FC<{ children?: React.ReactNode }> = ({
           </title>
         </Head>
         <ModalsProvider>{children}</ModalsProvider>
+        <Affix position={{ bottom: "1rem", left: "1rem" }}>
+          <ActionIcon
+            bg="#31658E"
+            variant="filled"
+            radius="xl"
+            size={60}
+            onClick={() =>
+              window.open(
+                "https://wa.me/51970802065?text=Hola,%20tengo%20una%20consulta"
+              )
+            }
+          >
+            <IconBrandWhatsapp stroke={1.5} size={35} />
+          </ActionIcon>
+        </Affix>
       </>
     </>
   );
