@@ -5,9 +5,11 @@ import { modals } from "@mantine/modals";
 const SurveyWelcomeModal = ({
   name,
   setStep,
+  onClose,
 }: {
   name: string;
   setStep: () => void;
+  onClose: () => void;
 }) => {
   return (
     <>
@@ -35,7 +37,14 @@ const SurveyWelcomeModal = ({
           </Button>
         </Group>
         <Group position="center">
-          <Anchor c="#31658E" fz={15} onClick={() => modals.closeAll()}>
+          <Anchor
+            c="#31658E"
+            fz={15}
+            onClick={() => {
+              modals.closeAll();
+              onClose();
+            }}
+          >
             Hacerlo más tarde
           </Anchor>
         </Group>
