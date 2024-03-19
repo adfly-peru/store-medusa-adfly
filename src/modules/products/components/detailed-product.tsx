@@ -985,7 +985,16 @@ export function DetailedProduct({
                                   {d.name}
                                 </Text>{" "}
                               </td>
-                              <td>{d.value}</td>
+                              <td>
+                                <Text
+                                  sx={{
+                                    whiteSpace: "pre-line",
+                                  }}
+                                  fw="bold"
+                                >
+                                  {d.value}
+                                </Text>
+                              </td>
                             </tr>
                           );
                         })}
@@ -1053,7 +1062,16 @@ export function DetailedProduct({
                         >
                           <Text fw="bold">{d.name}</Text>{" "}
                         </td>
-                        <td>{d.value}</td>
+                        <td>
+                          <Text
+                            sx={{
+                              whiteSpace: "pre-line",
+                            }}
+                            fw="bold"
+                          >
+                            {d.value}
+                          </Text>
+                        </td>
                       </tr>
                     );
                   })}

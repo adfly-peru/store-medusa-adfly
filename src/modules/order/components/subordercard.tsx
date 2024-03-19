@@ -128,7 +128,16 @@ const DetailModal = ({ itemdetails }: { itemdetails: ItemDetails }) => {
                         >
                           <Text fw="bold">{d.name}</Text>{" "}
                         </td>
-                        <td>{d.value}</td>
+                        <td>
+                          <Text
+                            sx={{
+                              whiteSpace: "pre-line",
+                            }}
+                            fw="bold"
+                          >
+                            {d.value}
+                          </Text>
+                        </td>
                       </tr>
                     );
                   })}
@@ -193,7 +202,16 @@ const DetailModal = ({ itemdetails }: { itemdetails: ItemDetails }) => {
                         >
                           <Text fw="bold">{d.name}</Text>{" "}
                         </td>
-                        <td>{d.value}</td>
+                        <td>
+                          <Text
+                            sx={{
+                              whiteSpace: "pre-line",
+                            }}
+                            fw="bold"
+                          >
+                            {d.value}
+                          </Text>
+                        </td>
                       </tr>
                     );
                   })}
