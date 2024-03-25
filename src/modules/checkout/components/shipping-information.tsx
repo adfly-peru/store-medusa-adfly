@@ -51,7 +51,8 @@ const ShippingInformation = ({
 }) => {
   const { addresses, deleteAddress } = useAccount();
   const [loading, setLoading] = useState(false);
-  const { cart, editDelivery, selectDeliveryMethod } = useCart();
+  const { cart, editDelivery, selectDeliveryMethod, handlePrecheckout } =
+    useCart();
   const [opened, setOpened] = useState(false);
   const [opened2, setOpened2] = useState(false);
   const [select, setSelect] = useState<string>("");
@@ -78,6 +79,11 @@ const ShippingInformation = ({
             (a) => a.uuidcollaboratoraddress === uuidcollaboratoraddress
           ) ?? "-",
       });
+    await handlePrecheckout(
+      addresses.find(
+        (a) => a.uuidcollaboratoraddress === uuidcollaboratoraddress
+      )
+    );
     setAddressSelected(true);
   };
 

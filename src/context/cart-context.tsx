@@ -14,9 +14,11 @@ import {
 import { Cart, CartItem } from "@interfaces/cart";
 import { useAccount } from "./account-context";
 import { BillingForm } from "@interfaces/billing";
-import { AddressInfoForm } from "@interfaces/address-interface";
+import { Address, AddressInfoForm } from "@interfaces/address-interface";
 import { VariantAttribute } from "@interfaces/productInterface";
 import { useRouter } from "next/router";
+import { precheckoutQuery } from "api/precheckout";
+import { CartPromotions } from "@interfaces/promotion";
 
 function areVariantAttributesEqual(
   list1: VariantAttribute[],
@@ -96,6 +98,8 @@ interface CartContext {
   setChecked: (v: string) => void;
   hasAcceptedTerms: boolean;
   setHasAcceptedTerms: (v: boolean) => void;
+  handlePrecheckout: (address?: Address) => Promise<void>;
+  cartPromotions: CartPromotions | null;
 }
 
 const CartContext = createContext<CartContext | null>(null);
@@ -107,6 +111,9 @@ interface CartProviderProps {
 export const CartProvider = ({ children }: CartProviderProps) => {
   const router = useRouter();
   const [checked, setChecked] = useState("ticket");
+  const [cartPromotions, setCartPromotions] = useState<CartPromotions | null>(
+    null
+  );
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
   const { collaborator } = useAccount();
   const [collaboratorId, setCollaboratorId] = useState<string | null>(null);
@@ -372,9 +379,25 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     }
   };
 
+  const handlePrecheckout = async (address?: Address) => {
+    if (!cart) return;
+    console.log("hola");
+
+    const response = await precheckoutQuery(cart, address);
+    console.log({ response });
+
+    setCartPromotions(response);
+  };
+
+  useEffect(() => {
+    console.log("data", { cartPromotions });
+  }, [cartPromotions]);
+
   return (
     <CartContext.Provider
       value={{
+        handlePrecheckout,
+        cartPromotions,
         hasAcceptedTerms,
         setHasAcceptedTerms,
         checked,

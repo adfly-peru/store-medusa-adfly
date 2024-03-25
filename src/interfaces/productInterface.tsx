@@ -85,6 +85,8 @@ export interface VariantDetailed {
     description: string;
     type: string;
     termConditions: string;
+    uuiddepartment?: string;
+    uuidcampaign?: string;
   };
   service?: Service;
 }

@@ -90,6 +90,9 @@ const GET_CART = gql`
               offerName
               description
               type
+              termConditions
+              uuiddepartment
+              uuidcampaign
             }
           }
           quantity

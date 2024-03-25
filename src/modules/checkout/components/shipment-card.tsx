@@ -10,10 +10,13 @@ import {
   Grid,
   Divider,
   Select,
+  Popover,
+  ActionIcon,
 } from "@mantine/core";
-import { IconCircleFilled } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { IconCircleFilled, IconQuestionMark } from "@tabler/icons-react";
+import { useEffect, useMemo, useState } from "react";
 import { ShipmentData } from "./shipping-information";
+import { useProduct } from "@context/product-context";
 
 const ShipmentCard = ({
   index,
@@ -26,12 +29,31 @@ const ShipmentCard = ({
   suborder: CartSubOrder;
   updateShipmentData: (data: ShipmentData) => void;
 }) => {
-  const { cart } = useCart();
+  const { cart, cartPromotions } = useCart();
+  const { promotions } = useProduct();
   const { collaborator } = useAccount();
   const [uuidstore, setUuidstore] = useState(
     suborder.deliverymethod === "pickup" ? suborder.uuidaddress : ""
   );
   const [selected, setSelected] = useState(suborder.deliverymethod ?? "");
+
+  const deliveryPromotion = useMemo(() => {
+    const deliveryCartPromotion = cartPromotions?.PartnerPromotions?.find(
+      (p) => p.UUIDPartner === suborder.uuidbusiness
+    )?.FreeShippingPromotion;
+    if (deliveryCartPromotion?.FreeShipping ?? false) {
+      return promotions.find(
+        (p) => p.uuidpromotion === deliveryCartPromotion?.UuidPromotion
+      );
+    }
+    return undefined;
+  }, [cartPromotions, suborder.uuidbusiness, promotions]);
+
+  const discountPromotion = useMemo(() => {
+    return cartPromotions?.PartnerPromotions?.find(
+      (p) => p.UUIDPartner === suborder.uuidbusiness
+    )?.DiscountPromotion;
+  }, [cartPromotions, suborder.uuidbusiness]);
 
   useEffect(() => {
     if (selected === "onhome" || selected === "online") {
@@ -109,6 +131,40 @@ const ShipmentCard = ({
                             : product.variant.adflyPrice ?? 0)
                         }`}
                       </Text>
+                      {discountPromotion ? (
+                        <Group>
+                          <Text c="red">
+                            <Text fw={500} span>
+                              {"Descuento: "}
+                            </Text>
+                            {`- S/.${discountPromotion.Discount}`}
+                          </Text>
+                          <Popover position="top" withArrow shadow="md">
+                            <Popover.Target>
+                              <ActionIcon
+                                size="xs"
+                                radius="xl"
+                                variant="outline"
+                              >
+                                <IconQuestionMark />
+                              </ActionIcon>
+                            </Popover.Target>
+                            <Popover.Dropdown>
+                              <Text maw={200} size="sm">
+                                {
+                                  promotions.find(
+                                    (p) =>
+                                      p.uuidpromotion ===
+                                      discountPromotion.UuidPromotion
+                                  )?.promotionname
+                                }
+                              </Text>
+                            </Popover.Dropdown>
+                          </Popover>
+                        </Group>
+                      ) : (
+                        <></>
+                      )}
                       <Text>
                         <Text fw={500} span>
                           {"Vendido y Entregado por: "}
@@ -153,12 +209,43 @@ const ShipmentCard = ({
                       label="Entrega en Dirección Personal"
                     />
                     <Stack pl={20} spacing={0} fz={11}>
-                      <Text>
-                        <Text span c="dimmed">
-                          Costo de Envío:
+                      {deliveryPromotion ? (
+                        <Group>
+                          <Text>
+                            <Text span c="dimmed">
+                              {`Costo de Envío: `}
+                            </Text>
+                            <Text
+                              span
+                              td="line-through"
+                            >{` S/. ${suborder.availableDeliveryMethods.deliveryOnHome.price}`}</Text>
+                            <Text span>{` S/.0`}</Text>
+                          </Text>
+                          <Popover position="top" withArrow shadow="md">
+                            <Popover.Target>
+                              <ActionIcon
+                                size="xs"
+                                radius="xl"
+                                variant="outline"
+                              >
+                                <IconQuestionMark />
+                              </ActionIcon>
+                            </Popover.Target>
+                            <Popover.Dropdown>
+                              <Text maw={200} size="sm">
+                                {deliveryPromotion.promotionname}
+                              </Text>
+                            </Popover.Dropdown>
+                          </Popover>
+                        </Group>
+                      ) : (
+                        <Text>
+                          <Text span c="dimmed">
+                            Costo de Envío:
+                          </Text>
+                          {` S/. ${suborder.availableDeliveryMethods.deliveryOnHome.price}`}
                         </Text>
-                        {` S/. ${suborder.availableDeliveryMethods.deliveryOnHome.price}`}
-                      </Text>
+                      )}
                       <Text>
                         <Text span c="dimmed">
                           Fecha de Entrega:

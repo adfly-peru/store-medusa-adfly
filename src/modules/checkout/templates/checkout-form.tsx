@@ -8,11 +8,10 @@ import {
   rem,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import InformationForm from "@modules/checkout/components/information-form";
 import ShippingInformation from "@modules/checkout/components/shipping-information";
 import PaymentButton from "../components/payment-button";
-import { useAccount } from "@context/account-context";
 import { UseFormReturnType, useForm } from "@mantine/form";
 import { BillingForm } from "@interfaces/billing";
 import { useCart } from "@context/cart-context";

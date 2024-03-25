@@ -11,16 +11,23 @@ import {
   Center,
   Button,
   UnstyledButton,
+  ActionIcon,
+  Popover,
 } from "@mantine/core";
 import EmptyCart from "../components/empty-cart";
 import CheckoutForm from "./checkout-form";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "@context/account-context";
 import axios from "axios";
 import * as amplitude from "@amplitude/analytics-browser";
 import { BillingForm } from "@interfaces/billing";
 import { useForm } from "@mantine/form";
-import { IconCreditCard, IconStarFilled } from "@tabler/icons-react";
+import {
+  IconCreditCard,
+  IconQuestionMark,
+  IconStarFilled,
+} from "@tabler/icons-react";
+import { useProduct } from "@context/product-context";
 
 declare global {
   interface Window {
@@ -62,8 +69,10 @@ const createSessionToken = async (
 };
 
 const CheckoutTemplate = () => {
+  const { promotions } = useProduct();
   const {
     cart,
+    cartPromotions,
     useStars,
     editBilling,
     payCartWithStars,
@@ -75,6 +84,15 @@ const CheckoutTemplate = () => {
   const [deliveryprice, setDeliveryprice] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const [active, setActive] = useState(0);
+
+  const partnersDiscount = useMemo(() => {
+    return (
+      cartPromotions?.PartnerPromotions?.reduce(
+        (acc, curr) => acc + curr?.DiscountPromotion?.Discount ?? 0,
+        0
+      ) ?? 0
+    );
+  }, [cartPromotions]);
 
   const billingform = useForm<BillingForm>({
     initialValues: {
@@ -105,8 +123,12 @@ const CheckoutTemplate = () => {
       (acc, curr) => acc + (curr.deliveryprice ?? 0),
       cart.total
     );
-    setTotalAmount(totaldelivery);
-  }, [cart]);
+    setTotalAmount(
+      totaldelivery -
+        partnersDiscount -
+        (cartPromotions?.CartPromotion?.Discount ?? 0)
+    );
+  }, [cart, partnersDiscount, cartPromotions]);
 
   useEffect(() => {
     if (!cart) return;
@@ -253,16 +275,79 @@ const CheckoutTemplate = () => {
                       : `S/.${deliveryprice.toFixed(2)}`}
                   </Text>
                 </Group>
+                {cartPromotions?.CartPromotion?.Discount ?? 0 > 0 ? (
+                  <Group position="apart" c="red">
+                    <Group position="left" spacing={5}>
+                      <Text>Dscto. Carrito:</Text>
+                      <Popover position="top" withArrow shadow="md">
+                        <Popover.Target>
+                          <ActionIcon
+                            color="red"
+                            size="xs"
+                            radius="xl"
+                            variant="outline"
+                          >
+                            <IconQuestionMark />
+                          </ActionIcon>
+                        </Popover.Target>
+                        <Popover.Dropdown>
+                          <Text maw={200} size="sm" c="dark">
+                            Descuento por la promocion {'"'}
+                            {
+                              promotions.find(
+                                (p) =>
+                                  p.uuidpromotion ===
+                                  cartPromotions?.CartPromotion?.UuidPromotion
+                              )?.promotionname
+                            }
+                            {'"'}
+                          </Text>
+                        </Popover.Dropdown>
+                      </Popover>
+                    </Group>
+                    <Text>
+                      {`- S/.${(
+                        cartPromotions?.CartPromotion?.Discount ?? 0
+                      ).toFixed(2)}`}
+                    </Text>
+                  </Group>
+                ) : (
+                  <></>
+                )}
+                {partnersDiscount > 0 ? (
+                  <Group position="apart" c="red">
+                    <Group position="left" spacing={5}>
+                      <Text>Dscto. Subordenes:</Text>
+                      <Popover position="top" withArrow shadow="md">
+                        <Popover.Target>
+                          <ActionIcon
+                            color="red"
+                            size="xs"
+                            radius="xl"
+                            variant="outline"
+                          >
+                            <IconQuestionMark />
+                          </ActionIcon>
+                        </Popover.Target>
+                        <Popover.Dropdown>
+                          <Text maw={200} size="sm" c="dark">
+                            Descuento acumulado de las subordenes
+                          </Text>
+                        </Popover.Dropdown>
+                      </Popover>
+                    </Group>
+                    <Text>{`- S/.${partnersDiscount.toFixed(2)}`}</Text>
+                  </Group>
+                ) : (
+                  <></>
+                )}
                 {useStars ? (
                   <Group position="apart" c="red">
                     <Text>Dscto. Estrellas:</Text>
                     <Text>
                       {`- S/.${(
-                        ((cart.total + deliveryprice) * 100 <
-                        (collaborator?.stars ?? 0)
-                          ? parseFloat(
-                              ((cart.total + deliveryprice) * 100).toFixed(0)
-                            )
+                        (totalAmount * 100 < (collaborator?.stars ?? 0)
+                          ? parseFloat((totalAmount * 100).toFixed(0))
                           : collaborator?.stars ?? 0) / 100
                       ).toFixed(2)}`}
                     </Text>
@@ -276,14 +361,10 @@ const CheckoutTemplate = () => {
                   <Text>
                     S/.
                     {(
-                      cart.total +
-                      deliveryprice -
+                      totalAmount -
                       (useStars
-                        ? ((cart.total + deliveryprice) * 100 <
-                          (collaborator?.stars ?? 0)
-                            ? parseFloat(
-                                ((cart.total + deliveryprice) * 100).toFixed(0)
-                              )
+                        ? (totalAmount * 100 < (collaborator?.stars ?? 0)
+                            ? parseFloat((totalAmount * 100).toFixed(0))
                             : collaborator?.stars ?? 0) / 100
                         : 0)
                     ).toFixed(2)}
@@ -305,7 +386,7 @@ const CheckoutTemplate = () => {
                     <Text>Estrellas</Text>
                     <IconStarFilled size={20} />
                   </Group>
-                  <Text>{((cart.total + deliveryprice) * 100).toFixed(0)}</Text>
+                  <Text>{(totalAmount * 100).toFixed(0)}</Text>
                 </Group>
               </Card>
               {active === 2 ? (
