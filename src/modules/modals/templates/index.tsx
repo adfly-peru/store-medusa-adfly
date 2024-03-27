@@ -131,13 +131,6 @@ const CollaboratorModals: React.FC<{ children?: React.ReactNode }> = ({
       modalsToShow.push(showSurveyModal);
     }
 
-    if (
-      isMonth(3) &&
-      !localStorage.getItem(`tadamarchmodal_${collaborator.uuidcollaborator}`)
-    ) {
-      modalsToShow.push(showTadaMarchModal);
-    }
-
     setModalQueue(modalsToShow);
   }, [collaborator]);
 
