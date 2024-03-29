@@ -5,6 +5,8 @@ import {
   FilterOptions,
   useFilteredProducts,
 } from "@context/filtered-products-context";
+import { InstantSearch, RefinementList } from "react-instantsearch";
+import algoliasearch from "algoliasearch/lite";
 
 const FilterDrawer = ({
   searchable,
@@ -20,7 +22,6 @@ const FilterDrawer = ({
   const [subcategory, setSubcategory] = useState<string[]>([]);
   const [brand, setBrand] = useState<string[]>([]);
   const [search, setSearch] = useState<string>("");
-
   useEffect(() => {
     setBrand([]);
     setCategory([]);

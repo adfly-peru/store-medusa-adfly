@@ -12,6 +12,7 @@ import {
   Radio,
   Divider,
   Container,
+  createStyles,
 } from "@mantine/core";
 import Pagination from "@modules/common/components/pagination";
 import FilteredProducts from "@modules/products/components/filtered-products";
@@ -25,6 +26,17 @@ import {
 import { useState } from "react";
 import FilterDrawer from "../components/filter-drawer";
 import { useProduct } from "@context/product-context";
+import algoliasearch from "algoliasearch/lite";
+import { InstantSearch, RefinementList } from "react-instantsearch";
+import FilterSection from "../components/algolia-filter";
+
+const useStyles = createStyles((theme) => ({
+  list: {
+    listStyle: "none",
+    border: "3px solid blue",
+    padding: 0,
+  },
+}));
 
 const SearchProducts = ({
   searchable,
@@ -41,8 +53,28 @@ const SearchProducts = ({
     useFilteredProducts();
   const { departments } = useProduct();
   const { campaigns: originalCampaigns } = useProduct();
+  const { classes } = useStyles();
+
   return (
     <>
+      <div>aaas</div>
+      <FilterSection
+        searchable={
+          searchable !== ""
+            ? searchable
+            : departmentName !== ""
+            ? departments.find((d) => d.name === departmentName)?.id ?? ""
+            : campaign
+        }
+        kind={
+          searchable !== ""
+            ? "search"
+            : departmentName !== ""
+            ? "department"
+            : "campaign"
+        }
+        departmentname={departmentName}
+      />
       <Drawer
         opened={openedSort}
         onClose={() => setOpenedSort(false)}
