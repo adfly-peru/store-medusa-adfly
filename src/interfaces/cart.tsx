@@ -1,6 +1,12 @@
 import { VariantAttribute, VariantDetailed } from "./productInterface";
 
 export interface Cart {
+  discounts: {
+    uuidpromotiondiscount: string;
+    uuidinfo: string;
+    promotiondiscountvalue: number;
+    type: string;
+  }[];
   uuidcart: string;
   uuidcollaborator: string;
   creationdate: string;

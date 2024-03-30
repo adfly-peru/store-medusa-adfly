@@ -1,4 +1,4 @@
-import { GET_CART } from "@graphql/cart/queries";
+import { GET_CART_WITH_PROMOTIONS } from "@graphql/cart/queries";
 import { Cart } from "@interfaces/cart";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
@@ -28,19 +28,29 @@ export default async function handler(req: any, res: any) {
 
     try {
       const { data } = await client.query<{ getCart: Cart }>({
-        query: GET_CART,
+        query: GET_CART_WITH_PROMOTIONS,
         variables: { collaboratorId: collaboratorid },
       });
       const cartdata = data.getCart;
       const hasReceiverName =
         (cartdata.deliveryInfo?.receivername?.length ?? 0) > 0;
       const hasRUC = (cartdata.billingInfo?.ruc?.length ?? 0) > 0;
+      const suborders = cartdata.suborders.map((s) => {
+        const promotion = cartdata.discounts?.find(
+          (d) => d.type === "suborder" && d.uuidinfo === s.uuidcartsuborder
+        );
+        return {
+          ...s,
+          uuidpromotiondiscount: promotion?.uuidpromotiondiscount,
+          promotiondiscountvalue: promotion?.promotiondiscountvalue,
+        };
+      });
 
       const response: AxiosResponse<AdflyResponse> = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_API}/store/order`,
         {
           purchaseNumber,
-          suborders: cartdata.suborders,
+          suborders: suborders,
           uuidcollaborator: cartdata.uuidcollaborator,
           total: cartdata.total,
           uuidcart: cartdata.uuidcart,
@@ -51,6 +61,12 @@ export default async function handler(req: any, res: any) {
           isreceiver: hasReceiverName,
           isbilling: hasRUC,
           stars: Number(stars),
+          uuidpromotiondiscount: cartdata.discounts?.find(
+            (d) => d.type === "cart" && d.uuidinfo === cartdata.uuidcart
+          )?.uuidpromotiondiscount,
+          promotiondiscountvalue: cartdata.discounts?.find(
+            (d) => d.type === "cart" && d.uuidinfo === cartdata.uuidcart
+          )?.promotiondiscountvalue,
         },
         {
           headers: {
