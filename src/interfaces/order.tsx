@@ -53,6 +53,8 @@ export interface OrderDetailsCollaborator {
 }
 
 export interface OrderDetails {
+  cartdiscount?: number;
+  partnersdiscount?: number;
   collaborator: OrderDetailsCollaborator;
   billingInfo: OrderDetailsBilling;
   deliveryInfo: OrderDetailsDelivery;
@@ -80,6 +82,7 @@ export interface Order {
 }
 
 export interface SubOrderDetails {
+  discount?: number;
   name?: string;
   country?: string;
   department?: string;

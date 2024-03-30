@@ -286,6 +286,13 @@ const SuccessMessage = ({
           <Text>{`Envío: S/.${(report.order.deliveryPrice || 0).toFixed(
             2
           )}`}</Text>
+          {((report.order.details.cartdiscount ?? 0) > 0 ||
+            (report.order.details.partnersdiscount ?? 0) > 0) && (
+            <Text c="red">{`Dscnto por promocion: - S/.${(
+              (report.order.details.cartdiscount ?? 0) +
+              (report.order.details.partnersdiscount ?? 0)
+            ).toFixed(2)}`}</Text>
+          )}
           <Text fw="bold">{`Total del Pedido: S/.${report.order.finalTotal.toFixed(
             2
           )}`}</Text>
