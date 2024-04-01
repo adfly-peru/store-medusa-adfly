@@ -7,8 +7,8 @@ export interface Promotion {
 }
 
 export interface DiscountPromotion {
-  UuidPromotion: string;
-  Discount: number;
+  UuidPromotion?: string;
+  Discount?: number;
 }
 
 export interface FreeShippingPromotion {
@@ -17,12 +17,12 @@ export interface FreeShippingPromotion {
 }
 
 export interface PartnerPromotions {
-  UUIDPartner: string;
-  DiscountPromotion: DiscountPromotion;
-  FreeShippingPromotion: FreeShippingPromotion;
+  UUIDPartner?: string;
+  DiscountPromotion?: DiscountPromotion;
+  FreeShippingPromotion?: FreeShippingPromotion;
 }
 
 export interface CartPromotions {
-  CartPromotion: DiscountPromotion;
-  PartnerPromotions: PartnerPromotions[];
+  CartPromotion?: DiscountPromotion;
+  PartnerPromotions?: PartnerPromotions[];
 }

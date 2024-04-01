@@ -66,6 +66,7 @@ const ShipmentCard = ({
             ? cart?.deliveryInfo?.collaboratoraddress
                 ?.uuidcollaboratoraddress ?? ""
             : "",
+        uuidpromotion: deliveryPromotion?.uuidpromotion,
       });
     }
   }, [selected]);

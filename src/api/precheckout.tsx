@@ -1,5 +1,6 @@
 import { Address } from "@interfaces/address-interface";
 import { Cart } from "@interfaces/cart";
+import { CartPromotions } from "@interfaces/promotion";
 import axios from "axios";
 
 export const precheckoutQuery = async (cartdata: Cart, address?: Address) => {
@@ -39,34 +40,50 @@ export const precheckoutQuery = async (cartdata: Cart, address?: Address) => {
         );
         const status = response.status;
         if (status == 201 || status == 200) {
-          console.log(response.data.data);
           const responseData = response.data.data.data;
-          return {
-            CartPromotion: {
-              UuidPromotion: responseData.cart_promotion.uuid_promotion,
-              Discount: responseData.cart_promotion.discount,
-            },
-            PartnerPromotions: responseData.partner_promotions.map(
-              (partnerPromo: any) => ({
-                UUIDPartner: partnerPromo.uuid_partner,
-                DiscountPromotion: {
-                  UuidPromotion: partnerPromo.discount_promotion.uuid_promotion,
-                  Discount: partnerPromo.discount_promotion.discount,
-                },
-                FreeShippingPromotion: {
-                  UuidPromotion:
-                    partnerPromo.free_shipping_promotion.uuid_promotion,
-                  FreeShipping:
-                    partnerPromo.free_shipping_promotion.free_shipping,
-                },
-              })
+          console.log(responseData);
+          const cartresponse: CartPromotions = {
+            CartPromotion: responseData.cart_promotion
+              ? {
+                  UuidPromotion: responseData.cart_promotion.uuid_promotion,
+                  Discount: responseData.cart_promotion.discount,
+                }
+              : undefined,
+            PartnerPromotions: responseData.partner_promotions?.map(
+              (partnerPromo: any) =>
+                partnerPromo
+                  ? {
+                      UUIDPartner: partnerPromo.uuid_partner,
+                      DiscountPromotion: partnerPromo.discount_promotion
+                        ? {
+                            UuidPromotion:
+                              partnerPromo.discount_promotion.uuid_promotion,
+                            Discount: partnerPromo.discount_promotion.discount,
+                          }
+                        : undefined,
+                      FreeShippingPromotion:
+                        partnerPromo.free_shipping_promotion
+                          ? {
+                              UuidPromotion:
+                                partnerPromo.free_shipping_promotion
+                                  .uuid_promotion,
+                              FreeShipping:
+                                partnerPromo.free_shipping_promotion
+                                  .free_shipping,
+                            }
+                          : undefined,
+                    }
+                  : undefined
             ),
           };
+          return cartresponse;
         }
       }
     }
+    console.log("Aqui");
     return null;
   } catch (error) {
+    console.log("Otro Aqui", error);
     return null;
   }
 };

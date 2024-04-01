@@ -38,6 +38,7 @@ export interface ShipmentData {
   uuidcartsuborder: string;
   method: string;
   uuidaddress: string;
+  uuidpromotion?: string;
 }
 
 const ShippingInformation = ({
@@ -338,7 +339,8 @@ const ShippingInformation = ({
                     await selectDeliveryMethod(
                       data.uuidcartsuborder,
                       data.method,
-                      data.uuidaddress
+                      data.uuidaddress,
+                      data.uuidpromotion
                     );
                   }}
                 />

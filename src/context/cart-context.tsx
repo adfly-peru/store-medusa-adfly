@@ -83,7 +83,8 @@ interface CartContext {
   selectDeliveryMethod: (
     uuidcartsuborder: string,
     deliverymethod: string,
-    uuidaddress: string
+    uuidaddress: string,
+    uuid_promotion?: string
   ) => Promise<string | null>;
   loadingEvent: boolean;
   refetch: () => Promise<void>;
@@ -357,7 +358,8 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const selectDeliveryMethod = async (
     uuidcartsuborder: string,
     deliverymethod: string,
-    uuidaddress: string
+    uuidaddress: string,
+    uuid_promotion?: string
   ) => {
     try {
       setLoadingEvent(true);
@@ -365,7 +367,8 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         const resp = await editDeliveryMethod(
           uuidcartsuborder,
           deliverymethod,
-          uuidaddress
+          uuidaddress,
+          uuid_promotion
         );
         await refetch();
         setLoadingEvent(false);
@@ -381,17 +384,9 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
   const handlePrecheckout = async (address?: Address) => {
     if (!cart) return;
-    console.log("hola");
-
     const response = await precheckoutQuery(cart, address);
-    console.log({ response });
-
     setCartPromotions(response);
   };
-
-  useEffect(() => {
-    console.log("data", { cartPromotions });
-  }, [cartPromotions]);
 
   return (
     <CartContext.Provider

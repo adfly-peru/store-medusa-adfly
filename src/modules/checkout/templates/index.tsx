@@ -88,7 +88,7 @@ const CheckoutTemplate = () => {
   const partnersDiscount = useMemo(() => {
     return (
       cartPromotions?.PartnerPromotions?.reduce(
-        (acc, curr) => acc + curr?.DiscountPromotion?.Discount ?? 0,
+        (acc, curr) => acc + (curr?.DiscountPromotion?.Discount ?? 0),
         0
       ) ?? 0
     );
