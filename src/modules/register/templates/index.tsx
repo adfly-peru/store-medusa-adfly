@@ -125,18 +125,17 @@ const RegisterModal = ({
             {loading ? <Loader variant="dots" /> : <Text>Continuar</Text>}
           </Button>
         </Center>
-        <Text ta="center" fz={13}>
+        <Text
+          ta="center"
+          fz={15}
+          component="a"
+          onClick={() => {
+            goRequest();
+            amplitude.track("User Go To Send Request");
+          }}
+        >
           ¿No tienes acceso?{" "}
-          <Text
-            span
-            component="a"
-            onClick={() => {
-              amplitude.track("User Go To Send Request");
-              goRequest();
-            }}
-            style={{ cursor: "pointer" }}
-            c="blue"
-          >
+          <Text span style={{ cursor: "pointer" }} c="blue">
             Envía una solicitud aquí
           </Text>
         </Text>
