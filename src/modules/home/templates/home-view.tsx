@@ -1,4 +1,4 @@
-import { Stack, Space } from "@mantine/core";
+import { Stack, Space, Image, MediaQuery } from "@mantine/core";
 import CategorySection from "@modules/home/components/category-section";
 import FeaturedProducts from "../components/featured-products";
 import { useAccount } from "@context/account-context";
@@ -6,31 +6,40 @@ import { Carousel, Embla } from "@mantine/carousel";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import Autoplay from "embla-carousel-autoplay";
+import axios from "axios";
 
 const HomeView = () => {
   const { homeDesign, banners } = useAccount();
   const router = useRouter();
   const autoplay = useRef(Autoplay({ delay: 4000 }));
-  // const [embla, setEmbla] = useState<Embla | null>(null);
-  // const [autoplayDelay, setAutoplayDelay] = useState(3000);
-  // useEffect(() => {
-  //   if (embla) {
-  //     const autoplay = () => {
-  //       if (embla.canScrollNext()) {
-  //         embla.scrollNext();
-  //       } else {
-  //         embla.scrollTo(0);
-  //       }
-  //     };
+  const handleTailoyCoupom = async () => {
+    try {
+      if (typeof window !== "undefined") {
+        const storedToken = localStorage.getItem("collaboratortoken");
+        if (storedToken) {
+          const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_BACKEND_API}/store/order/tailoy`,
+            {},
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: storedToken,
+              },
+            }
+          );
+        }
+      }
+      const downloadLink = document.createElement("a");
+      downloadLink.href = "/tailoy/CUPONERA_2024[75].pdf";
+      downloadLink.setAttribute("download", "CUPONERA_2024[75].pdf");
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    } catch (error) {
+      console.log("Error on generate coupon", error);
+    }
+  };
 
-  //     const autoplayInterval = setInterval(autoplay, autoplayDelay);
-  //     return () => clearInterval(autoplayInterval);
-  //   }
-  // }, [embla, autoplayDelay]);
-
-  // const increaseDelay = () => {
-  //   setAutoplayDelay((currentDelay) => currentDelay + 5000);
-  // };
   return (
     <>
       <Carousel
@@ -57,7 +66,6 @@ const HomeView = () => {
             },
           },
         }}
-        // plugins={[autoplay.current]}\
       >
         <Carousel.Slide>
           <div
@@ -92,7 +100,37 @@ const HomeView = () => {
       </Carousel>
       <Stack align="center" justify="flex-end" spacing={32} px={15}>
         <CategorySection />
-        <Space h={36} />
+        <MediaQuery
+          smallerThan="md"
+          styles={{
+            display: "none",
+          }}
+        >
+          <Image
+            src="/tailoy/desktop.jpg"
+            alt="tailoy"
+            style={{
+              cursor: "pointer",
+            }}
+            onClick={handleTailoyCoupom}
+          />
+        </MediaQuery>
+        <MediaQuery
+          largerThan="md"
+          styles={{
+            display: "none",
+          }}
+        >
+          <Image
+            src="/tailoy/mobile.jpg"
+            alt="tailoy"
+            style={{
+              cursor: "pointer",
+            }}
+            onClick={handleTailoyCoupom}
+          />
+        </MediaQuery>
+        <Space h={16} />
         <FeaturedProducts />
       </Stack>
     </>
