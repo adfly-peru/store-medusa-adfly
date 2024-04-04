@@ -9,7 +9,7 @@ export const precheckoutQuery = async (cartdata: Cart, address?: Address) => {
       const storedToken = localStorage.getItem("collaboratortoken");
       if (storedToken) {
         const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/checkout`,
+          `${process.env.NEXT_PUBLIC_BACKEND_API}/adfly/promotion/checkout`,
           {
             partner_products: cartdata.suborders.map(
               ({ uuidcartsuborder, uuidbusiness, items }) => ({
