@@ -227,10 +227,21 @@ const SimpleOrderView = ({ orderId }: { orderId: string }) => {
           <Space h="xl" />
           <Title order={3}> Resumen del Pedido </Title>
           <Paper radius="md" py="md" px="xl" withBorder>
-            <Text>{`Sub total: S/.${report.order.totalIgv.toFixed(2)}`}</Text>
+            <Text>{`Sub total: S/.${(
+              report.order.totalIgv +
+              ((report.order.details.cartdiscount ?? 0) +
+                (report.order.details.partnersdiscount ?? 0))
+            ).toFixed(2)}`}</Text>
             <Text>{`Envío: S/.${(report.order.deliveryPrice || 0).toFixed(
               2
             )}`}</Text>
+            {((report.order.details.cartdiscount ?? 0) > 0 ||
+              (report.order.details.partnersdiscount ?? 0) > 0) && (
+              <Text c="red">{`Dscnto por promocion: - S/.${(
+                (report.order.details.cartdiscount ?? 0) +
+                (report.order.details.partnersdiscount ?? 0)
+              ).toFixed(2)}`}</Text>
+            )}
             <Text fw="bold">{`Total del Pedido: S/.${report.order.finalTotal.toFixed(
               2
             )}`}</Text>

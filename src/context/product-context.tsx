@@ -1,26 +1,19 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
+import { Campaign, Department } from "@interfaces/category";
 import {
-  Brand,
-  Campaign,
-  Category,
-  Department,
-  Subcategory,
-} from "@interfaces/category";
-import {
-  GET_BRANDS,
   GET_CAMPAIGNS,
-  GET_CATEGORIES,
   GET_DEPARTMENTS,
-  GET_SUBCATEGORIES,
+  GET_PROMOTIONS,
 } from "@graphql/categories/queries";
+import { Promotion } from "@interfaces/promotion";
+import { IToken } from "@interfaces/collaborator";
+import jwtDecode from "jwt-decode";
 
 interface ProductContext {
   departments: Department[];
-  // categories: Category[];
-  // subCategories: Subcategory[];
-  // brands: Brand[];
   campaigns: Campaign[];
+  promotions: Promotion[];
 }
 
 const ProductContext = createContext<ProductContext | null>(null);
@@ -30,28 +23,37 @@ interface ProductProviderProps {
 }
 
 export const ProductProvider = ({ children }: ProductProviderProps) => {
+  const [businessid, setBusinessid] = useState<string | null>(null);
+  const [userid, setUserid] = useState<string | null>(null);
   const { data: departments } = useQuery<{ departments: Department[] }>(
     GET_DEPARTMENTS
   );
-  // const { data: categories } = useQuery<{ categories: Category[] }>(
-  //   GET_CATEGORIES
-  // );
-  // const { data: subcategories } = useQuery<{ subcategories: Subcategory[] }>(
-  //   GET_SUBCATEGORIES
-  // );
-  // const { data: brands } = useQuery<{ brands: Brand[] }>(GET_BRANDS);
   const { data: campaigns } = useQuery<{
     getAllCampaigns: { campaigns: Campaign[] };
   }>(GET_CAMPAIGNS);
+  const { data: promotions } = useQuery<{
+    availablePromotions: Promotion[];
+  }>(GET_PROMOTIONS, {
+    variables: { userid, businessid },
+    skip: !userid || !businessid,
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("collaboratortoken");
+      if (!token) return;
+      const decodedToken: IToken = jwtDecode(token);
+      setUserid(decodedToken.uuid_collaborator);
+      setBusinessid(decodedToken.uuid_business);
+    }
+  }, []);
 
   return (
     <ProductContext.Provider
       value={{
         departments: departments?.departments ?? [],
-        // categories: categories?.categories ?? [],
-        // subCategories: subcategories?.subcategories ?? [],
-        // brands: brands?.brands ?? [],
         campaigns: campaigns?.getAllCampaigns?.campaigns ?? [],
+        promotions: promotions?.availablePromotions ?? [],
       }}
     >
       {children}

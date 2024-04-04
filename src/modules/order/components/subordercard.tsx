@@ -274,6 +274,11 @@ const SuborderCard = ({
           {suborder.details.comments || "-"}
         </Text>
       </Text>
+      {(suborder.details.discount ?? 0) > 0 && (
+        <Text c="red">{`Dscnto por promocion: - S/.${(
+          suborder.details.discount ?? 0
+        ).toFixed(2)}`}</Text>
+      )}
       {suborder.items.map((product, idx) => (
         <div key={idx}>
           <Divider my="sm" />

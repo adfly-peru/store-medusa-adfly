@@ -57,6 +57,8 @@ const GET_ORDER_REPORT = gql`
         deliveryPrice
         businessName
         details {
+          cartdiscount
+          partnersdiscount
           collaborator {
             name
             lastname
@@ -89,6 +91,7 @@ const GET_ORDER_REPORT = gql`
           deliveryPrice
           deliveryTime
           details {
+            discount
             name
             country
             department

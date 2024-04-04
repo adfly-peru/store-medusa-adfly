@@ -75,10 +75,23 @@ const GET_CAMPAIGNS = gql`
   }
 `;
 
+const GET_PROMOTIONS = gql`
+  query availablePromotions($userid: ID!, $businessid: ID!) {
+    availablePromotions(userid: $userid, businessid: $businessid) {
+      uuidpromotion
+      promotionname
+      initialdate
+      duedate
+      state
+    }
+  }
+`;
+
 export {
   GET_CATEGORIES,
   GET_DEPARTMENTS,
   GET_SUBCATEGORIES,
   GET_BRANDS,
   GET_CAMPAIGNS,
+  GET_PROMOTIONS,
 };

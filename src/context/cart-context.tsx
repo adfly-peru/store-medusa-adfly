@@ -14,9 +14,11 @@ import {
 import { Cart, CartItem } from "@interfaces/cart";
 import { useAccount } from "./account-context";
 import { BillingForm } from "@interfaces/billing";
-import { AddressInfoForm } from "@interfaces/address-interface";
+import { Address, AddressInfoForm } from "@interfaces/address-interface";
 import { VariantAttribute } from "@interfaces/productInterface";
 import { useRouter } from "next/router";
+import { precheckoutQuery } from "api/precheckout";
+import { CartPromotions } from "@interfaces/promotion";
 
 function areVariantAttributesEqual(
   list1: VariantAttribute[],
@@ -81,7 +83,8 @@ interface CartContext {
   selectDeliveryMethod: (
     uuidcartsuborder: string,
     deliverymethod: string,
-    uuidaddress: string
+    uuidaddress: string,
+    uuid_promotion?: string
   ) => Promise<string | null>;
   loadingEvent: boolean;
   refetch: () => Promise<void>;
@@ -96,6 +99,8 @@ interface CartContext {
   setChecked: (v: string) => void;
   hasAcceptedTerms: boolean;
   setHasAcceptedTerms: (v: boolean) => void;
+  handlePrecheckout: (address?: Address) => Promise<void>;
+  cartPromotions: CartPromotions | null;
 }
 
 const CartContext = createContext<CartContext | null>(null);
@@ -107,6 +112,9 @@ interface CartProviderProps {
 export const CartProvider = ({ children }: CartProviderProps) => {
   const router = useRouter();
   const [checked, setChecked] = useState("ticket");
+  const [cartPromotions, setCartPromotions] = useState<CartPromotions | null>(
+    null
+  );
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
   const { collaborator } = useAccount();
   const [collaboratorId, setCollaboratorId] = useState<string | null>(null);
@@ -350,7 +358,8 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const selectDeliveryMethod = async (
     uuidcartsuborder: string,
     deliverymethod: string,
-    uuidaddress: string
+    uuidaddress: string,
+    uuid_promotion?: string
   ) => {
     try {
       setLoadingEvent(true);
@@ -358,7 +367,8 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         const resp = await editDeliveryMethod(
           uuidcartsuborder,
           deliverymethod,
-          uuidaddress
+          uuidaddress,
+          uuid_promotion
         );
         await refetch();
         setLoadingEvent(false);
@@ -372,9 +382,17 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     }
   };
 
+  const handlePrecheckout = async (address?: Address) => {
+    if (!cart) return;
+    const response = await precheckoutQuery(cart, address);
+    setCartPromotions(response);
+  };
+
   return (
     <CartContext.Provider
       value={{
+        handlePrecheckout,
+        cartPromotions,
         hasAcceptedTerms,
         setHasAcceptedTerms,
         checked,
