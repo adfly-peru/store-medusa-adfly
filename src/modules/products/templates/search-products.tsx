@@ -13,30 +13,119 @@ import {
   Divider,
   Container,
   createStyles,
+  ActionIcon,
+  UnstyledButton,
 } from "@mantine/core";
-import Pagination from "@modules/common/components/pagination";
-import FilteredProducts from "@modules/products/components/filtered-products";
-import SearchBar from "@modules/products/components/search-bar";
+// import Pagination from "@modules/common/components/pagination";
 import {
   IconCheck,
   IconChevronDown,
+  IconChevronLeft,
+  IconChevronRight,
+  IconChevronsLeft,
+  IconChevronsRight,
   IconFilter,
   IconList,
 } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterDrawer from "../components/filter-drawer";
 import { useProduct } from "@context/product-context";
 import algoliasearch from "algoliasearch/lite";
-import { InstantSearch, RefinementList } from "react-instantsearch";
+import {
+  InstantSearch,
+  Pagination,
+  usePagination,
+  useSortBy,
+} from "react-instantsearch";
 import FilterSection from "../components/algolia-filter";
+import FilteredAlgoliaProducts from "../components/algolia-results";
+import { searchClient } from "@lib/algolia-client";
+import { useRouter } from "next/router";
 
-const useStyles = createStyles((theme) => ({
-  list: {
-    listStyle: "none",
-    border: "3px solid blue",
-    padding: 0,
+const sortItems = [
+  { value: "adfly_store", label: "A - Z" },
+  {
+    value: "products_price_asc",
+    label: "Precio ascendente",
   },
-}));
+  {
+    value: "products_price_desc",
+    label: "Precio descendente",
+  },
+];
+
+const CustomSortBy = () => {
+  const router = useRouter();
+  const { sort } = router.query;
+  const { currentRefinement, refine } = useSortBy({
+    items: sortItems,
+  });
+
+  useEffect(() => {
+    if (typeof sort === "string") refine(sort);
+  }, [sort, refine]);
+
+  return (
+    <Select
+      rightSection={<IconChevronDown size="1rem" />}
+      value={currentRefinement}
+      onChange={(val) => {
+        const newQuery = { ...router.query };
+        if (val) newQuery["sort"] = val;
+        router.push(
+          {
+            pathname: "/search",
+            query: newQuery,
+          },
+          undefined,
+          { shallow: true }
+        );
+      }}
+      data={sortItems}
+    />
+  );
+};
+
+const CustomPagination = () => {
+  const { pages, refine, isFirstPage, isLastPage, currentRefinement, nbPages } =
+    usePagination({
+      padding: 1,
+    });
+
+  return (
+    <Group>
+      <ActionIcon disabled={isFirstPage} onClick={() => refine(0)}>
+        <IconChevronsLeft />
+      </ActionIcon>
+      <ActionIcon
+        disabled={isFirstPage}
+        onClick={() => refine(currentRefinement - 1)}
+      >
+        <IconChevronLeft />
+      </ActionIcon>
+      {pages.map((p) => (
+        <UnstyledButton
+          c={currentRefinement === p ? "dark" : "#3D7FB2"}
+          key={p}
+          onClick={() => refine(p)}
+          disabled={currentRefinement === p}
+          fw={currentRefinement === p ? 700 : 500}
+        >
+          {p + 1}
+        </UnstyledButton>
+      ))}
+      <ActionIcon
+        disabled={isLastPage}
+        onClick={() => refine(currentRefinement + 1)}
+      >
+        <IconChevronRight />
+      </ActionIcon>
+      <ActionIcon disabled={isLastPage} onClick={() => refine(nbPages - 1)}>
+        <IconChevronsRight />
+      </ActionIcon>
+    </Group>
+  );
+};
 
 const SearchProducts = ({
   searchable,
@@ -53,28 +142,12 @@ const SearchProducts = ({
     useFilteredProducts();
   const { departments } = useProduct();
   const { campaigns: originalCampaigns } = useProduct();
-  const { classes } = useStyles();
 
   return (
-    <>
-      <div>aaas</div>
-      <FilterSection
-        searchable={
-          searchable !== ""
-            ? searchable
-            : departmentName !== ""
-            ? departments.find((d) => d.name === departmentName)?.id ?? ""
-            : campaign
-        }
-        kind={
-          searchable !== ""
-            ? "search"
-            : departmentName !== ""
-            ? "department"
-            : "campaign"
-        }
-        departmentname={departmentName}
-      />
+    <InstantSearch
+      indexName={process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME}
+      searchClient={searchClient}
+    >
       <Drawer
         opened={openedSort}
         onClose={() => setOpenedSort(false)}
@@ -170,7 +243,8 @@ const SearchProducts = ({
           }}
         >
           <Grid.Col span={2} bg="#F2F2F3" px={0} ml="lg" mr="xs">
-            <SearchBar
+            <FilterSection />
+            {/* <SearchBar
               searchable={
                 searchable !== ""
                   ? searchable
@@ -186,7 +260,7 @@ const SearchProducts = ({
                   : "campaign"
               }
               departmentname={departmentName}
-            />
+            /> */}
           </Grid.Col>
         </MediaQuery>
         <Grid.Col span="auto" px="md" py={0}>
@@ -200,23 +274,9 @@ const SearchProducts = ({
               <Group position="apart" bg="#F2F2F3" p="xs">
                 <Group>
                   <Text fw={700}>Ordenar por:</Text>
-                  <Select
-                    rightSection={<IconChevronDown size="1rem" />}
-                    value={sortBy}
-                    onChange={setSortBy}
-                    data={[
-                      { label: "Nombre", value: "name" },
-                      { label: "Precio Adfly", value: "adflyprice" },
-                      { label: "Precio Original", value: "refprice" },
-                      { label: "Stock", value: "stock" },
-                    ]}
-                  />
+                  <CustomSortBy />
                 </Group>
-                <Pagination
-                  currentPage={Math.ceil(offset / limit) + 1}
-                  totalPages={Math.ceil(count / limit)}
-                  onPageChange={(page) => setoffset((page - 1) * limit)}
-                />
+                <CustomPagination />
               </Group>
             </div>
           </MediaQuery>
@@ -246,17 +306,13 @@ const SearchProducts = ({
             </div>
           </MediaQuery>
           <Space h="md" />
-          <FilteredProducts />
+          <FilteredAlgoliaProducts />
           <Group bg="#F2F2F3" mt="md" position="center">
-            <Pagination
-              currentPage={Math.ceil(offset / limit) + 1}
-              totalPages={Math.ceil(count / limit)}
-              onPageChange={(page) => setoffset((page - 1) * limit)}
-            />
+            <CustomPagination />
           </Group>
         </Grid.Col>
       </Grid>{" "}
-    </>
+    </InstantSearch>
   );
 };
 

@@ -41,6 +41,9 @@ import { useCart } from "@context/cart-context";
 import * as amplitude from "@amplitude/analytics-browser";
 import HeaderTabs from "./header-tabs";
 import { useDisclosure } from "@mantine/hooks";
+import { Hits, InstantSearch, SearchBox } from "react-instantsearch";
+import { searchClient } from "@lib/algolia-client";
+import SearchComponent from "./algolia-search2";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -293,7 +296,10 @@ const HomeHeader = () => {
           </Center>
         </Grid.Col>
         <Grid.Col span="auto" py={16}>
-          <form onSubmit={form.onSubmit((_) => searchProduct())}>
+          <form onSubmit={form.onSubmit((value) => console.log({ value }))}>
+            <SearchComponent />
+          </form>
+          {/* <form onSubmit={form.onSubmit((_) => searchProduct())}>
             <Autocomplete
               placeholder="Buscar"
               icon={<IconSearch size={16} stroke={1.5} />}
@@ -303,7 +309,7 @@ const HomeHeader = () => {
               onItemSubmit={(_) => searchProduct()}
               itemComponent={AutoCompleteItem}
             />
-          </form>
+          </form> */}
         </Grid.Col>
         <Grid.Col span={8} sm={10} lg={7} xl={6}>
           <Group position="center" spacing="md">
