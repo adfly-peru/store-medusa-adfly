@@ -1,9 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import {
   Text,
   Group,
   Image,
-  createStyles,
-  Autocomplete,
   Grid,
   Menu,
   SelectItemProps,
@@ -13,18 +12,14 @@ import {
   Center,
   MediaQuery,
   Divider,
-  ScrollArea,
-  Tabs,
   Drawer,
   Title,
   NavLink,
-  rem,
 } from "@mantine/core";
 import {
   IconBasket,
   IconChevronDown,
   IconChevronRight,
-  IconSearch,
   IconSettings,
   IconShoppingCart,
   IconTransferOut,
@@ -34,69 +29,12 @@ import {
 import { useProduct } from "@context/product-context";
 import { forwardRef, useEffect, useState } from "react";
 import { useAccount } from "@context/account-context";
-import CartDrawer from "@modules/layout/components/cart-drawer";
 import { useRouter } from "next/router";
-import { useForm } from "@mantine/form";
 import { useCart } from "@context/cart-context";
 import * as amplitude from "@amplitude/analytics-browser";
 import HeaderTabs from "./header-tabs";
 import { useDisclosure } from "@mantine/hooks";
-
-const useStyles = createStyles((theme) => ({
-  header: {
-    paddingTop: theme.spacing.sm,
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[6]
-        : theme.colors.gray[0],
-    borderBottom: `1px solid ${
-      theme.colorScheme === "dark" ? "transparent" : theme.colors.gray[2]
-    }`,
-    marginBottom: 50,
-  },
-
-  mainSection: {
-    paddingBottom: theme.spacing.sm,
-  },
-
-  search: {
-    [theme.fn.smallerThan("xs")]: {
-      display: "none",
-    },
-  },
-
-  tabs: {
-    [theme.fn.smallerThan("sm")]: {
-      display: "none.",
-    },
-  },
-
-  tabsList: {
-    borderBottom: "0 !important",
-  },
-
-  tab: {
-    fontWeight: 500,
-    height: 38,
-    backgroundColor: "transparent",
-
-    "&:hover": {
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[5]
-          : theme.colors.gray[1],
-    },
-
-    "&[data-active]": {
-      backgroundColor:
-        theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-      borderColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[7]
-          : theme.colors.gray[2],
-    },
-  },
-}));
+import SearchComponent from "./algolia-search";
 
 const HomeHeader = () => {
   const router = useRouter();
@@ -104,22 +42,10 @@ const HomeHeader = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const { collaborator, logout, homeDesign } = useAccount();
   const [searchable, setSearchable] = useState("");
-  const form = useForm();
   const [cartLength, setCartLength] = useState(0);
   const { cart } = useCart();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
-  const searchProduct = () => {
-    amplitude.track("Search Product", {
-      data: searchable,
-      origin: "Search Bar",
-    });
-    router.push({
-      pathname: "/search",
-      query: { data: searchable },
-    });
-    setSearchable("");
-  };
   const searchProductByCategorie = (categorieToSearch: string) => {
     amplitude.track("Search Product", {
       department: categorieToSearch,
@@ -128,7 +54,7 @@ const HomeHeader = () => {
     close();
     router.push({
       pathname: "/search",
-      query: { department: categorieToSearch },
+      query: { department_name: categorieToSearch },
     });
     setSearchable("");
   };
@@ -204,7 +130,7 @@ const HomeHeader = () => {
                 campaign: category.name,
                 origin: "Campaign Menu",
               });
-              router.push(`/search?campaign=${category.uuidcampaign}`);
+              router.push(`/search?campaign_names=${category.name}`);
             }}
             label={
               <Text py={10} fz={18}>
@@ -293,17 +219,7 @@ const HomeHeader = () => {
           </Center>
         </Grid.Col>
         <Grid.Col span="auto" py={16}>
-          <form onSubmit={form.onSubmit((_) => searchProduct())}>
-            <Autocomplete
-              placeholder="Buscar"
-              icon={<IconSearch size={16} stroke={1.5} />}
-              value={searchable}
-              onChange={setSearchable}
-              data={(searchable.length ?? 0) > 0 ? [searchable] : []}
-              onItemSubmit={(_) => searchProduct()}
-              itemComponent={AutoCompleteItem}
-            />
-          </form>
+          <SearchComponent />
         </Grid.Col>
         <Grid.Col span={8} sm={10} lg={7} xl={6}>
           <Group position="center" spacing="md">

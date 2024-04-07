@@ -1,68 +1,47 @@
-import { useFilteredProducts } from "@context/filtered-products-context";
 import {
   Text,
   Grid,
   Space,
   Group,
-  Select,
   MediaQuery,
   Button,
   Drawer,
-  Title,
-  Radio,
-  Divider,
-  Container,
 } from "@mantine/core";
-import Pagination from "@modules/common/components/pagination";
-import FilteredProducts from "@modules/products/components/filtered-products";
-import SearchBar from "@modules/products/components/search-bar";
-import {
-  IconCheck,
-  IconChevronDown,
-  IconFilter,
-  IconList,
-} from "@tabler/icons-react";
+import { IconFilter, IconList } from "@tabler/icons-react";
 import { useState } from "react";
-import FilterDrawer from "../components/filter-drawer";
-import { useProduct } from "@context/product-context";
+import { InstantSearch } from "react-instantsearch";
+import FilterSection from "../components/algolia-filter";
+import FilteredAlgoliaProducts from "../components/algolia-results";
+import { searchClient } from "@lib/algolia-client";
+import CustomPagination from "@modules/algolia/components/pagination";
+import CustomSortBy from "@modules/algolia/components/sortby";
+import { useRouter } from "next/router";
 
-const SearchProducts = ({
-  searchable,
-  departmentName,
-  campaign,
-}: {
-  searchable: string;
-  departmentName: string;
-  campaign: string;
-}) => {
+const SearchProducts = () => {
   const [opened, setOpened] = useState(false);
   const [openedSort, setOpenedSort] = useState(false);
-  const { setSortBy, sortBy, offset, count, setoffset, limit } =
-    useFilteredProducts();
-  const { departments } = useProduct();
-  const { campaigns: originalCampaigns } = useProduct();
+  const router = useRouter();
+  const { query, department_name, campaign_name, sort, page } = router.query;
+
   return (
-    <>
+    <InstantSearch
+      indexName={process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME}
+      searchClient={searchClient}
+    >
       <Drawer
         opened={openedSort}
         onClose={() => setOpenedSort(false)}
-        title={
-          <Title
-            order={2}
-            styles={{
-              fontSize: "20px",
-              fontweight: 700,
-              lineheight: "30px",
-              letterSpacing: "0.05em",
-            }}
-          >
-            Ordenar por:
-          </Title>
-        }
+        title={"Ordenar por:"}
         padding={0}
         size="md"
         position="right"
         styles={{
+          title: {
+            fontSize: "20px",
+            fontweight: 700,
+            lineheight: "30px",
+            letterSpacing: "0.05em",
+          },
           header: {
             padding: 18,
             backgroundColor: "#31658E",
@@ -73,36 +52,22 @@ const SearchProducts = ({
           },
         }}
       >
-        <Container p={0}>
-          <Divider size="md" style={{ borderColor: "black" }} />
-          <Radio.Group value={sortBy} onChange={setSortBy} m={20}>
-            <Radio value="name" label="Nombre" icon={IconCheck} />
-            <Radio value="adflyprice" label="Precio Adfly" icon={IconCheck} />
-            <Radio value="refprice" label="Precio Original" icon={IconCheck} />
-            <Radio value="stock" label="Stock" icon={IconCheck} />
-          </Radio.Group>
-        </Container>
+        <CustomSortBy />
       </Drawer>
       <Drawer
         opened={opened}
         onClose={() => setOpened(false)}
-        title={
-          <Title
-            order={2}
-            styles={{
-              fontSize: "20px",
-              fontweight: 700,
-              lineheight: "30px",
-              letterSpacing: "0.05em",
-            }}
-          >
-            Filtrar por:
-          </Title>
-        }
+        title={"Filtrar por:"}
         padding={0}
         size="md"
         position="right"
         styles={{
+          title: {
+            fontSize: "20px",
+            fontweight: 700,
+            lineheight: "30px",
+            letterSpacing: "0.05em",
+          },
           header: {
             padding: 18,
             backgroundColor: "#31658E",
@@ -113,22 +78,7 @@ const SearchProducts = ({
           },
         }}
       >
-        <FilterDrawer
-          searchable={
-            searchable !== ""
-              ? searchable
-              : departmentName !== ""
-              ? departments.find((d) => d.name === departmentName)?.id ?? ""
-              : campaign
-          }
-          kind={
-            searchable !== ""
-              ? "search"
-              : departmentName !== ""
-              ? "department"
-              : "campaign"
-          }
-        />
+        <FilterSection />
       </Drawer>
       <Grid w="100%">
         <MediaQuery
@@ -138,23 +88,7 @@ const SearchProducts = ({
           }}
         >
           <Grid.Col span={2} bg="#F2F2F3" px={0} ml="lg" mr="xs">
-            <SearchBar
-              searchable={
-                searchable !== ""
-                  ? searchable
-                  : departmentName !== ""
-                  ? departments.find((d) => d.name === departmentName)?.id ?? ""
-                  : campaign
-              }
-              kind={
-                searchable !== ""
-                  ? "search"
-                  : departmentName !== ""
-                  ? "department"
-                  : "campaign"
-              }
-              departmentname={departmentName}
-            />
+            <FilterSection />
           </Grid.Col>
         </MediaQuery>
         <Grid.Col span="auto" px="md" py={0}>
@@ -164,38 +98,17 @@ const SearchProducts = ({
               display: "none",
             }}
           >
-            <div>
-              <Group position="apart" bg="#F2F2F3" p="xs">
-                <Group>
-                  <Text fw={700}>Ordenar por:</Text>
-                  <Select
-                    rightSection={<IconChevronDown size="1rem" />}
-                    value={sortBy}
-                    onChange={setSortBy}
-                    data={[
-                      { label: "Nombre", value: "name" },
-                      { label: "Precio Adfly", value: "adflyprice" },
-                      { label: "Precio Original", value: "refprice" },
-                      { label: "Stock", value: "stock" },
-                    ]}
-                  />
-                </Group>
-                <Pagination
-                  currentPage={Math.ceil(offset / limit) + 1}
-                  totalPages={Math.ceil(count / limit)}
-                  onPageChange={(page) => setoffset((page - 1) * limit)}
-                />
+            <Group position="apart" bg="#F2F2F3" p="xs">
+              <Group>
+                <Text fw={700}>Ordenar por:</Text>
+                <CustomSortBy />
               </Group>
-            </div>
+              <CustomPagination />
+            </Group>
           </MediaQuery>
           <MediaQuery largerThan="md" styles={{ display: "none" }}>
             <div>
-              <Text>
-                {searchable +
-                  departmentName +
-                  (originalCampaigns.find((v) => v.uuidcampaign === campaign)
-                    ?.name ?? "")}
-              </Text>
+              <Text>{query ?? department_name ?? campaign_name ?? "---"}</Text>
               <Space h="md" />
               <Group grow>
                 <Button
@@ -214,17 +127,13 @@ const SearchProducts = ({
             </div>
           </MediaQuery>
           <Space h="md" />
-          <FilteredProducts />
+          <FilteredAlgoliaProducts />
           <Group bg="#F2F2F3" mt="md" position="center">
-            <Pagination
-              currentPage={Math.ceil(offset / limit) + 1}
-              totalPages={Math.ceil(count / limit)}
-              onPageChange={(page) => setoffset((page - 1) * limit)}
-            />
+            <CustomPagination />
           </Group>
         </Grid.Col>
-      </Grid>{" "}
-    </>
+      </Grid>
+    </InstantSearch>
   );
 };
 

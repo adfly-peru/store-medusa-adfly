@@ -19,11 +19,10 @@ const HeaderTabs = () => {
         value={""}
         onTabChange={(value) => {
           amplitude.track("Search Product", {
-            campaign:
-              campaigns.find((v) => v.uuidcampaign === value)?.name ?? "",
+            campaign: value,
             origin: "Campaign Tabs",
           });
-          router.push(`/search?campaign=${value}`);
+          router.push(`/search?campaign_names=${value}`);
         }}
       >
         <ScrollArea scrollbarSize={2}>
@@ -35,7 +34,7 @@ const HeaderTabs = () => {
             }}
           >
             {campaigns.map((c) => (
-              <Tabs.Tab key={c.uuidcampaign} value={c.uuidcampaign}>
+              <Tabs.Tab key={c.uuidcampaign} value={c.name}>
                 {c.name}
               </Tabs.Tab>
             ))}

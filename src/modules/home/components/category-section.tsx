@@ -25,7 +25,7 @@ const CategorySection = () => {
     });
     router.push({
       pathname: "/search",
-      query: { department: categorieToSearch },
+      query: { department_name: categorieToSearch },
     });
   };
 
