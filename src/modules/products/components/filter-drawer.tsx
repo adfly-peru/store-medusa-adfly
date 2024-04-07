@@ -5,8 +5,6 @@ import {
   FilterOptions,
   useFilteredProducts,
 } from "@context/filtered-products-context";
-import { InstantSearch, RefinementList } from "react-instantsearch";
-import algoliasearch from "algoliasearch/lite";
 
 const FilterDrawer = ({
   searchable,
