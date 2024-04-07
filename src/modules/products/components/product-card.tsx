@@ -6,9 +6,7 @@ import {
   Badge,
   Button,
   createStyles,
-  Title,
   Stack,
-  Space,
 } from "@mantine/core";
 import Link from "next/link";
 import { useEffect, useState } from "react";

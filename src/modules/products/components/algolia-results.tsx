@@ -1,5 +1,4 @@
-import { useFilteredProducts } from "@context/filtered-products-context";
-import { Center, Loader, SimpleGrid } from "@mantine/core";
+import { Center, SimpleGrid } from "@mantine/core";
 import ProductCard from "@modules/products/components/product-card";
 import { useHits } from "react-instantsearch";
 

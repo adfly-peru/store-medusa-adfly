@@ -375,7 +375,7 @@ export function DetailedProduct({
             fw={400}
             fz={12}
             component="a"
-            href={`/search?data=${product.department.name}`}
+            href={`/search?department_name=${product.department.name}`}
           >
             {product.department.name}
           </UnstyledButton>
@@ -384,7 +384,7 @@ export function DetailedProduct({
             fw={400}
             fz={12}
             component="a"
-            href={`/search?data=${product.category.name}`}
+            href={`/search?category_name=${product.category.name}`}
           >
             {product.category.name}
           </UnstyledButton>
@@ -393,7 +393,7 @@ export function DetailedProduct({
             fw={400}
             fz={12}
             component="a"
-            href={`/search?data=${product.subCategory.name}`}
+            href={`/search?subcategory_name=${product.subCategory.name}`}
           >
             {product.subCategory.name}
           </UnstyledButton>
