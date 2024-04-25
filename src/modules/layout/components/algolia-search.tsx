@@ -36,9 +36,6 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
           <Avatar size="xl" src={hit.image_url} />
           <div>
             <Text size="sm">{renderHighlightedText("product_name")}</Text>
-            <Text size="xs" opacity={0.65}>
-              {renderHighlightedText("product_description")}
-            </Text>
             {renderHighlightedText("department_name")} -
             {renderHighlightedText("category_name")} -
             {renderHighlightedText("subcategory_name")} -
@@ -79,7 +76,10 @@ const SearchComponent = () => {
   useEffect(() => {
     if (query.trim() !== "") {
       index
-        .search(query, { hitsPerPage: 10 })
+        .search(query, {
+          hitsPerPage: 10,
+          filters: 'product_status:"accepted"',
+        })
         .then(({ hits }) => {
           setItems([
             {

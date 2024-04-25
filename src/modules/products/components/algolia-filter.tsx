@@ -50,6 +50,7 @@ const FilterSection = () => {
         hitsPerPage={12}
         facetFilters={facetFilters}
         query={typeof query === "string" ? query : query?.toString()}
+        filters='product_status:"accepted"'
       />
       <Accordion p={0} multiple styles={{ item: { borderColor: "black" } }}>
         <CustomRefinementList
