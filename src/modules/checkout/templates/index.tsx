@@ -200,6 +200,7 @@ const CheckoutTemplate = () => {
       await payCartWithStars(cart.purchaseNumber, totalAmountFixed, starsToUse);
       return;
     }
+    totalAmountFixed = parseFloat(totalAmountFixed.toFixed(2));
     const sessionToken = await createSessionToken(
       totalAmountFixed,
       collaborator.email ?? "",
