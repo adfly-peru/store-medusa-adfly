@@ -8,14 +8,18 @@ import "@fontsource/open-sans";
 import * as amplitude from "@amplitude/analytics-browser";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import theme from "@styles/theme";
+import { CssBaseline, Fab } from "@mui/material";
 import Authentication from "@modules/authentication/templates";
 import { ClientProvider } from "@context/client-context";
 import { CategoriesProvider } from "@context/categories-context";
 import AppHeader from "@modules/components/Header";
 import AppFooter from "@modules/components/Footer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import LoadingScreen from "@modules/components/LoadingScreen";
+import { DesignContainer, DesignProvider } from "@context/design-context";
+import { WhatsApp } from "@mui/icons-material";
+import { ApolloProvider } from "@apollo/client";
+import apolloClient from "@lib/apollo-config";
 
 const googleMapsLibraries = ["places"];
 
@@ -35,42 +39,61 @@ export default function App(props: MyAppProps) {
     }
   }, []);
   return (
-    <GoogleOAuthProvider clientId={process.env.NEXT_GOOGLE_CLIENT_ID ?? ""}>
+    <GoogleOAuthProvider
+      clientId={
+        process.env.NEXT_GOOGLE_CLIENT_ID ??
+        "142447493370-spr2jt87ll4cm60gnr4hs925sng983vf.apps.googleusercontent.com"
+      }
+    >
       <SessionProvider session={session}>
-        <ClientProvider>
+        <ApolloProvider client={apolloClient}>
           <AccountProvider>
             <CartProvider>
-              <ThemeProvider theme={theme}>
-                <CategoriesProvider>
-                  <LoadScript
-                    googleMapsApiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
-                    libraries={googleMapsLibraries as any}
-                    onLoad={() => {
-                      console.log("Script Loaded!");
-                    }}
-                    onError={(error) => {
-                      console.error("Error cargando Google Maps", error);
-                    }}
-                  >
-                    <CssBaseline />
-                    <Authentication>
-                      <AppHeader />
-                      <div
-                        style={{
-                          minHeight: "1200px",
-                        }}
-                      >
-                        <Component {...pageProps} />
-                      </div>
-
-                      <AppFooter />
-                    </Authentication>
-                  </LoadScript>
-                </CategoriesProvider>
-              </ThemeProvider>
+              <DesignProvider>
+                <DesignContainer>
+                  <CategoriesProvider>
+                    <LoadScript
+                      googleMapsApiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
+                      libraries={googleMapsLibraries as any}
+                      onLoad={() => {
+                        console.log("Script Loaded!");
+                      }}
+                      onError={(error) => {
+                        console.error("Error cargando Google Maps", error);
+                      }}
+                    >
+                      <CssBaseline />
+                      <LoadingScreen />
+                      <Authentication>
+                        <AppHeader />
+                        <div
+                          style={{
+                            minHeight: "1200px",
+                          }}
+                        >
+                          <Component {...pageProps} />
+                        </div>
+                        <Fab
+                          color="primary"
+                          aria-label="whatsapp"
+                          onClick={() =>
+                            window.open(
+                              "https://wa.me/51970802065?text=Hola,%20tengo%20una%20consulta"
+                            )
+                          }
+                          sx={{ position: "fixed", bottom: 16, right: 16 }}
+                        >
+                          <WhatsApp />
+                        </Fab>
+                        <AppFooter />
+                      </Authentication>
+                    </LoadScript>
+                  </CategoriesProvider>
+                </DesignContainer>
+              </DesignProvider>
             </CartProvider>
           </AccountProvider>
-        </ClientProvider>
+        </ApolloProvider>
       </SessionProvider>
     </GoogleOAuthProvider>
   );

@@ -13,6 +13,7 @@ export interface IToken {
 export default NextAuth({
   session: {
     strategy: "jwt",
+    maxAge: 17 * 60 * 60,
   },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
@@ -29,7 +30,7 @@ export default NextAuth({
       },
       authorize: async (credentials, req) => {
         const host = req.headers?.host;
-        const subdomain = "core-dev";
+        const subdomain = (host as string).split(".")[0];
         try {
           const response = await axios.post(
             `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/checkaccess`,
@@ -89,17 +90,8 @@ export default NextAuth({
       },
       authorize: async (credentials, req) => {
         const host = req.headers?.host;
-        // const subdomain = (host as string).split(".")[0];
-        const subdomain = "core-dev";
-        console.log("Init");
+        const subdomain = (host as string).split(".")[0];
         try {
-          console.log("Body", {
-            credential: credentials?.credential,
-            password: credentials?.password,
-            sub_domain: subdomain,
-            mode: credentials?.mode,
-            google_token: credentials?.token,
-          });
           const response = await axios.post(
             `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/auth/signin`,
             {
@@ -110,13 +102,6 @@ export default NextAuth({
               google_token: credentials?.token,
             }
           );
-          console.log("Body", {
-            credential: credentials?.credential,
-            password: credentials?.password ?? "-",
-            sub_domain: subdomain,
-            mode: credentials?.mode,
-            google_token: credentials?.token,
-          });
           if (response.status === 200 || response.status === 201) {
             const accessToken = response.data.data.data.token;
             const decodedToken: IToken = jwtDecode(accessToken);

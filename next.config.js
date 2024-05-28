@@ -3,7 +3,23 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["products.adfly.com.pe"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.adfly.com.pe",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "img.freepik.com",
+        port: "",
+      },
+    ],
   },
 };
 

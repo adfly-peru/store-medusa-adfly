@@ -1,0 +1,90 @@
+query StoreDesign($subdomain: String!) {
+  storeDesign(subdomain: $subdomain) {
+    ispremium
+    fontcolor
+    backcolor
+    logourl
+    bannerurl
+    commercialname
+    href
+  }
+}
+
+query Banners {
+  banners {
+    uuidbanner
+    bannerimageurl
+    bannerlink
+    priority
+    creationdate
+    updatedate
+  }
+}
+
+query BannersLists {
+  activeBannersLists {
+    uuidbannerlist
+    name
+    banners {
+      uuidbannerlistdetail
+      imgurl
+      linkurl
+    }
+    pos
+    active
+  }
+}
+
+query HomeLists {
+  activeHomeLists {
+    uuidhomelist
+    name
+    section
+    products
+    productsList {
+      uuidOffer
+      offerName
+      description
+      principalSku
+      type
+      creationDate
+      updateDate
+      tags
+      details {
+        refPrice
+        adflyPrice
+        offerPrice
+        imageURL
+        discountType
+        discount
+      }
+      brand {
+        name
+      }
+      department {
+        name
+      }
+      business {
+        uuidbusiness
+        businessname
+        commercialname
+        deliveryMethods {
+          deliveryonline
+          deliveryonhome
+          deliveryonstore
+        }
+      }
+      category {
+        name
+      }
+      subCategory {
+        name
+      }
+      status
+    }
+    creationdate
+    updatedate
+    pos
+    active
+  }
+}

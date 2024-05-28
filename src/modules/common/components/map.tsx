@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GoogleMap, Marker, StandaloneSearchBox } from "@react-google-maps/api";
-import { TextInput } from "@mantine/core";
 import ubigeoPeru, { UbigeoEntry } from "ubigeo-peru";
+import { FormControl, InputLabel, TextField } from "@mui/material";
 
 export interface AddressInfo {
   address: string;
@@ -107,10 +107,14 @@ const findUbigeoMatch = (
 };
 
 interface MapProps {
+  defaultPlace?: Place;
   onSelectPlace: (place: Place | null) => void;
 }
 
-export const MapForm: React.FC<MapProps> = ({ onSelectPlace }) => {
+export const MapForm: React.FC<MapProps> = ({
+  defaultPlace,
+  onSelectPlace,
+}) => {
   const [availableDistricts, setAvailableDistrict] = useState<UbigeoEntry[]>(
     []
   );
@@ -120,29 +124,18 @@ export const MapForm: React.FC<MapProps> = ({ onSelectPlace }) => {
   const [availableDepartments, setAvailableDepartment] = useState<
     UbigeoEntry[]
   >([]);
-  const [selectedPlaceName, setSelectedPlaceName] = useState("");
+  const [selectedPlaceName, setSelectedPlaceName] = useState(
+    defaultPlace?.name
+  );
   const [, setMap] = useState<google.maps.Map | null>(null);
   const [searchBox, setSearchBox] =
     useState<google.maps.places.SearchBox | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const [zoom, setZoom] = useState(15);
   const [center, setCenter] = useState({
-    lat: -12.135609160664332,
-    lng: -77.02211591070116,
+    lat: defaultPlace?.location.lat ?? -12.135609160664332,
+    lng: defaultPlace?.location.lng ?? -77.02211591070116,
   });
-
-  useEffect(() => {
-    const data1 = ubigeoPeru.reniec.filter((r) => r.distrito != "00");
-    const data2 = ubigeoPeru.reniec.filter(
-      (r) => r.provincia != "00" && r.distrito == "00"
-    );
-    const data3 = ubigeoPeru.reniec.filter(
-      (r) => r.provincia == "00" && r.distrito == "00"
-    );
-    setAvailableDistrict(data1);
-    setAvailableProvince(data2);
-    setAvailableDepartment(data3);
-  }, []);
 
   const handleLoadMap = (map: google.maps.Map) => {
     setMap(map);
@@ -172,7 +165,6 @@ export const MapForm: React.FC<MapProps> = ({ onSelectPlace }) => {
   ) => {
     const fullPlaceData = await reverseGeocode(lat, lng);
     if (!fullPlaceData) return null;
-    console.log({ fullPlaceData });
 
     const districtComponent = filterByType(fullPlaceData, [
       "administrative_area_level_3",
@@ -275,6 +267,31 @@ export const MapForm: React.FC<MapProps> = ({ onSelectPlace }) => {
       console.error("Error retrieving place information:", error);
     }
   };
+
+  useEffect(() => {
+    if (defaultPlace) {
+      resolveLocationData(
+        defaultPlace.location.lat,
+        defaultPlace.location.lng,
+        null
+      );
+      setZoom(18);
+    }
+  }, [defaultPlace]);
+
+  useEffect(() => {
+    const data1 = ubigeoPeru.reniec.filter((r) => r.distrito != "00");
+    const data2 = ubigeoPeru.reniec.filter(
+      (r) => r.provincia != "00" && r.distrito == "00"
+    );
+    const data3 = ubigeoPeru.reniec.filter(
+      (r) => r.provincia == "00" && r.distrito == "00"
+    );
+    setAvailableDistrict(data1);
+    setAvailableProvince(data2);
+    setAvailableDepartment(data3);
+  }, []);
+
   return (
     <div style={{}}>
       <StandaloneSearchBox
@@ -287,15 +304,34 @@ export const MapForm: React.FC<MapProps> = ({ onSelectPlace }) => {
           east: -68.6770238,
         }}
       >
-        <TextInput
-          label="Dirección"
-          mb={10}
-          value={selectedPlaceName}
-          onChange={(e) => setSelectedPlaceName(e.target.value)}
-        />
+        <FormControl fullWidth size="small">
+          <InputLabel
+            sx={{
+              color: "black",
+              fontWeight: 600,
+              top: "-20px",
+              marginLeft: "-10px",
+            }}
+          >
+            Dirección
+          </InputLabel>
+          <TextField
+            size="small"
+            sx={{
+              marginTop: "10px",
+              marginBottom: "10px",
+            }}
+            value={selectedPlaceName}
+            onChange={(e) => setSelectedPlaceName(e.target.value)}
+          />
+        </FormControl>
       </StandaloneSearchBox>
       <GoogleMap
-        mapContainerStyle={{ height: "400px", width: "100%" }}
+        mapContainerStyle={{
+          height: "400px",
+          width: "100%",
+          marginTop: "30px",
+        }}
         onLoad={handleLoadMap}
         center={center}
         zoom={zoom}

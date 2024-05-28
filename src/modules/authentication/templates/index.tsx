@@ -4,6 +4,7 @@ import RequestModal from "../components/Verification/request";
 import ResponseModal from "../components/Verification/response";
 import { Modal, Typography } from "@mui/material";
 import { useSession } from "next-auth/react";
+import Loader from "@modules/components/LoadingScreen/Loader";
 
 const ALLOW_DNI_PAGES = ["search", "product", "home", "cart"];
 
@@ -154,7 +155,7 @@ const Authentication: React.FC<{ children?: React.ReactNode }> = ({
   }, [status]);
 
   if (status === "loading") {
-    return <div>loading...</div>;
+    return <Loader />;
   }
 
   return (

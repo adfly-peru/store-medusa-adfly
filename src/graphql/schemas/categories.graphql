@@ -1,0 +1,66 @@
+query Departments {
+  departments {
+    id
+    name
+    description
+    active
+    visible
+    outstanding
+    image
+    section
+  }
+}
+
+query Categories {
+  categories {
+    uuidCategory
+    uuidDepartment
+    name
+    description
+    active
+    visible
+    subCategories {
+      uuidSubCategory
+      name
+      description
+      active
+      visible
+    }
+  }
+}
+
+query Subcategories {
+  subcategories {
+    uuidSubCategory
+    uuidCategory
+    name
+    description
+    active
+    visible
+  }
+}
+
+query Brands {
+  brands {
+    id
+    name
+  }
+}
+
+query Campaigns {
+  campaigns {
+    uuidcampaign
+    name
+    description
+  }
+}
+
+query AvailablePromotions {
+  availablePromotions {
+    uuidpromotion
+    promotionname
+    initialdate
+    duedate
+    state
+  }
+}
