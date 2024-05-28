@@ -22,7 +22,6 @@ import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@lib/apollo-config";
 
 const googleMapsLibraries = ["places"];
-
 interface MyAppProps extends AppProps {
   pageProps: { session?: Session };
 }
