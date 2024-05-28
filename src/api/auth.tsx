@@ -110,3 +110,40 @@ export const surveyQuery = async ({
     return "Error sending survey";
   }
 };
+
+export interface RegisterForm {
+  email: string;
+  registerForm: string;
+  old_password: string;
+  new_password: string;
+  phone: string;
+  newsletters: boolean;
+  terms: boolean;
+  mode: string;
+  token: string;
+  uuidbusiness: string;
+  document_number: string;
+  document_type: string;
+}
+
+export const registerRequest = async (form: RegisterForm): Promise<void> => {
+  const response = await axios.post(
+    `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/verify`,
+    form,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const status = response.status;
+  if (status == 201 || status == 200) {
+    if (response.data) {
+      if (response.data.data.errors) {
+        throw new Error((response.data.data.errors as []).join("-"));
+      }
+      return;
+    }
+  }
+  throw new Error("Error in account verification");
+};

@@ -1,11 +1,10 @@
-import Layout from "@modules/layout/templates";
-import AccountSecurity from "@modules/account/templates/account-security";
+import AccountLayout from "@modules/account/templates/AccountLayout";
 
 const SecurityPage = () => {
   return (
-    <Layout>
-      <AccountSecurity />
-    </Layout>
+    <AccountLayout>
+      <div></div>
+    </AccountLayout>
   );
 };
 

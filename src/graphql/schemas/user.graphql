@@ -1,0 +1,68 @@
+query getCollaborator {
+  collaborator {
+    uuidcollaborator
+    name
+    lastname
+    documenttype
+    documentnumber
+    phonenumber
+    email
+    status
+    changePassword
+    emailVerify
+    urlprofile
+    stars
+    newsletters
+    preferences {
+      whatdoyouwant
+      topproducts
+      topservices
+      toppromotions
+      prefercommunication
+      otherprefercommunication
+    }
+  }
+}
+
+query getAddresses {
+  collaboratoraddresses {
+    uuidcollaboratoraddress
+    alias
+    address
+    lat
+    lng
+    district
+    province
+    department
+    country
+    additional
+  }
+}
+
+query collaboratorStars(
+  $page: Int!
+  $limit: Int!
+  $filters: CollaboratorStarsFilterInput
+  $sort: CollaboratorStarsSortInput
+) {
+  collaboratorStars(page: $page, limit: $limit, filter: $filters, sort: $sort) {
+    totalCount
+    edges {
+      node {
+        uuidstars
+        creationdate
+        operation
+        amount
+        responsiblename
+        responsiblelastname
+        message
+        reason
+        uuidorder
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}

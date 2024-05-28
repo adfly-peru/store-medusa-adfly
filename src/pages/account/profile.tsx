@@ -1,11 +1,11 @@
-import Layout from "@modules/layout/templates";
-import AccountProfile from "@modules/account/templates/account-profile";
+import ProfileForm from "@modules/account/components/Profile";
+import AccountLayout from "@modules/account/templates/AccountLayout";
 
 const ProfilePage = () => {
   return (
-    <Layout>
-      <AccountProfile />
-    </Layout>
+    <AccountLayout>
+      <ProfileForm />
+    </AccountLayout>
   );
 };
 

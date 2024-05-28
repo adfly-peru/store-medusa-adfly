@@ -1,7 +1,8 @@
 import { Address } from "@interfaces/address-interface";
+import { CollaboratorAddress } from "generated/graphql";
 import ubigeoPeru from "ubigeo-peru";
 
-export const formatAddress = (add: Address) => {
+export const formatAddress = (add: CollaboratorAddress) => {
   const d =
     ubigeoPeru.reniec.find(
       (v) =>

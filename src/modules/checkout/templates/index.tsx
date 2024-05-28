@@ -1,232 +1,12 @@
 import { useCart } from "@context/cart-context";
-import {
-  Grid,
-  Divider,
-  Stack,
-  Title,
-  Card,
-  Group,
-  Text,
-  Space,
-  Center,
-  Button,
-  UnstyledButton,
-  ActionIcon,
-  Popover,
-} from "@mantine/core";
-import EmptyCart from "../components/empty-cart";
-import CheckoutForm from "./checkout-form";
-import { useEffect, useMemo, useState } from "react";
-import { useAccount } from "@context/account-context";
-import axios from "axios";
-import * as amplitude from "@amplitude/analytics-browser";
-import { BillingForm } from "@interfaces/billing";
-import { useForm } from "@mantine/form";
-import {
-  IconCreditCard,
-  IconQuestionMark,
-  IconStarFilled,
-} from "@tabler/icons-react";
-import { useProduct } from "@context/product-context";
-
-declare global {
-  interface Window {
-    VisanetCheckout: any;
-  }
-}
-
-const createSessionToken = async (
-  productAmount: number,
-  customerEmail: string,
-  activeCustomer: boolean,
-  documentNumber: string,
-  daysInApp: number
-): Promise<string | null> => {
-  try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_API}/store/session`,
-      {
-        amount: productAmount,
-        customerEmail: customerEmail,
-        activeCustomer: activeCustomer,
-        documentNumber: documentNumber,
-        daysInApp: daysInApp,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const status = response.status;
-    if (status == 201 || status == 200) {
-      return response.data.data.data.sessionKey;
-    }
-    return null;
-  } catch (error) {
-    return null;
-  }
-};
+import EmptyCart from "../components/EmptyCart";
+import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
+import Resume from "../components/Resume";
+import { CheckoutProvider } from "../context/CheckoutContext";
+import { CheckoutStepper, StepperSection } from "../components/Stepper";
 
 const CheckoutTemplate = () => {
-  const { promotions } = useProduct();
-  const {
-    cart,
-    cartPromotions,
-    useStars,
-    editBilling,
-    payCartWithStars,
-    checked,
-    hasAcceptedTerms,
-  } = useCart();
-  const { collaborator, daysInApp } = useAccount();
-  const [saving, setSaving] = useState(0);
-  const [deliveryprice, setDeliveryprice] = useState(0);
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [active, setActive] = useState(0);
-
-  const partnersDiscount = useMemo(() => {
-    return (
-      cartPromotions?.PartnerPromotions?.reduce(
-        (acc, curr) => acc + (curr?.DiscountPromotion?.Discount ?? 0),
-        0
-      ) ?? 0
-    );
-  }, [cartPromotions]);
-
-  const billingform = useForm<BillingForm>({
-    initialValues: {
-      name: collaborator?.name ?? "",
-      lastname: collaborator?.lastname ?? "",
-      doctype: collaborator?.documenttype ?? "",
-      doc: collaborator?.documentnumber ?? "",
-      email: collaborator?.email ?? "",
-      phone: cart?.billingInfo?.phone ?? collaborator?.phonenumber ?? "",
-      ruc: cart?.billingInfo?.ruc ?? "",
-      businessname: cart?.billingInfo?.businessname ?? "",
-      fiscaladdress: cart?.billingInfo?.fiscaladdress ?? "",
-    },
-    validate: {
-      phone: (value) =>
-        value?.length ?? 0 > 0 ? null : "Este campo es requerido",
-    },
-  });
-
-  const nextStep = () =>
-    setActive((current) => (current < 3 ? current + 1 : current));
-  const prevStep = () =>
-    setActive((current) => (current > 0 ? current - 1 : current));
-
-  useEffect(() => {
-    if (!cart) return;
-    const totaldelivery = cart.suborders.reduce(
-      (acc, curr) => acc + (curr.deliveryprice ?? 0),
-      cart.total
-    );
-    setTotalAmount(
-      totaldelivery -
-        partnersDiscount -
-        (cartPromotions?.CartPromotion?.Discount ?? 0)
-    );
-  }, [cart, partnersDiscount, cartPromotions]);
-
-  useEffect(() => {
-    if (!cart) return;
-    const totaldelivery = cart.suborders.reduce(
-      (acc, curr) => acc + (curr.deliveryprice ?? 0),
-      0
-    );
-    setDeliveryprice(totaldelivery);
-    const calculateTotalRefPrice = () => {
-      if (!cart) return 0;
-
-      return cart.suborders.reduce((suborderTotal, suborder) => {
-        return (
-          suborderTotal +
-          suborder.items.reduce((itemTotal, item) => {
-            return itemTotal + item.quantity * item.variant.refPrice;
-          }, 0)
-        );
-      }, 0);
-    };
-    setSaving(calculateTotalRefPrice() - (cart.total - totaldelivery));
-  }, [cart]);
-
-  const funcOnPaymentButton = async (checked: string) => {
-    billingform.clearErrors();
-    if (checked === "bill") {
-      let valids = 0;
-      if ((billingform.values.ruc?.length ?? 0) == 0) {
-        valids += 1;
-        billingform.setFieldError("ruc", "RUC es obligatorio");
-      }
-      if ((billingform.values.businessname?.length ?? 0) <= 0) {
-        valids += 1;
-        billingform.setFieldError(
-          "businessname",
-          "Nombre de la empresa es obligatorio"
-        );
-      }
-      if ((billingform.values.fiscaladdress?.length ?? 0) <= 0) {
-        valids += 1;
-        billingform.setFieldError(
-          "fiscaladdress",
-          "Dirección Fiscal es obligatoria"
-        );
-      }
-      if (valids === 0) {
-        return await editBilling(billingform.values);
-      }
-    } else {
-      return await editBilling(billingform.values);
-    }
-    return "Complete los campos obligatorios";
-  };
-
-  const payment = async () => {
-    if (!cart || !collaborator) return;
-    const infoerror = await funcOnPaymentButton(checked);
-    if (infoerror) return;
-    let totalAmountFixed = parseFloat(totalAmount.toFixed(2));
-    let starsToUse = 0;
-    if (useStars) {
-      starsToUse =
-        totalAmount * 100 < (collaborator?.stars ?? 0)
-          ? parseFloat((totalAmount * 100).toFixed(0))
-          : collaborator?.stars ?? 0;
-      totalAmountFixed = totalAmountFixed - starsToUse / 100;
-    }
-    if (totalAmountFixed === 0) {
-      await payCartWithStars(cart.purchaseNumber, totalAmountFixed, starsToUse);
-      return;
-    }
-    const sessionToken = await createSessionToken(
-      totalAmountFixed,
-      collaborator.email ?? "",
-      true,
-      collaborator.documentnumber,
-      daysInApp
-    );
-    if (!sessionToken) return;
-    amplitude.track("Boton de Pago Clickeado", {
-      purchaseNumber: cart.purchaseNumber,
-    });
-    window.VisanetCheckout.configure({
-      sessiontoken: `${sessionToken}`,
-      channel: "web",
-      merchantid: process.env.NEXT_PUBLIC_MERCHANT_ID,
-      purchasenumber: cart.purchaseNumber,
-      amount: totalAmountFixed,
-      expirationminutes: "20",
-      timeouturl: "about:blank",
-      merchantlogo: "https://tienda.adfly.com.pe/logo_adfly.svg",
-      merchantname: "Adfly",
-      formbuttoncolor: "#31658E",
-      action: `api/payment?purchaseNumber=${cart.purchaseNumber}&amount=${totalAmount}&collaboratorid=${collaborator?.uuidcollaborator}&stars=${starsToUse}`,
-    });
-
-    window.VisanetCheckout.open();
-  };
+  const { cart } = useCart();
 
   if (!cart) {
     return <EmptyCart />;
@@ -236,190 +16,52 @@ const CheckoutTemplate = () => {
     return <EmptyCart />;
   }
   return (
-    <>
-      <Center w="100%">
-        <Stack w="95%" align="start" pl={8}>
-          <Title fz={25} align="start" order={2}>
-            Checkout
-          </Title>
+    <Box
+      sx={(theme) => ({
+        marginTop: "30px",
+        paddingLeft: "20px",
+        paddingRight: "20px",
+        [theme.breakpoints.up("md")]: {
+          paddingLeft: "27px",
+          paddingRight: "27px",
+        },
+        [theme.breakpoints.up("lg")]: {
+          paddingLeft: "117px",
+          paddingRight: "117px",
+        },
+      })}
+    >
+      <Typography variant="h2">Checkout</Typography>
+      <CheckoutProvider>
+        <Stack
+          direction="row"
+          sx={(theme) => ({
+            marginTop: "20px",
+            [theme.breakpoints.down("md")]: {
+              flexDirection: "column",
+              gap: "20px",
+            },
+          })}
+          spacing={{
+            xs: 0,
+            md: 2,
+          }}
+        >
+          <Card
+            sx={{
+              width: "100%",
+              height: "fit-content",
+            }}
+          >
+            <CardContent>
+              <CheckoutStepper />
+              <StepperSection />
+            </CardContent>
+          </Card>
+          <Resume />
         </Stack>
-      </Center>
-      <Center w="100%">
-        <Grid w="95%" mt={0}>
-          <Grid.Col span="auto">
-            <CheckoutForm
-              billingform={billingform}
-              active={active}
-              setActive={setActive}
-              nextStep={nextStep}
-              prevStep={prevStep}
-            />
-          </Grid.Col>
-          {/* <Divider size="sm" orientation="vertical" /> */}
-          <Grid.Col span={12} md={3}>
-            <Stack align="center">
-              <Card w="100%" radius="md" withBorder fz={15}>
-                <Title order={3} fz={20}>
-                  Resumen
-                </Title>
-                <Space h="md" />
-                <Group position="apart">
-                  <Text>Subtotal:</Text>
-                  <Text>S/.{cart.total.toFixed(2)}</Text>
-                </Group>
-                <Group position="apart">
-                  <Text>Envío:</Text>
-                  <Text>
-                    {deliveryprice === 0
-                      ? "-"
-                      : `S/.${deliveryprice.toFixed(2)}`}
-                  </Text>
-                </Group>
-                {cartPromotions?.CartPromotion?.Discount ?? 0 > 0 ? (
-                  <Group position="apart" c="red">
-                    <Group position="left" spacing={5}>
-                      <Text>Dscto. Carrito:</Text>
-                      <Popover position="top" withArrow shadow="md">
-                        <Popover.Target>
-                          <ActionIcon
-                            color="red"
-                            size="xs"
-                            radius="xl"
-                            variant="outline"
-                          >
-                            <IconQuestionMark />
-                          </ActionIcon>
-                        </Popover.Target>
-                        <Popover.Dropdown>
-                          <Text maw={200} size="sm" c="dark">
-                            Descuento por la promocion {'"'}
-                            {
-                              promotions.find(
-                                (p) =>
-                                  p.uuidpromotion ===
-                                  cartPromotions?.CartPromotion?.UuidPromotion
-                              )?.promotionname
-                            }
-                            {'"'}
-                          </Text>
-                        </Popover.Dropdown>
-                      </Popover>
-                    </Group>
-                    <Text>
-                      {`- S/.${(
-                        cartPromotions?.CartPromotion?.Discount ?? 0
-                      ).toFixed(2)}`}
-                    </Text>
-                  </Group>
-                ) : (
-                  <></>
-                )}
-                {partnersDiscount > 0 ? (
-                  <Group position="apart" c="red">
-                    <Group position="left" spacing={5}>
-                      <Text>Dscto. Subordenes:</Text>
-                      <Popover position="top" withArrow shadow="md">
-                        <Popover.Target>
-                          <ActionIcon
-                            color="red"
-                            size="xs"
-                            radius="xl"
-                            variant="outline"
-                          >
-                            <IconQuestionMark />
-                          </ActionIcon>
-                        </Popover.Target>
-                        <Popover.Dropdown>
-                          <Text maw={200} size="sm" c="dark">
-                            Descuento acumulado de las subordenes
-                          </Text>
-                        </Popover.Dropdown>
-                      </Popover>
-                    </Group>
-                    <Text>{`- S/.${partnersDiscount.toFixed(2)}`}</Text>
-                  </Group>
-                ) : (
-                  <></>
-                )}
-                {useStars ? (
-                  <Group position="apart" c="red">
-                    <Text>Dscto. Estrellas:</Text>
-                    <Text>
-                      {`- S/.${(
-                        (totalAmount * 100 < (collaborator?.stars ?? 0)
-                          ? parseFloat((totalAmount * 100).toFixed(0))
-                          : collaborator?.stars ?? 0) / 100
-                      ).toFixed(2)}`}
-                    </Text>
-                  </Group>
-                ) : (
-                  <></>
-                )}
-                <Divider my={5} style={{ border: "1px solid black" }} />
-                <Group position="apart" fw="bold">
-                  <Text>Total:</Text>
-                  <Text>
-                    S/.
-                    {(
-                      totalAmount -
-                      (useStars
-                        ? (totalAmount * 100 < (collaborator?.stars ?? 0)
-                            ? parseFloat((totalAmount * 100).toFixed(0))
-                            : collaborator?.stars ?? 0) / 100
-                        : 0)
-                    ).toFixed(2)}
-                  </Text>
-                </Group>
-                <Space h="lg" />
-                <Text
-                  fz={10}
-                  color="gray.6"
-                >{`(Ahorro estimado: S/.${saving.toFixed(2)})`}</Text>
-                <Space h="xl" />
-              </Card>
-              <Card w="100%" p="sm" radius="xs" withBorder fz={15}>
-                <Title order={3} fz={20}>
-                  Resumen en estrellas
-                </Title>
-                <Group mt="sm" position="apart" fw="bold" fz="sm" c="yellow">
-                  <Group spacing="xs">
-                    <Text>Estrellas</Text>
-                    <IconStarFilled size={20} />
-                  </Group>
-                  <Text>{(totalAmount * 100).toFixed(0)}</Text>
-                </Group>
-              </Card>
-              {active === 2 ? (
-                <Stack w="100%" spacing="xl">
-                  <Button
-                    mt="md"
-                    w="100%"
-                    h={48}
-                    disabled={!hasAcceptedTerms}
-                    onClick={() => payment()}
-                    leftIcon={<IconCreditCard />}
-                  >
-                    {"Pagar"}
-                  </Button>
-                  <UnstyledButton
-                    w="100%"
-                    c="#31658E"
-                    fw={900}
-                    ta="center"
-                    fz={18}
-                    onClick={prevStep}
-                  >
-                    Regresar a datos de envío
-                  </UnstyledButton>
-                </Stack>
-              ) : (
-                <></>
-              )}
-            </Stack>
-          </Grid.Col>
-        </Grid>
-      </Center>
-    </>
+      </CheckoutProvider>
+    </Box>
   );
 };
 

@@ -1,0 +1,231 @@
+query collaboratorOrders(
+  $page: Int!
+  $limit: Int!
+  $filters: CollaboratorOrderFilterInput
+  $sort: CollaboratorOrderSortInput
+) {
+  collaboratorOrders(
+    page: $page
+    limit: $limit
+    filter: $filters
+    sort: $sort
+  ) {
+    totalCount
+    edges {
+      node {
+        uuidorder
+        purchasenumber
+        creationdate
+        updatedate
+        status
+        total
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+
+query orderReport($id: ID!) {
+  collaboratorOrder(uuidorder: $id) {
+    order {
+      starsUsed
+      starspurchasenumber
+      comments
+      uuidOrder
+      uuidCollaborator
+      creationDate
+      status
+      total
+      igv
+      finalTotal
+      totalIgv
+      deliveryPrice
+      businessName
+      details {
+        cartdiscount
+        partnersdiscount
+        collaborator {
+          name
+          lastname
+          documenttype
+          documentnumber
+          email
+          phonenumber
+        }
+        billingInfo {
+          phone
+          ruc
+          businessname
+          fiscaladdress
+        }
+        deliveryInfo {
+          receivername
+          receiverdocumentkind
+          receiverdocumentnumber
+          phone
+        }
+        isreceiver
+        isbilling
+      }
+      suborders {
+        comments
+        uuidBusiness
+        businessName
+        sellerName
+        deliveryMethod
+        deliveryPrice
+        deliveryTime
+        details {
+          discount
+          name
+          country
+          department
+          province
+          district
+          address
+          comments
+        }
+        total
+        status
+        items {
+          uuidorderitem
+          uuidsuborder
+          uuidvariant
+          quantity
+          subtotal
+          details {
+            type
+            description
+            refprice
+            adflyprice
+            offerprice
+            imageurl
+            variantsku
+            productname
+            termsconditions
+            principalsku
+            attributes {
+              attributeName
+              value
+            }
+            uuidbrand
+            uuiddepartment
+            uuidcategory
+            uuidsubcategory
+            uuidbusiness
+            initialdate
+            expirationdate
+            initialpurchasedate
+            expirationpurchasedate
+            accessservice
+            contentservice
+            servicesCodes
+            specification
+            condition
+            conditiondetails
+            productwarranty
+            sellerwarranty
+            included
+            width
+            height
+            weight
+            length
+          }
+        }
+      }
+      paymentInfo {
+        canal
+        card
+        brand
+        purchaseNumber
+      }
+    }
+    collaborator {
+      name
+      lastname
+      documenttype
+      documentnumber
+      phonenumber
+      email
+    }
+  }
+}
+
+query collaboratorCoupons(
+  $page: Int!
+  $limit: Int!
+  $filters: CollaboratorCouponFilterInput
+  $sort: CollaboratorCouponSortInput
+) {
+  collaboratorCoupons(
+    page: $page
+    limit: $limit
+    filter: $filters
+    sort: $sort
+  ) {
+    totalCount
+    edges {
+      node {
+        uuidcouponcollaboratorusage
+        uuidcollaborator
+        businessname
+        dateused
+        type
+        uuidproduct
+        uuidvariant
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+
+query couponReport($id: ID!) {
+  collaboratorCouponUsage(uuidcouponcollaboratorusage: $id) {
+    uuidcouponcollaboratorusage
+    uuidcollaborator
+    uuidproduct
+    uuidvariant
+    businessname
+    dateused
+    type
+    couponcode
+    couponData {
+      initialDate
+      expirationDate
+      initialPurchaseDate
+      expirationPurchaseDate
+      couponUsage
+      couponContent
+      discountType
+      discount
+      couponCode
+    }
+    variant {
+      uuidVariant
+      attributes {
+        attributeName
+        value
+      }
+      currency
+      stock
+      refPrice
+      adflyPrice
+      offerPrice
+      maxQuantity
+      imageURL
+      variantSku
+      offer {
+        offerName
+        description
+        type
+        termConditions
+      }
+    }
+  }
+}

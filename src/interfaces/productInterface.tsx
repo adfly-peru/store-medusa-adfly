@@ -110,14 +110,14 @@ export interface Offer {
   uuidOffer: string;
   offerName: string;
   description: string;
-  principalSku: string;
+  principalSku?: string | null;
   type: string;
   offerAttributes: OfferAttribute[];
   creationDate: string;
   updateDate: string;
   tags: string[];
-  rejectionComment?: string;
-  termConditions?: string;
+  rejectionComment?: string | null;
+  termConditions?: string | null;
   details?: OfferDetails;
   variant: Variant[];
   brand: {

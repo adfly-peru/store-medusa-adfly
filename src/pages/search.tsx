@@ -1,10 +1,5 @@
-import Layout from "@modules/layout/templates";
-import SearchProducts from "@modules/products/templates/search-products";
+import SearchProducts from "@modules/products/templates/Search";
 
 export default function Search() {
-  return (
-    <Layout>
-      <SearchProducts />
-    </Layout>
-  );
+  return <SearchProducts />;
 }
