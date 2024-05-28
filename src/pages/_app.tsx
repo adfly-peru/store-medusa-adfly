@@ -39,12 +39,7 @@ export default function App(props: MyAppProps) {
     }
   }, []);
   return (
-    <GoogleOAuthProvider
-      clientId={
-        process.env.NEXT_GOOGLE_CLIENT_ID ??
-        "142447493370-spr2jt87ll4cm60gnr4hs925sng983vf.apps.googleusercontent.com"
-      }
-    >
+    <GoogleOAuthProvider clientId={process.env.NEXT_GOOGLE_CLIENT_ID ?? ""}>
       <SessionProvider session={session}>
         <ApolloProvider client={apolloClient}>
           <AccountProvider>
