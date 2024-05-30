@@ -1,7 +1,12 @@
 import {
+  Alert,
+  AlertTitle,
   Button,
   Checkbox,
+  CircularProgress,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
   IconButton,
   Link,
   Stack,
@@ -13,9 +18,10 @@ import { useSession } from "next-auth/react";
 import BaseModal from "@modules/components/BaseModal";
 import { useRegister } from "./Context";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 interface FormValues {
+  email: string;
   password: string;
   newsletters: boolean;
   terms: boolean;
@@ -32,9 +38,10 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
+    control,
   } = useForm<FormValues>({
     defaultValues: {
+      email: registerForm.email,
       password: "",
       newsletters: false,
       terms: false,
@@ -45,13 +52,19 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
   const onSubmit = async (data: FormValues) => {
     setLoginError("");
     setLoading(true);
-    await handleRegister({
-      ...registerForm,
-      new_password: data.password,
-      newsletters: data.newsletters,
-      terms: data.terms,
-      phone: data.phone,
-    });
+    try {
+      await handleRegister({
+        ...registerForm,
+        email: data.email,
+        new_password: data.password,
+        newsletters: data.newsletters,
+        terms: data.terms,
+        phone: data.phone,
+      });
+    } catch {
+      setLoginError("Hubo un error desconocido en el servicio");
+    }
+    setLoading(false);
   };
 
   return (
@@ -62,6 +75,22 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
             gap: "20px",
           })}
         >
+          {loginError && (
+            <Alert
+              severity="error"
+              sx={{
+                width: "100%",
+                paddingLeft: 0,
+                "& .MuiAlert-icon": {
+                  marginRight: "10px",
+                  marginLeft: "-23px",
+                },
+              }}
+            >
+              <AlertTitle>Error al ingresar</AlertTitle>
+              {loginError}
+            </Alert>
+          )}
           <Typography variant="subtitle2" fontSize={13}>
             Completa los datos pendientes para completar tu registro.
           </Typography>
@@ -97,18 +126,20 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
           />
           <Typography>Correo electrónico</Typography>
           <TextField
-            disabled
+            disabled={registerForm.mode !== "password"}
             autoComplete="off"
             variant="outlined"
             fullWidth
             size="small"
-            value={registerForm.email}
             InputLabelProps={{
               shrink: true,
             }}
             sx={{
               marginTop: "-10px",
             }}
+            error={!!errors.email}
+            helperText={errors.email ? "Este campo es requerido" : ""}
+            {...register("email", { required: true })}
           />
           <Typography variant="body2">Contraseña</Typography>
           <TextField
@@ -134,6 +165,8 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
             sx={{
               marginTop: "-10px",
             }}
+            error={!!errors.password}
+            helperText={errors.password ? "Este campo es requerido" : ""}
             {...register("password", { required: true })}
           />
           <Typography>N° Celular</Typography>
@@ -151,21 +184,32 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
             }}
             {...register("phone")}
           />
+          <FormControl error={!!errors.terms}>
+            <FormControlLabel
+              control={
+                <Controller
+                  name="terms"
+                  control={control}
+                  rules={{
+                    validate: (value) =>
+                      value || "Debes aceptar los Términos y Condiciones",
+                  }}
+                  render={({ field }) => <Checkbox {...field} />}
+                />
+              }
+              label={
+                <Typography variant="body1" fontSize={11}>
+                  Acepto los <Link>Términos y Condiciones</Link> de ADFLY y
+                  autorizo la <Link>política de privacidad</Link>.
+                </Typography>
+              }
+            />
+            {errors.terms && (
+              <FormHelperText>{errors.terms.message}</FormHelperText>
+            )}
+          </FormControl>
           <FormControlLabel
-            control={<Checkbox />}
-            label={
-              <Typography variant="body1" fontSize={11}>
-                Acepto los <Link>Términos y Condiciones</Link> de ADFLY y
-                autorizo la <Link>política de privacidad</Link>.
-              </Typography>
-            }
-            {...register("terms", {
-              validate: (value) =>
-                value || "Debes aceptar los Términos y Condiciones",
-            })}
-          />
-          <FormControlLabel
-            control={<Checkbox />}
+            control={<Checkbox defaultChecked />}
             label={
               <Typography variant="body1" fontSize={11}>
                 Acepto recibir material publicitario relacionado a la tienda{" "}
@@ -173,8 +217,13 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
             }
             {...register("newsletters")}
           />
-          <Button fullWidth variant="contained" type="submit">
-            Completar registro
+          <Button
+            fullWidth
+            variant="contained"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? <CircularProgress size={24} /> : "Completar registro"}
           </Button>
           <Typography textAlign="center" fontSize={10} fontWeight="lighter">
             Si necesitas ayuda, escríbenos a hola@adfly.pe o llámanos al +51 970

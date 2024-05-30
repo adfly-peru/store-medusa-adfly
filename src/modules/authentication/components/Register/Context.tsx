@@ -38,6 +38,10 @@ export const RegisterProvider = ({
   const [step, setStep] = useState(1);
 
   const handleRegister = async (form: RegisterForm) => {
+    setRegisterForm({
+      ...form,
+      old_password: form.mode === "password" ? form.document_number : "",
+    });
     await registerRequest({
       ...form,
       old_password: form.mode === "password" ? form.document_number : "",
