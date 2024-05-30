@@ -68,7 +68,7 @@ export const DesignProvider = ({ children }: DesignProviderProps) => {
           grey: {
             200: "#C7CACD",
             300: "#8F959B",
-            400: "#8F959B30",
+            400: "#8F959B",
             500: "#737A82",
             600: "#5C6268",
             700: "#45494E",

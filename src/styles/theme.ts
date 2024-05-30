@@ -1,4 +1,4 @@
-import { Theme, createTheme } from "@mui/material/styles";
+import { Theme, alpha, createTheme } from "@mui/material/styles";
 
 const baseTheme = (theme: Theme) => {
   return createTheme({
@@ -81,10 +81,13 @@ const baseTheme = (theme: Theme) => {
             color: theme.palette.primary.main,
           },
           ".slick-products-slider": {
+            width: "100%",
             display: "flex !important",
+            gap: "30px",
           },
-          ".slick-dots": {
-            bottom: "unset",
+          ".slick-product-dots li button:before": {
+            marginTop: "10px",
+            fontSize: "10px !important",
           },
           ".slick-dots li": {
             height: 50,
@@ -139,6 +142,13 @@ const baseTheme = (theme: Theme) => {
           },
         },
       },
+      MuiFormHelperText: {
+        styleOverrides: {
+          root: {
+            fontSize: 12,
+          },
+        },
+      },
       MuiButton: {
         styleOverrides: {
           root: {
@@ -157,10 +167,7 @@ const baseTheme = (theme: Theme) => {
           root: {
             borderRadius: "6px !important",
             "&.Mui-disabled": {
-              backgroundColor: theme.palette.grey[400],
-            },
-            "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: theme.palette.primary.main,
+              backgroundColor: alpha(theme.palette.grey[400], 0.3),
             },
           },
         },
@@ -168,7 +175,15 @@ const baseTheme = (theme: Theme) => {
       MuiOutlinedInput: {
         styleOverrides: {
           root: {
-            borderColor: "red",
+            ":hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: theme.palette.primary.main,
+            },
+            ":focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: theme.palette.primary.main,
+            },
+            "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: theme.palette.error.main,
+            },
           },
         },
       },

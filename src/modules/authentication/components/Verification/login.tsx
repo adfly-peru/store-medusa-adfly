@@ -2,9 +2,6 @@ import {
   Box,
   Divider,
   FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   Button,
   Stack,
   TextField,
@@ -13,16 +10,23 @@ import {
   Alert,
   AlertTitle,
   CircularProgress,
+  Autocomplete,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 
 interface FormValues {
-  docType: string;
+  docType: { label: string; value: string } | null;
   doc: string;
 }
+
+export const documentTypes = [
+  { label: "DNI", value: "DNI" },
+  { label: "Carné extranjería", value: "CE" },
+  { label: "Pasaporte", value: "passport" },
+];
 
 const LoginModal = React.forwardRef<
   HTMLDivElement,
@@ -34,10 +38,11 @@ const LoginModal = React.forwardRef<
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
-      docType: "",
+      docType: null,
       doc: "",
     },
   });
@@ -47,17 +52,11 @@ const LoginModal = React.forwardRef<
   const onSubmit = (data: FormValues) => {
     setLoginError("");
     setLoading(true);
-    // Test
-    // signIn("credentials", {
-    //   redirect: false,
-    //   callbackUrl: "/",
-    //   credential: "74608726",
-    //   password: "Oldfriends4056?",
-    // })
     signIn("dni", {
       redirect: false,
       callbackUrl: "/",
       ...data,
+      docType: data.docType?.value,
     })
       .then((result) => {
         if (!result?.ok)
@@ -168,23 +167,50 @@ const LoginModal = React.forwardRef<
               }}
             >
               {loginError && (
-                <Alert severity="error">
+                <Alert
+                  severity="error"
+                  sx={{
+                    width: "100%",
+                    paddingLeft: 0,
+                    "& .MuiAlert-icon": {
+                      marginRight: "10px",
+                      marginLeft: "-23px",
+                    },
+                  }}
+                >
                   <AlertTitle>Error al ingresar</AlertTitle>
                   {loginError}
                 </Alert>
               )}
               <FormControl fullWidth size="small">
-                <InputLabel id="doctype-label">Tipo de documento</InputLabel>
-                <Select
-                  labelId="doctype-label"
-                  label="Tipo de documento"
-                  defaultValue=""
-                  {...register("docType", { required: true })}
-                >
-                  <MenuItem value="DNI">DNI</MenuItem>
-                  <MenuItem value="CE">Carné extranjería</MenuItem>
-                  <MenuItem value="passport">Pasaporte</MenuItem>
-                </Select>
+                <Controller
+                  name="docType"
+                  control={control}
+                  defaultValue={null}
+                  rules={{ required: "Este campo es requerido" }}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      options={documentTypes}
+                      getOptionLabel={(option) => option.label}
+                      isOptionEqualToValue={(option, value) =>
+                        option.value === value.value
+                      }
+                      onChange={(event, value) => field.onChange(value)}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Tipo de documento"
+                          error={!!errors.docType}
+                          size="small"
+                          helperText={
+                            errors.docType ? "Este campo es requerido" : ""
+                          }
+                        />
+                      )}
+                    />
+                  )}
+                />
               </FormControl>
               <TextField
                 label="Número de documento"
@@ -192,6 +218,8 @@ const LoginModal = React.forwardRef<
                 variant="outlined"
                 fullWidth
                 size="small"
+                error={!!errors.doc}
+                helperText={errors.doc ? "Este campo es requerido" : ""}
                 {...register("doc", { required: true })}
               />
               <Button

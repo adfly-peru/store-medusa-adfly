@@ -49,6 +49,7 @@ export default NextAuth({
               document_type,
               document_number,
               complete_registration,
+              email,
             } = response.data.data.data;
             return {
               id: uuid_collaborator,
@@ -58,11 +59,14 @@ export default NextAuth({
               documenttype: document_type,
               dni: document_number,
               completeregistration: complete_registration,
+              sub_domain: subdomain,
+              email,
             };
           } else {
             throw new Error("Invalid credentials");
           }
         } catch (error) {
+          console.error("DNI authorization error:", error);
           return null;
         }
       },
@@ -114,14 +118,14 @@ export default NextAuth({
             throw new Error("Invalid credentials");
           }
         } catch (error) {
-          console.error(error);
+          console.error("Custom credentials authorization error:", error);
           return null;
         }
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
         token.name = user.name;
@@ -132,11 +136,47 @@ export default NextAuth({
         token.accessToken = user.accessToken;
         token.uuidbusiness = user.uuidbusiness;
         token.completeregistration = user.completeregistration;
+        token.email = user.email;
+        token.provider = account?.provider || token.provider;
+        token.sub_domain = user.sub_domain;
       }
       return token;
     },
     async session({ session, token }) {
       session.user = token;
+
+      if (
+        token.provider === "dni" &&
+        token.documenttype &&
+        token.dni &&
+        token.sub_domain
+      ) {
+        try {
+          const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/checkaccess`,
+            {
+              documenttype: token.documenttype,
+              documentnumber: token.dni,
+              sub_domain: token.sub_domain,
+            }
+          );
+
+          if (response.status === 200 || response.status === 201) {
+            const { complete_registration, email } = response.data.data.data;
+
+            if (session.user.completeregistration !== complete_registration) {
+              session.user.completeregistration = complete_registration;
+            }
+
+            if (session.user.email !== email) {
+              session.user.email = email;
+            }
+          }
+        } catch (error) {
+          console.error("Session verification error:");
+        }
+      }
+
       return session;
     },
   },

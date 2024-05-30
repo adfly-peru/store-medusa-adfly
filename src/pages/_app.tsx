@@ -10,7 +10,6 @@ import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import { CssBaseline, Fab } from "@mui/material";
 import Authentication from "@modules/authentication/templates";
-import { ClientProvider } from "@context/client-context";
 import { CategoriesProvider } from "@context/categories-context";
 import AppHeader from "@modules/components/Header";
 import AppFooter from "@modules/components/Footer";

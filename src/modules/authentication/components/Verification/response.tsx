@@ -6,6 +6,7 @@ const ResponseModal = React.forwardRef<
   {
     title: string;
     response: ReactNode;
+    goBack: () => void;
   }
 >((props, _) => {
   return (
@@ -49,6 +50,7 @@ const ResponseModal = React.forwardRef<
             borderRadius: 17,
           }}
           variant="contained"
+          onClick={props.goBack}
         >
           Volver al inicio
         </Button>

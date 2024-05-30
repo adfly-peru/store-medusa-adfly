@@ -5,8 +5,7 @@ import ResponseModal from "../components/Verification/response";
 import { Modal, Typography } from "@mui/material";
 import { useSession } from "next-auth/react";
 import Loader from "@modules/components/LoadingScreen/Loader";
-
-const ALLOW_DNI_PAGES = ["search", "product", "home", "cart"];
+import { useDesign } from "@context/design-context";
 
 const AuthenticationModal = React.forwardRef<
   HTMLDivElement,
@@ -15,10 +14,22 @@ const AuthenticationModal = React.forwardRef<
   }
 >((props, _) => {
   AuthenticationModal.displayName = "AuthenticationModal";
+  const { storeDesign } = useDesign();
 
   const [step, setStep] = useState<
     "login" | "request" | "success" | "access" | "pending"
   >("login");
+  const [form, setForm] = useState<{
+    name: string;
+    doctype: string;
+    doc: string;
+    email: string;
+  }>({
+    name: "",
+    doctype: "",
+    doc: "",
+    email: "",
+  });
 
   switch (step) {
     case "login":
@@ -29,10 +40,24 @@ const AuthenticationModal = React.forwardRef<
         />
       );
     case "request":
-      return <RequestModal goBackLogin={() => setStep("login")} />;
+      return (
+        <RequestModal
+          goBackLogin={() => setStep("login")}
+          goNext={(value, newForm) => {
+            setForm({
+              name: `${newForm.name} ${newForm.lastname}`,
+              doctype: newForm.documenttype?.value ?? "",
+              doc: newForm.documentnumber,
+              email: newForm.email,
+            });
+            setStep(value);
+          }}
+        />
+      );
     case "success":
       return (
         <ResponseModal
+          goBack={() => setStep("login")}
           title={"¡Solicitud enviada con éxito!"}
           response={
             <Typography
@@ -50,7 +75,7 @@ const AuthenticationModal = React.forwardRef<
                 variant="body1"
                 fontSize={14}
               >
-                [Nombre de empresa]
+                {storeDesign?.commercialname ?? "[Nombre de empresa]"}
               </Typography>{" "}
               revisará tu solicitud. Te estaremos informando sobre el resultado
               a{" "}
@@ -60,7 +85,7 @@ const AuthenticationModal = React.forwardRef<
                 variant="body1"
                 fontSize={14}
               >
-                correo@dominio.com
+                {form.email ?? "correo@dominio.com"}
               </Typography>
               .
             </Typography>
@@ -70,6 +95,7 @@ const AuthenticationModal = React.forwardRef<
     case "access":
       return (
         <ResponseModal
+          goBack={() => setStep("login")}
           title={"¡Ya cuentas con acceso!"}
           response={
             <Typography
@@ -80,14 +106,14 @@ const AuthenticationModal = React.forwardRef<
                 lineHeight: "19px",
               }}
             >
-              Hola [Nombre],{" "}
+              Hola {form.name ?? "[Nombre]"},{" "}
               <Typography
                 display="inline"
                 fontWeight={700}
                 variant="body1"
                 fontSize={14}
               >
-                [tipo documento]
+                {form.doctype ?? "[tipo documento]"}
               </Typography>{" "}
               con n° documento{" "}
               <Typography
@@ -96,7 +122,7 @@ const AuthenticationModal = React.forwardRef<
                 variant="body1"
                 fontSize={14}
               >
-                [# documento]
+                {form.doc ?? "[# documento]"}
               </Typography>{" "}
               ya contaba con acceso a la tienda. No es necesario enviar una
               solicitud de acceso.
@@ -107,6 +133,7 @@ const AuthenticationModal = React.forwardRef<
     case "pending":
       return (
         <ResponseModal
+          goBack={() => setStep("login")}
           title={"Solicitud pendiente"}
           response={
             <Typography
@@ -117,14 +144,14 @@ const AuthenticationModal = React.forwardRef<
                 lineHeight: "19px",
               }}
             >
-              Hola [Nombre],{" "}
+              Hola {form.name ?? "[Nombre]"},{" "}
               <Typography
                 display="inline"
                 fontWeight={700}
                 variant="body1"
                 fontSize={14}
               >
-                [tipo documento]
+                {form.doctype ?? "[tipo documento]"}
               </Typography>{" "}
               con n° documento{" "}
               <Typography
@@ -133,7 +160,7 @@ const AuthenticationModal = React.forwardRef<
                 variant="body1"
                 fontSize={14}
               >
-                [# documento]
+                {form.doc ?? "[# documento]"}
               </Typography>{" "}
               ya cuenta con una solicitud pendiente de revisión.
             </Typography>

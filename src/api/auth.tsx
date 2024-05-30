@@ -44,33 +44,29 @@ export const requestAccessQuery = async ({
   termsconditions: boolean;
   sub_domain: string;
   email: string;
-}): Promise<string | null> => {
-  try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_API}/business-partners/collaborators/access`,
-      {
-        name,
-        lastname,
-        documenttype,
-        documentnumber,
-        termsconditions,
-        sub_domain,
-        email,
+}): Promise<void> => {
+  const response = await axios.post(
+    `${process.env.NEXT_PUBLIC_BACKEND_API}/business-partners/collaborators/access`,
+    {
+      name,
+      lastname,
+      documenttype,
+      documentnumber,
+      termsconditions,
+      sub_domain,
+      email,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const status = response.status;
-    if (status == 201 || status == 200) {
-      return null;
     }
-    return "Error requesting access";
-  } catch (error) {
-    return "Error requesting access";
+  );
+  const status = response.status;
+  if (status == 201 || status == 200) {
+    return;
   }
+  throw new Error("Error requesting access");
 };
 
 export const surveyQuery = async ({
