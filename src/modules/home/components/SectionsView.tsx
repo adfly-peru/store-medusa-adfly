@@ -22,32 +22,47 @@ const SectionsView = () => {
   return (
     <Box
       sx={(theme) => ({
-        padding: "60px 110px",
+        padding: "0px 110px",
         backgroundColor: "#F2F2F2",
         width: "100%",
         [theme.breakpoints.down("lg")]: {
-          padding: "30px 30px",
+          padding: "0px 90px",
         },
         [theme.breakpoints.down("md")]: {
-          padding: "10px 10px",
+          padding: "0px 10px",
         },
+        display: "flex",
+        flexDirection: "column",
+        gap: "10px",
       })}
     >
-      <Typography variant="h2" fontSize={32} color="black" fontWeight={500}>
-        ¡Descubre lo que tenemos para ti!
-      </Typography>
-      <Divider
-        sx={(theme) => ({
-          border: "1px solid black",
-          width: "246px",
-          marginTop: "10px",
-          marginBottom: "24px",
-          [theme.breakpoints.down("md")]: {
-            width: "88px",
-          },
-        })}
-      />
-      <Stack direction="row" justifyContent="space-between" spacing={3}>
+      <Stack sx={{ gap: "10px" }}>
+        <Typography
+          variant="h2"
+          fontSize={24}
+          color="black"
+          fontWeight={500}
+          sx={{
+            lineHeight: "normal",
+          }}
+        >
+          ¡Descubre lo que tenemos para ti!
+        </Typography>
+        <Divider
+          sx={(theme) => ({
+            border: "1px solid black",
+            width: "246px",
+            [theme.breakpoints.down("md")]: {
+              width: "88px",
+            },
+          })}
+        />
+      </Stack>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        sx={{ gap: "40px" }}
+      >
         {isMdDown ? (
           <Stack
             sx={{ width: "100%" }}
@@ -76,34 +91,35 @@ const SectionsView = () => {
             sx={(theme) => ({
               display: "flex",
               borderRadius: "20px",
-              height: "191px",
+              gap: "20px",
               width: "100%",
               justifyContent: "space-between",
+              paddingRight: "20px",
             })}
           >
             <CardMedia
               component="img"
-              sx={{ width: "45%" }}
               image="/StoreCardImage.svg"
               alt="store card"
+              sx={{
+                width: 280,
+                height: 170,
+              }}
             />
-            <CardContent sx={{ padding: "20px 30px !important" }}>
+            <CardContent
+              sx={{ margin: "10px 0px !important", padding: "0 !important" }}
+            >
               <Stack
                 justifyContent="space-between"
                 alignItems="flex-end"
-                sx={{
-                  height: "100%",
-                }}
+                sx={{ gap: "10px" }}
               >
                 <Stack
                   direction="row"
                   alignItems="center"
-                  spacing={1}
                   sx={(theme) => ({
-                    fontSize: 24,
-                    [theme.breakpoints.down("lg")]: {
-                      fontSize: 20,
-                    },
+                    gap: "10px",
+                    fontSize: 20,
                   })}
                 >
                   <Icon fontSize="inherit" icon={"bx:store"} />
@@ -111,18 +127,16 @@ const SectionsView = () => {
                     variant="h2"
                     fontSize="inherit"
                     color="black"
-                    fontWeight={700}
+                    fontWeight={600}
+                    sx={{ lineHeight: "1.5" }}
                   >
-                    Tienda Online
+                    Compras Online
                   </Typography>
                 </Stack>
                 <Typography
                   sx={(theme) => ({
                     fontSize: 20,
-                    lineHeight: "150%",
-                    [theme.breakpoints.down("lg")]: {
-                      fontSize: 18,
-                    },
+                    lineHeight: "1.5",
                   })}
                   textAlign="right"
                 >
@@ -133,6 +147,7 @@ const SectionsView = () => {
                   size="small"
                   endIcon={<Icon icon="carbon:next-filled" />}
                   onClick={() => router.push("/search?type=product")}
+                  sx={{ fontWeight: 700 }}
                 >
                   Comprar ahora
                 </Button>
@@ -168,46 +183,40 @@ const SectionsView = () => {
             sx={{
               display: "flex",
               borderRadius: "20px",
-              height: "191px",
+              gap: "20px",
               width: "100%",
               justifyContent: "space-between",
+              paddingLeft: "20px",
             }}
           >
-            <CardContent sx={{ padding: "20px 30px !important" }}>
-              <Stack
-                justifyContent="space-between"
-                sx={{
-                  height: "100%",
-                }}
-              >
+            <CardContent
+              sx={{ margin: "10px 0px !important", padding: "0 !important" }}
+            >
+              {" "}
+              <Stack justifyContent="space-between" sx={{ gap: "10px" }}>
                 <Stack
                   direction="row"
                   alignItems="center"
-                  spacing={1}
                   sx={(theme) => ({
-                    fontSize: 24,
-                    [theme.breakpoints.down("lg")]: {
-                      fontSize: 20,
-                    },
+                    gap: "10px",
+                    fontSize: 20,
                   })}
                 >
                   <Typography
                     variant="h2"
                     fontSize="inherit"
                     color="black"
-                    fontWeight={700}
+                    fontWeight={600}
+                    sx={{ lineHeight: "1.5" }}
                   >
-                    Tienda Online
+                    Cupones
                   </Typography>
                   <Icon fontSize="inherit" icon={"ic:outline-discount"} />
                 </Stack>
                 <Typography
                   sx={(theme) => ({
                     fontSize: 20,
-                    lineHeight: "150%",
-                    [theme.breakpoints.down("lg")]: {
-                      fontSize: 18,
-                    },
+                    lineHeight: "1.5",
                   })}
                   textAlign="left"
                 >
@@ -218,6 +227,7 @@ const SectionsView = () => {
                   size="small"
                   endIcon={<Icon icon="carbon:next-filled" />}
                   onClick={() => router.push("/search?type=coupon")}
+                  sx={{ fontWeight: 700 }}
                 >
                   Ver cupones
                 </Button>
@@ -225,7 +235,10 @@ const SectionsView = () => {
             </CardContent>
             <CardMedia
               component="img"
-              sx={{ width: "30%" }}
+              sx={{
+                width: 280,
+                height: 170,
+              }}
               image="/CouponCardImage.svg"
               alt="coupon card"
             />

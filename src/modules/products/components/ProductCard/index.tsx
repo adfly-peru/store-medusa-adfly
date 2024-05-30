@@ -39,11 +39,12 @@ const ProductCard = ({ product }: { product: Offer }) => {
 
   return (
     <Card
+      elevation={5}
       sx={(theme) => ({
         width: "240px",
         borderRadius: "10px",
-        marginTop: "15px",
-        marginBottom: "15px",
+        marginTop: "3px",
+        marginBottom: "10px",
         [theme.breakpoints.down("md")]: {
           width: "207px",
         },

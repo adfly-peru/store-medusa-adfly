@@ -12,12 +12,9 @@ const BannerListCard = ({
   return (
     <Box
       sx={(theme) => ({
-        padding: "60px 110px",
+        padding: "0 140px",
         backgroundColor: "#F2F2F2",
         width: "100%",
-        [theme.breakpoints.down("lg")]: {
-          padding: "30px 30px",
-        },
         [theme.breakpoints.down("md")]: {
           padding: "10px 10px",
         },
@@ -25,8 +22,7 @@ const BannerListCard = ({
     >
       <Stack
         direction="row"
-        spacing={8.75}
-        sx={{ justifyContent: "space-between" }}
+        sx={{ justifyContent: "space-between", gap: "70px" }}
       >
         {bannerList.banners?.map((b, index) => (
           <Box

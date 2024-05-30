@@ -74,8 +74,7 @@ const AppHeader = () => {
       <Stack>
         <Stack
           direction="row"
-          height={50}
-          py="5px"
+          height={40}
           justifyContent="space-between"
           sx={(theme) => ({
             paddingLeft: "92px",
@@ -94,9 +93,8 @@ const AppHeader = () => {
             onClick={() => router.push("/home")}
             sizes="100vw"
             width={10}
-            height={10}
+            height={40}
             style={{
-              height: "100%",
               width: "auto",
             }}
             src={
@@ -108,12 +106,8 @@ const AppHeader = () => {
           />
           <Image
             sizes="100vw"
-            width={10}
-            height={10}
-            style={{
-              height: "100%",
-              width: "auto",
-            }}
+            width={96}
+            height={40}
             src={"/Logo Adfly.svg"}
             alt={"adfly"}
           />
@@ -138,13 +132,6 @@ const AppHeader = () => {
             },
           })}
         >
-          <Box
-            sx={(theme) => ({
-              height: "50px",
-              width: "50px",
-              backgroundColor: theme.palette.primary.main,
-            })}
-          ></Box>
           <IconButton
             onClick={toggleDrawer(true)}
             sx={(theme) => ({

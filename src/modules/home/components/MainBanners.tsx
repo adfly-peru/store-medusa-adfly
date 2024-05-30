@@ -67,7 +67,7 @@ const MainBanners = ({
           backgroundColor: "#F2F2F2",
           width: "100%",
           [theme.breakpoints.down("lg")]: {
-            padding: "20px 30px",
+            padding: "0px 90px",
           },
           [theme.breakpoints.down("md")]: {
             padding: "0px 0px",
@@ -76,7 +76,6 @@ const MainBanners = ({
         })}
       >
         <Slider
-          dots
           infinite
           speed={500}
           slidesToShow={1}
@@ -91,17 +90,20 @@ const MainBanners = ({
                 display: "flex !important",
                 justifyContent: "center !important",
                 alignItems: "center !important",
-                height: "100% !important",
+                height: "340px !important",
+                overflow: "hidden",
+                position: "relative",
               }}
             >
               <Image
                 sizes="100vw"
-                width={10}
-                height={10}
+                width={1100}
+                height={340}
                 style={{
                   width: "100%",
                   height: "auto",
-                  objectFit: "contain",
+                  objectFit: "cover",
+                  objectPosition: "center",
                 }}
                 src={i.img === "" ? "/Logo Adfly.svg" : i.img}
                 alt={i.img}

@@ -1,9 +1,7 @@
 import Loader from "@modules/components/LoadingScreen/Loader";
 import { Box, Stack } from "@mui/material";
 import {
-  BannersListsQuery,
   HomeList,
-  HomeListsQuery,
   SecondaryBannersList,
   useBannersListsQuery,
   useBannersQuery,
@@ -73,6 +71,7 @@ const Home = () => {
     <Stack
       sx={{
         backgroundColor: "#F2F2F2",
+        gap: "30px",
       }}
     >
       <MainBanners bannersList={bannersList} />

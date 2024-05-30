@@ -7,7 +7,13 @@ import { Icon } from "@iconify/react";
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
   return (
-    <IconButton className="slick-arrow" onClick={onClick}>
+    <IconButton
+      className="slick-arrow"
+      onClick={onClick}
+      style={{
+        fontSize: "40px",
+      }}
+    >
       <Icon icon="carbon:next-filled" />
     </IconButton>
   );
@@ -15,7 +21,13 @@ function SampleNextArrow(props: any) {
 function SamplePrevArrow(props: any) {
   const { className, style, onClick } = props;
   return (
-    <IconButton className="slick-arrow" onClick={onClick} style={{}}>
+    <IconButton
+      className="slick-arrow"
+      onClick={onClick}
+      style={{
+        fontSize: "40px",
+      }}
+    >
       <Icon icon="carbon:previous-filled" />
     </IconButton>
   );
@@ -28,35 +40,27 @@ interface ProductsSliderProps {
 export default function ProductsSlider({ products }: ProductsSliderProps) {
   const settings = {
     dots: true,
-    infinite: false,
+    infinite: true,
     speed: 500,
-    slidesToShow: Math.min(4, products.length),
-    slidesToScroll: Math.min(4, products.length),
+    slidesToShow: 4,
+    slidesToScroll: 4,
     className: "slick-products-slider",
+    dotsClass: "slick-dots slick-product-dots",
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
     responsive: [
       {
-        breakpoint: 1440,
-        settings: {
-          slidesToShow: Math.min(3, products.length),
-          slidesToScroll: Math.min(3, products.length),
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
         breakpoint: 834,
         settings: {
-          slidesToShow: Math.min(2, products.length),
-          slidesToScroll: Math.min(2, products.length),
+          slidesToShow: 2,
+          slidesToScroll: 2,
         },
       },
       {
         breakpoint: 375,
         settings: {
-          slidesToShow: Math.min(1, products.length),
-          slidesToScroll: Math.min(1, products.length),
+          slidesToShow: 1,
+          slidesToScroll: 1,
         },
       },
     ],
@@ -65,7 +69,20 @@ export default function ProductsSlider({ products }: ProductsSliderProps) {
   if (products.length > 1)
     return (
       <Slider {...settings}>
-        {products.map((i, index) => (
+        {products.length < 4 &&
+          products.map((i) => (
+            <Box
+              key={i.uuidOffer}
+              sx={{
+                display: "flex !important",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <ProductCard product={i} />
+            </Box>
+          ))}
+        {products.map((i) => (
           <Box
             key={i.uuidOffer}
             sx={{
