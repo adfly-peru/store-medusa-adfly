@@ -18,14 +18,11 @@ const FilteredAlgoliaProducts = () => {
     >
       <Grid
         container
-        justifyContent="space-between"
+        justifyContent="flex-start"
         sx={{
           margin: 0,
           width: "100%",
-        }}
-        spacing={{
-          xs: 0,
-          sm: 5,
+          gap: "40px",
         }}
       >
         {hits.map((hit: any) => (
