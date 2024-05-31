@@ -29,7 +29,10 @@ const BannerListCard = ({
       >
         <Stack
           direction="row"
-          sx={{ justifyContent: "space-between", gap: "70px" }}
+          sx={{
+            justifyContent: "space-between",
+            gap: { xs: "10px", msm: "60px" },
+          }}
         >
           {bannerList.banners?.map((b, index) => (
             <Box

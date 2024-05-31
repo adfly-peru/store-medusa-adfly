@@ -51,10 +51,11 @@ export const DesignProvider = ({ children }: DesignProviderProps) => {
           values: {
             xs: 0,
             sm: 375,
+            msm: 949,
             md: 834,
             lg: 1440,
             xl: 1536,
-          },
+          } as any,
         },
         palette: {
           primary: {

@@ -72,7 +72,7 @@ const Home = () => {
       sx={{
         backgroundColor: "#F2F2F2",
         gap: "30px",
-        marginBottom: "30px",
+        paddingBottom: "40px",
       }}
     >
       <MainBanners bannersList={bannersList} />
