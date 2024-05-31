@@ -71,6 +71,10 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
     return response;
   };
 
+  useEffect(() => {
+    if (session?.user?.accessToken) refetch();
+  }, [refetch, session]);
+
   return (
     <AccountContext.Provider
       value={{
