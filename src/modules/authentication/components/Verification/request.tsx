@@ -26,6 +26,7 @@ import { ArrowBack } from "@mui/icons-material";
 import { documentTypes } from "./login";
 import { requestAccessQuery } from "api/auth";
 import { AxiosError } from "axios";
+import { useDesign } from "@context/design-context";
 
 interface FormValues {
   name: string;
@@ -46,6 +47,7 @@ const RequestModal = React.forwardRef<
     ) => void;
   }
 >((props, _) => {
+  const { storeDesign } = useDesign();
   const {
     control,
     register,
@@ -144,10 +146,10 @@ const RequestModal = React.forwardRef<
               width={10}
               height={10}
               style={{
-                width: "100%",
-                height: "auto",
+                width: "auto",
+                height: "100%",
               }}
-              src={"/alicorp.png"}
+              src={storeDesign?.logourl ?? "/alicorp.png"}
               alt={"alicorp"}
             />
           </Box>

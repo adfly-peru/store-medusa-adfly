@@ -16,6 +16,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Controller, useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
+import { useDesign } from "@context/design-context";
 
 interface FormValues {
   docType: { label: string; value: string } | null;
@@ -35,6 +36,7 @@ const LoginModal = React.forwardRef<
     goRequest: () => void;
   }
 >((props, _) => {
+  const { storeDesign } = useDesign();
   const {
     register,
     handleSubmit,
@@ -122,10 +124,10 @@ const LoginModal = React.forwardRef<
               width={10}
               height={10}
               style={{
-                width: "100%",
-                height: "auto",
+                width: "auto",
+                height: "100%",
               }}
-              src={"/alicorp.png"}
+              src={storeDesign?.logourl ?? "/alicorp.png"}
               alt={"alicorp"}
             />
           </Box>

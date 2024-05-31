@@ -2,7 +2,7 @@ import { Box, Stack } from "@mui/material";
 import { SecondaryBannersList } from "generated/graphql";
 import Image from "next/image";
 
-const defaultImage = "https://via.placeholder.com/400";
+export const defaultImage = "https://via.placeholder.com/400";
 
 const BannerListCard = ({
   bannerList,

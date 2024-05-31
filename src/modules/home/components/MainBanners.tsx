@@ -6,6 +6,7 @@ import { useBannersQuery } from "generated/graphql";
 import Image from "next/image";
 import { useMemo } from "react";
 import Slider from "react-slick";
+import { defaultImage } from "./BannersListCard";
 
 function SampleNextArrow(props: any) {
   const { onClick } = props;
@@ -97,7 +98,11 @@ const MainBanners = ({
                     objectFit: "cover",
                     objectPosition: "center",
                   }}
-                  src={i.img === "" ? "/Logo Adfly.svg" : i.img}
+                  src={
+                    i.img === "" || i.img === defaultImage
+                      ? "/default/MainBanner.svg"
+                      : i.img
+                  }
                   alt={i.img}
                 />
               </Box>
