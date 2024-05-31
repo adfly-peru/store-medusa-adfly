@@ -11,7 +11,8 @@ function SampleNextArrow(props: any) {
       className="slick-arrow"
       onClick={onClick}
       style={{
-        fontSize: "40px",
+        fontSize: "30px",
+        padding: 0,
       }}
     >
       <Icon icon="carbon:next-filled" />
@@ -25,7 +26,8 @@ function SamplePrevArrow(props: any) {
       className="slick-arrow"
       onClick={onClick}
       style={{
-        fontSize: "40px",
+        fontSize: "30px",
+        padding: 0,
       }}
     >
       <Icon icon="carbon:previous-filled" />
@@ -39,7 +41,6 @@ interface ProductsSliderProps {
 
 export default function ProductsSlider({ products }: ProductsSliderProps) {
   const settings = {
-    dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 4,
@@ -50,7 +51,7 @@ export default function ProductsSlider({ products }: ProductsSliderProps) {
     prevArrow: <SamplePrevArrow />,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1121,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,

@@ -10,51 +10,59 @@ const BannerListCard = ({
   bannerList: Partial<SecondaryBannersList>;
 }) => {
   return (
-    <Box
-      sx={(theme) => ({
-        padding: "0 140px",
-        backgroundColor: "#F2F2F2",
-        width: "100%",
-        [theme.breakpoints.down("md")]: {
-          padding: "10px 10px",
-        },
-      })}
-    >
-      <Stack
-        direction="row"
-        sx={{ justifyContent: "space-between", gap: "70px" }}
+    <Stack direction="row" justifyContent="center">
+      <Box
+        sx={(theme) => ({
+          backgroundColor: "#F2F2F2",
+          width: "100%",
+          maxWidth: 1440,
+          [theme.breakpoints.down(1261)]: {
+            maxWidth: 1220,
+          },
+          [theme.breakpoints.down(1121)]: {
+            maxWidth: 980,
+          },
+          [theme.breakpoints.down(949)]: {
+            maxWidth: 834,
+          },
+        })}
       >
-        {bannerList.banners?.map((b, index) => (
-          <Box
-            key={b.linkurl}
-            sx={{
-              flex: "1 1 0",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Image
-              src={
-                b.imgurl === defaultImage && bannerList.banners?.length === 1
-                  ? "/default/SimpleBanner.svg"
-                  : b.imgurl === defaultImage
-                  ? `/default/DoubleBanner${index + 1}.svg`
-                  : b.imgurl
-              }
-              sizes="100vw"
-              width={10}
-              height={50}
-              style={{
-                width: "100%",
-                height: "auto",
-                objectFit: "contain",
+        <Stack
+          direction="row"
+          sx={{ justifyContent: "space-between", gap: "70px" }}
+        >
+          {bannerList.banners?.map((b, index) => (
+            <Box
+              key={b.linkurl}
+              sx={{
+                flex: "1 1 0",
+                display: "flex",
+                justifyContent: "center",
               }}
-              alt={b.linkurl}
-            />
-          </Box>
-        ))}
-      </Stack>
-    </Box>
+            >
+              <Image
+                src={
+                  b.imgurl === defaultImage && bannerList.banners?.length === 1
+                    ? "/default/SimpleBanner.svg"
+                    : b.imgurl === defaultImage
+                    ? `/default/DoubleBanner${index + 1}.svg`
+                    : b.imgurl
+                }
+                sizes="100vw"
+                width={10}
+                height={50}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+                alt={b.linkurl}
+              />
+            </Box>
+          ))}
+        </Stack>
+      </Box>
+    </Stack>
   );
 };
 

@@ -83,7 +83,10 @@ const baseTheme = (theme: Theme) => {
           ".slick-products-slider": {
             width: "100%",
             display: "flex !important",
-            gap: "30px",
+            gap: "20px",
+            [theme.breakpoints.down(949)]: {
+              gap: "8px",
+            },
           },
           ".slick-product-dots li button:before": {
             marginTop: "10px",
