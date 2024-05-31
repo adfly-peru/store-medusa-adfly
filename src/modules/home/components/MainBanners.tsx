@@ -1,7 +1,7 @@
 import { useDesign } from "@context/design-context";
 import Loader from "@modules/components/LoadingScreen/Loader";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import { Box, IconButton } from "@mui/material";
+import { Box, Container, IconButton } from "@mui/material";
 import { useBannersQuery } from "generated/graphql";
 import Image from "next/image";
 import { useMemo } from "react";
@@ -61,57 +61,50 @@ const MainBanners = ({
 
   if (bannersList.length > 1)
     return (
-      <Box
-        sx={(theme) => ({
-          padding: "20px 110px",
-          backgroundColor: "#F2F2F2",
-          width: "100%",
-          [theme.breakpoints.down("lg")]: {
-            padding: "0px 90px",
-          },
-          [theme.breakpoints.down("md")]: {
-            padding: "0px 0px",
-            marginTop: "-8px",
-          },
-        })}
-      >
-        <Slider
-          infinite
-          speed={500}
-          slidesToShow={1}
-          slidesToScroll={1}
-          nextArrow={<SampleNextArrow />}
-          prevArrow={<SamplePrevArrow />}
+      <Container sx={{ padding: "0 !important" }}>
+        <Box
+          sx={(theme) => ({
+            marginTop: "10px",
+          })}
         >
-          {bannersList.map((i, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: "flex !important",
-                justifyContent: "center !important",
-                alignItems: "center !important",
-                height: "340px !important",
-                overflow: "hidden",
-                position: "relative",
-              }}
-            >
-              <Image
-                sizes="100vw"
-                width={1100}
-                height={340}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "cover",
-                  objectPosition: "center",
+          <Slider
+            infinite
+            speed={500}
+            slidesToShow={1}
+            slidesToScroll={1}
+            nextArrow={<SampleNextArrow />}
+            prevArrow={<SamplePrevArrow />}
+          >
+            {bannersList.map((i, index) => (
+              <Box
+                key={index}
+                sx={{
+                  display: "flex !important",
+                  justifyContent: "center !important",
+                  alignItems: "center !important",
+                  height: "340px !important",
+                  overflow: "hidden",
+                  position: "relative",
                 }}
-                src={i.img === "" ? "/Logo Adfly.svg" : i.img}
-                alt={i.img}
-              />
-            </Box>
-          ))}
-        </Slider>
-      </Box>
+              >
+                <Image
+                  sizes="100vw"
+                  width={1100}
+                  height={340}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "cover",
+                    objectPosition: "center",
+                  }}
+                  src={i.img === "" ? "/Logo Adfly.svg" : i.img}
+                  alt={i.img}
+                />
+              </Box>
+            ))}
+          </Slider>
+        </Box>
+      </Container>
     );
 };
 
