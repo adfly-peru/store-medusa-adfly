@@ -14,10 +14,11 @@ import {
   Typography,
   Slide,
   Divider,
+  Button,
 } from "@mui/material";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const CategoriesDrawer = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
@@ -36,6 +37,9 @@ const CategoriesDrawer = ({ onClose }: { onClose: () => void }) => {
         [theme.breakpoints.down("sm")]: {
           width: 180,
         },
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
       })}
     >
       <Stack
@@ -45,8 +49,7 @@ const CategoriesDrawer = ({ onClose }: { onClose: () => void }) => {
         sx={(theme) => ({
           backgroundColor: theme.palette.primary.main,
           height: 70,
-          paddingLeft: "20px",
-          paddingRight: "20px",
+          padding: "14px 20px",
           [theme.breakpoints.down("md")]: {
             height: 66,
           },
@@ -138,24 +141,36 @@ const CategoriesDrawer = ({ onClose }: { onClose: () => void }) => {
         in={section === "tienda" || section === "cupon"}
         mountOnEnter
         unmountOnExit
+        style={{ flex: 1, display: "flex", flexDirection: "column" }}
       >
-        <List>
-          <ListItemButton onClick={() => setSection("")}>
-            <ListItemIcon
-              sx={{
-                marginRight: "10px",
-              }}
-            >
-              <ArrowBack />
-            </ListItemIcon>
-            <ListItemText
-              primary={section === "tienda" ? "Tienda" : "Cupones de descuento"}
-            />
-          </ListItemButton>
+        <List
+          sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            paddingBottom: 0,
+          }}
+        >
+          <Box>
+            <ListItemButton onClick={() => setSection("")}>
+              <ListItemIcon
+                sx={{
+                  marginRight: "10px",
+                }}
+              >
+                <ArrowBack />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  section === "tienda" ? "Tienda" : "Cupones de descuento"
+                }
+              />
+            </ListItemButton>
+          </Box>
           <Divider />
           <Box
             sx={{
-              height: 600,
+              flex: 1,
               overflowY: "auto",
               "&::-webkit-scrollbar": {
                 width: "10px",
@@ -195,6 +210,32 @@ const CategoriesDrawer = ({ onClose }: { onClose: () => void }) => {
                   <ListItemText primary={dep.name} />
                 </ListItemButton>
               ))}
+          </Box>
+          <Divider />
+          <Box
+            sx={{
+              padding: 1,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Button
+              variant="outlined"
+              sx={{
+                alignSelf: "center",
+                padding: "6px 40px",
+              }}
+              onClick={() => {
+                router.push(
+                  `/search?type=${section === "tienda" ? "product" : "coupon"}`
+                );
+                onClose();
+              }}
+            >
+              Ver todo
+            </Button>
           </Box>
         </List>
       </Slide>

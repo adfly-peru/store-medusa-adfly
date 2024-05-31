@@ -2,6 +2,7 @@ import { FiltersProvider } from "@modules/products/context/FiltersContext";
 import Departments from "./Departments";
 import Filters from "./Filters";
 import { Stack } from "@mui/material";
+import QueryDetails from "./QueryDetails";
 
 const AlgoliaSideBar = () => {
   return (
@@ -13,6 +14,7 @@ const AlgoliaSideBar = () => {
         },
       })}
     >
+      <QueryDetails />
       <Departments />
       <FiltersProvider>
         <Filters />

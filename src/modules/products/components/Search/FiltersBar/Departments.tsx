@@ -83,6 +83,8 @@ const CategorySection = ({
               fontWeight: 700,
               textDecoration: "underline",
               color: "black",
+              marginLeft: "3px",
+              marginBottom: "4px",
             }}
           >
             {backLabel}
@@ -172,7 +174,7 @@ const Departments = () => {
       ) : (
         <CategorySection
           attribute="department_name"
-          backLabel={type === "product" ? "Tienda" : "Cupones"}
+          backLabel="Departamentos"
         />
       )}
     </Paper>

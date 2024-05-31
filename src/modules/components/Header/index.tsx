@@ -311,7 +311,7 @@ const AppHeader = () => {
                 handleClose();
               }}
             >
-              Cerrar sesión
+              {!!session?.user?.accessToken ? "Cerrar sesión" : "Salir"}
             </MenuItem>
           </Menu>
           <Divider

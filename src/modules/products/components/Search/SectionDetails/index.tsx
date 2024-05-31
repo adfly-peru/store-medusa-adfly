@@ -72,8 +72,7 @@ const SectionDetails = () => {
               backgroundColor: "white",
               "&.Mui-selected": {
                 color: "white",
-                backgroundColor: theme.palette.primary.main,
-                "&.Mui-hover": {},
+                backgroundColor: `${theme.palette.primary.main} !important`,
               },
               "&.Mui-disabled": {
                 color: "grey",
