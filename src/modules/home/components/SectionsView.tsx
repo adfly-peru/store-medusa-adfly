@@ -77,15 +77,18 @@ const SectionsView = () => {
           </Stack>
         ) : (
           <Card
-            sx={{
+            sx={(theme) => ({
               display: "flex",
               borderRadius: "20px",
-              gap: "20px",
+              gap: {
+                xs: 0,
+                1120: "20px",
+              },
               width: "100%",
               justifyContent: "space-between",
               paddingRight: "20px",
               alignItems: "stretch",
-            }}
+            })}
           >
             <CardMedia
               component="img"
@@ -116,11 +119,12 @@ const SectionsView = () => {
                 alignItems: "flex-end",
                 margin: "0px !important",
                 padding: "0 !important",
-                [theme.breakpoints.down(1121)]: {
-                  gap: 0,
-                },
+                fontSize: 20,
                 [theme.breakpoints.down(949)]: {
                   fontSize: 14,
+                },
+                [theme.breakpoints.down(1121)]: {
+                  gap: 0,
                 },
               })}
             >
@@ -164,7 +168,7 @@ const SectionsView = () => {
                 size="small"
                 endIcon={<Icon icon="carbon:next-filled" />}
                 onClick={() => router.push("/search?type=product")}
-                sx={{ fontWeight: 700, fontSize: "inherit" }}
+                sx={{ fontWeight: 700, fontSize: 14 }}
               >
                 Comprar ahora
               </Button>
@@ -199,7 +203,10 @@ const SectionsView = () => {
             sx={{
               display: "flex",
               borderRadius: "20px",
-              gap: "20px",
+              gap: {
+                xs: 0,
+                1120: "20px",
+              },
               width: "100%",
               justifyContent: "space-between",
               paddingLeft: "20px",
@@ -219,6 +226,7 @@ const SectionsView = () => {
                 [theme.breakpoints.down(1121)]: {
                   gap: 0,
                 },
+                fontSize: 20,
                 [theme.breakpoints.down(949)]: {
                   fontSize: 14,
                 },
@@ -264,7 +272,7 @@ const SectionsView = () => {
                 size="small"
                 endIcon={<Icon icon="carbon:next-filled" />}
                 onClick={() => router.push("/search?type=coupon")}
-                sx={{ fontWeight: 700, fontSize: "inherit" }}
+                sx={{ fontWeight: 700, fontSize: 14 }}
               >
                 Ver cupones
               </Button>
