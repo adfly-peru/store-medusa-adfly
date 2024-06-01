@@ -1,6 +1,13 @@
 import { TimePeriod, purchasePeriodTime } from "@modules/common/types";
 import * as amplitude from "@amplitude/analytics-browser";
-import { Box, Button, Divider, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Star } from "@mui/icons-material";
 import NumberInput from "@modules/components/NumberInput";
 import { Icon } from "@iconify/react";
@@ -11,6 +18,8 @@ import { Delivery } from "./DeliverySection";
 import { Attributes } from "./AttributesSection";
 import { CouponResponse } from "./CouponResponse";
 import { useDetailedProduct } from "@modules/products/context/DetailedProductContext";
+import DynamicAlert from "@modules/components/Alert";
+import { useState } from "react";
 
 export function DetailedProduct({}: {}) {
   const {
@@ -26,6 +35,25 @@ export function DetailedProduct({}: {}) {
     lastcoupon,
     handleGenerateCoupon,
   } = useDetailedProduct();
+  const [loading, setLoading] = useState(false);
+  const [triggerAlert, setTriggerAlert] = useState(false);
+  const [alertFunc, setAlertFunc] = useState<() => Promise<void>>(
+    () => async () => {}
+  );
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const handleAction = async () => {
+    setLoading(true);
+    if (product.type === "coupon") await handleGenerateCoupon();
+    else await handleAddProduct();
+    setLoading(false);
+  };
+
+  const handleOpenAlert = (func: () => Promise<void>, message: string) => {
+    setAlertFunc(() => func);
+    setAlertMessage(message);
+    setTriggerAlert(true);
+  };
 
   if (!selectedVariant) return <></>;
 
@@ -215,13 +243,22 @@ export function DetailedProduct({}: {}) {
           </Typography>
           {product.type === "coupon" ? (
             <Button
-              onClick={handleGenerateCoupon}
+              onClick={() =>
+                handleOpenAlert(
+                  () => handleAction(),
+                  "Su cupón fue agregado con éxito"
+                )
+              }
               variant="contained"
-              disabled={maxUnitsPerUser <= 0}
+              disabled={maxUnitsPerUser <= 0 || loading}
             >
-              {maxUnitsPerUser <= 0
-                ? `Último cupón generado: ${lastcoupon ?? ""}`
-                : "Generar Cupón"}
+              {maxUnitsPerUser <= 0 ? (
+                `Último cupón generado: ${lastcoupon ?? ""}`
+              ) : loading ? (
+                <CircularProgress size={24} />
+              ) : (
+                "Generar Cupón"
+              )}
             </Button>
           ) : (
             <Stack spacing={1}>
@@ -234,10 +271,19 @@ export function DetailedProduct({}: {}) {
                 />
                 <Button
                   variant="contained"
-                  onClick={handleAddProduct}
-                  disabled={maxUnitsPerUser <= 0 || value < 1}
+                  onClick={() =>
+                    handleOpenAlert(
+                      () => handleAction(),
+                      "Su producto fue agregado con éxito"
+                    )
+                  }
+                  disabled={maxUnitsPerUser <= 0 || value < 1 || loading}
                 >
-                  Agregar al carrito
+                  {loading ? (
+                    <CircularProgress size={24} />
+                  ) : (
+                    "Agregar al carrito"
+                  )}
                 </Button>
               </Stack>
               <Stack direction="row" alignItems="center">
@@ -258,6 +304,12 @@ export function DetailedProduct({}: {}) {
         <Delivery />
       </Stack>
       <Details />
+      <DynamicAlert
+        func={alertFunc}
+        message={alertMessage}
+        trigger={triggerAlert}
+        onResetTrigger={() => setTriggerAlert(false)}
+      />
     </Box>
   );
 }

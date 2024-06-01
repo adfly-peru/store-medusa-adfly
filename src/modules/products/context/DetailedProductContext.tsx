@@ -1,7 +1,5 @@
 import { useAccount } from "@context/account-context";
 import { useCart } from "@context/cart-context";
-import { Check } from "@mui/icons-material";
-import { Alert, Snackbar, Typography } from "@mui/material";
 import { CouponResponse, generateCouponRequest } from "api/cart";
 import { CartItem, ProductQuery, Variant } from "generated/graphql";
 import { useSession } from "next-auth/react";
@@ -48,7 +46,6 @@ export const DetailedProductProvider = ({
   const { getVariant, addProduct } = useCart();
 
   const [value, setValue] = useState<number>(0);
-  const [open, setOpen] = useState(false);
 
   const [couponResponse, setCouponResponse] = useState<CouponResponse | null>(
     null
@@ -113,17 +110,6 @@ export const DetailedProductProvider = ({
 
   const selectedVariant = currentVariants.at(0);
 
-  const handleClose = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
-
   const handleAddProduct = async () => {
     if (!selectedVariant) return;
     if (!collaborator) {
@@ -136,7 +122,6 @@ export const DetailedProductProvider = ({
         product.business.uuidbusiness,
         value
       );
-      setOpen(true);
       setValue(0);
     } catch (error) {
       console.error("Error adding product to cart:", error);
@@ -186,29 +171,6 @@ export const DetailedProductProvider = ({
         setCouponOpen,
       }}
     >
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        open={open}
-        onClose={handleClose}
-        autoHideDuration={4000}
-      >
-        <Alert
-          onClose={handleClose}
-          icon={<Check fontSize="inherit" />}
-          severity="success"
-          variant="filled"
-          sx={{ width: "100%", fontSize: 60 }}
-        >
-          <Typography
-            sx={{
-              paddingTop: "3px",
-              fontSize: 14,
-            }}
-          >
-            Su producto fue añadido al carrito
-          </Typography>
-        </Alert>
-      </Snackbar>
       {children}
     </DetailedProductContext.Provider>
   );

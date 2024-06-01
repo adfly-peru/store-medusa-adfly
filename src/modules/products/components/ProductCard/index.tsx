@@ -49,11 +49,12 @@ const ProductCard = ({ product }: { product: Offer }) => {
     >
       <CardActionArea
         onClick={
-          // Test () => router.push(`/product/${product.uuidOffer}`)
-          () =>
-            router.push(
-              `/product/${devProduct.at(product.description.length % 3)}`
-            )
+          // Test
+          () => router.push(`/product/${product.uuidOffer}`)
+          // () =>
+          //   router.push(
+          //     `/product/${devProduct.at(product.description.length % 3)}`
+          //   )
         }
         sx={{
           display: "flex",
