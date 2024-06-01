@@ -5,10 +5,19 @@ import {
   GridRowParams,
 } from "@mui/x-data-grid";
 import Image from "next/image";
-import { Stack, Typography } from "@mui/material";
+import {
+  Backdrop,
+  Box,
+  CircularProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { CartItem } from "generated/graphql";
 import { useCart } from "@context/cart-context";
+import { useState } from "react";
+import DynamicAlert from "@modules/components/Alert";
+import NumberInput from "@modules/components/NumberInput";
 
 interface RowItem {
   id: number;
@@ -22,35 +31,62 @@ interface RowItem {
   };
   quantity: number;
   subtotal: number;
+  item: CartItem;
+  maxQuantity: number;
 }
 
 const ProductCartTable = ({ items }: { items: CartItem[] }) => {
   const { editProduct, removeProduct } = useCart();
-  const rows: RowItem[] = items.map((item, index) => ({
-    id: index,
-    name: item.variant.offer.offerName,
-    quantity: item.quantity,
-    subtotal: item.subtotal,
-    image: item.variant.imageURL,
-    prices: {
-      offerPrice:
-        (item.variant.offerPrice ?? 0) > 0
-          ? item.variant.offerPrice ?? 0
-          : undefined,
-      adflyPrice: item.variant.adflyPrice,
-      refPrice: item.variant.refPrice,
-      finalPrice:
-        (item.variant.offerPrice ?? 0) > 0
-          ? item.variant.offerPrice ?? 0
-          : item.variant.adflyPrice,
-    },
-    item: item,
-  }));
+  const [loading, setLoading] = useState(false);
+  const [triggerAlert, setTriggerAlert] = useState(false);
+  const [alertFunc, setAlertFunc] = useState<() => Promise<void>>(
+    () => async () => {}
+  );
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const handleAction = async (func: () => Promise<void>) => {
+    setLoading(true);
+    await func();
+    setLoading(false);
+  };
+
+  const handleOpenAlert = (func: () => Promise<void>, message: string) => {
+    setAlertFunc(() => func);
+    setAlertMessage(message);
+    setTriggerAlert(true);
+  };
+
+  const rows: RowItem[] = items.map((item, index) => {
+    const allowed =
+      (item.variant.maxQuantity ?? 0) - (item.variant.totalLastPeriod ?? 0);
+
+    return {
+      id: index,
+      name: item.variant.offer.offerName,
+      quantity: item.quantity,
+      subtotal: item.subtotal,
+      image: item.variant.imageURL,
+      prices: {
+        offerPrice:
+          (item.variant.offerPrice ?? 0) > 0
+            ? item.variant.offerPrice ?? 0
+            : undefined,
+        adflyPrice: item.variant.adflyPrice,
+        refPrice: item.variant.refPrice,
+        finalPrice:
+          (item.variant.offerPrice ?? 0) > 0
+            ? item.variant.offerPrice ?? 0
+            : item.variant.adflyPrice,
+      },
+      item: item,
+      maxQuantity: Math.min(allowed, item.variant.maxQuantity ?? 0),
+    };
+  });
   const columns: GridColDef<RowItem[][number]>[] = [
     {
       field: "name",
       headerName: "Detalle",
-      flex: 4,
+      flex: 2,
       renderCell: (params) => (
         <Stack
           direction="row"
@@ -63,16 +99,14 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
         >
           <Image
             sizes="100vw"
-            width={10}
-            height={10}
-            style={{
-              height: "100%",
-              width: "auto",
-            }}
+            width={200}
+            height={190}
             src={params.row.image !== "" ? params.row.image : "/Logo Adfly.svg"}
             alt={params.row.image}
           />
-          <Typography variant="h3">{params.row.name}</Typography>
+          <Typography variant="h3" fontSize={18}>
+            {params.row.name}
+          </Typography>
         </Stack>
       ),
     },
@@ -122,13 +156,33 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
       headerName: "Cantidad",
       flex: 1,
       headerAlign: "center",
-      renderCell: (params) => (
-        <Stack justifyContent="center" sx={{ height: "100%" }}>
-          <Typography textAlign="center" variant="body2" fontWeight={700}>
-            {`${params.value} unidad(es)`}
-          </Typography>
-        </Stack>
-      ),
+      renderCell: (params) => {
+        return (
+          <Stack justifyContent="center" sx={{ height: "100%" }} spacing={1}>
+            <NumberInput
+              value={params.value}
+              onChange={(_, newValue) =>
+                handleOpenAlert(
+                  () =>
+                    handleAction(() =>
+                      editProduct(
+                        params.row.item,
+                        params.row.item.uuidcartsuborder,
+                        newValue ?? 0
+                      )
+                    ),
+                  "Su carrito ha sido actualizado con éxito"
+                )
+              }
+              min={1}
+              max={params.row.maxQuantity}
+            />
+            <Typography textAlign="center" variant="body2" fontWeight={700}>
+              {`Max: ${params.row.maxQuantity} unidad(es)`}
+            </Typography>
+          </Stack>
+        );
+      },
     },
     {
       field: "subtotal",
@@ -154,9 +208,15 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
           icon={<Delete color="error" />}
           label="Eliminar"
           onClick={() =>
-            removeProduct(
-              (params.row.item as CartItem).uuidcartitem,
-              (params.row.item as CartItem).uuidcartsuborder
+            handleOpenAlert(
+              () =>
+                handleAction(() =>
+                  removeProduct(
+                    (params.row.item as CartItem).uuidcartitem,
+                    (params.row.item as CartItem).uuidcartsuborder
+                  )
+                ),
+              "Su carrito ha sido actualizado con éxito"
             )
           }
         />,
@@ -165,7 +225,20 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
   ];
 
   return (
-    <>
+    <Box position="relative" sx={{ width: "100%" }}>
+      <Backdrop
+        sx={(theme) => ({
+          color: theme.palette.primary.main,
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          position: "absolute",
+          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          backdropFilter: "blur(1px)",
+          borderRadius: 1,
+        })}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -177,7 +250,13 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
           },
         }}
       />
-    </>
+      <DynamicAlert
+        func={alertFunc}
+        message={alertMessage}
+        trigger={triggerAlert}
+        onResetTrigger={() => setTriggerAlert(false)}
+      />
+    </Box>
   );
 };
 

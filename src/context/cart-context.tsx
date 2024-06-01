@@ -169,12 +169,12 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
   const editProduct = async (
     cartitem: CartItem,
-    uuidbusiness: string,
+    uuidcartsuborder: string,
     quantity: number
   ) => {
     if (!data?.cart) return;
     const subOrderIndex = data.cart.suborders.findIndex(
-      (subOrder) => subOrder.uuidbusiness === uuidbusiness
+      (subOrder) => subOrder.uuidcartsuborder === uuidcartsuborder
     );
     if (subOrderIndex === -1) return;
     const itemIndex = data.cart.suborders[subOrderIndex].items.findIndex(
@@ -187,7 +187,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         uuiditem: cartitem.uuidcartitem,
         uuidcart: data.cart.uuidcart,
         uuidvariant: cartitem.uuidvariant,
-        uuidbusiness: uuidbusiness,
+        uuidbusiness: data.cart.suborders[subOrderIndex].uuidbusiness,
         quantity: quantity - cartitem.quantity,
         operation: "update",
       });

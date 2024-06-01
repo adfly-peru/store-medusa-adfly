@@ -14,14 +14,6 @@ import { Offer } from "generated/graphql";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 
-// Test
-const devProduct = [
-  "6620cd29-ca5e-4adf-9278-42faf4b919e2",
-  "ec890603-f0d0-4b8f-913f-4e2d1bacc9a3",
-  "a6f0f39b-6712-4270-a04e-c3acc1dbd593",
-  "747af52d-0e54-41ae-8588-ca01f1173b88",
-];
-
 const ProductCard = ({ product }: { product: Offer }) => {
   const router = useRouter();
 
@@ -48,14 +40,7 @@ const ProductCard = ({ product }: { product: Offer }) => {
       })}
     >
       <CardActionArea
-        onClick={
-          // Test
-          () => router.push(`/product/${product.uuidOffer}`)
-          // () =>
-          //   router.push(
-          //     `/product/${devProduct.at(product.description.length % 3)}`
-          //   )
-        }
+        onClick={() => router.push(`/product/${product.uuidOffer}`)}
         sx={{
           display: "flex",
           flexDirection: "column",
