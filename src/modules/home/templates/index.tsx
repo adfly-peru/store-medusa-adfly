@@ -69,11 +69,15 @@ const Home = () => {
 
   return (
     <Stack
-      sx={{
+      sx={(theme) => ({
         backgroundColor: "#F2F2F2",
         gap: "30px",
-        paddingBottom: "40px",
-      }}
+        paddingBottom: "30px",
+        [theme.breakpoints.down(949)]: {
+          gap: "20px",
+          paddingBottom: "20px",
+        },
+      })}
     >
       <MainBanners bannersList={bannersList} />
       <SectionsView />
