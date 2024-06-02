@@ -10,6 +10,8 @@ const AppFooter = () => {
       <Box
         sx={(theme) => ({
           width: "100%",
+          display: "flex",
+          justifyContent: "center",
           backgroundColor: theme.palette.primary.main,
           paddingLeft: "20px",
           paddingRight: "20px",
@@ -27,10 +29,10 @@ const AppFooter = () => {
             [theme.breakpoints.down(1261)]: {
               maxWidth: 1080,
             },
-            [theme.breakpoints.up(1025)]: {
+            [theme.breakpoints.down(1025)]: {
               maxWidth: 948,
             },
-            [theme.breakpoints.up(949)]: {
+            [theme.breakpoints.down(949)]: {
               maxWidth: 756,
             },
           })}
