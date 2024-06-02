@@ -11,19 +11,9 @@ const AppFooter = () => {
         sx={(theme) => ({
           width: "100%",
           backgroundColor: theme.palette.primary.main,
-          paddingLeft: "60px",
-          paddingRight: "60px",
+          paddingLeft: "20px",
+          paddingRight: "20px",
           paddingBottom: "60px",
-          [theme.breakpoints.down("lg")]: {
-            paddingLeft: "30px",
-            paddingRight: "30px",
-            paddingBottom: "30px",
-          },
-          [theme.breakpoints.up("md")]: {
-            paddingLeft: "10px",
-            paddingRight: "10px",
-            paddingBottom: "10px",
-          },
         })}
       >
         <Box
@@ -32,14 +22,24 @@ const AppFooter = () => {
             backgroundColor: "white",
             borderBottomLeftRadius: "20px",
             borderBottomRightRadius: "20px",
-            padding: "40px",
+            padding: "20px",
+            maxWidth: 1180,
+            [theme.breakpoints.down(1261)]: {
+              maxWidth: 1080,
+            },
+            [theme.breakpoints.up(1025)]: {
+              maxWidth: 948,
+            },
+            [theme.breakpoints.up(949)]: {
+              maxWidth: 756,
+            },
           })}
         >
-          <Stack direction="row" justifyContent="space-between">
+          <Stack direction="row" justifyContent="space-between" spacing={1}>
             <FirstPart />
             <Box
               sx={(theme) => ({
-                [theme.breakpoints.down("md")]: {
+                [theme.breakpoints.down(580)]: {
                   display: "none",
                 },
               })}
@@ -49,7 +49,7 @@ const AppFooter = () => {
             <ThirdPart />
             <Box
               sx={(theme) => ({
-                [theme.breakpoints.down("lg")]: {
+                [theme.breakpoints.down(580)]: {
                   display: "none",
                 },
               })}
@@ -61,7 +61,7 @@ const AppFooter = () => {
             direction="row"
             sx={(theme) => ({
               justifyContent: "flex-end",
-              [theme.breakpoints.down("md")]: {
+              [theme.breakpoints.down(580)]: {
                 marginTop: "20px",
                 justifyContent: "space-between",
               },
@@ -69,8 +69,9 @@ const AppFooter = () => {
           >
             <Box
               sx={(theme) => ({
-                [theme.breakpoints.up("md")]: {
-                  display: "none",
+                display: "none",
+                [theme.breakpoints.down(580)]: {
+                  display: "block",
                 },
               })}
             >
@@ -78,8 +79,9 @@ const AppFooter = () => {
             </Box>
             <Box
               sx={(theme) => ({
-                [theme.breakpoints.up("lg")]: {
-                  display: "none",
+                display: "none",
+                [theme.breakpoints.down(580)]: {
+                  display: "block",
                 },
               })}
             >

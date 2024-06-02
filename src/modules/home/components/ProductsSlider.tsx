@@ -58,14 +58,14 @@ export default function ProductsSlider({ products }: ProductsSliderProps) {
         },
       },
       {
-        breakpoint: 834,
+        breakpoint: 940,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
         },
       },
       {
-        breakpoint: 375,
+        breakpoint: 580,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,

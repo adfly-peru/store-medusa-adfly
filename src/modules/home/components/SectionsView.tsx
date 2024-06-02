@@ -60,18 +60,18 @@ const SectionsView = () => {
             spacing={2}
           >
             <IconButton
-              sx={{
-                fontSize: 50,
-                color: "black",
-                border: "2px solid #C7CACD",
+              sx={(theme) => ({
+                fontSize: 40,
                 borderRadius: "8px",
-                padding: "30px 60px",
-              }}
+                padding: "25px 40px",
+                backgroundColor: `${theme.palette.primary.main} !important`,
+                color: theme.palette.secondary.main,
+              })}
               onClick={() => router.push("/search?type=product")}
             >
               <Icon icon={"bx:store"} />
             </IconButton>
-            <Typography fontSize={18} fontWeight={600}>
+            <Typography fontSize={16} fontWeight={600}>
               Tienda Online
             </Typography>
           </Stack>
@@ -184,17 +184,17 @@ const SectionsView = () => {
           >
             <IconButton
               sx={{
-                fontSize: 50,
-                color: "black",
-                border: "2px solid #C7CACD",
+                fontSize: 40,
                 borderRadius: "8px",
-                padding: "30px 60px",
+                padding: "25px 40px",
+                backgroundColor: `${theme.palette.primary.main} !important`,
+                color: theme.palette.secondary.main,
               }}
               onClick={() => router.push("/search?type=coupon")}
             >
               <Icon icon={"ic:outline-discount"} />
             </IconButton>
-            <Typography fontSize={18} fontWeight={600}>
+            <Typography fontSize={16} fontWeight={600}>
               Cupones
             </Typography>
           </Stack>

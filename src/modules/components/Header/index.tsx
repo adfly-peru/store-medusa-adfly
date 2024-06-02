@@ -74,9 +74,10 @@ const AppHeader = () => {
       <Stack>
         <Stack
           direction="row"
-          height={40}
           justifyContent="space-between"
           sx={(theme) => ({
+            paddingTop: "5px",
+            paddingBottom: "5px",
             paddingLeft: "92px",
             paddingRight: "92px",
             [theme.breakpoints.down("lg")]: {

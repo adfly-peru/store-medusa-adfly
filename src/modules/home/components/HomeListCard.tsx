@@ -43,7 +43,17 @@ const HomeListCard = ({ homeList }: { homeList: Partial<HomeList> }) => {
         })}
       >
         <Stack direction="row" alignItems="center" sx={{ gap: "20px" }}>
-          <Typography variant="h2" fontSize={24} color="black" fontWeight={500}>
+          <Typography
+            variant="h2"
+            fontSize={24}
+            color="black"
+            fontWeight={500}
+            sx={(theme) => ({
+              [theme.breakpoints.down("md")]: {
+                fontSize: 19,
+              },
+            })}
+          >
             {homeList.name}
           </Typography>
           <Icon

@@ -83,7 +83,6 @@ const MainBanners = ({
                   display: "flex !important",
                   justifyContent: "center !important",
                   alignItems: "center !important",
-                  height: "340px !important",
                   overflow: "hidden",
                   position: "relative",
                 }}
@@ -111,6 +110,43 @@ const MainBanners = ({
         </Box>
       </Container>
     );
+  return (
+    <Container sx={{ padding: "0 !important" }}>
+      <Box
+        sx={(theme) => ({
+          marginTop: "10px",
+        })}
+      >
+        <Box
+          sx={{
+            display: "flex !important",
+            justifyContent: "center !important",
+            alignItems: "center !important",
+            overflow: "hidden",
+            position: "relative",
+          }}
+        >
+          <Image
+            sizes="100vw"
+            width={1100}
+            height={340}
+            style={{
+              width: "100%",
+              height: "auto",
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+            src={
+              bannersList[0].img === "" || bannersList[0].img === defaultImage
+                ? "/default/MainBanner.svg"
+                : bannersList[0].img
+            }
+            alt={bannersList[0].img}
+          />
+        </Box>
+      </Box>
+    </Container>
+  );
 };
 
 export default MainBanners;

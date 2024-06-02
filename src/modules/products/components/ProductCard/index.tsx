@@ -34,6 +34,9 @@ const ProductCard = ({ product }: { product: Offer }) => {
       elevation={5}
       sx={(theme) => ({
         width: product.type === "coupon" ? "220px" : "200px",
+        [theme.breakpoints.down("md")]: {
+          width: product.type === "coupon" ? "190px" : "180px",
+        },
         borderRadius: "10px",
         marginTop: "3px",
         marginBottom: "10px",
@@ -57,9 +60,12 @@ const ProductCard = ({ product }: { product: Offer }) => {
               : product.details?.imageURL
           }
           alt={product.offerName}
-          sx={{
+          sx={(theme) => ({
             objectFit: "contain",
-          }}
+            [theme.breakpoints.down("md")]: {
+              height: product.type === "product" ? 80 : 130,
+            },
+          })}
         />
         <CardContent
           sx={{
@@ -93,7 +99,7 @@ const ProductCard = ({ product }: { product: Offer }) => {
                 variant="h3"
                 fontSize={13}
                 fontWeight={500}
-                sx={{
+                sx={(theme) => ({
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
@@ -103,7 +109,11 @@ const ProductCard = ({ product }: { product: Offer }) => {
                   fontWeight: 400,
                   fontSize: "12px",
                   lineHeight: "normal",
-                }}
+                  [theme.breakpoints.down("md")]: {
+                    WebkitLineClamp: "1",
+                    height: "17px",
+                  },
+                })}
               >
                 {product.offerName}
               </Typography>
@@ -172,7 +182,12 @@ const ProductCard = ({ product }: { product: Offer }) => {
                 >
                   <Typography
                     variant="body2"
-                    sx={{ fontSize: 16, lineHeight: "22px", fontWeight: 600 }}
+                    sx={(theme) => ({
+                      fontSize: 16,
+                      lineHeight: "22px",
+                      fontWeight: 600,
+                      [theme.breakpoints.down("md")]: { fontSize: 14 },
+                    })}
                   >
                     S/.{" "}
                     {((product.details?.offerPrice ?? 0) > 0
@@ -187,6 +202,8 @@ const ProductCard = ({ product }: { product: Offer }) => {
                       fontSize: 12,
                       lineHeight: "20px",
                       fontWeight: 400,
+                      textDecoration: "line-through",
+                      [theme.breakpoints.down("md")]: { fontSize: 10 },
                     })}
                   >
                     S/. {(product.details?.refPrice ?? 0).toFixed(2)}
