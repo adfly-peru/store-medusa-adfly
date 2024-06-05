@@ -119,8 +119,9 @@ const ForgotPasswordModal = React.forwardRef<
           }}
           textAlign="justify"
         >
-          Introduce abajo tu correo electrónico. Te enviaremos los detalles para
-          poder restablecer la contraseña de tu cuenta.
+          Te enviaremos los detalles para poder restablecer la contraseña de tu
+          cuenta. Por favor, revisa el correo electrónico con el que te has
+          registrado.
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack

@@ -12,6 +12,7 @@ declare module "next-auth" {
     uuidbusiness?: string;
     completeregistration?: boolean;
     sub_domain?: string;
+    provider?: string;
   }
 
   interface Session {
@@ -28,6 +29,7 @@ declare module "next-auth" {
       uuidbusiness?: string;
       completeregistration?: boolean;
       sub_domain?: string;
+      provider?: string;
     };
   }
 }

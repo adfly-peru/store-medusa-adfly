@@ -1,10 +1,11 @@
 import { Preferences } from "@interfaces/collaborator";
 import { surveyQuery } from "api/auth";
+import axios from "axios";
 import {
   GetCollaboratorQuery,
   useGetCollaboratorQuery,
 } from "generated/graphql";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AccountContext {
@@ -87,6 +88,53 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       setCollaborator(undefined);
     }
   }, [session?.user, refetch]);
+
+  useEffect(() => {
+    const verifySession = async () => {
+      if (
+        session?.user?.provider === "dni" &&
+        session.user.documenttype &&
+        session.user.dni &&
+        session.user.sub_domain &&
+        !session.user.completeregistration
+      ) {
+        try {
+          const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/checkaccess`,
+            {
+              documenttype: session.user.documenttype,
+              documentnumber: session.user.dni,
+              sub_domain: session.user.sub_domain,
+            }
+          );
+
+          if (response.status === 200 || response.status === 201) {
+            const { complete_registration, email } = response.data.data.data;
+
+            if (
+              session.user.completeregistration !== complete_registration ||
+              session.user.email !== email
+            ) {
+              console.log("To sign in again");
+              await signIn("dni", {
+                documenttype: session.user.documenttype,
+                documentnumber: session.user.dni,
+                sub_domain: session.user.sub_domain,
+                callbackUrl: "/",
+                redirect: false,
+              });
+            }
+          }
+        } catch (error) {
+          console.error("Session verification error:", error);
+        }
+      }
+    };
+
+    if (session?.user?.provider === "dni") {
+      verifySession();
+    }
+  }, [session]);
 
   return (
     <AccountContext.Provider
