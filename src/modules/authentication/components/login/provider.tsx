@@ -25,8 +25,8 @@ interface FormValues {
 const ProviderModal = React.forwardRef<
   HTMLDivElement,
   {
-    nextStep: () => void;
     onClose: () => void;
+    forgot: () => void;
   }
 >((props, _) => {
   const { data: session } = useSession();
@@ -226,6 +226,8 @@ const ProviderModal = React.forwardRef<
               sx={{
                 alignSelf: "flex-end",
               }}
+              component="button"
+              onClick={props.forgot}
             >
               ¿Has olvidado la contraseña?
             </Link>

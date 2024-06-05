@@ -1,5 +1,5 @@
 import Loader from "@modules/components/LoadingScreen/Loader";
-import { Box, Stack } from "@mui/material";
+import { Box, Modal, Stack } from "@mui/material";
 import {
   HomeList,
   SecondaryBannersList,
@@ -7,12 +7,14 @@ import {
   useBannersQuery,
   useHomeListsQuery,
 } from "generated/graphql";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import BannerListCard from "../components/BannersListCard";
 import HomeListCard from "../components/HomeListCard";
 import MainBanners from "../components/MainBanners";
 import SectionsView from "../components/SectionsView";
 import { useDesign } from "@context/design-context";
+import { useRouter } from "next/router";
+import RecoveryModal from "@modules/authentication/components/login/RecoveryPassword";
 
 export enum ListType {
   BANNER = "BANNER",
@@ -20,6 +22,8 @@ export enum ListType {
 }
 
 const Home = () => {
+  const router = useRouter();
+  const { recoverytoken } = router.query;
   const { data: homeListData, loading: loading1 } = useHomeListsQuery();
   const { data: bannersListData, loading: loading2 } = useBannersListsQuery();
   const { storeDesign } = useDesign();
@@ -79,6 +83,36 @@ const Home = () => {
         },
       })}
     >
+      <Modal open={!!recoverytoken}>
+        <Box
+          sx={{
+            position: "absolute",
+            inset: "0px",
+            height: "100%",
+            overflow: "hidden auto",
+            outline: "none",
+            display: "flex",
+            flexDirection: "column",
+            padding: "1.5rem",
+          }}
+        >
+          <Box
+            sx={(theme) => ({
+              position: "relative",
+              margin: "auto",
+              height: "max-content",
+              maxHeight: "unset",
+              transform: "none",
+              top: "unset",
+              left: "unset",
+            })}
+          >
+            <RecoveryModal
+              token={recoverytoken ? (recoverytoken as string) : ""}
+            />
+          </Box>
+        </Box>
+      </Modal>
       <MainBanners bannersList={bannersList} />
       <SectionsView />
       {items.map((item) => (

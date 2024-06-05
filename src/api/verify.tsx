@@ -53,26 +53,24 @@ export const verifyAccount = async (
 export const changePasswordQuery = async (
   new_password: string,
   token: string
-): Promise<string | null> => {
-  try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/verify`,
-      {
-        new_password,
+): Promise<void> => {
+  const response = await axios.post(
+    `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/verify`,
+    {
+      new_password,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      }
-    );
-    const status = response.status;
-    if (status == 201 || status == 200) {
-      return null;
     }
-    return "Error in change password";
-  } catch (error) {
-    return "Error in change password";
+  );
+  const status = response.status;
+  if (status == 201 || status == 200) {
+    if (response.data.data.errors)
+      throw new Error(response.data.data.errors[0]);
+    return;
   }
+  throw new Error("Error in change password");
 };

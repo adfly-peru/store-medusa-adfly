@@ -72,7 +72,7 @@ const SectionsView = () => {
               <Icon icon={"bx:store"} />
             </IconButton>
             <Typography fontSize={16} fontWeight={600}>
-              Tienda Online
+              Compras Online
             </Typography>
           </Stack>
         ) : (
