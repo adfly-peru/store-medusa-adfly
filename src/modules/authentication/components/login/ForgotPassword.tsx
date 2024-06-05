@@ -164,7 +164,7 @@ const ForgotPasswordModal = React.forwardRef<
                 width: 130,
               }}
             >
-              {loading ? <CircularProgress size={24} /> : "Ingresar"}
+              {loading ? <CircularProgress size={24} /> : "Enviar"}
             </Button>
           </Stack>
         </form>

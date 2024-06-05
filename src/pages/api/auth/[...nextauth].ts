@@ -142,42 +142,5 @@ export default NextAuth({
       }
       return token;
     },
-    async session({ session, token }) {
-      session.user = token;
-
-      if (
-        token.provider === "dni" &&
-        token.documenttype &&
-        token.dni &&
-        token.sub_domain
-      ) {
-        try {
-          const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/checkaccess`,
-            {
-              documenttype: token.documenttype,
-              documentnumber: token.dni,
-              sub_domain: token.sub_domain,
-            }
-          );
-
-          if (response.status === 200 || response.status === 201) {
-            const { complete_registration, email } = response.data.data.data;
-
-            if (session.user.completeregistration !== complete_registration) {
-              session.user.completeregistration = complete_registration;
-            }
-
-            if (session.user.email !== email) {
-              session.user.email = email;
-            }
-          }
-        } catch (error) {
-          console.error("Session verification error:");
-        }
-      }
-
-      return session;
-    },
   },
 });
