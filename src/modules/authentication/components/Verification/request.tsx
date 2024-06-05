@@ -101,19 +101,20 @@ const RequestModal = React.forwardRef<
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box
         sx={(theme) => ({
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
+          position: "relative",
+          margin: "auto",
+          height: "max-content",
+          maxHeight: "unset",
+          transform: "none",
+          top: "unset",
+          left: "unset",
           borderRadius: "40px",
           backgroundColor: "white",
-          [theme.breakpoints.up("md")]: {
-            width: 500,
+          width: 420,
+          [theme.breakpoints.down(1024)]: {
+            width: 336,
           },
           [theme.breakpoints.down("md")]: {
-            width: 340,
-          },
-          [theme.breakpoints.down("sm")]: {
             width: 295,
           },
         })}
@@ -121,23 +122,20 @@ const RequestModal = React.forwardRef<
         <Stack alignItems="center">
           <Box
             sx={(theme) => ({
-              [theme.breakpoints.up("md")]: {
-                width: 154,
-                height: 44,
-                marginTop: "22px",
-                marginBottom: "22px",
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+              height: 44,
+              marginTop: "20px",
+              marginBottom: "20px",
+              [theme.breakpoints.down("lg")]: {
+                height: 40,
+              },
+              [theme.breakpoints.down(1024)]: {
+                height: 36,
               },
               [theme.breakpoints.down("md")]: {
-                width: 127,
-                height: 36,
-                marginTop: "22px",
-                marginBottom: "22px",
-              },
-              [theme.breakpoints.down("sm")]: {
-                width: 80,
-                height: 22,
-                marginTop: "20px",
-                marginBottom: "20px",
+                height: 26,
               },
             })}
           >
@@ -161,13 +159,20 @@ const RequestModal = React.forwardRef<
           <Stack
             sx={(theme) => ({
               gap: "15px",
-              paddingLeft: "30px",
-              paddingRight: "30px",
-              width: "100%",
-              marginTop: "24px",
-              [theme.breakpoints.up("md")]: {
-                paddingLeft: "100px",
-                paddingRight: "100px",
+              paddingLeft: "60px",
+              paddingRight: "60px",
+              width: 420,
+              marginTop: "20px",
+              marginBottom: "10px",
+              [theme.breakpoints.down(1024)]: {
+                width: 336,
+                paddingLeft: "30px",
+                paddingRight: "30px",
+              },
+              [theme.breakpoints.down("md")]: {
+                width: 295,
+                paddingLeft: "30px",
+                paddingRight: "30px",
               },
             })}
             alignItems="flex-start"
@@ -177,7 +182,7 @@ const RequestModal = React.forwardRef<
               position="relative"
               width="100%"
               sx={(theme) => ({
-                [theme.breakpoints.down("md")]: {
+                [theme.breakpoints.down(1024)]: {
                   marginLeft: "23px",
                 },
               })}
@@ -398,6 +403,10 @@ const RequestModal = React.forwardRef<
                       render={({ field }) => <Checkbox {...field} />}
                     />
                   }
+                  sx={{
+                    marginLeft: 0,
+                    marginRight: 0,
+                  }}
                   label={
                     <Typography variant="body1" fontSize={11}>
                       Acepto los <Link href="#">Términos y Condiciones</Link> de
@@ -420,7 +429,18 @@ const RequestModal = React.forwardRef<
               >
                 {loading ? <CircularProgress size={24} /> : "Enviar"}
               </Button>
-              <Typography variant="subtitle2" textAlign="center">
+              <Typography
+                variant="caption"
+                textAlign="center"
+                fontSize={10}
+                fontWeight={300}
+                sx={(theme) => ({
+                  [theme.breakpoints.up(1024)]: {
+                    marginLeft: "-70px !important",
+                    marginRight: "-70px !important",
+                  },
+                })}
+              >
                 Si necesitas ayuda, escríbenos a hola@adfly.pe o llámanos al +51
                 970 802 065
               </Typography>

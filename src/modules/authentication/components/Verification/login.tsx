@@ -76,46 +76,44 @@ const LoginModal = React.forwardRef<
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box
         sx={(theme) => ({
-          position: "absolute" as "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
+          position: "relative",
+          margin: "auto",
+          height: "max-content",
+          maxHeight: "unset",
+          transform: "none",
+          top: "unset",
+          left: "unset",
           borderRadius: "40px",
           backgroundColor: "white",
-          [theme.breakpoints.up("md")]: {
-            width: 482,
-            // height: 515,
+          width: 420,
+          [theme.breakpoints.down("lg")]: {
+            width: 398,
+          },
+          [theme.breakpoints.down(1024)]: {
+            width: 340,
           },
           [theme.breakpoints.down("md")]: {
-            width: 340,
-            // height: 391,
-          },
-          [theme.breakpoints.down("sm")]: {
             width: 295,
-            // height: 370,
           },
         })}
       >
         <Stack spacing={0} alignItems="center">
           <Box
             sx={(theme) => ({
-              [theme.breakpoints.up("md")]: {
-                width: 154,
-                height: 44,
-                marginTop: "22px",
-                marginBottom: "22px",
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+              height: 44,
+              marginTop: "20px",
+              marginBottom: "20px",
+              [theme.breakpoints.down("lg")]: {
+                height: 40,
+              },
+              [theme.breakpoints.down(1024)]: {
+                height: 36,
               },
               [theme.breakpoints.down("md")]: {
-                width: 127,
-                height: 36,
-                marginTop: "22px",
-                marginBottom: "22px",
-              },
-              [theme.breakpoints.down("sm")]: {
-                width: 80,
-                height: 22,
-                marginTop: "20px",
-                marginBottom: "20px",
+                height: 26,
               },
             })}
           >
@@ -139,21 +137,40 @@ const LoginModal = React.forwardRef<
           <Stack
             sx={(theme) => ({
               gap: "15px",
-              paddingLeft: "30px",
-              paddingRight: "30px",
-              width: "100%",
-              marginBottom: "20px",
-              [theme.breakpoints.up("md")]: {
-                marginTop: "34px",
-                marginBottom: "32px",
-                paddingLeft: "100px",
-                paddingRight: "100px",
+              paddingLeft: "81px",
+              paddingRight: "81px",
+              width: 420,
+              marginTop: "20px",
+              marginBottom: "40px",
+              [theme.breakpoints.down("lg")]: {
+                width: 398,
+                paddingLeft: "70px",
+                paddingRight: "70px",
+              },
+              [theme.breakpoints.down(1024)]: {
+                width: 340,
+                marginTop: "10px",
+                marginBottom: "30px",
+                paddingLeft: "68px",
+                paddingRight: "68px",
+              },
+              [theme.breakpoints.down("md")]: {
+                width: 295,
+                paddingLeft: "30px",
+                paddingRight: "30px",
               },
             })}
             alignItems="center"
             justifyContent="space-around"
           >
-            <Stack alignItems="center">
+            <Stack
+              alignItems="center"
+              sx={{
+                marginLeft: "-30px",
+                marginRight: "-30px",
+                gap: "5px",
+              }}
+            >
               <Typography variant="h3">¡Bienvenido!</Typography>
               <Typography variant="subtitle2">
                 Ingresa y descubre lo que tenemos para ti.
@@ -232,7 +249,14 @@ const LoginModal = React.forwardRef<
               >
                 {loading ? <CircularProgress size={24} /> : "Ingresar"}
               </Button>
-              <Typography variant="subtitle2">
+              <Typography
+                variant="subtitle2"
+                sx={(theme) => ({
+                  [theme.breakpoints.down(1024)]: {
+                    fontSize: 12,
+                  },
+                })}
+              >
                 ¿No tienes acceso?{" "}
                 <Link
                   display="inline"
@@ -246,17 +270,14 @@ const LoginModal = React.forwardRef<
             </Stack>
             <Box
               sx={(theme) => ({
-                [theme.breakpoints.up("md")]: {
-                  width: 154,
-                  height: 44,
-                },
-                [theme.breakpoints.down("md")]: {
-                  width: 127,
+                display: "flex",
+                justifyContent: "center",
+                height: 47,
+                [theme.breakpoints.down(1024)]: {
                   height: 36,
                 },
-                [theme.breakpoints.down("sm")]: {
-                  width: 80,
-                  height: 22,
+                [theme.breakpoints.down("md")]: {
+                  height: 29,
                 },
               })}
             >
@@ -265,8 +286,8 @@ const LoginModal = React.forwardRef<
                 width={10}
                 height={10}
                 style={{
-                  width: "100%",
-                  height: "auto",
+                  width: "auto",
+                  height: "100%",
                 }}
                 src={"/Logo Adfly.svg"}
                 alt={"adfly"}

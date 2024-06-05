@@ -93,10 +93,13 @@ const ProviderModal = React.forwardRef<
   return (
     <Box
       sx={(theme) => ({
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
+        position: "relative",
+        margin: "auto",
+        height: "max-content",
+        maxHeight: "unset",
+        transform: "none",
+        top: "unset",
+        left: "unset",
         borderRadius: "20px",
         backgroundColor: "white",
         [theme.breakpoints.up("md")]: {
@@ -266,7 +269,7 @@ const ProviderModal = React.forwardRef<
         >
           Continua con G-mail
         </Button>
-        <Button
+        {/* <Button
           sx={(_) => ({
             color: "gray",
             borderColor: "gray",
@@ -281,7 +284,7 @@ const ProviderModal = React.forwardRef<
           onClick={() => googleLogin()}
         >
           Continua con Microsoft
-        </Button>
+        </Button> */}
         <Typography textAlign="center" fontSize={10} fontWeight="lighter">
           Si necesitas ayuda, escríbenos a hola@adfly.pe o llámanos al +51 970
           802 065

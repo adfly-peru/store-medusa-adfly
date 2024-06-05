@@ -63,10 +63,60 @@ const AppHeader = () => {
   return (
     <header>
       <Modal open={isOpenSignUp}>
-        <RegisterModal onClose={() => setIsOpenSignUp(false)} />
+        <Box
+          sx={{
+            position: "absolute",
+            inset: "0px",
+            height: "100%",
+            overflow: "hidden auto",
+            outline: "none",
+            display: "flex",
+            flexDirection: "column",
+            padding: "1.5rem",
+          }}
+        >
+          <Box
+            sx={(theme) => ({
+              position: "relative",
+              margin: "auto",
+              height: "max-content",
+              maxHeight: "unset",
+              transform: "none",
+              top: "unset",
+              left: "unset",
+            })}
+          >
+            <RegisterModal onClose={() => setIsOpenSignUp(false)} />
+          </Box>
+        </Box>
       </Modal>
       <Modal open={isOpenSignIn}>
-        <LoginModal closeModal={() => setIsOpenSignIn(false)} />
+        <Box
+          sx={{
+            position: "absolute",
+            inset: "0px",
+            height: "100%",
+            overflow: "hidden auto",
+            outline: "none",
+            display: "flex",
+            flexDirection: "column",
+            padding: "1.5rem",
+          }}
+        >
+          <Box
+            sx={(theme) => ({
+              position: "relative",
+              margin: "auto",
+              height: "max-content",
+              maxHeight: "unset",
+              transform: "none",
+              top: "unset",
+              left: "unset",
+            })}
+          >
+            <LoginModal closeModal={() => setIsOpenSignIn(false)} />
+          </Box>
+        </Box>
       </Modal>
       <Drawer open={openDrawer}>
         <CategoriesDrawer onClose={toggleDrawer(false)} />

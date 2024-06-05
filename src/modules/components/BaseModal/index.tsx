@@ -13,10 +13,13 @@ const BaseModal = React.forwardRef<
   return (
     <Box
       sx={(theme) => ({
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
+        position: "relative",
+        margin: "auto",
+        height: "max-content",
+        maxHeight: "unset",
+        transform: "none",
+        top: "unset",
+        left: "unset",
         borderRadius: "20px",
         backgroundColor: "white",
         [theme.breakpoints.up("md")]: {

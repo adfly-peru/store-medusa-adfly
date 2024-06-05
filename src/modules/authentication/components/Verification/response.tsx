@@ -12,19 +12,22 @@ const ResponseModal = React.forwardRef<
   return (
     <Box
       sx={(theme) => ({
-        position: "absolute",
-        paddingLeft: "40px",
-        paddingRight: "40px",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
+        position: "relative",
+        margin: "auto",
+        height: "max-content",
+        maxHeight: "unset",
+        transform: "none",
+        top: "unset",
+        left: "unset",
+        paddingLeft: "35px",
+        paddingRight: "35px",
         borderRadius: "40px",
         backgroundColor: "white",
-        [theme.breakpoints.up("md")]: {
-          width: 430,
-        },
-        [theme.breakpoints.down("sm")]: {
-          width: 295,
+        width: 420,
+        [theme.breakpoints.down("md")]: {
+          paddingLeft: "20px",
+          paddingRight: "20px",
+          width: 300,
         },
       })}
     >
@@ -37,7 +40,9 @@ const ResponseModal = React.forwardRef<
           gap: "10px",
         }}
       >
-        <Typography variant="h2">{props.title}</Typography>
+        <Typography variant="h2" fontSize={20}>
+          {props.title}
+        </Typography>
         <Divider
           style={{
             width: "100%",

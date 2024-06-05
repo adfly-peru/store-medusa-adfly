@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import LoginModal from "../components/Verification/login";
 import RequestModal from "../components/Verification/request";
 import ResponseModal from "../components/Verification/response";
-import { Modal, Typography } from "@mui/material";
+import { Box, Modal, Typography } from "@mui/material";
 import { useSession } from "next-auth/react";
 import Loader from "@modules/components/LoadingScreen/Loader";
 import { useDesign } from "@context/design-context";
@@ -77,8 +77,8 @@ const AuthenticationModal = React.forwardRef<
               >
                 {storeDesign?.commercialname ?? "[Nombre de empresa]"}
               </Typography>{" "}
-              revisará tu solicitud. Te estaremos informando sobre el resultado
-              a{" "}
+              revisará tu solicitud.
+              <br /> Te estaremos informando sobre el resultado a{" "}
               <Typography
                 display="inline"
                 fontWeight={700}
@@ -198,7 +198,32 @@ const Authentication: React.FC<{ children?: React.ReactNode }> = ({
           },
         }}
       >
-        <AuthenticationModal closeModal={() => setIsModalOpen(false)} />
+        <Box
+          sx={{
+            position: "absolute",
+            inset: "0px",
+            height: "100%",
+            overflow: "hidden auto",
+            outline: "none",
+            display: "flex",
+            flexDirection: "column",
+            padding: "1.5rem",
+          }}
+        >
+          <Box
+            sx={(theme) => ({
+              position: "relative",
+              margin: "auto",
+              height: "max-content",
+              maxHeight: "unset",
+              transform: "none",
+              top: "unset",
+              left: "unset",
+            })}
+          >
+            <AuthenticationModal closeModal={() => setIsModalOpen(false)} />
+          </Box>
+        </Box>
       </Modal>
       {children}
     </div>
