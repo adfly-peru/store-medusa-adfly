@@ -24,9 +24,18 @@ interface AccountProviderProps {
 }
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
+  const [collaborator, setCollaborator] =
+    useState<GetCollaboratorQuery["collaborator"]>();
   const { data: session } = useSession();
-
-  const { data: collaboratorData, refetch } = useGetCollaboratorQuery();
+  const { data: collaboratorData, refetch } = useGetCollaboratorQuery({
+    onCompleted(data) {
+      setCollaborator(data.collaborator);
+    },
+    onError(error) {
+      if (error.message === "access denied: user not authenticated")
+        setCollaborator(undefined);
+    },
+  });
 
   const [isOpenSignIn, setIsOpenSignIn] = useState(false);
   const [isOpenSignUp, setIsOpenSignUp] = useState(false);
@@ -72,13 +81,14 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   };
 
   useEffect(() => {
-    if (session?.user?.accessToken) refetch();
+    if (session?.user) refetch();
+    else setCollaborator(undefined);
   }, [refetch, session]);
 
   return (
     <AccountContext.Provider
       value={{
-        collaborator: collaboratorData?.collaborator,
+        collaborator,
         isOpenSignIn,
         isOpenSignUp,
         setIsOpenSignIn,

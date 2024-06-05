@@ -327,7 +327,11 @@ const AppHeader = () => {
               color: theme.palette.secondary.main,
               fontSize: "25px",
             })}
-            onClick={() => router.push("/account/orders")}
+            onClick={() =>
+              !!session?.user?.accessToken
+                ? router.push("/account/orders")
+                : handleAuthentication()
+            }
           >
             <LocalMallOutlined fontSize="inherit" />
           </IconButton>
@@ -343,7 +347,11 @@ const AppHeader = () => {
               color: theme.palette.secondary.main,
               fontSize: "25px",
             })}
-            onClick={() => router.push("/cart")}
+            onClick={() =>
+              !!session?.user?.accessToken
+                ? router.push("/cart")
+                : handleAuthentication()
+            }
           >
             <Badge
               badgeContent={

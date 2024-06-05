@@ -20,8 +20,10 @@ import { CouponResponse } from "./CouponResponse";
 import { useDetailedProduct } from "@modules/products/context/DetailedProductContext";
 import DynamicAlert from "@modules/components/Alert";
 import { useState } from "react";
+import { useAccount } from "@context/account-context";
 
 export function DetailedProduct({}: {}) {
+  const { collaborator, handleAuthentication } = useAccount();
   const {
     handleAddProduct,
     product,
@@ -50,6 +52,10 @@ export function DetailedProduct({}: {}) {
   };
 
   const handleOpenAlert = (func: () => Promise<void>, message: string) => {
+    if (!collaborator) {
+      handleAuthentication();
+      return;
+    }
     setAlertFunc(() => func);
     setAlertMessage(message);
     setTriggerAlert(true);
