@@ -87,6 +87,16 @@ const baseTheme = (theme: Theme) => {
             [theme.breakpoints.down(949)]: {
               gap: "8px",
             },
+            ".slick-list": {
+              paddingLeft: "5px",
+              paddingRight: "5px",
+            },
+            ".slick-track": {
+              gap: "30px",
+            },
+            ".slick-slide": {
+              width: "auto !important",
+            },
           },
           ".slick-product-dots li button:before": {
             marginTop: "10px",

@@ -42,65 +42,25 @@ interface ProductsSliderProps {
 export default function ProductsSlider({ products }: ProductsSliderProps) {
   const settings = {
     infinite: true,
+    center: true,
+    variableWidth: true,
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
+    slidesToShow: 1,
+    slidesToScroll: 1,
     className: "slick-products-slider",
     dotsClass: "slick-dots slick-product-dots",
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
-    responsive: [
-      {
-        breakpoint: 1121,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-        },
-      },
-      {
-        breakpoint: 940,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 580,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
   };
 
   if (products.length > 1)
     return (
       <Slider {...settings}>
-        {products.length < 4 &&
-          products.map((i) => (
-            <Box
-              key={i.uuidOffer}
-              sx={{
-                display: "flex !important",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <ProductCard product={i} />
-            </Box>
-          ))}
         {products.map((i) => (
-          <Box
-            key={i.uuidOffer}
-            sx={{
-              display: "flex !important",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <ProductCard product={i} />
-          </Box>
+          <ProductCard product={i} key={i.uuidOffer} />
+        ))}
+        {products.map((i) => (
+          <ProductCard product={i} key={i.uuidOffer} />
         ))}
       </Slider>
     );
