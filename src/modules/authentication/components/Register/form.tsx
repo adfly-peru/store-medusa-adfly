@@ -70,9 +70,10 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
         new_password: data.password,
         newsletters: data.newsletters,
         terms: data.terms,
-        phone:
-          parsePhoneNumberFromString(data.phone.number, data.phone.code)
-            ?.number ?? "",
+        phone: !!data.phone.number
+          ? parsePhoneNumberFromString(data.phone.number, data.phone.code)
+              ?.number ?? ""
+          : "",
       });
     } catch {
       setLoginError("Hubo un error desconocido en el servicio");
@@ -207,6 +208,7 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
             control={control}
             rules={{
               validate: (value) => {
+                if (!value.number) return true;
                 const phoneNumber = parsePhoneNumberFromString(
                   value.number,
                   value.code
