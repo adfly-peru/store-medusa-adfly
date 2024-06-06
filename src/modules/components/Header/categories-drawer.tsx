@@ -149,6 +149,7 @@ const CategoriesDrawer = ({ onClose }: { onClose: () => void }) => {
             display: "flex",
             flexDirection: "column",
             paddingBottom: 0,
+            height: "100%",
           }}
         >
           <Box>
@@ -170,7 +171,7 @@ const CategoriesDrawer = ({ onClose }: { onClose: () => void }) => {
           <Divider />
           <Box
             sx={{
-              flex: 1,
+              flex: null,
               overflowY: "auto",
               "&::-webkit-scrollbar": {
                 width: "10px",
@@ -185,6 +186,8 @@ const CategoriesDrawer = ({ onClose }: { onClose: () => void }) => {
               "&::-webkit-scrollbar-thumb:hover": {
                 backgroundColor: "rgba(0,0,0,0.6)",
               },
+              WebkitFlex: null,
+              height: `calc(100vh - 175px)`,
             }}
           >
             {departments
