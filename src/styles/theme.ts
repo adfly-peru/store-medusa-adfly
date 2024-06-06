@@ -90,6 +90,28 @@ const baseTheme = (theme: Theme) => {
             ".slick-list": {
               paddingLeft: "5px",
               paddingRight: "5px",
+              position: "relative",
+              overflow: "hidden",
+              "::before, ::after": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                width: "20px",
+                zIndex: 1,
+              },
+              "::before": {
+                left: 0,
+                background:
+                  "linear-gradient(to left, transparent, rgba(255, 255, 255, 0.9))",
+                filter: "blur(8px)",
+              },
+              "::after": {
+                right: 0,
+                background:
+                  "linear-gradient(to right, transparent, rgba(255, 255, 255, 0.9))",
+                filter: "blur(8px)",
+              },
             },
             ".slick-track": {
               gap: "30px",

@@ -51,6 +51,14 @@ export default function ProductsSlider({ products }: ProductsSliderProps) {
     dotsClass: "slick-dots slick-product-dots",
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          arrows: false, // Oculta las flechas en pantallas pequeñas
+        },
+      },
+    ],
   };
 
   if (products.length > 1)
