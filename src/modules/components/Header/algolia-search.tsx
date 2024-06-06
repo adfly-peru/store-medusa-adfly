@@ -10,6 +10,7 @@ import {
   Stack,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
 
@@ -92,6 +93,7 @@ SelectItem.displayName = "SelectItem";
 
 const SearchComponent = () => {
   const router = useRouter();
+  const theme = useTheme();
   const [query, setQuery] = useState<string>("");
   const [items, setItems] = useState<any[]>([]);
 
@@ -177,6 +179,10 @@ const SearchComponent = () => {
             startAdornment: <Search />,
             sx: {
               backgroundColor: "white",
+              [theme.breakpoints.down("md")]: {
+                paddingTop: "0 !important",
+                paddingBottom: "0 !important",
+              },
             },
           }}
           InputLabelProps={{

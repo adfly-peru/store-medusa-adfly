@@ -64,8 +64,9 @@ const SectionsView = () => {
                 fontSize: 40,
                 borderRadius: "8px",
                 padding: "25px 40px",
-                backgroundColor: `${theme.palette.primary.main} !important`,
-                color: theme.palette.secondary.main,
+                backgroundColor: theme.palette.secondary.main,
+                border: `2px solid ${theme.palette.primary.main}`,
+                color: theme.palette.primary.main,
               })}
               onClick={() => router.push("/search?type=product")}
             >
@@ -187,8 +188,9 @@ const SectionsView = () => {
                 fontSize: 40,
                 borderRadius: "8px",
                 padding: "25px 40px",
-                backgroundColor: `${theme.palette.primary.main} !important`,
-                color: theme.palette.secondary.main,
+                backgroundColor: theme.palette.secondary.main,
+                border: `2px solid ${theme.palette.primary.main}`,
+                color: theme.palette.primary.main,
               }}
               onClick={() => router.push("/search?type=coupon")}
             >
