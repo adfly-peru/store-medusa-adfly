@@ -1,14 +1,22 @@
-import { Box, Divider, Button, Stack, Typography } from "@mui/material";
-import React, { ReactNode } from "react";
+import {
+  Box,
+  Divider,
+  Button,
+  Stack,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
+import React, { ReactNode, useState } from "react";
 
 const ResponseModal = React.forwardRef<
   HTMLDivElement,
   {
     title: string;
     response: ReactNode;
-    goBack: () => void;
+    goBack: () => Promise<void>;
   }
 >((props, _) => {
+  const [loading, setLoading] = useState(false);
   return (
     <Box
       sx={(theme) => ({
@@ -21,6 +29,7 @@ const ResponseModal = React.forwardRef<
         left: "unset",
         paddingLeft: "35px",
         paddingRight: "35px",
+        paddingTop: "1px",
         borderRadius: "40px",
         backgroundColor: "white",
         width: 420,
@@ -35,7 +44,7 @@ const ResponseModal = React.forwardRef<
         alignItems="center"
         width="100%"
         sx={{
-          marginTop: "30px",
+          marginTop: "15px",
           marginBottom: "30px",
           gap: "10px",
         }}
@@ -51,13 +60,17 @@ const ResponseModal = React.forwardRef<
         {props.response}
         <Button
           sx={{
-            marginTop: "15px",
+            marginBottom: "10px",
             borderRadius: 17,
           }}
           variant="contained"
-          onClick={props.goBack}
+          onClick={() => {
+            setLoading(true);
+            props.goBack().finally(() => setLoading(false));
+          }}
+          disabled={loading}
         >
-          Volver al inicio
+          {loading ? <CircularProgress /> : "Volver al inicio"}
         </Button>
       </Stack>
     </Box>

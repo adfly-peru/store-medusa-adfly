@@ -3,7 +3,7 @@ import LoginModal from "../components/Verification/login";
 import RequestModal from "../components/Verification/request";
 import ResponseModal from "../components/Verification/response";
 import { Box, Modal, Typography } from "@mui/material";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Loader from "@modules/components/LoadingScreen/Loader";
 import { useDesign } from "@context/design-context";
 
@@ -57,7 +57,7 @@ const AuthenticationModal = React.forwardRef<
     case "success":
       return (
         <ResponseModal
-          goBack={() => setStep("login")}
+          goBack={async () => setStep("login")}
           title={"¡Solicitud enviada con éxito!"}
           response={
             <Typography
@@ -95,7 +95,19 @@ const AuthenticationModal = React.forwardRef<
     case "access":
       return (
         <ResponseModal
-          goBack={() => setStep("login")}
+          goBack={async () => {
+            const result = await signIn("dni", {
+              redirect: false,
+              callbackUrl: "/",
+              doc: form.doc,
+              docType: form.doctype,
+            });
+            if (!result?.ok)
+              console.error(
+                "Lo sentimos, el número de documento ingresado no es válido, verifica que los datos sean correctos o solicita acceso para continuar."
+              );
+            else props.closeModal();
+          }}
           title={"¡Ya cuentas con acceso!"}
           response={
             <Typography
@@ -133,7 +145,7 @@ const AuthenticationModal = React.forwardRef<
     case "pending":
       return (
         <ResponseModal
-          goBack={() => setStep("login")}
+          goBack={async () => setStep("login")}
           title={"Solicitud pendiente"}
           response={
             <Typography
