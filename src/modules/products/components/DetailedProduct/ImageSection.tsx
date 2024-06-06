@@ -20,10 +20,11 @@ export function ProductImages() {
   return (
     <Box
       width={412}
-      height={442}
       sx={{
+        maxWidth: "90%",
         boxShadow: "0px 0 5px -1px rgba(0,0,0,0.2)",
         paddingTop: "10px",
+        paddingBottom: images.length > 1 ? "30px" : 0,
       }}
     >
       <Stack>

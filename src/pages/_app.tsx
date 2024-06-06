@@ -19,6 +19,7 @@ import { DesignContainer, DesignProvider } from "@context/design-context";
 import { WhatsApp } from "@mui/icons-material";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@lib/apollo-config";
+import { Global } from "@emotion/react";
 
 const googleMapsLibraries = ["places"];
 interface MyAppProps extends AppProps {
@@ -56,6 +57,13 @@ export default function App(props: MyAppProps) {
                       }}
                     >
                       <CssBaseline />
+                      <Global
+                        styles={{
+                          ".MuiDrawer-root > .MuiPaper-root": {
+                            overflow: "visible",
+                          },
+                        }}
+                      />
                       <LoadingScreen />
                       <Authentication>
                         <AppHeader />

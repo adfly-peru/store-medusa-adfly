@@ -7,6 +7,8 @@ import {
   Divider,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { Star } from "@mui/icons-material";
 import NumberInput from "@modules/components/NumberInput";
@@ -23,6 +25,8 @@ import { useState } from "react";
 import { useAccount } from "@context/account-context";
 
 export function DetailedProduct({}: {}) {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down(1121));
   const { collaborator, handleAuthentication } = useAccount();
   const {
     handleAddProduct,
@@ -69,6 +73,7 @@ export function DetailedProduct({}: {}) {
         marginTop: "40px",
         marginLeft: "10px",
         marginRight: "10px",
+        marginBottom: "40px",
       }}
     >
       <CouponResponse />
@@ -307,8 +312,20 @@ export function DetailedProduct({}: {}) {
             </Stack>
           )}
         </Stack>
-        <Delivery />
+        {!matches && <Delivery />}
       </Stack>
+      {matches && (
+        <Divider
+          sx={(theme) => ({
+            borderColor: "gray",
+            margin: "40px -60px 15px -60px",
+            [theme.breakpoints.down(481)]: {
+              margin: "40px -10px 15px -10px",
+            },
+          })}
+        />
+      )}
+      {matches && <Delivery />}
       <Details />
       <DynamicAlert
         func={alertFunc}

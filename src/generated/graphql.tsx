@@ -1006,6 +1006,7 @@ export type Query = {
   department?: Maybe<Department>;
   departments: Array<Department>;
   districts: Array<District>;
+  getAllCampaigns: PaginatedCampaigns;
   getAllCoupons: PaginatedCouponUsages;
   getAllHomeLists: PaginatedHomeLists;
   getBusinessSummary?: Maybe<BusinessSummary>;
@@ -1226,6 +1227,17 @@ export type QueryDepartmentArgs = {
 };
 
 
+export type QueryGetAllCampaignsArgs = {
+  asc?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  onlyAccepted?: InputMaybe<Scalars['Boolean']['input']>;
+  onlyAvailable?: InputMaybe<Scalars['Boolean']['input']>;
+  searchBy?: InputMaybe<Scalars['String']['input']>;
+  sortBy?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryGetAllCouponsArgs = {
   asc?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -1323,6 +1335,7 @@ export type QueryOffersArgs = {
   onlyAccepted?: InputMaybe<Scalars['Boolean']['input']>;
   searchBy?: InputMaybe<Scalars['String']['input']>;
   sortBy?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<OfferType>;
   withCount?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -2447,6 +2460,7 @@ export const StoreDesignDocument = gql`
     bannerurl
     commercialname
     href
+    ispremium
   }
 }
     `;

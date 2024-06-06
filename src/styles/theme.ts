@@ -97,6 +97,11 @@ const baseTheme = (theme: Theme) => {
             width: 50,
             filter: "grayscale(100%)",
           },
+          ".slick-dots-products-slider li": {
+            height: "50px !important",
+            width: "50px !important",
+            filter: "grayscale(100%)",
+          },
           ".slick-dots .slick-active": {
             filter: "none",
           },

@@ -1,5 +1,5 @@
 import { NavigateNext, NavigateBefore } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import Slider from "react-slick";
 import Image from "next/image";
 
@@ -24,6 +24,7 @@ function SampleNextArrow(props: any) {
     </IconButton>
   );
 }
+
 function SamplePrevArrow(props: any) {
   const { className, style, onClick } = props;
   return (
@@ -52,7 +53,10 @@ interface ImageSliderProps {
 }
 
 export default function ImageSlider({ images }: ImageSliderProps) {
-  if (images.length > 1)
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down(610));
+
+  if (images.length > 1) {
     return (
       <Slider
         dots
@@ -62,31 +66,60 @@ export default function ImageSlider({ images }: ImageSliderProps) {
         slidesToScroll={1}
         nextArrow={<SampleNextArrow />}
         prevArrow={<SamplePrevArrow />}
-        dotsClass="slick-dots slick-thumb"
-        customPaging={function (i) {
-          return (
-            <Image
-              width={50}
-              height={50}
-              style={{}}
-              src={images[i]}
-              alt={images[i]}
-            />
-          );
-        }}
+        dotsClass="slick-dots slick-dots-products-slider"
+        customPaging={(i) => (
+          <Image
+            height={50}
+            width={50}
+            style={{}}
+            src={images[i] === "" ? "/Logo Adfly.svg" : images[i]}
+            alt={images[i]}
+          />
+        )}
       >
         {images.map((i, index) => (
-          <Image key={index} width={340} height={340} src={i} alt={i} />
+          <Box
+            key={index}
+            sx={{
+              position: "relative",
+              width: matches ? "90%" : 340,
+              height: matches ? "auto" : 340,
+              paddingBottom: matches ? undefined : "100%",
+              paddingTop: matches ? "100%" : undefined,
+              overflow: "hidden",
+              margin: "0 auto",
+            }}
+          >
+            <Image
+              layout="fill"
+              objectFit="contain"
+              src={i === "" ? "/Logo Adfly.svg" : i}
+              alt={i}
+            />
+          </Box>
         ))}
       </Slider>
     );
+  }
 
   return (
-    <Image
-      width={390}
-      height={390}
-      src={(images[0] ?? "") === "" ? "/Logo Adfly.svg" : images[0]}
-      alt={images[0]}
-    />
+    <Box
+      sx={{
+        position: "relative",
+        width: matches ? "90%" : 390,
+        height: matches ? "auto" : 390,
+        paddingBottom: matches ? undefined : "100%",
+        paddingTop: matches ? "100%" : undefined,
+        overflow: "hidden",
+        margin: "0 auto",
+      }}
+    >
+      <Image
+        layout="fill"
+        objectFit="contain"
+        src={(images[0] ?? "") === "" ? "/Logo Adfly.svg" : images[0]}
+        alt={images[0]}
+      />
+    </Box>
   );
 }

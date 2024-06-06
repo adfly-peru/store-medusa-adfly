@@ -24,10 +24,14 @@ const ProductInfo = () => {
 
   return (
     <Box
-      sx={{
+      sx={(theme) => ({
         paddingLeft: "50px",
         paddingRight: "50px",
-      }}
+        [theme.breakpoints.down(481)]: {
+          paddingLeft: 0,
+          paddingRight: 0,
+        },
+      })}
     >
       <DetailedProductProvider
         offerForCollaborator={product}

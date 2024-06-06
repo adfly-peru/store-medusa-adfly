@@ -1,3 +1,4 @@
+import { useDesign } from "@context/design-context";
 import { Icon } from "@iconify/react";
 import {
   Stack,
@@ -13,6 +14,7 @@ import { useRouter } from "next/router";
 const SectionDetails = () => {
   const router = useRouter();
   const { type, query } = router.query;
+  const { storeDesign } = useDesign();
   const theme = useTheme();
   const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -109,26 +111,30 @@ const SectionDetails = () => {
               <Icon fontSize={40} icon={"ic:outline-discount"} />
             </Stack>
           </ToggleButton>
-          <ToggleButton key="marketplace" value="marketplace" disabled>
-            <Stack direction="row" alignItems="center" spacing={2}>
-              {!isMdDown && (
-                <Typography fontSize="inherit" textTransform="none">
-                  Marketplace
-                </Typography>
-              )}
-              <Icon fontSize={40} icon={"mdi:hand-coin-outline"} />
-            </Stack>
-          </ToggleButton>
-          <ToggleButton key="benefits" value="benefits" disabled>
-            <Stack direction="row" alignItems="center" spacing={2}>
-              {!isMdDown && (
-                <Typography fontSize="inherit" textTransform="none">
-                  Beneficios
-                </Typography>
-              )}
-              <Icon fontSize={40} icon="material-symbols:stars-outline" />
-            </Stack>
-          </ToggleButton>
+          {storeDesign?.ispremium && (
+            <ToggleButton key="marketplace" value="marketplace" disabled>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                {!isMdDown && (
+                  <Typography fontSize="inherit" textTransform="none">
+                    Marketplace
+                  </Typography>
+                )}
+                <Icon fontSize={40} icon={"mdi:hand-coin-outline"} />
+              </Stack>
+            </ToggleButton>
+          )}
+          {storeDesign?.ispremium && (
+            <ToggleButton key="benefits" value="benefits" disabled>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                {!isMdDown && (
+                  <Typography fontSize="inherit" textTransform="none">
+                    Beneficios
+                  </Typography>
+                )}
+                <Icon fontSize={40} icon="material-symbols:stars-outline" />
+              </Stack>
+            </ToggleButton>
+          )}
         </ToggleButtonGroup>
       </Stack>
     </Stack>

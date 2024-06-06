@@ -22,14 +22,14 @@ interface FormValues {
   confirmpassword: string;
 }
 
-const requirements = [
+export const requirements = [
   { re: /[0-9]/, label: "Incluye un número" },
   { re: /[a-z]/, label: "Incluye una letra en minúscula" },
   { re: /[A-Z]/, label: "Incluye una letra en mayúscula" },
   // { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Incluye un símbolo especial" },
 ];
 
-const getStrength = (password: string) => {
+export const getStrength = (password: string) => {
   let multiplier = password.length > 7 ? 0 : 1;
 
   requirements.forEach((requirement) => {
@@ -41,7 +41,7 @@ const getStrength = (password: string) => {
   return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
 };
 
-const PasswordRequirement = ({
+export const PasswordRequirement = ({
   meets,
   label,
 }: {

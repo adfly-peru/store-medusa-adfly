@@ -101,6 +101,7 @@ const SearchComponent = () => {
         data: value,
         origin: "Search Bar",
       });
+      setQuery("");
       router.push({
         pathname: "/search",
         query: { query, type: "product" },
@@ -109,6 +110,7 @@ const SearchComponent = () => {
       amplitude.track("Go to Product from search bar", {
         productid: value,
       });
+      setQuery("");
       router.push({
         pathname: "/product/" + value,
       });
@@ -157,7 +159,7 @@ const SearchComponent = () => {
       selectOnFocus
       handleHomeEndKeys
       options={items}
-      getOptionLabel={(option) => option?.label ?? option}
+      getOptionLabel={(option) => option?.label ?? ""}
       renderOption={(props, option) => (
         <SelectItem
           {...props}
