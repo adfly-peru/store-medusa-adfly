@@ -66,6 +66,9 @@ const MainBanners = ({
         <Box
           sx={(theme) => ({
             marginTop: "10px",
+            [theme.breakpoints.down("md")]: {
+              marginTop: 0,
+            },
           })}
         >
           <Slider
@@ -115,6 +118,9 @@ const MainBanners = ({
       <Box
         sx={(theme) => ({
           marginTop: "10px",
+          [theme.breakpoints.down("md")]: {
+            marginTop: 0,
+          },
         })}
       >
         <Box

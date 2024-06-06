@@ -151,8 +151,6 @@ const SearchComponent = () => {
     <Autocomplete
       sx={{
         width: "100%",
-        marginLeft: "10px",
-        marginRight: "20px",
       }}
       freeSolo
       clearOnBlur
