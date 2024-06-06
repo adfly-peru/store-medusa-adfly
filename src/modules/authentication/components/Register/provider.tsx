@@ -78,7 +78,7 @@ const ProviderModal = React.forwardRef<HTMLDivElement>(() => {
       >
         Regístrate con G-mail
       </Button>
-      <Button
+      {/* <Button
         sx={(_) => ({
           color: "gray",
           borderColor: "gray",
@@ -92,7 +92,7 @@ const ProviderModal = React.forwardRef<HTMLDivElement>(() => {
         startIcon={<Icon icon="logos:microsoft-icon" />}
       >
         Regístrate con Microsoft
-      </Button>
+      </Button> */}
       <Divider
         sx={{
           fontWeight: 600,

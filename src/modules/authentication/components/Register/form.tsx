@@ -19,13 +19,20 @@ import BaseModal from "@modules/components/BaseModal";
 import { useRegister } from "./Context";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { Controller, useForm } from "react-hook-form";
+import CustomPhoneInput from "@modules/components/PhoneInput";
+import { isValidPhoneNumber } from "react-phone-number-input";
+import { CountryCode, parsePhoneNumberFromString } from "libphonenumber-js/min";
+import { requirements } from "../login/RecoveryPassword";
 
 interface FormValues {
   email: string;
   password: string;
   newsletters: boolean;
   terms: boolean;
-  phone: string;
+  phone: {
+    number: string;
+    code: CountryCode;
+  };
 }
 
 const FormModal = React.forwardRef<HTMLDivElement>(() => {
@@ -39,13 +46,17 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
   } = useForm<FormValues>({
     defaultValues: {
       email: registerForm.email,
       password: "",
       newsletters: false,
       terms: false,
-      phone: "",
+      phone: {
+        number: "",
+        code: "PE",
+      },
     },
   });
 
@@ -59,7 +70,9 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
         new_password: data.password,
         newsletters: data.newsletters,
         terms: data.terms,
-        phone: data.phone,
+        phone:
+          parsePhoneNumberFromString(data.phone.number, data.phone.code)
+            ?.number ?? "",
       });
     } catch {
       setLoginError("Hubo un error desconocido en el servicio");
@@ -70,11 +83,7 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
   return (
     <BaseModal title={"Termina de registrarte"} onClose={onClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack
-          sx={(theme) => ({
-            gap: "20px",
-          })}
-        >
+        <Stack sx={{ gap: "20px" }}>
           {loginError && (
             <Alert
               severity="error"
@@ -166,23 +175,71 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
               marginTop: "-10px",
             }}
             error={!!errors.password}
-            helperText={errors.password ? "Este campo es requerido" : ""}
-            {...register("password", { required: true })}
+            helperText={errors.password ? errors.password.message : ""}
+            {...register("password", {
+              required: "Este campo es obligatorio",
+              validate: (value) => {
+                return (
+                  (value.length > 7 &&
+                    requirements.every((req) => req.re.test(value))) ||
+                  "Ingrese una contraseña válida"
+                );
+              },
+            })}
           />
+          <Typography variant="caption" fontSize={11}>
+            <ul
+              style={{
+                marginBottom: 0,
+                marginTop: "-15px",
+                marginLeft: "-10px",
+              }}
+            >
+              <li>Una mayúscula</li>
+              <li>Una minúscula</li>
+              <li>Un carácter</li>
+              <li>Mínimo 8 letras</li>
+            </ul>
+          </Typography>
           <Typography>N° Celular</Typography>
-          <TextField
-            placeholder="+51 987654321"
-            autoComplete="off"
-            variant="outlined"
-            fullWidth
-            size="small"
-            InputLabelProps={{
-              shrink: true,
+          <Controller
+            name="phone"
+            control={control}
+            rules={{
+              validate: (value) => {
+                const phoneNumber = parsePhoneNumberFromString(
+                  value.number,
+                  value.code
+                );
+                return (
+                  (phoneNumber &&
+                    isValidPhoneNumber(
+                      phoneNumber.number,
+                      phoneNumber.country
+                    )) ||
+                  "El número no es válido"
+                );
+              },
             }}
-            sx={{
-              marginTop: "-10px",
-            }}
-            {...register("phone")}
+            render={({ field }) => (
+              <CustomPhoneInput
+                value={field.value.number}
+                onChange={(val) =>
+                  setValue("phone", {
+                    number: val,
+                    code: field.value.code,
+                  })
+                }
+                country={field.value.code}
+                setCountry={(val) =>
+                  setValue("phone", {
+                    number: field.value.number,
+                    code: val,
+                  })
+                }
+                error={errors.phone?.message}
+              />
+            )}
           />
           <FormControl error={!!errors.terms}>
             <FormControlLabel
