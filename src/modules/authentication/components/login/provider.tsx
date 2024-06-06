@@ -227,7 +227,11 @@ const ProviderModal = React.forwardRef<
                 alignSelf: "flex-end",
               }}
               component="button"
-              onClick={props.forgot}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                props.forgot();
+              }}
             >
               ¿Has olvidado la contraseña?
             </Link>
