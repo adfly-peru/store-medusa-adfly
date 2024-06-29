@@ -35,19 +35,6 @@ const Filters = () => {
           margin: "10px 15px",
         })}
       />
-      <Box
-        sx={{
-          margin: "18px",
-        }}
-      >
-        <Button
-          variant="contained"
-          fullWidth
-          onClick={() => handleApplyFilters()}
-        >
-          Aplicar filtros
-        </Button>
-      </Box>
     </List>
   );
 };

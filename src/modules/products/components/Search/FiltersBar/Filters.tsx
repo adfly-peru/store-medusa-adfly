@@ -44,15 +44,6 @@ const Filters = () => {
           </ListSubheader>
         }
       >
-        <Divider
-          sx={(theme) => ({
-            fontWeight: 600,
-            fontSize: 16,
-            border: `1px solid ${theme.palette.grey[200]}`,
-            margin: "5px 15px",
-          })}
-        />
-        <CustomRefinementList label={"Marca"} attribute={"brand_name"} />
         {query.type === "product" && (
           <Divider
             sx={(theme) => ({
@@ -64,6 +55,15 @@ const Filters = () => {
           />
         )}
         {query.type === "product" && <PricesRange />}
+        <Divider
+          sx={(theme) => ({
+            fontWeight: 600,
+            fontSize: 16,
+            border: `1px solid ${theme.palette.grey[200]}`,
+            margin: "5px 15px",
+          })}
+        />
+        <CustomRefinementList label={"Marca"} attribute={"brand_name"} />
         <Divider
           sx={(theme) => ({
             fontWeight: 600,
@@ -90,15 +90,6 @@ const Filters = () => {
             margin: "10px 15px",
           })}
         />
-        <Box
-          sx={{
-            margin: "18px",
-          }}
-        >
-          <Button variant="contained" fullWidth onClick={handleApplyFilters}>
-            Aplicar filtros
-          </Button>
-        </Box>
       </List>
     </Paper>
   );

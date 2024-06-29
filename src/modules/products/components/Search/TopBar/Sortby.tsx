@@ -1,6 +1,4 @@
 import { Box, MenuItem, Select, Typography } from "@mui/material";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useSortBy } from "react-instantsearch";
 
 const sortItems = [
@@ -16,15 +14,9 @@ const sortItems = [
 ];
 
 const CustomSortBy = () => {
-  const router = useRouter();
-  const { sort } = router.query;
   const { currentRefinement, refine } = useSortBy({
     items: sortItems,
   });
-
-  useEffect(() => {
-    if (typeof sort === "string") refine(sort);
-  }, [sort, refine]);
 
   return (
     <>
@@ -46,17 +38,7 @@ const CustomSortBy = () => {
           defaultValue={currentRefinement}
           autoFocus={false}
           onChange={(event) => {
-            const val = event.target.value;
-            const newQuery = { ...router.query };
-            if (val) newQuery["sort"] = val;
-            router.push(
-              {
-                pathname: "/search",
-                query: newQuery,
-              },
-              undefined,
-              { shallow: true }
-            );
+            refine(event.target.value);
           }}
         >
           {sortItems.map((item) => (

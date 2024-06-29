@@ -12,6 +12,7 @@ const AlgoliaSideBar = () => {
         [theme.breakpoints.down("md")]: {
           display: "none",
         },
+        width: 250,
       })}
     >
       <QueryDetails />

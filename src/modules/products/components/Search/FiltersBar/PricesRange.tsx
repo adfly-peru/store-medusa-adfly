@@ -1,6 +1,8 @@
 import { useFilters } from "@modules/products/context/FiltersContext";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import {
+  Box,
+  Button,
   Collapse,
   Divider,
   InputAdornment,
@@ -22,7 +24,7 @@ const CustomTextField = styled(TextField)({
 
 const PricesRange = React.forwardRef<HTMLDivElement>((_props, _) => {
   const [open, setOpen] = React.useState(true);
-  const { range } = useRange({
+  const { range, refine, start } = useRange({
     attribute: "final_price",
   });
   const { pricesRange, setPricesRange } = useFilters();
@@ -33,10 +35,14 @@ const PricesRange = React.forwardRef<HTMLDivElement>((_props, _) => {
 
   useEffect(() => {
     setPricesRange((prev) => ({
-      min: range.min ?? prev?.min ?? 0,
-      max: range.max ?? prev?.max ?? 0,
+      min: isFinite(start[0] ?? 0)
+        ? start[0] ?? 0
+        : range.min ?? prev?.min ?? 0,
+      max: isFinite(start[1] ?? 0)
+        ? start[1] ?? 0
+        : range.max ?? prev?.max ?? 0,
     }));
-  }, [range]);
+  }, [range.max, range.min, setPricesRange, start]);
 
   return (
     <div>
@@ -69,7 +75,9 @@ const PricesRange = React.forwardRef<HTMLDivElement>((_props, _) => {
               variant="outlined"
               size="small"
               type="number"
-              value={pricesRange?.min ?? 0}
+              value={
+                isNaN(pricesRange?.min ?? NaN) ? "" : pricesRange?.min ?? 0
+              }
               onChange={(event) =>
                 setPricesRange((prev) => ({
                   min: parseFloat(event.target.value) ?? prev?.min ?? 0,
@@ -112,7 +120,9 @@ const PricesRange = React.forwardRef<HTMLDivElement>((_props, _) => {
               variant="outlined"
               size="small"
               type="number"
-              value={pricesRange?.max ?? 0}
+              value={
+                isNaN(pricesRange?.max ?? NaN) ? "" : pricesRange?.max ?? 0
+              }
               onChange={(event) =>
                 setPricesRange((prev) => ({
                   max: parseFloat(event.target.value) ?? prev?.max ?? 0,
@@ -137,6 +147,21 @@ const PricesRange = React.forwardRef<HTMLDivElement>((_props, _) => {
             />
           </Stack>
         </Stack>
+        <Box
+          sx={{
+            margin: "18px",
+          }}
+        >
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() =>
+              pricesRange ? refine([pricesRange.min, pricesRange.max]) : null
+            }
+          >
+            Aplicar
+          </Button>
+        </Box>
       </Collapse>
     </div>
   );
