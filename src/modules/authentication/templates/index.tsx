@@ -108,6 +108,7 @@ const AuthenticationModal = React.forwardRef<
               );
             else props.closeModal();
           }}
+          buttonText="Ingresar"
           title={"¡Ya cuentas con acceso!"}
           response={
             <Typography
@@ -136,8 +137,8 @@ const AuthenticationModal = React.forwardRef<
               >
                 {form.doc ?? "[# documento]"}
               </Typography>{" "}
-              ya contaba con acceso a la tienda. No es necesario enviar una
-              solicitud de acceso.
+              ya contaba con acceso a la plataforma de beneficios. No es
+              necesario enviar una solicitud de acceso.
             </Typography>
           }
         />

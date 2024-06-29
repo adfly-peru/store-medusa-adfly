@@ -343,7 +343,7 @@ const RequestModal = React.forwardRef<
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          placeholder="DNI"
+                          placeholder="Selecciona Tipo Documento"
                           variant="outlined"
                           size="small"
                           error={!!errors.documenttype}
@@ -371,7 +371,7 @@ const RequestModal = React.forwardRef<
                   N° Documento
                 </InputLabel>
                 <TextField
-                  placeholder="12345678"
+                  placeholder="Ingresa n° documento"
                   variant="outlined"
                   fullWidth
                   size="small"

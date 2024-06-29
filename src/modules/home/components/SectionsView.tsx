@@ -64,16 +64,16 @@ const SectionsView = () => {
                 fontSize: 40,
                 borderRadius: "8px",
                 padding: "25px 40px",
-                backgroundColor: theme.palette.secondary.main,
-                border: `2px solid ${theme.palette.primary.main}`,
-                color: theme.palette.primary.main,
+                backgroundColor: theme.palette.primary.main,
+                border: `2px solid ${theme.palette.secondary.main}`,
+                color: theme.palette.secondary.main,
               })}
               onClick={() => router.push("/search?type=product")}
             >
               <Icon icon={"bx:store"} />
             </IconButton>
             <Typography fontSize={16} fontWeight={600}>
-              Compras Online
+              Tienda Online
             </Typography>
           </Stack>
         ) : (
@@ -148,7 +148,7 @@ const SectionsView = () => {
                   fontWeight={600}
                   sx={{ lineHeight: "1.5" }}
                 >
-                  Compras Online
+                  Tienda Online
                 </Typography>
               </Stack>
               <Typography
@@ -188,9 +188,9 @@ const SectionsView = () => {
                 fontSize: 40,
                 borderRadius: "8px",
                 padding: "25px 40px",
-                backgroundColor: theme.palette.secondary.main,
-                border: `2px solid ${theme.palette.primary.main}`,
-                color: theme.palette.primary.main,
+                backgroundColor: theme.palette.primary.main,
+                border: `2px solid ${theme.palette.secondary.main}`,
+                color: theme.palette.secondary.main,
               }}
               onClick={() => router.push("/search?type=coupon")}
             >

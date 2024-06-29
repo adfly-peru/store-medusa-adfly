@@ -22,6 +22,7 @@ const SearchProducts = () => {
           paddingLeft: "117px",
           paddingRight: "117px",
         },
+        marginBottom: 15,
       })}
     >
       <InstantSearch

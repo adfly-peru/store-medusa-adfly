@@ -111,7 +111,7 @@ const SectionDetails = () => {
               <Icon fontSize={40} icon={"ic:outline-discount"} />
             </Stack>
           </ToggleButton>
-          {storeDesign?.ispremium && (
+          {/* {storeDesign?.ispremium && (
             <ToggleButton key="marketplace" value="marketplace" disabled>
               <Stack direction="row" alignItems="center" spacing={2}>
                 {!isMdDown && (
@@ -134,7 +134,7 @@ const SectionDetails = () => {
                 <Icon fontSize={40} icon="material-symbols:stars-outline" />
               </Stack>
             </ToggleButton>
-          )}
+          )} */}
         </ToggleButtonGroup>
       </Stack>
     </Stack>

@@ -11,8 +11,10 @@ import {
 } from "@mui/material";
 import React from "react";
 import PricesRange from "./PricesRange";
+import { useRouter } from "next/router";
 
 const Filters = () => {
+  const { query } = useRouter();
   const { handleApplyFilters } = useFilters();
 
   return (
@@ -51,15 +53,17 @@ const Filters = () => {
           })}
         />
         <CustomRefinementList label={"Marca"} attribute={"brand_name"} />
-        <Divider
-          sx={(theme) => ({
-            fontWeight: 600,
-            fontSize: 16,
-            border: `1px solid ${theme.palette.grey[200]}`,
-            margin: "10px 15px",
-          })}
-        />
-        <PricesRange />
+        {query.type === "product" && (
+          <Divider
+            sx={(theme) => ({
+              fontWeight: 600,
+              fontSize: 16,
+              border: `1px solid ${theme.palette.grey[200]}`,
+              margin: "10px 15px",
+            })}
+          />
+        )}
+        {query.type === "product" && <PricesRange />}
         <Divider
           sx={(theme) => ({
             fontWeight: 600,

@@ -231,7 +231,7 @@ const AppHeader = () => {
               >
                 <MenuIcon />
               </IconButton>
-              <Divider
+              {/* <Divider
                 orientation="vertical"
                 sx={(theme) => ({
                   height: "22px",
@@ -261,7 +261,7 @@ const AppHeader = () => {
                 >
                   Entrega en Lima
                 </Button>
-              </Box>
+              </Box> */}
             </Stack>
             <SearchComponent />
             <Stack direction="row" sx={{ gap: "20px" }} alignItems="center">
@@ -464,7 +464,7 @@ const AppHeader = () => {
             </Stack>
           </Stack>
         </Stack>
-        <Stack
+        {/* <Stack
           sx={(theme) => ({
             [theme.breakpoints.up("md")]: {
               display: "none",
@@ -513,7 +513,7 @@ const AppHeader = () => {
               Ingresa tu ubicación
             </Button>
           </Stack>
-        </Stack>
+        </Stack> */}
         {breadcrumbs && (
           <Stack
             sx={(theme) => ({

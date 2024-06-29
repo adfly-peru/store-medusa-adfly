@@ -10,7 +10,7 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRefinementList } from "react-instantsearch";
 
 const CustomRefinementList = React.forwardRef<
@@ -23,7 +23,7 @@ const CustomRefinementList = React.forwardRef<
   const [open, setOpen] = React.useState(true);
   const [searchValue, setSearchValue] = React.useState("");
   const { filters, setFilters } = useFilters();
-  const { items } = useRefinementList({
+  const { items, refine } = useRefinementList({
     attribute: props.attribute,
   });
 
@@ -36,6 +36,7 @@ const CustomRefinementList = React.forwardRef<
   };
 
   const handleCheckboxClick = (itemLabel: string) => {
+    refine(itemLabel);
     setFilters((prevFilters) => {
       const newFilters = { ...prevFilters };
       const currentItems = newFilters[props.attribute] || [];

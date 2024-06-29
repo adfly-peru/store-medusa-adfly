@@ -12,12 +12,13 @@ import {
   Stack,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React from "react";
 import { useSession } from "next-auth/react";
 import BaseModal from "@modules/components/BaseModal";
 import { useRegister } from "./Context";
-import { VisibilityOff, Visibility } from "@mui/icons-material";
+import { VisibilityOff, Visibility, Check } from "@mui/icons-material";
 import { Controller, useForm } from "react-hook-form";
 import CustomPhoneInput from "@modules/components/PhoneInput";
 import { isValidPhoneNumber } from "react-phone-number-input";
@@ -36,6 +37,7 @@ interface FormValues {
 }
 
 const FormModal = React.forwardRef<HTMLDivElement>(() => {
+  const theme = useTheme();
   const { onClose, registerForm, handleRegister } = useRegister();
   const { data: session } = useSession();
   const [showPassword, setShowPassword] = React.useState(false);
@@ -47,6 +49,7 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
     formState: { errors },
     control,
     setValue,
+    watch,
   } = useForm<FormValues>({
     defaultValues: {
       email: registerForm.email,
@@ -59,6 +62,8 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
       },
     },
   });
+
+  const verifyPassword = watch("password");
 
   const onSubmit = async (data: FormValues) => {
     setLoginError("");
@@ -196,10 +201,32 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
                 marginLeft: "-10px",
               }}
             >
-              <li>Una mayúscula</li>
-              <li>Una minúscula</li>
-              <li>Un carácter</li>
-              <li>Mínimo 8 letras</li>
+              {requirements.map((requirement, index) => (
+                <li
+                  key={index}
+                  style={{
+                    color: requirement.re.test(verifyPassword)
+                      ? theme.palette.primary.main
+                      : "inherit",
+                  }}
+                >
+                  {requirement.registerLabel}{" "}
+                  {requirement.re.test(verifyPassword) && (
+                    <Check fontSize="inherit" />
+                  )}
+                </li>
+              ))}
+              <li
+                style={{
+                  color:
+                    verifyPassword.length > 7
+                      ? theme.palette.primary.main
+                      : "inherit",
+                }}
+              >
+                Mínimo 8 letras{" "}
+                {verifyPassword.length > 7 && <Check fontSize="inherit" />}
+              </li>
             </ul>
           </Typography>
           <Typography>N° Celular</Typography>
@@ -208,7 +235,7 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
             control={control}
             rules={{
               validate: (value) => {
-                if (!value.number) return true;
+                if (!value.number) return "Este campo es obligatorio";
                 const phoneNumber = parsePhoneNumberFromString(
                   value.number,
                   value.code

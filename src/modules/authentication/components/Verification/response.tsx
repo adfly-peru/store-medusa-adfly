@@ -14,6 +14,7 @@ const ResponseModal = React.forwardRef<
     title: string;
     response: ReactNode;
     goBack: () => Promise<void>;
+    buttonText?: string;
   }
 >((props, _) => {
   const [loading, setLoading] = useState(false);
@@ -70,7 +71,11 @@ const ResponseModal = React.forwardRef<
           }}
           disabled={loading}
         >
-          {loading ? <CircularProgress /> : "Volver al inicio"}
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            props.buttonText ?? "Volver al inicio"
+          )}
         </Button>
       </Stack>
     </Box>

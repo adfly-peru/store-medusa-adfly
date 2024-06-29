@@ -23,9 +23,9 @@ interface FormValues {
 }
 
 export const requirements = [
-  { re: /[0-9]/, label: "Incluye un número" },
-  { re: /[a-z]/, label: "Incluye una letra en minúscula" },
-  { re: /[A-Z]/, label: "Incluye una letra en mayúscula" },
+  { re: /[0-9]/, label: "Incluye un número",  registerLabel: "Un número" },
+  { re: /[a-z]/, label: "Incluye una letra en minúscula", registerLabel: "Una minúscula" },
+  { re: /[A-Z]/, label: "Incluye una letra en mayúscula", registerLabel: "Una mayúscula"  },
   // { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Incluye un símbolo especial" },
 ];
 
