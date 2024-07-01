@@ -20,7 +20,32 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**.adfly.com.pe",
+        hostname: "banner.adfly.com.pe",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "logo.adfly.com.pe",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "categories.adfly.com.pe",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "collaborators-avatar.adfly.com.pe",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "department.adfly.com.pe",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "products.adfly.com.pe",
         port: "",
       },
       {
