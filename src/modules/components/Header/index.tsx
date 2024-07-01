@@ -164,7 +164,7 @@ const AppHeader = () => {
             },
           })}
         >
-          <Image
+          <img
             onClick={() => router.push("/home")}
             sizes="100vw"
             width={10}
@@ -179,7 +179,7 @@ const AppHeader = () => {
             }
             alt={"store"}
           />
-          <Image
+          <img
             sizes="100vw"
             width={96}
             height={40}
