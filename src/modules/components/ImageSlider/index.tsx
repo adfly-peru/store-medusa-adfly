@@ -68,7 +68,7 @@ export default function ImageSlider({ images }: ImageSliderProps) {
         prevArrow={<SamplePrevArrow />}
         dotsClass="slick-dots slick-dots-products-slider"
         customPaging={(i) => (
-          <Image
+          <img
             height={50}
             width={50}
             style={{}}
@@ -90,7 +90,7 @@ export default function ImageSlider({ images }: ImageSliderProps) {
               margin: "0 auto",
             }}
           >
-            <Image
+            <img
               layout="fill"
               objectFit="contain"
               src={i === "" ? "/Logo Adfly.svg" : i}
@@ -114,7 +114,7 @@ export default function ImageSlider({ images }: ImageSliderProps) {
         margin: "0 auto",
       }}
     >
-      <Image
+      <img
         layout="fill"
         objectFit="contain"
         src={(images[0] ?? "") === "" ? "/Logo Adfly.svg" : images[0]}

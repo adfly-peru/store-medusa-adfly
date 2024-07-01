@@ -43,7 +43,7 @@ const BannerListCard = ({
                 justifyContent: "center",
               }}
             >
-              <Image
+              <img
                 src={
                   b.imgurl === defaultImage && bannerList.banners?.length === 1
                     ? "/default/SimpleBanner.svg"

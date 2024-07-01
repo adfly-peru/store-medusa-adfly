@@ -97,7 +97,7 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
             padding: "10px 0",
           }}
         >
-          <Image
+          <img
             sizes="100vw"
             width={200}
             height={190}

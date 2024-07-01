@@ -60,7 +60,7 @@ const SuborderInformation = ({
             alignItems="center"
           >
             <Stack direction="row" spacing={1}>
-              <Image
+              <img
                 sizes="100vw"
                 width={10}
                 height={50}

@@ -20,7 +20,7 @@ const SectionDetails = () => {
 
   return (
     <Stack spacing={2}>
-      <Image
+      <img
         src={
           type === "coupon"
             ? "/sections/Foto Cupones.svg"

@@ -139,7 +139,7 @@ const RequestModal = React.forwardRef<
               },
             })}
           >
-            <Image
+            <img
               sizes="100vw"
               width={10}
               height={10}

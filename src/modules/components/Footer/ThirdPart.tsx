@@ -16,7 +16,7 @@ const ThirdPart = () => {
           },
         })}
       >
-        <Image
+        <img
           sizes="100vw"
           width={180}
           height={10}

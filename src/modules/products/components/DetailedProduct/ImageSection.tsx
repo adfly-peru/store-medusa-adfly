@@ -44,7 +44,7 @@ export function ProductImages() {
           }}
         />
       </Stack>
-      <ImageSlider images={images} />
+      <imgSlider images={images} />
     </Box>
   );
 }

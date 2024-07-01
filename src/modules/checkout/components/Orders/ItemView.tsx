@@ -11,7 +11,7 @@ const ItemView = ({
 }) => {
   return (
     <Stack direction="row" spacing={1} my={2}>
-      <Image
+      <img
         sizes="100vw"
         width={10}
         height={50}

@@ -90,7 +90,7 @@ const MainBanners = ({
                   position: "relative",
                 }}
               >
-                <Image
+                <img
                   sizes="100vw"
                   width={1100}
                   height={340}
@@ -132,7 +132,7 @@ const MainBanners = ({
             position: "relative",
           }}
         >
-          <Image
+          <img
             sizes="100vw"
             width={1100}
             height={340}

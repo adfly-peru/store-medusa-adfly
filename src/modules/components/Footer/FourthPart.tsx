@@ -37,7 +37,7 @@ const FourthPart = () => {
           },
         })}
       >
-        <Image
+        <img
           sizes="100vw"
           width={154}
           height={10}
