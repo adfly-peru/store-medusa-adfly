@@ -82,7 +82,9 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   };
 
   useEffect(() => {
+    console.log({ data: session?.user });
     if (session?.user) {
+      console.log("Refetch");
       refetch();
     } else {
       setCollaborator(undefined);
