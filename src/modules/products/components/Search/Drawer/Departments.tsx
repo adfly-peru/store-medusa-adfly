@@ -1,6 +1,7 @@
 import { Icon } from "@iconify/react";
 import { ArrowBack } from "@mui/icons-material";
 import {
+  Box,
   Button,
   Collapse,
   Divider,
@@ -126,24 +127,20 @@ const CategorySection = ({
         })}
       />
       {items.length > 5 && (
-        <Button
-          size="small"
-          variant="contained"
-          sx={(theme) => ({
-            width: 280,
-            margin: "20px 20px 0px 20px",
-            [theme.breakpoints.down("lg")]: {
-              width: 220,
-            },
-          })}
-          onClick={handleExpandClick}
-        >
-          {expanded ? "Ver menos" : "Ver todo"}
-          <Icon
-            icon={expanded ? "mdi:chevron-up" : "mdi:chevron-down"}
-            height={20}
-          />
-        </Button>
+        <Box sx={{ padding: "20px 20px 0px 20px" }}>
+          <Button
+            size="small"
+            variant="contained"
+            fullWidth
+            onClick={handleExpandClick}
+          >
+            {expanded ? "Ver menos" : "Ver todo"}
+            <Icon
+              icon={expanded ? "mdi:chevron-up" : "mdi:chevron-down"}
+              height={20}
+            />
+          </Button>
+        </Box>
       )}
     </List>
   );

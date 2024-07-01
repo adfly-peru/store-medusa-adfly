@@ -10,6 +10,7 @@ const AlgoliaDrawer = ({ onClose }: { onClose: () => void }) => {
     <Box
       sx={(theme) => ({
         width: 360,
+        overflow: "auto",
       })}
     >
       <Stack

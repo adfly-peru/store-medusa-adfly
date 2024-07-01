@@ -158,6 +158,7 @@ const PricesRange = React.forwardRef<HTMLDivElement>((_props, _) => {
             onClick={() =>
               pricesRange ? refine([pricesRange.min, pricesRange.max]) : null
             }
+            size="small"
           >
             Aplicar
           </Button>
