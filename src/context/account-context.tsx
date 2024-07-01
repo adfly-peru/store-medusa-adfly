@@ -82,14 +82,14 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   };
 
   useEffect(() => {
-    console.log({ data: session?.user });
-    if (session?.user) {
+    console.log({ data: session?.user?.email });
+    if (session?.user?.email) {
       console.log("Refetch");
       refetch();
     } else {
       setCollaborator(undefined);
     }
-  }, [session?.user, refetch]);
+  }, [session?.user?.email, refetch]);
 
   useEffect(() => {
     const verifySession = async () => {
