@@ -1,9 +1,6 @@
 import { Icon } from "@iconify/react";
 import CustomRefinementList from "@modules/products/components/Search/FiltersBar/RefinementList";
-import { useFilters } from "@modules/products/context/FiltersContext";
 import {
-  Box,
-  Button,
   Divider,
   List,
   ListSubheader,
@@ -15,7 +12,6 @@ import { useRouter } from "next/router";
 
 const Filters = () => {
   const { query } = useRouter();
-  const { handleApplyFilters } = useFilters();
 
   return (
     <Paper

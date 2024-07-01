@@ -37,7 +37,6 @@ interface IFiltersContext {
       | undefined
     >
   >;
-  handleApplyFilters: () => void;
 }
 
 const FiltersContext = createContext<IFiltersContext | null>(null);
@@ -63,30 +62,6 @@ export const FiltersProvider = ({
     max: number;
   }>();
 
-  const handleApplyFilters = () => {
-    const newQuery = { ...router.query };
-    newQuery["brand_name"] = filters["brand_name"];
-    newQuery["campaign_names"] = filters["campaign_names"];
-    newQuery["commercial_name"] = filters["commercial_name"];
-    if (pricesRange) {
-      newQuery["minPrice"] = pricesRange.min.toString();
-      newQuery["maxPrice"] = pricesRange.max.toString();
-    }
-    router.push(
-      {
-        pathname: "/search",
-        query: newQuery,
-      },
-      undefined,
-      { shallow: true }
-    );
-    setFilters({
-      brand_name: [],
-      campaign_names: [],
-      commercial_name: [],
-    });
-  };
-
   return (
     <FiltersContext.Provider
       value={{
@@ -100,7 +75,6 @@ export const FiltersProvider = ({
         setFilters,
         pricesRange,
         setPricesRange,
-        handleApplyFilters,
       }}
     >
       {children}

@@ -1,11 +1,8 @@
 import CustomRefinementList from "@modules/products/components/Search/FiltersBar/RefinementList";
-import { useFilters } from "@modules/products/context/FiltersContext";
-import { Box, Button, Divider, List } from "@mui/material";
+import { Divider, List } from "@mui/material";
 import React from "react";
 
 const Filters = () => {
-  const { handleApplyFilters } = useFilters();
-
   return (
     <List sx={{ width: "100%" }}>
       <CustomRefinementList label={"Marca"} attribute={"brand_name"} />

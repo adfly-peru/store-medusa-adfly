@@ -3,10 +3,29 @@ import ProductCard from "../../ProductCard";
 import { Box, Grid, Typography } from "@mui/material";
 import { Offer } from "generated/graphql";
 import Loader from "@modules/components/LoadingScreen/Loader";
+import { useMemo } from "react";
+
+type AlgoliaHit = {
+  [key: string]: any;
+};
+
+const cleanObjectKeys = (obj: AlgoliaHit): AlgoliaHit => {
+  const cleanedObj: AlgoliaHit = {};
+  for (const key in obj) {
+    const cleanedKey = key.replace(/[^\x20-\x7E]/g, "");
+    cleanedObj[cleanedKey] = obj[key];
+  }
+  return cleanedObj;
+};
 
 const FilteredAlgoliaProducts = () => {
-  const { hits } = useHits();
+  const { hits: dirtyHits } = useHits();
   const { status, error, results } = useInstantSearch();
+
+  const hits = useMemo(
+    () => dirtyHits.map((hit) => cleanObjectKeys(hit)),
+    [dirtyHits]
+  );
 
   return (
     <Box
