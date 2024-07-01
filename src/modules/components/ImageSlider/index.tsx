@@ -91,10 +91,14 @@ export default function ImageSlider({ images }: ImageSliderProps) {
             }}
           >
             <img
-              layout="fill"
-              objectFit="contain"
               src={i === "" ? "/Logo Adfly.svg" : i}
               alt={i}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                position: "absolute",
+              }}
             />
           </Box>
         ))}
@@ -115,10 +119,14 @@ export default function ImageSlider({ images }: ImageSliderProps) {
       }}
     >
       <img
-        layout="fill"
-        objectFit="contain"
         src={(images[0] ?? "") === "" ? "/Logo Adfly.svg" : images[0]}
         alt={images[0]}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          position: "absolute",
+        }}
       />
     </Box>
   );
