@@ -2,30 +2,27 @@ import { AddressInfoForm } from "@interfaces/address-interface";
 import { BillingForm } from "@interfaces/billing";
 import { Cart } from "@interfaces/cart";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { CartQuery } from "generated/graphql";
 
-export const createCart = async (
-  collaboratorid: string
+export const createCartRequest = async (
+  token: string
 ): Promise<string | null> => {
   try {
-    if (typeof window !== "undefined") {
-      if (collaboratorid) {
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_BACKEND_API}/store/cart`,
-          {
-            uuidcollaborator: collaboratorid,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const status = response.status;
-        if (status == 201 || status == 200) {
-          return null;
-        }
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/store/cart`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
       }
+    );
+    const status = response.status;
+    if (status == 201 || status == 200) {
+      return null;
     }
+
     return "Error creating cart";
   } catch (error) {
     return "Error creating cart";
@@ -39,32 +36,27 @@ export interface CouponResponse {
 
 export const generateCouponRequest = async (
   uuid_variant: string,
-  uuid_product: string
+  uuid_product: string,
+  storedToken: string
 ): Promise<CouponResponse> => {
   try {
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem("collaboratortoken");
-      if (storedToken) {
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_BACKEND_API}/store/order/coupon`,
-          {
-            uuid_variant,
-            uuid_product,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: storedToken,
-            },
-          }
-        );
-        const status = response.status;
-        if (status == 201 || status == 200) {
-          const { data } = response.data;
-          console.log(data);
-          return { couponCode: data.couponCode, status: "success" };
-        }
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/store/order/coupon`,
+      {
+        uuid_variant,
+        uuid_product,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: storedToken,
+        },
       }
+    );
+    const status = response.status;
+    if (status == 201 || status == 200) {
+      const { data } = response.data;
+      return { couponCode: data.couponCode, status: "success" };
     }
     return { couponCode: "", status: "failed" };
   } catch (error) {
@@ -81,66 +73,52 @@ interface ManageItemBody {
   operation: string;
 }
 
-export const manageItem = async (
-  data: ManageItemBody
-): Promise<string | null> => {
-  try {
-    if (typeof window !== "undefined") {
-      const response = await axios.put(
-        `${process.env.NEXT_PUBLIC_BACKEND_API}/store/cart`,
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const status = response.status;
-      if (status == 201 || status == 200) {
-        return null;
-      }
+export const manageItem = async (data: ManageItemBody): Promise<void> => {
+  const response = await axios.put(
+    `${process.env.NEXT_PUBLIC_BACKEND_API}/store/cart`,
+    data,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
     }
-    return "Error in manage item";
-  } catch (error) {
-    return "Error in manage item";
+  );
+  const status = response.status;
+  if (status == 201 || status == 200) {
+    return;
   }
+  throw new Error("Failed to add item");
 };
 
 export const editBillingInfo = async (
   uuidcollaborator: string,
   uuidcart: string,
-  billingform: BillingForm
+  billingform: BillingForm,
+  token: string
 ): Promise<string | null> => {
   try {
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem("collaboratortoken");
-      if (storedToken) {
-        const response = await axios.put(
-          `${process.env.NEXT_PUBLIC_BACKEND_API}/store/cart/billing-info`,
-          {
-            uuidcollaborator: uuidcollaborator,
-            uuidcart: uuidcart,
-            phone: billingform.phone == "" ? null : billingform.phone,
-            ruc: billingform.ruc == "" ? null : billingform.ruc,
-            businessname:
-              billingform.businessname == "" ? null : billingform.businessname,
-            fiscaladdress:
-              billingform.fiscaladdress == ""
-                ? null
-                : billingform.fiscaladdress,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: storedToken,
-            },
-          }
-        );
-        const status = response.status;
-        if (status == 201 || status == 200) {
-          return null;
-        }
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/store/cart/billing-info`,
+      {
+        uuidcollaborator,
+        uuidcart,
+        phone: billingform.phone == "" ? null : billingform.phone,
+        ruc: billingform.ruc == "" ? null : billingform.ruc,
+        businessname:
+          billingform.businessname == "" ? null : billingform.businessname,
+        fiscaladdress:
+          billingform.fiscaladdress == "" ? null : billingform.fiscaladdress,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
       }
+    );
+    const status = response.status;
+    if (status == 201 || status == 200) {
+      return null;
     }
     return "Error in billing info";
   } catch (error) {
@@ -152,45 +130,39 @@ export const editDeliveryInfo = async (
   uuidcollaborator: string,
   uuidcart: string,
   addressinfo: AddressInfoForm,
-  uuidcollaboratoraddress: string
+  uuidcollaboratoraddress: string,
+  token: string
 ): Promise<string | null> => {
   try {
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem("collaboratortoken");
-      if (storedToken) {
-        const response = await axios.put(
-          `${process.env.NEXT_PUBLIC_BACKEND_API}/store/cart/delivery-info`,
-          {
-            uuidcollaborator: uuidcollaborator,
-            uuidcart: uuidcart,
-            uuidcollaboratoraddress: uuidcollaboratoraddress,
-            receivername:
-              addressinfo.receivername == "" ? null : addressinfo.receivername,
-            receiverdocumentkind:
-              addressinfo.receiverdocumentkind == ""
-                ? null
-                : addressinfo.receiverdocumentkind,
-            receiverdocumentnumber:
-              addressinfo.receiverdocumentnumber == ""
-                ? null
-                : addressinfo.receiverdocumentnumber,
-            phonenumber:
-              addressinfo.receiverphone == ""
-                ? null
-                : addressinfo.receiverphone,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: storedToken,
-            },
-          }
-        );
-        const status = response.status;
-        if (status == 201 || status == 200) {
-          return null;
-        }
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/store/cart/delivery-info`,
+      {
+        uuidcollaborator,
+        uuidcart,
+        uuidcollaboratoraddress,
+        receivername:
+          addressinfo.receivername == "" ? null : addressinfo.receivername,
+        receiverdocumentkind:
+          addressinfo.receiverdocumentkind == ""
+            ? null
+            : addressinfo.receiverdocumentkind,
+        receiverdocumentnumber:
+          addressinfo.receiverdocumentnumber == ""
+            ? null
+            : addressinfo.receiverdocumentnumber,
+        phonenumber:
+          addressinfo.receiverphone == "" ? null : addressinfo.receiverphone,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
       }
+    );
+    const status = response.status;
+    if (status == 201 || status == 200) {
+      return null;
     }
     return "Error in delivery info";
   } catch (error) {
@@ -198,41 +170,59 @@ export const editDeliveryInfo = async (
   }
 };
 
+export const selectAddressMethod = async (
+  uuidcart: string,
+  uuidcollaborator: string,
+  uuidcollaboratoraddress: string,
+  token: string
+) => {
+  const response = await axios.put(
+    `${process.env.NEXT_PUBLIC_BACKEND_API}/store/cart/delivery-info`,
+    {
+      uuidcollaborator,
+      uuidcart,
+      uuidcollaboratoraddress,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    }
+  );
+  const status = response.status;
+  if (status == 201 || status == 200) {
+    return null;
+  }
+  throw new Error("Error on select address");
+};
+
 export const editDeliveryMethod = async (
+  storedToken: string,
   uuidcartsuborder: string,
   deliverymethod: string,
   uuidaddress: string,
   uuid_promotion?: string
 ): Promise<string | null> => {
-  try {
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem("collaboratortoken");
-      if (storedToken) {
-        const response = await axios.put(
-          `${process.env.NEXT_PUBLIC_BACKEND_API}/store/cart/delivery-method`,
-          {
-            uuidcartsuborder: uuidcartsuborder,
-            deliverymethod: deliverymethod,
-            uuidadddress: uuidaddress,
-            uuid_promotion,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: storedToken,
-            },
-          }
-        );
-        const status = response.status;
-        if (status == 201 || status == 200) {
-          return null;
-        }
-      }
+  const response = await axios.put(
+    `${process.env.NEXT_PUBLIC_BACKEND_API}/store/cart/delivery-method`,
+    {
+      uuidcartsuborder: uuidcartsuborder,
+      deliverymethod: deliverymethod,
+      uuidadddress: uuidaddress,
+      uuid_promotion,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: storedToken,
+      },
     }
-    return "Error in delivery info";
-  } catch (error) {
-    return "Error in delivery info";
-  }
+  );
+  const status = response.status;
+  if (status == 201 || status == 200) return null;
+
+  return "Error in delivery info";
 };
 
 interface AdflyResponse {
@@ -245,7 +235,7 @@ interface AdflyResponse {
 
 export const payCart = async (
   purchaseNumber: string,
-  cartdata: Cart,
+  cartdata: NonNullable<CartQuery["cart"]>,
   amount: number,
   stars: number
 ) => {

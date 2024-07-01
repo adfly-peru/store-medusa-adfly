@@ -1,7 +1,6 @@
-import { GET_CART_WITH_PROMOTIONS } from "@graphql/cart/queries";
-import { Cart } from "@interfaces/cart";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import { PromotionsCartDocument, PromotionsCartQuery } from "generated/graphql";
 
 const client = new ApolloClient({
   link: new HttpLink({
@@ -24,14 +23,18 @@ interface AdflyResponse {
 export default async function handler(req: any, res: any) {
   if (req.method === "POST") {
     const { transactionToken } = req.body;
-    const { purchaseNumber, amount, collaboratorid, stars } = req.query;
+    const { purchaseNumber, amount, stars, accessToken } = req.query;
 
     try {
-      const { data } = await client.query<{ getCart: Cart }>({
-        query: GET_CART_WITH_PROMOTIONS,
-        variables: { collaboratorId: collaboratorid },
+      const { data } = await client.query<PromotionsCartQuery>({
+        query: PromotionsCartDocument,
+        context: {
+          headers: {
+            Authorization: accessToken,
+          },
+        },
       });
-      const cartdata = data.getCart;
+      const cartdata = data.cart!;
       const hasReceiverName =
         (cartdata.deliveryInfo?.receivername?.length ?? 0) > 0;
       const hasRUC = (cartdata.billingInfo?.ruc?.length ?? 0) > 0;
@@ -100,8 +103,9 @@ export default async function handler(req: any, res: any) {
         }
       }
     } catch (error) {
-      const axiosError = error as AxiosError<AdflyResponse>;
+      console.error({ error });
       let errorToSend = `Error al hacer la solicitud: ${JSON.stringify(error)}`;
+      const axiosError = error as AxiosError<AdflyResponse>;
       let errorDataResponse = JSON.stringify(axiosError);
       if (axiosError && axiosError.response) {
         errorToSend = `Error: ${JSON.stringify(axiosError.response.data)}`;

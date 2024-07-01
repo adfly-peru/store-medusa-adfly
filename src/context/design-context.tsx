@@ -1,49 +1,35 @@
-import { useQuery } from "@apollo/client";
-import { GET_LOGIN__DESIGN } from "@graphql/design/queries";
-import { DesignConfig } from "@interfaces/design";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { ApolloError } from "@apollo/client";
+import Loader from "@modules/components/LoadingScreen/Loader";
+import { Theme, ThemeProvider, createTheme } from "@mui/material";
+import baseTheme from "@styles/theme";
+import { StoreDesignQuery, useStoreDesignQuery } from "generated/graphql";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-interface DesignContext {
-  loginDesign: DesignConfig | null;
-  error: string | null;
+interface DesignContextProps {
+  storeDesign?: StoreDesignQuery["storeDesign"];
+  theme?: Theme;
+  loading: boolean;
+  error?: ApolloError;
 }
 
-const DesignContext = createContext<DesignContext | null>(null);
+const DesignContext = createContext<DesignContextProps | null>(null);
 
 interface DesignProviderProps {
   children?: React.ReactNode;
 }
 
 export const DesignProvider = ({ children }: DesignProviderProps) => {
-  const [error, setError] = useState<string | null>(null);
   const [subdomain, setSubdomain] = useState<string | null>(null);
-  const [loginDesign, setLoginDesign] = useState<DesignConfig | null>(null);
-  const {
-    data,
-    error: errorQuery,
-    loading,
-    refetch,
-  } = useQuery<{
-    loginDesign: DesignConfig;
-  }>(GET_LOGIN__DESIGN, { variables: { subdomain }, skip: !subdomain });
-
-  const fetchLoginDesign = async () => {
-    if (data) {
-      setLoginDesign(data.loginDesign);
-    } else {
-      setError("No se pudo obtener el diseño de login");
-    }
-  };
-
-  useEffect(() => {
-    fetchLoginDesign();
-  }, [data]);
-
-  useEffect(() => {
-    if (errorQuery) {
-      setError("Error al obtener el diseño: " + error);
-    }
-  }, [errorQuery]);
+  const { data, loading, error } = useStoreDesignQuery({
+    variables: { subdomain: subdomain ?? "" },
+    skip: !subdomain,
+  });
 
   useEffect(() => {
     const obtenerSubDominio = () => {
@@ -52,18 +38,55 @@ export const DesignProvider = ({ children }: DesignProviderProps) => {
       if (partes.length > 2) {
         setSubdomain(partes[0]);
       } else {
-        setError("No se encuentra un subdominio en la URL");
+        setSubdomain("tiendajuandev");
       }
     };
     obtenerSubDominio();
   }, []);
 
+  const theme = useMemo(() => {
+    if (data?.storeDesign) {
+      const newTheme = createTheme({
+        breakpoints: {
+          values: {
+            xs: 0,
+            sm: 375,
+            msm: 949,
+            md: 834,
+            lg: 1440,
+            xl: 1536,
+          } as any,
+        },
+        palette: {
+          primary: {
+            main: data.storeDesign.backcolor || "#31658E",
+            contrastText: data.storeDesign.fontcolor || "#ffffff",
+          },
+          secondary: {
+            main: data.storeDesign.fontcolor || "#ffffff",
+            contrastText: data.storeDesign.backcolor || "#31658E",
+          },
+          grey: {
+            200: "#C7CACD",
+            300: "#8F959B",
+            400: "#8F959B",
+            500: "#737A82",
+            600: "#5C6268",
+            700: "#45494E",
+            800: "#2E3134",
+            900: "#242529",
+          },
+        },
+      });
+
+      return createTheme(newTheme, baseTheme(newTheme));
+    }
+    return;
+  }, [data]);
+
   return (
     <DesignContext.Provider
-      value={{
-        loginDesign,
-        error,
-      }}
+      value={{ storeDesign: data?.storeDesign, theme, loading, error }}
     >
       {children}
     </DesignContext.Provider>
@@ -77,4 +100,18 @@ export const useDesign = () => {
     throw new Error("useDesign must be used within a DesignProvider");
   }
   return context;
+};
+
+export const DesignContainer = ({
+  children,
+}: {
+  children?: React.ReactNode;
+}) => {
+  const { theme, error, loading } = useDesign();
+
+  if (loading) return <Loader />;
+  if (error) return <div>{error.message}</div>;
+  if (!theme) return <Loader />;
+
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 };

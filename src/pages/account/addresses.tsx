@@ -1,11 +1,11 @@
-import Layout from "@modules/layout/templates";
-import AccountAddresses from "@modules/account/templates/account-addresses";
+import AddressesTable from "@modules/account/components/Address/AddressesTable";
+import AccountLayout from "@modules/account/templates/AccountLayout";
 
 const AddressesPage = () => {
   return (
-    <Layout>
-      <AccountAddresses />
-    </Layout>
+    <AccountLayout>
+      <AddressesTable />
+    </AccountLayout>
   );
 };
 

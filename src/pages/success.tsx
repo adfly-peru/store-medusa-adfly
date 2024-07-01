@@ -1,7 +1,5 @@
-import Layout from "@modules/layout/templates";
+import SuccessMessage from "@modules/components/Success";
 import { useRouter } from "next/router";
-import { Center } from "@mantine/core";
-import SuccessMessage from "@modules/layout/components/success-message";
 
 const SuccesPage = () => {
   const router = useRouter();
@@ -9,13 +7,7 @@ const SuccesPage = () => {
   const orderData = data
     ? JSON.parse(data === "undefined" ? "{}" : (data as string))
     : null;
-  return (
-    <Layout>
-      <Center>
-        <SuccessMessage number={number} id={id} niubizData={orderData} />
-      </Center>
-    </Layout>
-  );
+  return <SuccessMessage number={number} id={id} niubizData={orderData} />;
 };
 
 export default SuccesPage;

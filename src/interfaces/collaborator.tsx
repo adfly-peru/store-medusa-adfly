@@ -23,12 +23,12 @@ export interface Collaborator {
 }
 
 export interface Preferences {
-  whatdoyouwant?: string[];
-  topproducts?: string[];
-  topservices?: string[];
-  toppromotions?: string[];
-  prefercommunication?: string[];
-  otherprefercommunication?: string;
+  whatdoyouwant?: string[] | null;
+  topproducts?: string[] | null;
+  topservices?: string[] | null;
+  toppromotions?: string[] | null;
+  prefercommunication?: string[] | null;
+  otherprefercommunication?: string | null;
 }
 
 export interface ProfileForm {
