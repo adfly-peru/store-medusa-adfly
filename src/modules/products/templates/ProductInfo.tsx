@@ -18,8 +18,12 @@ const ProductInfo = () => {
 
   const product = data?.offerForCollaborator;
 
-  if (!product || loading) {
+  if (loading) {
     return <Loader />;
+  }
+
+  if (!product) {
+    return <div>Product not found</div>;
   }
 
   return (
