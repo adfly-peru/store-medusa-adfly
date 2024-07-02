@@ -59,7 +59,7 @@ const ProviderModal = React.forwardRef<
         .then((result) => {
           if (!result?.ok)
             setLoginError(
-              "Contraseña incorrecta, por favor verifique que sea correcto"
+              "El correo electrónico con el que intentas iniciar sesión no coincide con el vinculado a tu cuenta. Por favor, verifica y vuelve a intentarlo"
             );
           else props.onClose();
         })
