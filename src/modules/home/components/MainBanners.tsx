@@ -1,11 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import { useDesign } from "@context/design-context";
-import Loader from "@modules/components/LoadingScreen/Loader";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Box, Container, IconButton } from "@mui/material";
-import { useBannersQuery } from "generated/graphql";
-import Image from "next/image";
-import { useMemo } from "react";
 import Slider from "react-slick";
 import { defaultImage } from "./BannersListCard";
 import { useRouter } from "next/router";
@@ -106,6 +101,7 @@ const MainBanners = ({
                     objectFit: "cover",
                     objectPosition: "center",
                     cursor: "pointer",
+                    aspectRatio: "1100 / 340",
                   }}
                   src={
                     i.img === "" || i.img === defaultImage
@@ -154,6 +150,7 @@ const MainBanners = ({
               objectFit: "cover",
               objectPosition: "center",
               cursor: "pointer",
+              aspectRatio: "1100 / 340",
             }}
             src={
               bannersList[0].img === "" || bannersList[0].img === defaultImage

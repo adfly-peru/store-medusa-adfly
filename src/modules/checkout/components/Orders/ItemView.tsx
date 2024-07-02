@@ -1,6 +1,5 @@
 import { Stack, Typography } from "@mui/material";
 import { CartItem } from "generated/graphql";
-import Image from "next/image";
 
 const ItemView = ({
   item,

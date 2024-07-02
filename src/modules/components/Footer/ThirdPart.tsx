@@ -1,6 +1,5 @@
 import { Icon } from "@iconify/react";
 import { Stack, Typography, Box } from "@mui/material";
-import Image from "next/image";
 
 const ThirdPart = () => {
   return (

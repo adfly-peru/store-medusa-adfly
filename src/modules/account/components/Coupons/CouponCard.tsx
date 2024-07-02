@@ -1,4 +1,3 @@
-import BaseModal from "@modules/components/BaseModal";
 import BasicTabs from "@modules/components/TabPanel";
 import { Close } from "@mui/icons-material";
 import {
@@ -16,8 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import { CouponUsage } from "generated/graphql";
-import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 const CouponDetailModal = ({
   coupon,
@@ -172,7 +170,7 @@ const CouponCard = ({ coupon }: { coupon: CouponUsage }) => {
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" spacing={1}>
           <Stack spacing={2}>
-            <Image
+            <img
               src={
                 (coupon.variant?.imageURL ?? "") === ""
                   ? "/Logo Adfly.svg"

@@ -20,7 +20,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import { Controller, useForm } from "react-hook-form";
 import { ArrowBack } from "@mui/icons-material";
 import { documentTypes } from "./login";

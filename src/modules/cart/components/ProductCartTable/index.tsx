@@ -4,7 +4,6 @@ import {
   GridColDef,
   GridRowParams,
 } from "@mui/x-data-grid";
-import Image from "next/image";
 import {
   Backdrop,
   Box,

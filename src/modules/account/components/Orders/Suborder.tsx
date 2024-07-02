@@ -6,7 +6,6 @@ import {
 } from "@modules/common/types";
 import { Divider, Stack, Typography } from "@mui/material";
 import { Suborder } from "generated/graphql";
-import Image from "next/image";
 
 const SuborderInformation = ({
   suborder,

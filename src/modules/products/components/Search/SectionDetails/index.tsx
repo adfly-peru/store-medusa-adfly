@@ -8,7 +8,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import Image from "next/image";
 import { useRouter } from "next/router";
 
 const SectionDetails = () => {

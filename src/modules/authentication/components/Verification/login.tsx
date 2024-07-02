@@ -13,7 +13,6 @@ import {
   Autocomplete,
 } from "@mui/material";
 import React, { useState } from "react";
-import Image from "next/image";
 import { Controller, useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useDesign } from "@context/design-context";

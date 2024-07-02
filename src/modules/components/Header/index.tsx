@@ -22,7 +22,6 @@ import {
   Breadcrumbs,
   Link,
 } from "@mui/material";
-import Image from "next/image";
 import SearchComponent from "./algolia-search";
 import { signOut, useSession } from "next-auth/react";
 import { useAccount } from "@context/account-context";

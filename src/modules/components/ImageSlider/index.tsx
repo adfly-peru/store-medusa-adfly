@@ -1,7 +1,6 @@
 import { NavigateNext, NavigateBefore } from "@mui/icons-material";
 import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import Slider from "react-slick";
-import Image from "next/image";
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;

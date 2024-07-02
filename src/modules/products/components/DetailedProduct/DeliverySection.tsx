@@ -14,7 +14,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import Image from "next/image";
 
 export function Delivery() {
   const theme = useTheme();
