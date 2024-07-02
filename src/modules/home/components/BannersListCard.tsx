@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 import { Box, Stack } from "@mui/material";
 import { SecondaryBannersList } from "generated/graphql";
-import Image from "next/image";
+import { useRouter } from "next/router";
 
 export const defaultImage = "https://via.placeholder.com/400";
 
@@ -9,6 +10,7 @@ const BannerListCard = ({
 }: {
   bannerList: Partial<SecondaryBannersList>;
 }) => {
+  const { push } = useRouter();
   return (
     <Stack direction="row" justifyContent="center">
       <Box
@@ -36,7 +38,7 @@ const BannerListCard = ({
         >
           {bannerList.banners?.map((b, index) => (
             <Box
-              key={b.linkurl}
+              key={index}
               sx={{
                 flex: "1 1 0",
                 display: "flex",
@@ -44,6 +46,9 @@ const BannerListCard = ({
               }}
             >
               <img
+                onClick={() =>
+                  (b.linkurl ?? "").length > 1 ? push(b.linkurl ?? "") : null
+                }
                 src={
                   b.imgurl === defaultImage && bannerList.banners?.length === 1
                     ? "/default/SimpleBanner.svg"
@@ -58,6 +63,7 @@ const BannerListCard = ({
                   width: "100%",
                   height: "auto",
                   objectFit: "contain",
+                  cursor: "pointer",
                 }}
                 alt={b.linkurl}
               />

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useDesign } from "@context/design-context";
 import Loader from "@modules/components/LoadingScreen/Loader";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
@@ -7,6 +8,7 @@ import Image from "next/image";
 import { useMemo } from "react";
 import Slider from "react-slick";
 import { defaultImage } from "./BannersListCard";
+import { useRouter } from "next/router";
 
 function SampleNextArrow(props: any) {
   const { onClick } = props;
@@ -58,6 +60,7 @@ const MainBanners = ({
     link: string | null | undefined;
   }[];
 }) => {
+  const { push } = useRouter();
   if (!bannersList.length) return <div></div>;
 
   if (bannersList.length > 1)
@@ -91,6 +94,9 @@ const MainBanners = ({
                 }}
               >
                 <img
+                  onClick={() =>
+                    (i.link ?? "").length > 1 ? push(i.link ?? "") : null
+                  }
                   sizes="100vw"
                   width={1100}
                   height={340}
@@ -99,6 +105,7 @@ const MainBanners = ({
                     height: "auto",
                     objectFit: "cover",
                     objectPosition: "center",
+                    cursor: "pointer",
                   }}
                   src={
                     i.img === "" || i.img === defaultImage
@@ -133,6 +140,11 @@ const MainBanners = ({
           }}
         >
           <img
+            onClick={() =>
+              (bannersList[0].link ?? "").length > 1
+                ? push(bannersList[0].link ?? "")
+                : null
+            }
             sizes="100vw"
             width={1100}
             height={340}
@@ -141,6 +153,7 @@ const MainBanners = ({
               height: "auto",
               objectFit: "cover",
               objectPosition: "center",
+              cursor: "pointer",
             }}
             src={
               bannersList[0].img === "" || bannersList[0].img === defaultImage
