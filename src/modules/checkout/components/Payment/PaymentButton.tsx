@@ -1,6 +1,7 @@
 import { useAccount } from "@context/account-context";
 import { useCart } from "@context/cart-context";
 import { useCheckout } from "@modules/checkout/context/CheckoutContext";
+import { formatPrice } from "@modules/common/functions/format-number";
 import { Button } from "@mui/material";
 import { payCart } from "api/cart";
 import axios from "axios";
@@ -50,11 +51,11 @@ const PaymentButton = () => {
     useCheckout();
 
   const starsValue = useMemo(
-    () => (collaborator?.stars ?? 0) / 100,
+    () => formatPrice((collaborator?.stars ?? 0) / 100),
     [collaborator?.stars]
   );
   const starsDiscount = useMemo(
-    () => Math.min(starsValue, finalPrice),
+    () => formatPrice(Math.min(starsValue, finalPrice)),
     [starsValue, finalPrice]
   );
 
@@ -67,7 +68,7 @@ const PaymentButton = () => {
   const handlerPayment = async () => {
     if (!collaborator || !cart) return;
     await handlerBillingInfo();
-    const priceToPay = finalPrice - (useStars ? starsDiscount : 0);
+    const priceToPay = formatPrice(finalPrice - (useStars ? starsDiscount : 0));
     if (priceToPay === 0 && useStars) {
       const routeResponse = await payCart(
         cart.purchaseNumber,
@@ -90,7 +91,6 @@ const PaymentButton = () => {
     // amplitude.track("Boton de Pago Clickeado", {
     //   purchaseNumber: cart.purchaseNumber,
     // })
-
     (window as any).VisanetCheckout.configure({
       sessiontoken: `${sessionToken}`,
       channel: "web",

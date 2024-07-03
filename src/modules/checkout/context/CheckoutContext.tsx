@@ -3,6 +3,7 @@ import { useCart } from "@context/cart-context";
 import { AddressInfoForm } from "@interfaces/address-interface";
 import { BillingForm } from "@interfaces/billing";
 import { CartPromotions } from "@interfaces/promotion";
+import { formatPrice } from "@modules/common/functions/format-number";
 import {
   editDeliveryInfo,
   editDeliveryMethod,
@@ -178,10 +179,12 @@ export const CheckoutProvider = ({
 
   const finalPrice = useMemo(
     () =>
-      (cart?.total ?? 0) +
-      (totalDelivery ?? 0) -
-      (promotions.CartPromotion?.Discount ?? 0) -
-      (partnersPromotionsDiscount ?? 0),
+      formatPrice(
+        (cart?.total ?? 0) +
+          (totalDelivery ?? 0) -
+          (promotions.CartPromotion?.Discount ?? 0) -
+          (partnersPromotionsDiscount ?? 0)
+      ),
     [
       cart?.total,
       totalDelivery,
