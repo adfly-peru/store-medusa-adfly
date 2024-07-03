@@ -9,11 +9,14 @@ import {
   Divider,
   IconButton,
   Stack,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { useRouter } from "next/router";
+import { type } from "os";
 
 const SectionsView = () => {
   const theme = useTheme();
@@ -42,41 +45,192 @@ const SectionsView = () => {
         },
       })}
     >
-      <Stack
-        direction="row"
-        justifyContent="center"
-        sx={(theme) => ({
-          gap: "160px",
-          [theme.breakpoints.down("lg")]: { gap: "120px" },
-          [theme.breakpoints.down(1261)]: { gap: "70px" },
-          [theme.breakpoints.down(1121)]: { gap: "20px" },
-        })}
-      >
-        {isMdDown ? (
-          <Stack
-            sx={{ width: "100%" }}
-            justifyContent="center"
-            alignItems="center"
-            spacing={2}
+      {isMdDown ? (
+        <Stack direction="row" justifyContent="center" alignItems="center">
+          <ToggleButtonGroup
+            value={type || ""}
+            exclusive
+            onChange={(_, val) => {
+              router.push({
+                pathname: "/search",
+                query: {
+                  type: val,
+                },
+              });
+            }}
+            sx={(theme) => ({
+              alignSelf: "center",
+              marginBottom: "10px !important",
+              borderRadius: "20px",
+              "& .MuiToggleButton-root": {
+                paddingTop: "12px",
+                paddingBottom: "12px",
+                width: "224px",
+                fontSize: 24,
+                borderRight: `1px solid ${theme.palette.grey[200]}`,
+                borderLeft: `1px solid ${theme.palette.grey[200]}`,
+                borderBottom: "8px solid",
+                backgroundColor: "white",
+                color: `${theme.palette.primary.main}`,
+                "&.MuiToggleButtonGroup-firstButton": {
+                  borderTopLeftRadius: "10px",
+                  borderBottomLeftRadius: "10px",
+                },
+                "&.MuiToggleButtonGroup-lastButton": {
+                  borderTopRightRadius: "10px",
+                  borderBottomRightRadius: "10px",
+                },
+              },
+            })}
           >
-            <IconButton
-              sx={(theme) => ({
-                fontSize: 40,
-                borderRadius: "8px",
-                padding: "25px 40px",
-                backgroundColor: theme.palette.primary.main,
-                border: `2px solid ${theme.palette.secondary.main}`,
-                color: theme.palette.secondary.main,
-              })}
-              onClick={() => router.push("/search?type=product")}
-            >
-              <Icon icon={"bx:store"} />
-            </IconButton>
-            <Typography fontSize={16} fontWeight={600}>
-              Tienda Online
-            </Typography>
-          </Stack>
-        ) : (
+            <ToggleButton key="product" value="product">
+              <Stack
+                alignItems="center"
+                spacing={2}
+                sx={(theme) => ({
+                  fontSize: 40,
+                  [theme.breakpoints.down("lg")]: {
+                    fontSize: 36,
+                  },
+                  [theme.breakpoints.down("md")]: {
+                    fontSize: 30,
+                  },
+                })}
+              >
+                <Icon fontSize="inherit" icon={"bx:store"} />
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: 20,
+                    [theme.breakpoints.down("lg")]: {
+                      fontSize: 16,
+                    },
+                    [theme.breakpoints.down("md")]: {
+                      fontSize: 14,
+                    },
+                  })}
+                  fontWeight={600}
+                  textTransform="none"
+                >
+                  Tienda
+                </Typography>
+              </Stack>
+            </ToggleButton>
+            <ToggleButton key="coupon" value="coupon">
+              <Stack
+                alignItems="center"
+                spacing={2}
+                sx={(theme) => ({
+                  fontSize: 40,
+                  [theme.breakpoints.down("lg")]: {
+                    fontSize: 36,
+                  },
+                  [theme.breakpoints.down("md")]: {
+                    fontSize: 30,
+                  },
+                })}
+              >
+                <Icon fontSize="inherit" icon={"ic:outline-discount"} />
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: 20,
+                    [theme.breakpoints.down("lg")]: {
+                      fontSize: 16,
+                    },
+                    [theme.breakpoints.down("md")]: {
+                      fontSize: 14,
+                    },
+                  })}
+                  fontWeight={600}
+                  textTransform="none"
+                >
+                  Cupones
+                </Typography>
+              </Stack>
+            </ToggleButton>
+            {/* {storeDesign?.ispremium && (
+            <ToggleButton key="marketplace" value="marketplace" disabled>
+              <Stack
+                alignItems="center"
+                spacing={2}
+                sx={(theme) => ({
+                  fontSize: 40,
+                  [theme.breakpoints.down("lg")]: {
+                    fontSize: 36,
+                  },
+                  [theme.breakpoints.down("md")]: {
+                    fontSize: 30,
+                  },
+                })}
+              >
+                <Icon fontSize="inherit" icon={"mdi:hand-coin-outline"} />
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: 20,
+                    [theme.breakpoints.down("lg")]: {
+                      fontSize: 16,
+                    },
+                    [theme.breakpoints.down("md")]: {
+                      fontSize: 14,
+                    },
+                  })}
+                  fontWeight={600}
+                  textTransform="none"
+                >
+                  Marketplace
+                </Typography>
+              </Stack>
+            </ToggleButton>
+          )}
+          {storeDesign?.ispremium && (
+            <ToggleButton key="benefits" value="benefits" disabled>
+              <Stack
+                alignItems="center"
+                spacing={2}
+                sx={(theme) => ({
+                  fontSize: 40,
+                  [theme.breakpoints.down("lg")]: {
+                    fontSize: 36,
+                  },
+                  [theme.breakpoints.down("md")]: {
+                    fontSize: 30,
+                  },
+                })}
+              >
+                <Icon
+                  fontSize="inherit"
+                  icon="material-symbols:stars-outline"
+                />
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: 20,
+                    [theme.breakpoints.down("lg")]: {
+                      fontSize: 16,
+                    },
+                    [theme.breakpoints.down("md")]: {
+                      fontSize: 14,
+                    },
+                  })}
+                  fontWeight={600}
+                  textTransform="none"
+                >
+                  Beneficios
+                </Typography>
+              </Stack>
+            </ToggleButton>
+          )} */}
+          </ToggleButtonGroup>
+        </Stack>
+      ) : (
+        <Stack
+          direction="row"
+          justifyContent="center"
+          sx={(theme) => ({
+            gap: "160px",
+            [theme.breakpoints.down("lg")]: { gap: "120px" },
+            [theme.breakpoints.down(1261)]: { gap: "70px" },
+            [theme.breakpoints.down(1121)]: { gap: "20px" },
+          })}
+        >
           <Card
             sx={(theme) => ({
               display: "flex",
@@ -175,32 +329,6 @@ const SectionsView = () => {
               </Button>
             </CardContent>
           </Card>
-        )}
-        {isMdDown ? (
-          <Stack
-            sx={{ width: "100%" }}
-            justifyContent="center"
-            alignItems="center"
-            spacing={2}
-          >
-            <IconButton
-              sx={{
-                fontSize: 40,
-                borderRadius: "8px",
-                padding: "25px 40px",
-                backgroundColor: theme.palette.primary.main,
-                border: `2px solid ${theme.palette.secondary.main}`,
-                color: theme.palette.secondary.main,
-              }}
-              onClick={() => router.push("/search?type=coupon")}
-            >
-              <Icon icon={"ic:outline-discount"} />
-            </IconButton>
-            <Typography fontSize={16} fontWeight={600}>
-              Cupones
-            </Typography>
-          </Stack>
-        ) : (
           <Card
             sx={{
               display: "flex",
@@ -299,8 +427,8 @@ const SectionsView = () => {
               })}
             />
           </Card>
-        )}
-      </Stack>
+        </Stack>
+      )}
     </Container>
   );
 };

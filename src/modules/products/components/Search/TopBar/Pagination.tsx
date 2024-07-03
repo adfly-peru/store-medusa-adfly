@@ -19,7 +19,7 @@ const CustomPagination = () => {
       count={nbPages}
       page={currentRefinement + 1}
       boundaryCount={1}
-      siblingCount={0}
+      siblingCount={1}
       onChange={handlePageChange}
     />
   );

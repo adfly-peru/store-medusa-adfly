@@ -66,6 +66,7 @@ export default function ImageSlider({ images }: ImageSliderProps) {
         nextArrow={<SampleNextArrow />}
         prevArrow={<SamplePrevArrow />}
         dotsClass="slick-dots slick-dots-products-slider"
+        className="slick-image-products-slider"
         customPaging={(i) => (
           <img
             height={50}
@@ -83,8 +84,7 @@ export default function ImageSlider({ images }: ImageSliderProps) {
               position: "relative",
               width: matches ? "90%" : 340,
               height: matches ? "auto" : 340,
-              paddingBottom: matches ? undefined : "100%",
-              paddingTop: matches ? "100%" : undefined,
+              paddingBottom: "100%",
               overflow: "hidden",
               margin: "0 auto",
             }}
@@ -111,8 +111,8 @@ export default function ImageSlider({ images }: ImageSliderProps) {
         position: "relative",
         width: matches ? "90%" : 390,
         height: matches ? "auto" : 390,
-        paddingBottom: matches ? undefined : "100%",
-        paddingTop: matches ? "100%" : undefined,
+        paddingBottom: "100%",
+        paddingTop: undefined,
         overflow: "hidden",
         margin: "0 auto",
       }}

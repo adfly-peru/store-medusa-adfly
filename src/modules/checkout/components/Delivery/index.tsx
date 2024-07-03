@@ -78,13 +78,7 @@ const Delivery = () => {
             sx={{
               alignSelf: "flex-end",
             }}
-            onClick={() =>
-              goToOrdersSection(
-                data?.collaboratoraddresses.find(
-                  (add) => add.uuidcollaboratoraddress === address
-                )?.department
-              )
-            }
+            onClick={() => goToOrdersSection(null)}
           >
             Continuar sin dirección de envio
           </Button>

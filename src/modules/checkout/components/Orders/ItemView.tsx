@@ -24,10 +24,12 @@ const ItemView = ({
         }
         alt={item.variant.imageURL}
       />
-      <Stack px={1}>
+      <Stack px={1} gap="6px">
         <Typography variant="h5">{item.variant.offer.offerName}</Typography>
         <Typography variant="body1">{`Cantidad: ${item.quantity}`}</Typography>
-        <Typography variant="body1">{`Subtotal: S/. ${item.subtotal}`}</Typography>
+        <Typography variant="body1">{`Subtotal: S/. ${item.subtotal.toFixed(
+          2
+        )}`}</Typography>
         <Typography variant="body1">{`Vendido y Entregado por: ${businessName}`}</Typography>
       </Stack>
     </Stack>

@@ -31,7 +31,7 @@ const StarsDetails = () => {
           marginLeft: 1,
         }}
       >
-        Valor del pedido: {finalPrice * 100} estrellas
+        Valor del pedido: {(finalPrice * 100).toFixed(0)} estrellas
       </Typography>
       <Typography
         variant="body2"
@@ -49,7 +49,7 @@ const StarsDetails = () => {
         label={`Deseo usar ${Math.min(
           collaborator?.stars ?? 0,
           finalPrice * 100
-        )} estrellas para pagar este pedido.`}
+        ).toFixed(0)} estrellas para pagar este pedido.`}
         sx={{
           marginTop: "2px",
           marginLeft: "5px",

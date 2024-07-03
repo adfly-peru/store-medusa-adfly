@@ -103,7 +103,9 @@ export function DetailedProduct({}: {}) {
             },
           })}
         >
-          <Typography variant="h3">{product.brand.name}</Typography>
+          <Typography variant="h3" fontSize={16}>
+            {product.brand.name}
+          </Typography>
           <Typography variant="body2">
             <Typography fontWeight={700} display="inline" component="span">
               {"SKU: "}
@@ -114,10 +116,16 @@ export function DetailedProduct({}: {}) {
         <Typography
           variant="h1"
           color="black"
+          fontSize={20}
           sx={(theme) => ({
             display: "none",
             [theme.breakpoints.down("md")]: {
-              display: "unset",
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 2,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxHeight: "3em",
             },
           })}
         >
@@ -127,6 +135,7 @@ export function DetailedProduct({}: {}) {
         <Stack spacing={2} width="100%">
           <Typography
             variant="h2"
+            fontSize={16}
             sx={(theme) => ({
               [theme.breakpoints.down("md")]: {
                 display: "none",
@@ -138,7 +147,14 @@ export function DetailedProduct({}: {}) {
           <Typography
             variant="h1"
             color="black"
+            fontSize={20}
             sx={(theme) => ({
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 2,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxHeight: "3em",
               [theme.breakpoints.down("md")]: {
                 display: "none",
               },

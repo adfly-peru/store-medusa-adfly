@@ -35,11 +35,7 @@ export const DesignProvider = ({ children }: DesignProviderProps) => {
     const obtenerSubDominio = () => {
       const { hostname } = window.location;
       const partes = hostname.split(".");
-      if (partes.length > 2) {
-        setSubdomain(partes[0]);
-      } else {
-        setSubdomain("tiendajuandev");
-      }
+      if (partes.length > 2) setSubdomain(partes[0]);
     };
     obtenerSubDominio();
   }, []);

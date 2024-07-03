@@ -111,7 +111,7 @@ export const CheckoutProvider = ({
       session.user.id,
       cart.uuidcart,
       deliveryInfo,
-      address ?? "",
+      department ? address ?? "" : "",
       session.user.accessToken
     );
     if (error) throw new Error(error);

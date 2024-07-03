@@ -261,7 +261,7 @@ const ProductCard = ({ product }: { product: Offer }) => {
               paddingTop: "2px",
             })}
           >
-            {product.type === "coupon" ? "Generar Cupón" : "Ver producto"}
+            {product.type === "coupon" ? "Ver Cupón" : "Ver producto"}
           </Box>
         </CardContent>
       </CardActionArea>

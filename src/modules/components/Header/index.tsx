@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import {
   AccountCircleOutlined,
   LocalMallOutlined,
@@ -167,7 +168,7 @@ const AppHeader = () => {
             onClick={() => router.push("/home")}
             sizes="100vw"
             width={10}
-            height={40}
+            height={36}
             style={{
               width: "auto",
             }}
@@ -290,7 +291,26 @@ const AppHeader = () => {
                     },
                   })}
                 >
-                  <Typography width={106} fontSize={14}>
+                  <Typography
+                    width={106}
+                    fontSize={14}
+                    sx={
+                      session?.user?.accessToken
+                        ? {
+                            display: "-webkit-box",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 2,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            maxHeight: "3em",
+                          }
+                        : {
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }
+                    }
+                  >
                     Hola {collaborator?.name ?? session?.user?.name ?? "---"}
                   </Typography>
                   <Typography
@@ -376,7 +396,13 @@ const AppHeader = () => {
                     >
                       Mi cuenta
                     </MenuItem>,
-                    <MenuItem key="configuracion" onClick={handleClose}>
+                    <MenuItem
+                      key="configuracion"
+                      onClick={() => {
+                        router.push("/account/profile");
+                        handleClose();
+                      }}
+                    >
                       Configuración
                     </MenuItem>,
                     <MenuItem key="ayuda" onClick={handleClose}>

@@ -80,71 +80,81 @@ const SelectAddressTable = ({
     <Stack>
       <Modal open={creation}>
         <Box
-          sx={(theme) => ({
+          sx={{
             position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            borderRadius: "20px",
-            backgroundColor: "white",
-            [theme.breakpoints.up("md")]: {
-              width: 660,
-            },
-            [theme.breakpoints.down("md")]: {
-              width: 640,
-            },
-            [theme.breakpoints.down("sm")]: {
-              width: 600,
-            },
-          })}
+            inset: "0px",
+            height: "100%",
+            overflow: "hidden auto",
+            outline: "none",
+            display: "flex",
+            flexDirection: "column",
+            padding: "1.5rem",
+          }}
         >
-          <AddressForm
-            onSubmit={(data) => {
-              handleOpenAlert(
-                () => handleCreateAddress(data as CollaboratorAddress),
-                "Dirección creada con éxito"
-              );
-            }}
-            onClose={() => setCreation(false)}
-          />
+          <Box
+            sx={(theme) => ({
+              position: "relative",
+              margin: "auto",
+              height: "max-content",
+              maxHeight: "unset",
+              transform: "none",
+              top: "unset",
+              left: "unset",
+            })}
+          >
+            <AddressForm
+              onSubmit={(data) => {
+                handleOpenAlert(
+                  () => handleCreateAddress(data as CollaboratorAddress),
+                  "Dirección creada con éxito"
+                );
+              }}
+              onClose={() => setCreation(false)}
+            />
+          </Box>
         </Box>
       </Modal>
       <Modal open={!!address}>
         <Box
-          sx={(theme) => ({
+          sx={{
             position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            borderRadius: "20px",
-            backgroundColor: "white",
-            [theme.breakpoints.up("md")]: {
-              width: 660,
-            },
-            [theme.breakpoints.down("md")]: {
-              width: 640,
-            },
-            [theme.breakpoints.down("sm")]: {
-              width: 600,
-            },
-          })}
+            inset: "0px",
+            height: "100%",
+            overflow: "hidden auto",
+            outline: "none",
+            display: "flex",
+            flexDirection: "column",
+            padding: "1.5rem",
+          }}
         >
-          <AddressForm
-            onSubmit={(data) => {
-              handleOpenAlert(
-                () =>
-                  handleUpdateAddress({
-                    ...(data as CollaboratorAddress),
-                    uuidcollaboratoraddress: address ?? "",
-                  }),
-                "Dirección actualizada con éxito"
-              );
-            }}
-            defaultValues={data.collaboratoraddresses.find(
-              (a) => a.uuidcollaboratoraddress === address
-            )}
-            onClose={() => setAddress(null)}
-          />
+          <Box
+            sx={(theme) => ({
+              position: "relative",
+              margin: "auto",
+              height: "max-content",
+              maxHeight: "unset",
+              transform: "none",
+              top: "unset",
+              left: "unset",
+            })}
+          >
+            <AddressForm
+              onSubmit={(data) => {
+                handleOpenAlert(
+                  () =>
+                    handleUpdateAddress({
+                      ...(data as CollaboratorAddress),
+                      uuidcollaboratoraddress: address ?? "",
+                    }),
+                  "Dirección actualizada con éxito"
+                );
+              }}
+              defaultValues={data.collaboratoraddresses.find(
+                (a) => a.uuidcollaboratoraddress === address
+              )}
+              onClose={() => setAddress(null)}
+            />
+          </Box>
         </Box>
       </Modal>
       <List

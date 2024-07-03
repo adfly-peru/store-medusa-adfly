@@ -82,14 +82,12 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   };
 
   useEffect(() => {
-    console.log({ data: session?.user?.email });
-    if (session?.user?.email) {
-      console.log("Refetch");
-      refetch();
+    if (session?.user?.accessToken) {
+      refetch().then((data) => setCollaborator(data.data.collaborator));
     } else {
       setCollaborator(undefined);
     }
-  }, [session?.user?.email, refetch]);
+  }, [session?.user?.accessToken, refetch]);
 
   useEffect(() => {
     const verifySession = async () => {
@@ -117,7 +115,6 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
               session.user.completeregistration !== complete_registration ||
               session.user.email !== email
             ) {
-              console.log("To sign in again");
               await signIn("dni", {
                 documenttype: session.user.documenttype,
                 documentnumber: session.user.dni,

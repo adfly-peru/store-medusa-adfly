@@ -62,12 +62,13 @@ const FilteredAlgoliaProducts = () => {
       ) : (
         <Grid
           container
-          justifyContent="flex-start"
+          justifyContent="space-around"
           sx={{
             margin: 0,
             width: "100%",
-            gap: "40px",
           }}
+          rowGap="40px"
+          columnGap="30px"
         >
           {hits.map((hit: any) => (
             <Grid item xs="auto" key={hit.objectID}>

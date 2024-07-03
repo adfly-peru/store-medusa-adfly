@@ -1,6 +1,4 @@
-import { searchClient } from "@lib/algolia-client";
 import { Box, Stack, Typography } from "@mui/material";
-import { InstantSearch } from "react-instantsearch";
 import ProductCartTable from "../components/ProductCartTable";
 import { useCart } from "@context/cart-context";
 import { useMemo } from "react";
@@ -25,6 +23,7 @@ const CartView = () => {
     }, 0);
     return totalRef - cart.total;
   }, [cart]);
+
   return (
     <Box
       sx={(theme) => ({
@@ -42,33 +41,11 @@ const CartView = () => {
       })}
     >
       <Typography variant="h2">{`Mi Carrito (${items.length} Productos)`}</Typography>
-      <Stack
-        direction="row"
-        sx={(theme) => ({
-          marginTop: "20px",
-          [theme.breakpoints.down("md")]: {
-            flexDirection: "column",
-            gap: "20px",
-          },
-        })}
-        spacing={{
-          xs: 0,
-          md: 2,
-        }}
-      >
-        {!!items.length ? (
-          <ProductCartTable items={items} />
-        ) : (
-          <Box
-            sx={{
-              width: "100%",
-            }}
-          >
-            <EmptyCart />
-          </Box>
-        )}
-        <Resume total={cart?.total ?? 0} saving={saving} />
-      </Stack>
+      <ProductCartTable
+        items={items}
+        total={cart?.total ?? 0}
+        saving={saving}
+      />
     </Box>
   );
 };

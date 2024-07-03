@@ -17,6 +17,9 @@ import { useCart } from "@context/cart-context";
 import { useState } from "react";
 import DynamicAlert from "@modules/components/Alert";
 import NumberInput from "@modules/components/NumberInput";
+import EmptyCart from "@modules/checkout/components/EmptyCart";
+import cart from "@pages/cart";
+import Resume from "../Resume";
 
 interface RowItem {
   id: number;
@@ -34,7 +37,15 @@ interface RowItem {
   maxQuantity: number;
 }
 
-const ProductCartTable = ({ items }: { items: CartItem[] }) => {
+const ProductCartTable = ({
+  items,
+  total,
+  saving,
+}: {
+  items: CartItem[];
+  total: number;
+  saving: number;
+}) => {
   const { editProduct, removeProduct } = useCart();
   const [loading, setLoading] = useState(false);
   const [triggerAlert, setTriggerAlert] = useState(false);
@@ -85,7 +96,7 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
     {
       field: "name",
       headerName: "Detalle",
-      flex: 2,
+      width: 300,
       renderCell: (params) => (
         <Stack
           direction="row"
@@ -99,11 +110,15 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
           <img
             sizes="100vw"
             width={200}
-            height={190}
+            height={150}
+            style={{
+              height: "100%",
+              width: "auto",
+            }}
             src={params.row.image !== "" ? params.row.image : "/Logo Adfly.svg"}
             alt={params.row.image}
           />
-          <Typography variant="h3" fontSize={18}>
+          <Typography variant="h3" fontSize={16}>
             {params.row.name}
           </Typography>
         </Stack>
@@ -112,7 +127,7 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
     {
       field: "prices.finalPrice",
       headerName: "Precio",
-      flex: 1,
+      width: 150,
       headerAlign: "center",
       renderCell: (params) => (
         <Stack
@@ -121,31 +136,11 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
             height: "100%",
           }}
         >
-          {params.row.prices.offerPrice && (
-            <Typography variant="body2" fontWeight={700} textAlign="center">
-              S/. {params.row.prices.offerPrice.toFixed(2)}
-            </Typography>
-          )}
-          <Typography
-            variant="body2"
-            fontWeight={700}
-            textAlign="center"
-            sx={{
-              textDecoration: params.row.prices.offerPrice
-                ? "line-through"
-                : "none",
-            }}
-          >
-            S/. {params.row.prices.adflyPrice.toFixed(2)}
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              textDecoration: "line-through",
-            }}
-            textAlign="center"
-          >
-            S/. {params.row.prices.refPrice.toFixed(2)}
+          <Typography variant="body2" fontWeight={700} textAlign="center">
+            S/.{" "}
+            {(
+              params.row.prices.offerPrice ?? params.row.prices.adflyPrice
+            ).toFixed(2)}
           </Typography>
         </Stack>
       ),
@@ -153,7 +148,7 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
     {
       field: "quantity",
       headerName: "Cantidad",
-      flex: 1,
+      width: 200,
       headerAlign: "center",
       renderCell: (params) => {
         return (
@@ -186,7 +181,7 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
     {
       field: "subtotal",
       headerName: "Subtotal",
-      flex: 1,
+      width: 150,
       headerAlign: "center",
       renderCell: (params) => (
         <Stack justifyContent="center" sx={{ height: "100%" }}>
@@ -238,23 +233,44 @@ const ProductCartTable = ({ items }: { items: CartItem[] }) => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSizeOptions={[5, 10, 20]}
-        rowHeight={100}
-        sx={{
-          "& .MuiDataGrid-filler": {
-            height: "0 !important",
+      <Stack
+        direction="row"
+        sx={(theme) => ({
+          marginTop: "20px",
+          [theme.breakpoints.down("md")]: {
+            flexDirection: "column",
+            gap: "20px",
           },
+        })}
+        spacing={{
+          xs: 0,
+          md: 2,
         }}
-      />
-      <DynamicAlert
-        func={alertFunc}
-        message={alertMessage}
-        trigger={triggerAlert}
-        onResetTrigger={() => setTriggerAlert(false)}
-      />
+      >
+        {!!items.length ? (
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSizeOptions={[5, 10, 20]}
+            rowHeight={100}
+          />
+        ) : (
+          <Box
+            sx={{
+              width: "100%",
+            }}
+          >
+            <EmptyCart />
+          </Box>
+        )}
+        <Resume total={total} saving={saving} />
+        <DynamicAlert
+          func={alertFunc}
+          message={alertMessage}
+          trigger={triggerAlert}
+          onResetTrigger={() => setTriggerAlert(false)}
+        />
+      </Stack>
     </Box>
   );
 };

@@ -80,6 +80,9 @@ const baseTheme = (theme: Theme) => {
           ".algolia-highlight": {
             color: theme.palette.primary.main,
           },
+          ".slick-image-products-slider": {
+            marginBottom: "30px",
+          },
           ".slick-products-slider": {
             width: "100%",
             display: "flex !important",

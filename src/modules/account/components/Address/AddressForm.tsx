@@ -49,7 +49,20 @@ const AddressForm: React.FC<AddressFormProps> = ({
   });
 
   return (
-    <Card sx={{ padding: 2 }}>
+    <Card
+      sx={(theme) => ({
+        padding: 2,
+        [theme.breakpoints.up("md")]: {
+          width: 660,
+        },
+        [theme.breakpoints.down("md")]: {
+          width: 640,
+        },
+        [theme.breakpoints.down("sm")]: {
+          width: 600,
+        },
+      })}
+    >
       <CardContent>
         <Stack
           direction="row"

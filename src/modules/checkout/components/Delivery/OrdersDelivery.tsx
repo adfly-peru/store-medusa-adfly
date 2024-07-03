@@ -74,9 +74,11 @@ const OrdersDelivery = ({ data }: { data: GetAddressesQuery | undefined }) => {
               Regresar
             </Button>
             <Button
-              disabled={Object.values(ordersDeliveryInfo).every((value) => {
-                return value.selectedMethod === "";
-              })}
+              disabled={
+                !Object.values(ordersDeliveryInfo).every(
+                  (value) => value.selectedMethod !== ""
+                )
+              }
               variant="contained"
               sx={{
                 width: "100%",
