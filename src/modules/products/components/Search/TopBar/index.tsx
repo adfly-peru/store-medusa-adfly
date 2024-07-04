@@ -17,7 +17,17 @@ const AlgoliaTopBar = () => {
         backgroundColor: "#F2F2F2",
       }}
     >
-      <Drawer open={openDrawer} variant="persistent">
+      <Drawer
+        open={openDrawer}
+        variant="persistent"
+        sx={(theme) => ({
+          ".MuiPaper-root": {
+            [theme.breakpoints.down("sm")]: {
+              width: "100%",
+            },
+          },
+        })}
+      >
         <AlgoliaDrawer onClose={toggleDrawer(false)} />
       </Drawer>
       <Stack
