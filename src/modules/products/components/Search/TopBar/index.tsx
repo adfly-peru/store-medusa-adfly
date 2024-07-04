@@ -17,7 +17,7 @@ const AlgoliaTopBar = () => {
         backgroundColor: "#F2F2F2",
       }}
     >
-      <Drawer open={openDrawer}>
+      <Drawer open={openDrawer} variant="persistent">
         <AlgoliaDrawer onClose={toggleDrawer(false)} />
       </Drawer>
       <Stack
