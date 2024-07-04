@@ -34,8 +34,8 @@ export function BreadcumbsSection() {
         {product.subCategory.name}
       </Link>
       <Typography color="text.primary">
-        {product.offerName.length > 40
-          ? `${product.offerName.slice(0, 40)}...`
+        {product.offerName.length > 16
+          ? `${product.offerName.slice(0, 16)}...`
           : product.offerName}
       </Typography>
     </Breadcrumbs>

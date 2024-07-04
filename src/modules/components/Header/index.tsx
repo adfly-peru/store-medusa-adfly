@@ -168,9 +168,12 @@ const AppHeader = () => {
             onClick={() => router.push("/home")}
             sizes="100vw"
             width={10}
-            height={36}
+            height={40}
             style={{
               width: "auto",
+              maxHeight: "40px",
+              maxWidth: "120px",
+              objectFit: "contain",
             }}
             src={
               (storeDesign?.logourl ?? "") === ""

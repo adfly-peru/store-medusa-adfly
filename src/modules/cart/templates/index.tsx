@@ -1,12 +1,21 @@
-import { Box, Stack, Typography } from "@mui/material";
-import ProductCartTable from "../components/ProductCartTable";
+import {
+  Backdrop,
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useCart } from "@context/cart-context";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Resume from "../components/Resume";
 import EmptyCart from "@modules/checkout/components/EmptyCart";
+import ItemResume from "../components/ItemResume";
 
 const CartView = () => {
   const { cart } = useCart();
+  const [loading, setLoading] = useState(false);
   const items = useMemo(
     () => cart?.suborders?.flatMap((suborder) => suborder?.items) ?? [],
     [cart]
@@ -41,11 +50,64 @@ const CartView = () => {
       })}
     >
       <Typography variant="h2">{`Mi Carrito (${items.length} Productos)`}</Typography>
-      <ProductCartTable
-        items={items}
-        total={cart?.total ?? 0}
-        saving={saving}
-      />
+      <Stack
+        direction="row"
+        sx={(theme) => ({
+          marginTop: "20px",
+          [theme.breakpoints.down("md")]: {
+            flexDirection: "column",
+            gap: "20px",
+          },
+        })}
+        spacing={{
+          xs: 0,
+          md: 2,
+        }}
+      >
+        {!!items.length ? (
+          <Box position="relative" sx={{ width: "100%" }}>
+            <Backdrop
+              sx={(theme) => ({
+                color: theme.palette.primary.main,
+                zIndex: (theme) => theme.zIndex.drawer + 1,
+                position: "absolute",
+                backgroundColor: "rgba(255, 255, 255, 0.5)",
+                backdropFilter: "blur(1px)",
+                borderRadius: 1,
+              })}
+              open={loading}
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
+            <Card
+              sx={{
+                width: "100%",
+              }}
+            >
+              <CardContent>
+                <Stack>
+                  {items.map((item) => (
+                    <ItemResume
+                      key={item.uuidcartitem}
+                      item={item}
+                      setLoading={setLoading}
+                    />
+                  ))}
+                </Stack>
+              </CardContent>
+            </Card>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              width: "100%",
+            }}
+          >
+            <EmptyCart />
+          </Box>
+        )}
+        <Resume total={cart?.total ?? 0} saving={saving} />
+      </Stack>
     </Box>
   );
 };

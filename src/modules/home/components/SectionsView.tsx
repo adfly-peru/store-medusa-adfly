@@ -66,6 +66,9 @@ const SectionsView = () => {
                 paddingTop: "12px",
                 paddingBottom: "12px",
                 width: "224px",
+                [theme.breakpoints.down(600)]: {
+                  width: "150px",
+                },
                 fontSize: 24,
                 borderRight: `1px solid ${theme.palette.grey[200]}`,
                 borderLeft: `1px solid ${theme.palette.grey[200]}`,

@@ -56,10 +56,7 @@ const AddressForm: React.FC<AddressFormProps> = ({
           width: 660,
         },
         [theme.breakpoints.down("md")]: {
-          width: 640,
-        },
-        [theme.breakpoints.down("sm")]: {
-          width: 600,
+          width: "100%",
         },
       })}
     >
