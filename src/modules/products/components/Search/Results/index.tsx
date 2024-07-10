@@ -13,7 +13,20 @@ const cleanObjectKeys = (obj: AlgoliaHit): AlgoliaHit => {
   const cleanedObj: AlgoliaHit = {};
   for (const key in obj) {
     const cleanedKey = key.replace(/[^\x20-\x7E]/g, "");
-    cleanedObj[cleanedKey] = obj[key];
+    const value = obj[key];
+    if (value && typeof value === "object" && "Valid" in value && value.Valid) {
+      cleanedObj[cleanedKey] =
+        "Float64" in value
+          ? value.Float64
+          : "String" in value
+          ? value.String
+          : value;
+    } else {
+      cleanedObj[cleanedKey] = value;
+    }
+  }
+  if (obj["product_id"] === "") {
+    cleanedObj["product_id"] = cleanedObj["objectID"];
   }
   return cleanedObj;
 };
@@ -26,6 +39,8 @@ const FilteredAlgoliaProducts = () => {
     () => dirtyHits.map((hit) => cleanObjectKeys(hit)),
     [dirtyHits]
   );
+
+  console.log({ hits });
 
   return (
     <Box
