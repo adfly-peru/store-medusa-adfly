@@ -1,4 +1,3 @@
-import { useFilters } from "@modules/products/context/FiltersContext";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import {
   ListItemButton,
@@ -10,7 +9,7 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import { useRefinementList } from "react-instantsearch";
 
 const CustomRefinementList = React.forwardRef<
@@ -22,7 +21,6 @@ const CustomRefinementList = React.forwardRef<
 >((props, _) => {
   const [open, setOpen] = React.useState(true);
   const [searchValue, setSearchValue] = React.useState("");
-  const { filters, setFilters } = useFilters();
   const { items, refine } = useRefinementList({
     attribute: props.attribute,
   });
@@ -37,19 +35,6 @@ const CustomRefinementList = React.forwardRef<
 
   const handleCheckboxClick = (itemLabel: string) => {
     refine(itemLabel);
-    setFilters((prevFilters) => {
-      const newFilters = { ...prevFilters };
-      const currentItems = newFilters[props.attribute] || [];
-      const index = currentItems.indexOf(itemLabel);
-      if (index === -1) {
-        newFilters[props.attribute] = [...currentItems, itemLabel];
-      } else {
-        newFilters[props.attribute] = currentItems.filter(
-          (label) => label !== itemLabel
-        );
-      }
-      return newFilters;
-    });
   };
 
   return (
@@ -113,7 +98,7 @@ const CustomRefinementList = React.forwardRef<
                 <ListItemIcon>
                   <Checkbox
                     edge="start"
-                    checked={filters[props.attribute]?.includes(item.label)}
+                    checked={item.isRefined}
                     tabIndex={-1}
                     disableRipple
                     sx={(theme) => ({

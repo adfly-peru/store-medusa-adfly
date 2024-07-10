@@ -11,6 +11,9 @@ const AlgoliaDrawer = ({ onClose }: { onClose: () => void }) => {
       sx={(theme) => ({
         width: 360,
         overflow: "auto",
+        [theme.breakpoints.down("sm")]: {
+          width: "auto",
+        },
       })}
     >
       <Stack

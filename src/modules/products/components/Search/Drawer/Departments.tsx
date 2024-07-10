@@ -92,31 +92,59 @@ const CategorySection = ({
         )
       }
     >
-      <Collapse in={expanded} collapsedSize={180}>
-        {attribute &&
-          items.map((item) => (
-            <ListItemButton
-              key={item.label}
-              sx={{
-                padding: "5px 25px",
-              }}
-              onClick={() => {
-                const newQuery = { ...router.query };
-                newQuery[attribute] = item.label;
-                router.push(
-                  {
-                    pathname: "/search",
-                    query: newQuery,
-                  },
-                  undefined,
-                  { shallow: true }
-                );
-              }}
-            >
-              <Typography variant="caption">{item.label}</Typography>
-            </ListItemButton>
-          ))}
-      </Collapse>
+      {items.length > 5 ? (
+        <Collapse in={expanded} collapsedSize={180}>
+          {attribute &&
+            items.map((item) => (
+              <ListItemButton
+                key={item.label}
+                sx={{
+                  padding: "5px 25px",
+                }}
+                onClick={() => {
+                  const newQuery = { ...router.query };
+                  newQuery[attribute] = item.label;
+                  router.push(
+                    {
+                      pathname: "/search",
+                      query: newQuery,
+                    },
+                    undefined,
+                    { shallow: true }
+                  );
+                }}
+              >
+                <Typography variant="caption">{item.label}</Typography>
+              </ListItemButton>
+            ))}
+        </Collapse>
+      ) : (
+        <div>
+          {attribute &&
+            items.map((item) => (
+              <ListItemButton
+                key={item.label}
+                sx={{
+                  padding: "5px 25px",
+                }}
+                onClick={() => {
+                  const newQuery = { ...router.query };
+                  newQuery[attribute] = item.label;
+                  router.push(
+                    {
+                      pathname: "/search",
+                      query: newQuery,
+                    },
+                    undefined,
+                    { shallow: true }
+                  );
+                }}
+              >
+                <Typography variant="caption">{item.label}</Typography>
+              </ListItemButton>
+            ))}
+        </div>
+      )}
 
       <Divider
         sx={(theme) => ({
