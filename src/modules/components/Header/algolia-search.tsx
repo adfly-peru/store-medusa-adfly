@@ -134,7 +134,8 @@ const SearchComponent = () => {
               hit: null,
             },
             ...hits.map((hit: any) => ({
-              value: hit.product_id,
+              value:
+                (hit.product_id ?? "") === "" ? hit.objectID : hit.product_id,
               label: query,
               hit: hit,
             })),
