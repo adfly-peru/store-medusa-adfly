@@ -1,6 +1,9 @@
 import {
   BenefitCategory,
+  BenefitSortField,
+  BenefitSortInput,
   BenefitsQuery,
+  SortDirection,
   useBenefitCategoriesQuery,
   useBenefitsLazyQuery,
   useBenefitsQuery,
@@ -24,7 +27,14 @@ interface IBenefitFiltersContext {
   result?: BenefitsQuery;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
+  sort: string;
+  setSort: Dispatch<SetStateAction<string>>;
 }
+
+export const benefitSortItems = [
+  { value: "name:asc", label: "A - Z" },
+  { value: "name:desc", label: "Z - A" },
+];
 
 const BenefitFiltersContext = createContext<IBenefitFiltersContext | null>(
   null
@@ -41,6 +51,7 @@ export const BenefitFiltersProvider = ({
     []
   );
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState<string>("name:asc");
 
   const [fetch, { data: result }] = useBenefitsLazyQuery();
 
@@ -52,9 +63,19 @@ export const BenefitFiltersProvider = ({
         filter: {
           categoryName: currentCategory,
         },
+        sort:
+          sort === "name:asc"
+            ? {
+                field: BenefitSortField.Name,
+                direction: SortDirection.Asc,
+              }
+            : {
+                field: BenefitSortField.Name,
+                direction: SortDirection.Desc,
+              },
       },
     });
-  }, [currentCategory, selectedDepartments, page, fetch]);
+  }, [currentCategory, selectedDepartments, page, sort, fetch]);
 
   return (
     <BenefitFiltersContext.Provider
@@ -67,6 +88,8 @@ export const BenefitFiltersProvider = ({
         page,
         setPage,
         result,
+        sort,
+        setSort,
       }}
     >
       {children}

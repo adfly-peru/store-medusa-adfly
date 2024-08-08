@@ -1,5 +1,5 @@
 import { Box, Button, Drawer, Paper, Stack } from "@mui/material";
-import CustomSortBy from "./Sortby";
+import CustomSortBy, { BenefitsSortBy } from "./Sortby";
 import CustomPagination, { BenefitsPagination } from "./Pagination";
 import AlgoliaDrawer, { BenefitsDrawer } from "../Drawer";
 import { useState } from "react";
@@ -96,7 +96,7 @@ export const BenefitsTopBar = () => {
           },
         })}
       >
-        {/* <CustomSortBy /> */}
+        <BenefitsSortBy />
         <BenefitsPagination />
       </Stack>
       <Stack
@@ -110,7 +110,7 @@ export const BenefitsTopBar = () => {
         })}
       >
         <Button onClick={toggleDrawer(true)}>Filtros</Button>
-        {/* <CustomSortBy /> */}
+        <BenefitsSortBy />
       </Stack>
     </Box>
   );
