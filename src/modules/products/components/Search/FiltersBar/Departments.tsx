@@ -1,4 +1,5 @@
 import { Icon } from "@iconify/react";
+import { useBenefitFilters } from "@modules/products/context/BenefitContext";
 import { ArrowBack } from "@mui/icons-material";
 import {
   Box,
@@ -135,6 +136,77 @@ const CategorySection = ({
         </Box>
       )}
     </List>
+  );
+};
+
+export const BenefitCategories = () => {
+  const { currentCategory, setCurrentCategory, categories } =
+    useBenefitFilters();
+  const [expanded, setExpanded] = useState(false);
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+  return (
+    <Paper
+      elevation={3}
+      sx={{
+        padding: "13px 0",
+        backgroundColor: "#F2F2F2",
+      }}
+    >
+      <List
+        sx={{ width: "100%" }}
+        subheader={
+          <ListSubheader
+            sx={{
+              backgroundColor: "inherit",
+              fontSize: 20,
+              lineHeight: "23px",
+              fontWeight: 700,
+              textDecoration: "underline",
+              color: "black",
+              marginLeft: "3px",
+              marginBottom: "4px",
+            }}
+          >
+            Departamentos
+          </ListSubheader>
+        }
+      >
+        <Collapse in={expanded} collapsedSize={180}>
+          {categories.map((item) => (
+            <ListItemButton
+              key={item.id}
+              sx={{
+                padding: "5px 20px",
+              }}
+              onClick={() => {
+                setCurrentCategory(item.name);
+              }}
+              selected={item.name === currentCategory}
+            >
+              <Typography variant="caption">{item.name}</Typography>
+            </ListItemButton>
+          ))}
+        </Collapse>
+        {categories.length > 5 && (
+          <Box sx={{ padding: "20px 20px 0px 20px" }}>
+            <Button
+              size="small"
+              variant="contained"
+              fullWidth
+              onClick={handleExpandClick}
+            >
+              {expanded ? "Ver menos" : "Ver todo"}
+              <Icon
+                icon={expanded ? "mdi:chevron-up" : "mdi:chevron-down"}
+                height={20}
+              />
+            </Button>
+          </Box>
+        )}
+      </List>
+    </Paper>
   );
 };
 

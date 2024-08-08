@@ -43,6 +43,66 @@ export type AvailableDeliveryMethods = {
   onstore: Scalars['Boolean']['output'];
 };
 
+export type Benefit = {
+  __typename?: 'Benefit';
+  accessBenefit?: Maybe<Scalars['String']['output']>;
+  active: Scalars['Boolean']['output'];
+  additionalFiles?: Maybe<Scalars['String']['output']>;
+  additionalInformation?: Maybe<Scalars['String']['output']>;
+  category?: Maybe<BenefitCategory>;
+  conditions?: Maybe<Scalars['String']['output']>;
+  creationdate: Scalars['DateTime']['output'];
+  departments: Array<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  images: Array<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  nextSteps?: Maybe<Scalars['String']['output']>;
+  outstanding: Scalars['Boolean']['output'];
+  updatedate: Scalars['DateTime']['output'];
+  uuidCategory: Scalars['ID']['output'];
+};
+
+export type BenefitCategory = {
+  __typename?: 'BenefitCategory';
+  active: Scalars['Boolean']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+};
+
+export type BenefitConnection = {
+  __typename?: 'BenefitConnection';
+  edges: Array<BenefitEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type BenefitEdge = {
+  __typename?: 'BenefitEdge';
+  node: Benefit;
+};
+
+export type BenefitFilterInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  categoryName?: InputMaybe<Scalars['String']['input']>;
+  creationdate?: InputMaybe<DateRangeInput>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  updatedate?: InputMaybe<DateRangeInput>;
+};
+
+export enum BenefitSortField {
+  CategoryName = 'categoryName',
+  Creationdate = 'creationdate',
+  Name = 'name',
+  Updatedate = 'updatedate'
+}
+
+export type BenefitSortInput = {
+  direction: SortDirection;
+  field: BenefitSortField;
+};
+
 export type BillAndPay = {
   __typename?: 'BillAndPay';
   accountbanknumber?: Maybe<Scalars['String']['output']>;
@@ -77,9 +137,40 @@ export type Brand = {
   updateDate: Scalars['DateTime']['output'];
 };
 
+export type BrandConnection = {
+  __typename?: 'BrandConnection';
+  edges: Array<BrandEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type BrandEdge = {
+  __typename?: 'BrandEdge';
+  node: Brand;
+};
+
+export type BrandFilterInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  creationdate?: InputMaybe<DateRangeInput>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  updatedate?: InputMaybe<DateRangeInput>;
+};
+
+export enum BrandSortField {
+  Creationdate = 'creationdate',
+  Name = 'name',
+  Updatedate = 'updatedate'
+}
+
+export type BrandSortInput = {
+  direction: SortDirection;
+  field: BrandSortField;
+};
+
 export type Business = {
   __typename?: 'Business';
   active: Scalars['Boolean']['output'];
+  approved?: Maybe<Scalars['Boolean']['output']>;
   businessname: Scalars['String']['output'];
   commercialname: Scalars['String']['output'];
   creationdate: Scalars['DateTime']['output'];
@@ -89,6 +180,7 @@ export type Business = {
   platform: Scalars['String']['output'];
   relationtype: Scalars['String']['output'];
   ruc: Scalars['String']['output'];
+  stars?: Maybe<StarsResume>;
   updatedate: Scalars['DateTime']['output'];
   uuidbusiness: Scalars['ID']['output'];
 };
@@ -105,6 +197,134 @@ export type BusinessAdmin = {
   updatedate: Scalars['DateTime']['output'];
   uuidbusiness: Scalars['ID']['output'];
   uuiduser: Scalars['ID']['output'];
+};
+
+export type BusinessAdminConnection = {
+  __typename?: 'BusinessAdminConnection';
+  edges: Array<BusinessAdminEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type BusinessAdminEdge = {
+  __typename?: 'BusinessAdminEdge';
+  node: BusinessAdmin;
+};
+
+export type BusinessAdminFilterInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  creationdate?: InputMaybe<DateRangeInput>;
+  credential?: InputMaybe<Scalars['String']['input']>;
+  firstname?: InputMaybe<Scalars['String']['input']>;
+  identificationnumber?: InputMaybe<Scalars['String']['input']>;
+  lastname?: InputMaybe<Scalars['String']['input']>;
+  relationtype?: InputMaybe<Scalars['String']['input']>;
+  updatedate?: InputMaybe<DateRangeInput>;
+};
+
+export enum BusinessAdminSortField {
+  Creationdate = 'creationdate',
+  Credential = 'credential',
+  Firstname = 'firstname',
+  Identificationnumber = 'identificationnumber',
+  Lastname = 'lastname',
+  Updatedate = 'updatedate'
+}
+
+export type BusinessAdminSortInput = {
+  direction: SortDirection;
+  field: BusinessAdminSortField;
+};
+
+export type BusinessCommunicationChannels = {
+  __typename?: 'BusinessCommunicationChannels';
+  digitalannouncements?: Maybe<Scalars['Boolean']['output']>;
+  fisicalannouncements?: Maybe<Scalars['Boolean']['output']>;
+  imbox?: Maybe<Scalars['Boolean']['output']>;
+  mail?: Maybe<Scalars['Boolean']['output']>;
+  social?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type BusinessConnection = {
+  __typename?: 'BusinessConnection';
+  edges: Array<BusinessEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type BusinessEdge = {
+  __typename?: 'BusinessEdge';
+  node: Business;
+};
+
+export type BusinessFilterInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  businessname?: InputMaybe<Scalars['String']['input']>;
+  commercialname?: InputMaybe<Scalars['String']['input']>;
+  creationdate?: InputMaybe<DateRangeInput>;
+  ispremium?: InputMaybe<Scalars['Boolean']['input']>;
+  relationtype?: InputMaybe<Scalars['String']['input']>;
+  ruc?: InputMaybe<Scalars['String']['input']>;
+  updatedate?: InputMaybe<DateRangeInput>;
+};
+
+export type BusinessResume = {
+  __typename?: 'BusinessResume';
+  business: Business;
+  enterprise?: Maybe<EnterpriseResume>;
+  logo?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  partner?: Maybe<PartnerResume>;
+};
+
+export type BusinessSections = {
+  __typename?: 'BusinessSections';
+  coupons?: Maybe<Scalars['Boolean']['output']>;
+  internalbenefits?: Maybe<Scalars['Boolean']['output']>;
+  marketplace?: Maybe<Scalars['Boolean']['output']>;
+  products?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export enum BusinessSortField {
+  Businessname = 'businessname',
+  Commercialname = 'commercialname',
+  Creationdate = 'creationdate',
+  Relationtype = 'relationtype',
+  Ruc = 'ruc',
+  Updatedate = 'updatedate'
+}
+
+export type BusinessSortInput = {
+  direction: SortDirection;
+  field: BusinessSortField;
+};
+
+export type BusinessStarConnection = {
+  __typename?: 'BusinessStarConnection';
+  edges: Array<BusinessStarEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type BusinessStarEdge = {
+  __typename?: 'BusinessStarEdge';
+  node: BusinessStars;
+};
+
+export type BusinessStarFilterInput = {
+  amount?: InputMaybe<FloatInput>;
+  creationdate?: InputMaybe<DateRangeInput>;
+  operation?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum BusinessStarSortField {
+  Amount = 'amount',
+  Creationdate = 'creationdate'
+}
+
+export type BusinessStarSortInput = {
+  direction: SortDirection;
+  field: BusinessStarSortField;
 };
 
 export type BusinessStars = {
@@ -148,10 +368,42 @@ export type Campaign = {
   expirationdate: Scalars['DateTime']['output'];
   initialdate: Scalars['DateTime']['output'];
   name: Scalars['String']['output'];
+  section: Scalars['String']['output'];
   specification?: Maybe<Scalars['String']['output']>;
   status: Scalars['String']['output'];
   updatedate: Scalars['DateTime']['output'];
   uuidcampaign: Scalars['ID']['output'];
+};
+
+export type CampaignConnection = {
+  __typename?: 'CampaignConnection';
+  edges: Array<CampaignEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type CampaignEdge = {
+  __typename?: 'CampaignEdge';
+  node: Campaign;
+};
+
+export type CampaignFilterInput = {
+  expirationdate?: InputMaybe<DateRangeInput>;
+  initialdate?: InputMaybe<DateRangeInput>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum CampaignSortField {
+  Expirationdate = 'expirationdate',
+  Initialdate = 'initialdate',
+  Name = 'name',
+  Status = 'status'
+}
+
+export type CampaignSortInput = {
+  direction: SortDirection;
+  field: CampaignSortField;
 };
 
 export type Cart = {
@@ -221,6 +473,41 @@ export type Category = {
   visible: Scalars['Boolean']['output'];
 };
 
+export type CategoryConnection = {
+  __typename?: 'CategoryConnection';
+  edges: Array<CategoryEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type CategoryEdge = {
+  __typename?: 'CategoryEdge';
+  node: Category;
+};
+
+export type CategoryFilterInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  creationdate?: InputMaybe<DateRangeInput>;
+  departmentid?: InputMaybe<Scalars['String']['input']>;
+  departmentname?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  section?: InputMaybe<Scalars['String']['input']>;
+  updatedate?: InputMaybe<DateRangeInput>;
+};
+
+export enum CategorySortField {
+  Creationdate = 'creationdate',
+  Departmentname = 'departmentname',
+  Name = 'name',
+  Section = 'section',
+  Updatedate = 'updatedate'
+}
+
+export type CategorySortInput = {
+  direction: SortDirection;
+  field: CategorySortField;
+};
+
 export type Collaborator = {
   __typename?: 'Collaborator';
   businessname?: Maybe<Scalars['String']['output']>;
@@ -254,6 +541,42 @@ export type CollaboratorAccessRequest = {
   uuidbusiness: Scalars['ID']['output'];
 };
 
+export type CollaboratorAccessRequestConnection = {
+  __typename?: 'CollaboratorAccessRequestConnection';
+  edges: Array<CollaboratorAccessRequestEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type CollaboratorAccessRequestEdge = {
+  __typename?: 'CollaboratorAccessRequestEdge';
+  node: CollaboratorAccessRequest;
+};
+
+export type CollaboratorAccessRequestFilterInput = {
+  creationdate?: InputMaybe<DateRangeInput>;
+  documentnumber?: InputMaybe<Scalars['String']['input']>;
+  documenttype?: InputMaybe<Scalars['String']['input']>;
+  lastname?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  updatedate?: InputMaybe<DateRangeInput>;
+};
+
+export enum CollaboratorAccessRequestSortField {
+  Creationdate = 'creationdate',
+  Documentnumber = 'documentnumber',
+  Documenttype = 'documenttype',
+  Lastname = 'lastname',
+  Name = 'name',
+  Status = 'status',
+  Updatedate = 'updatedate'
+}
+
+export type CollaboratorAccessRequestSortInput = {
+  direction: SortDirection;
+  field: CollaboratorAccessRequestSortField;
+};
+
 export type CollaboratorAddress = {
   __typename?: 'CollaboratorAddress';
   additional?: Maybe<Scalars['String']['output']>;
@@ -266,6 +589,13 @@ export type CollaboratorAddress = {
   lng: Scalars['Float']['output'];
   province: Scalars['String']['output'];
   uuidcollaboratoraddress: Scalars['ID']['output'];
+};
+
+export type CollaboratorConnection = {
+  __typename?: 'CollaboratorConnection';
+  edges: Array<CollaboratorEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
 };
 
 export type CollaboratorCouponConnection = {
@@ -293,6 +623,21 @@ export enum CollaboratorCouponSortField {
 export type CollaboratorCouponSortInput = {
   direction?: InputMaybe<SortDirection>;
   field?: InputMaybe<CollaboratorCouponSortField>;
+};
+
+export type CollaboratorEdge = {
+  __typename?: 'CollaboratorEdge';
+  node: Collaborator;
+};
+
+export type CollaboratorFilterInput = {
+  creationdate?: InputMaybe<DateRangeInput>;
+  documentnumber?: InputMaybe<Scalars['String']['input']>;
+  documenttype?: InputMaybe<Scalars['String']['input']>;
+  lastname?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  updatedate?: InputMaybe<DateRangeInput>;
 };
 
 export type CollaboratorOrderConnection = {
@@ -359,6 +704,21 @@ export type CollaboratorResume = {
   uuidcollaborator: Scalars['ID']['output'];
 };
 
+export enum CollaboratorSortField {
+  Creationdate = 'creationdate',
+  Documentnumber = 'documentnumber',
+  Documenttype = 'documenttype',
+  Lastname = 'lastname',
+  Name = 'name',
+  Status = 'status',
+  Updatedate = 'updatedate'
+}
+
+export type CollaboratorSortInput = {
+  direction: SortDirection;
+  field: CollaboratorSortField;
+};
+
 export type CollaboratorStars = {
   __typename?: 'CollaboratorStars';
   amount: Scalars['Float']['output'];
@@ -402,14 +762,30 @@ export type CollaboratorStarsSortInput = {
   field?: InputMaybe<CollaboratorStarsSortField>;
 };
 
+export type CollaboratorsResume = {
+  __typename?: 'CollaboratorsResume';
+  active?: Maybe<Scalars['Int']['output']>;
+  limit?: Maybe<Scalars['Int']['output']>;
+  process?: Maybe<Scalars['Int']['output']>;
+  requests?: Maybe<Scalars['Int']['output']>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
 export type ContactInfo = {
   __typename?: 'ContactInfo';
   email?: Maybe<Scalars['String']['output']>;
   lastname?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   phone?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
   uuidbusiness: Scalars['ID']['output'];
   uuidcontactinfo: Scalars['ID']['output'];
+};
+
+export type CountStatus = {
+  __typename?: 'CountStatus';
+  total: Scalars['Int']['output'];
+  value: Scalars['String']['output'];
 };
 
 export type Coupon = {
@@ -423,6 +799,46 @@ export type Coupon = {
   expirationPurchaseDate: Scalars['DateTime']['output'];
   initialDate: Scalars['DateTime']['output'];
   initialPurchaseDate: Scalars['DateTime']['output'];
+};
+
+export type CouponConnection = {
+  __typename?: 'CouponConnection';
+  edges: Array<CouponEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type CouponEdge = {
+  __typename?: 'CouponEdge';
+  node: CouponRow;
+};
+
+export type CouponFilterInput = {
+  client?: InputMaybe<Scalars['String']['input']>;
+  commercialname?: InputMaybe<Scalars['String']['input']>;
+  dateused?: InputMaybe<DateRangeInput>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CouponRow = {
+  __typename?: 'CouponRow';
+  client: Scalars['String']['output'];
+  commercialname: Scalars['String']['output'];
+  dateused: Scalars['DateTime']['output'];
+  name: Scalars['String']['output'];
+  uuidcoupon: Scalars['ID']['output'];
+};
+
+export enum CouponSortField {
+  Client = 'client',
+  Commercialname = 'commercialname',
+  Dateused = 'dateused',
+  Name = 'name'
+}
+
+export type CouponSortInput = {
+  direction: SortDirection;
+  field: CouponSortField;
 };
 
 export type CouponUsage = {
@@ -460,6 +876,45 @@ export type DeliveryHome = {
   uuiddeliveryhome: Scalars['ID']['output'];
 };
 
+export type DeliveryHomeConnection = {
+  __typename?: 'DeliveryHomeConnection';
+  edges: Array<DeliveryHomeEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type DeliveryHomeEdge = {
+  __typename?: 'DeliveryHomeEdge';
+  node: DeliveryHome;
+};
+
+export type DeliveryHomeFilterInput = {
+  city?: InputMaybe<Scalars['String']['input']>;
+  comments?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  department?: InputMaybe<Scalars['String']['input']>;
+  district?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<FloatInput>;
+  timetodelivery?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum DeliveryHomeSortField {
+  City = 'city',
+  Comments = 'comments',
+  Country = 'country',
+  Currency = 'currency',
+  Department = 'department',
+  District = 'district',
+  Price = 'price',
+  Timetodelivery = 'timetodelivery'
+}
+
+export type DeliveryHomeSortInput = {
+  direction: SortDirection;
+  field: DeliveryHomeSortField;
+};
+
 export type DeliveryInfo = {
   __typename?: 'DeliveryInfo';
   collaboratoraddress?: Maybe<CollaboratorAddress>;
@@ -493,6 +948,45 @@ export type DeliveryStore = {
   uuiddeliverystore: Scalars['ID']['output'];
 };
 
+export type DeliveryStoreConnection = {
+  __typename?: 'DeliveryStoreConnection';
+  edges: Array<DeliveryStoreEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type DeliveryStoreEdge = {
+  __typename?: 'DeliveryStoreEdge';
+  node: DeliveryStore;
+};
+
+export type DeliveryStoreFilterInput = {
+  city?: InputMaybe<Scalars['String']['input']>;
+  comments?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  department?: InputMaybe<Scalars['String']['input']>;
+  district?: InputMaybe<Scalars['String']['input']>;
+  line?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  timetodelivery?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum DeliveryStoreSortField {
+  City = 'city',
+  Comments = 'comments',
+  Country = 'country',
+  Department = 'department',
+  District = 'district',
+  Line = 'line',
+  Name = 'name',
+  Timetodelivery = 'timetodelivery'
+}
+
+export type DeliveryStoreSortInput = {
+  direction: SortDirection;
+  field: DeliveryStoreSortField;
+};
+
 export type Department = {
   __typename?: 'Department';
   active: Scalars['Boolean']['output'];
@@ -508,6 +1002,38 @@ export type Department = {
   visible: Scalars['Boolean']['output'];
 };
 
+export type DepartmentConnection = {
+  __typename?: 'DepartmentConnection';
+  edges: Array<DepartmentEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type DepartmentEdge = {
+  __typename?: 'DepartmentEdge';
+  node: Department;
+};
+
+export type DepartmentFilterInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  creationdate?: InputMaybe<DateRangeInput>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  section?: InputMaybe<Scalars['String']['input']>;
+  updatedate?: InputMaybe<DateRangeInput>;
+};
+
+export enum DepartmentSortField {
+  Creationdate = 'creationdate',
+  Name = 'name',
+  Section = 'section',
+  Updatedate = 'updatedate'
+}
+
+export type DepartmentSortInput = {
+  direction: SortDirection;
+  field: DepartmentSortField;
+};
+
 export type DesignConfig = {
   __typename?: 'DesignConfig';
   backcolor: Scalars['String']['output'];
@@ -516,7 +1042,10 @@ export type DesignConfig = {
   fontcolor: Scalars['String']['output'];
   href?: Maybe<Scalars['String']['output']>;
   ispremium?: Maybe<Scalars['Boolean']['output']>;
+  logincolor?: Maybe<Scalars['String']['output']>;
   logourl: Scalars['String']['output'];
+  offerLimitations: Array<OfferLimitation>;
+  sections?: Maybe<BusinessSections>;
   uuidbannerurl?: Maybe<Scalars['ID']['output']>;
   uuidlogourl?: Maybe<Scalars['ID']['output']>;
 };
@@ -531,11 +1060,24 @@ export type District = {
   uuiddistrict: Scalars['ID']['output'];
 };
 
+export type EnterpriseResume = {
+  __typename?: 'EnterpriseResume';
+  channels?: Maybe<BusinessCommunicationChannels>;
+  collaborators: Scalars['Boolean']['output'];
+  design: Scalars['Boolean']['output'];
+  sections?: Maybe<BusinessSections>;
+};
+
 export type FieldCount = {
   __typename?: 'FieldCount';
   count: Scalars['Int']['output'];
   name: Scalars['String']['output'];
   uuid: Scalars['ID']['output'];
+};
+
+export type FloatInput = {
+  from?: InputMaybe<Scalars['Float']['input']>;
+  to?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type HomeList = {
@@ -549,6 +1091,11 @@ export type HomeList = {
   section: Scalars['String']['output'];
   updatedate: Scalars['DateTime']['output'];
   uuidhomelist: Scalars['ID']['output'];
+};
+
+export type IntegerInput = {
+  from?: InputMaybe<Scalars['Int']['input']>;
+  to?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ItemDetails = {
@@ -588,12 +1135,26 @@ export type ItemDetails = {
   width?: Maybe<Scalars['Float']['output']>;
 };
 
+export type LegalInfo = {
+  __typename?: 'LegalInfo';
+  legalobject: Scalars['String']['output'];
+  legaltype: Scalars['String']['output'];
+  text: Scalars['String']['output'];
+  uuidlegalinfo: Scalars['ID']['output'];
+};
+
 export type MarketDesign = {
   __typename?: 'MarketDesign';
-  home_page: DesignConfig;
-  login: DesignConfig;
-  marketname: Scalars['String']['output'];
-  marketurl: Scalars['String']['output'];
+  banner?: Maybe<Scalars['String']['output']>;
+  confirmed?: Maybe<Scalars['Boolean']['output']>;
+  logincolor?: Maybe<Scalars['String']['output']>;
+  logo?: Maybe<Scalars['String']['output']>;
+  marketname?: Maybe<Scalars['String']['output']>;
+  marketurl?: Maybe<Scalars['String']['output']>;
+  primarycolor?: Maybe<Scalars['String']['output']>;
+  secondarycolor?: Maybe<Scalars['String']['output']>;
+  uuidbanner?: Maybe<Scalars['ID']['output']>;
+  uuidlogo?: Maybe<Scalars['ID']['output']>;
 };
 
 export type MarketWorkplace = {
@@ -614,6 +1175,7 @@ export type Offer = {
   __typename?: 'Offer';
   brand: Brand;
   business: Business;
+  campaignStatus?: Maybe<Scalars['String']['output']>;
   category: Category;
   creationDate: Scalars['DateTime']['output'];
   department: Department;
@@ -632,6 +1194,7 @@ export type Offer = {
   type: OfferType;
   updateDate: Scalars['DateTime']['output'];
   uuidOffer: Scalars['ID']['output'];
+  uuidcampaignoffer?: Maybe<Scalars['String']['output']>;
   variant: Array<Variant>;
 };
 
@@ -650,6 +1213,13 @@ export type OfferCampaign = {
   uuidoffercampaign: Scalars['ID']['output'];
 };
 
+export type OfferConnection = {
+  __typename?: 'OfferConnection';
+  edges: Array<OfferEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type OfferDetails = {
   __typename?: 'OfferDetails';
   adflyPrice: Scalars['Float']['output'];
@@ -661,11 +1231,37 @@ export type OfferDetails = {
   totalStock?: Maybe<Scalars['Int']['output']>;
 };
 
+export type OfferEdge = {
+  __typename?: 'OfferEdge';
+  node: Offer;
+};
+
+export type OfferFilterInput = {
+  categoryName?: InputMaybe<Scalars['String']['input']>;
+  creationdate?: InputMaybe<DateRangeInput>;
+  departmentName?: InputMaybe<Scalars['String']['input']>;
+  offerName?: InputMaybe<Scalars['String']['input']>;
+  partnerName?: InputMaybe<Scalars['String']['input']>;
+  principalSku?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  stock?: InputMaybe<IntegerInput>;
+  subcategoryName?: InputMaybe<Scalars['String']['input']>;
+  updatedate?: InputMaybe<DateRangeInput>;
+};
+
 export type OfferForCollaborator = {
   __typename?: 'OfferForCollaborator';
   lastcoupon?: Maybe<Scalars['String']['output']>;
   offer: Offer;
   totalLastPeriod?: Maybe<Scalars['Int']['output']>;
+};
+
+export type OfferLimitation = {
+  __typename?: 'OfferLimitation';
+  algoliaExp: Scalars['String']['output'];
+  dbExp: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type OfferResume = {
@@ -677,6 +1273,23 @@ export type OfferResume = {
   uuidOffer: Scalars['ID']['output'];
   uuidcampaign?: Maybe<Scalars['ID']['output']>;
   uuiddepartment?: Maybe<Scalars['ID']['output']>;
+};
+
+export enum OfferSortField {
+  CategoryName = 'categoryName',
+  Creationdate = 'creationdate',
+  DepartmentName = 'departmentName',
+  OfferName = 'offerName',
+  PartnerName = 'partnerName',
+  PrincipalSku = 'principalSku',
+  Stock = 'stock',
+  SubcategoryName = 'subcategoryName',
+  Updatedate = 'updatedate'
+}
+
+export type OfferSortInput = {
+  direction: SortDirection;
+  field: OfferSortField;
 };
 
 export enum OfferType {
@@ -696,6 +1309,7 @@ export type Order = {
   finalTotal: Scalars['Float']['output'];
   igv: Scalars['Float']['output'];
   paymentInfo?: Maybe<PaymentInfo>;
+  purchaseNumber: Scalars['String']['output'];
   starsUsed?: Maybe<Scalars['Int']['output']>;
   starspurchasenumber?: Maybe<Scalars['String']['output']>;
   status: Scalars['String']['output'];
@@ -706,6 +1320,13 @@ export type Order = {
   uuidCollaborator: Scalars['ID']['output'];
   uuidOrder: Scalars['ID']['output'];
   uuidTransaction: Scalars['String']['output'];
+};
+
+export type OrderConnection = {
+  __typename?: 'OrderConnection';
+  edges: Array<OrderEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
 };
 
 export type OrderDetails = {
@@ -745,10 +1366,41 @@ export type OrderDetailsDelivery = {
   receivername?: Maybe<Scalars['String']['output']>;
 };
 
+export type OrderEdge = {
+  __typename?: 'OrderEdge';
+  node: Order;
+};
+
+export type OrderFilterInput = {
+  businessname?: InputMaybe<Scalars['String']['input']>;
+  commercialname?: InputMaybe<Scalars['String']['input']>;
+  creationdate?: InputMaybe<DateRangeInput>;
+  purchasenumber?: InputMaybe<Scalars['String']['input']>;
+  starsUsed?: InputMaybe<IntegerInput>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  total?: InputMaybe<FloatInput>;
+  updatedate?: InputMaybe<DateRangeInput>;
+};
+
 export type OrderReport = {
   __typename?: 'OrderReport';
   collaborator: Collaborator;
   order: Order;
+};
+
+export enum OrderSortField {
+  Businessname = 'businessname',
+  Commercialname = 'commercialname',
+  Creationdate = 'creationdate',
+  Purchasenumber = 'purchasenumber',
+  StarsUsed = 'starsUsed',
+  Total = 'total',
+  Updatedate = 'updatedate'
+}
+
+export type OrderSortInput = {
+  direction: SortDirection;
+  field: OrderSortField;
 };
 
 export type PageInfo = {
@@ -802,23 +1454,11 @@ export type PaginatedCategories = {
   total: Scalars['Int']['output'];
 };
 
-export type PaginatedCollaboratorAccessRequest = {
-  __typename?: 'PaginatedCollaboratorAccessRequest';
-  requests: Array<CollaboratorAccessRequest>;
-  total: Scalars['Int']['output'];
-};
-
 export type PaginatedCollaboratorStars = {
   __typename?: 'PaginatedCollaboratorStars';
   operations: Array<CollaboratorStars>;
   totalOperations: Scalars['Int']['output'];
   totalStars: Scalars['Float']['output'];
-};
-
-export type PaginatedCollaborators = {
-  __typename?: 'PaginatedCollaborators';
-  collaborators: Array<Collaborator>;
-  total: Scalars['Int']['output'];
 };
 
 export type PaginatedCouponUsages = {
@@ -898,6 +1538,14 @@ export type PaginatedSubcategories = {
   total: Scalars['Int']['output'];
 };
 
+export type PartnerResume = {
+  __typename?: 'PartnerResume';
+  billingInformation: Scalars['Boolean']['output'];
+  contactsInformation: Scalars['Boolean']['output'];
+  productpolicies?: Maybe<Scalars['String']['output']>;
+  servicepolicies?: Maybe<Scalars['String']['output']>;
+};
+
 export type PaymentInfo = {
   __typename?: 'PaymentInfo';
   brand?: Maybe<Scalars['String']['output']>;
@@ -967,112 +1615,165 @@ export type Promotion = {
   uuidpromotion: Scalars['ID']['output'];
 };
 
+export type PromotionConnection = {
+  __typename?: 'PromotionConnection';
+  edges: Array<PromotionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type PromotionEdge = {
+  __typename?: 'PromotionEdge';
+  node: Promotion;
+};
+
+export type PromotionFilterInput = {
+  duedate?: InputMaybe<DateRangeInput>;
+  initialdate?: InputMaybe<DateRangeInput>;
+  promotionname?: InputMaybe<Scalars['String']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum PromotionSortField {
+  Duedate = 'duedate',
+  Initialdate = 'initialdate',
+  Promotionname = 'promotionname',
+  State = 'state'
+}
+
+export type PromotionSortInput = {
+  direction: SortDirection;
+  field: PromotionSortField;
+};
+
 export type Query = {
   __typename?: 'Query';
   activeBannersLists: Array<SecondaryBannersList>;
   activeHomeLists: Array<HomeList>;
-  availableOffers: PaginatedOffers;
+  adflyBrands: BrandConnection;
+  adflyCampaigns: CampaignConnection;
+  adflyCategories: CategoryConnection;
+  adflyDepartments: DepartmentConnection;
+  adflyPromotions: PromotionConnection;
+  adflySubcategories: SubCategoryConnection;
   availablePromotions: Array<Promotion>;
   banners: Array<AdflyBanner>;
   bannersList: Array<SecondaryBannersList>;
-  billingDataByBusiness?: Maybe<BillAndPay>;
+  benefit: Benefit;
+  benefitCategories: Array<BenefitCategory>;
+  benefits: BenefitConnection;
+  billAndPay?: Maybe<BillAndPay>;
   billingInfoByOrderID?: Maybe<BillingInfo>;
   brands: Array<Brand>;
-  businessAdminById: BusinessAdmin;
-  businessAdminsByBusiness: Array<BusinessAdmin>;
-  businessById: Business;
+  business?: Maybe<Business>;
+  businessAdmins: BusinessAdminConnection;
   businessOffersByCampaign: PaginatedOfferCampaigns;
-  businessStars: PaginatedBusinessStars;
-  businesses: Array<Business>;
+  businessResume: BusinessResume;
+  businessStars: BusinessStarConnection;
+  businesses: BusinessConnection;
   campaigns: Array<Campaign>;
   cart?: Maybe<Cart>;
   categories: Array<Category>;
-  categoriesByDepartment: Array<Category>;
-  category?: Maybe<Category>;
   collaborator: Collaborator;
-  collaboratorAccessRequestByBusiness: PaginatedCollaboratorAccessRequest;
+  collaboratorAccessRequests: CollaboratorAccessRequestConnection;
   collaboratorCouponUsage?: Maybe<CouponUsage>;
   collaboratorCoupons: CollaboratorCouponConnection;
   collaboratorOrder?: Maybe<OrderReport>;
   collaboratorOrders: CollaboratorOrderConnection;
   collaboratorStars: CollaboratorStarsConnection;
   collaboratoraddresses: Array<CollaboratorAddress>;
-  collaborators: PaginatedCollaborators;
-  contactInfoByBusiness?: Maybe<ContactInfo>;
-  couponReport?: Maybe<CouponUsage>;
-  deliveryHomeByBusiness: PaginatedDeliveryHome;
-  deliveryMethodsByBusiness: DeliveryMethods;
-  deliveryStoreByBusiness: PaginatedDeliveryStore;
-  department?: Maybe<Department>;
+  collaborators: CollaboratorConnection;
+  collaboratorsResume?: Maybe<CollaboratorsResume>;
+  contacts: Array<ContactInfo>;
+  coupons: CouponConnection;
+  deliveryMethods: DeliveryMethods;
   departments: Array<Department>;
-  districts: Array<District>;
-  getAllCampaigns: PaginatedCampaigns;
-  getAllCoupons: PaginatedCouponUsages;
   getAllHomeLists: PaginatedHomeLists;
   getBusinessSummary?: Maybe<BusinessSummary>;
   getCampaign: Campaign;
-  getCouponsByBusiness: PaginatedCouponUsages;
   getOfferCampaign: OfferCampaign;
-  getOrder?: Maybe<Order>;
-  getOrderReport?: Maybe<OrderReport>;
-  getSuborder?: Maybe<Suborder>;
-  getSuborderReport?: Maybe<SuborderReport>;
-  homeDesign: DesignConfig;
   homeLists: Array<HomeList>;
-  loginDesign: DesignConfig;
-  marketDesign: MarketDesign;
-  offer?: Maybe<Offer>;
+  homedelivery: DeliveryHomeConnection;
+  legalInfo: Array<LegalInfo>;
+  marketdesign?: Maybe<MarketDesign>;
+  offer: Offer;
   offerForCollaborator?: Maybe<OfferForCollaborator>;
-  offers: PaginatedOffers;
-  offersByBusiness: PaginatedOffers;
-  offersByBusinessAdmin: PaginatedOffers;
+  offerLimitations: Array<OfferLimitation>;
+  offers: OfferConnection;
   offersByCampaign: PaginatedOfferCampaigns;
-  offersByCategory: Array<Offer>;
-  offersByDepartment: Array<Offer>;
-  offersBySubCategory: Array<Offer>;
-  orders: PaginatedOrders;
-  paginatedBrands: PaginatedBrands;
-  paginatedBusinessAdmins: PaginatedBusinessAdmins;
-  paginatedBusinesses: PaginatedBusinesses;
-  paginatedCategories: PaginatedCategories;
-  paginatedDepartments: PaginatedDepartments;
-  paginatedMarketWorkplaces: PaginatedMarketWorkplaces;
-  paginatedSubcategories: PaginatedSubcategories;
-  promotions: PaginatedPromotions;
+  orders: OrderConnection;
+  ordersResume: Array<CountStatus>;
+  partners: Array<Business>;
   receiverInfoByOrderID?: Maybe<DeliveryInfo>;
-  regions: Array<Region>;
   simpleCart?: Maybe<ResumeCart>;
+  storeCollaborator: Collaborator;
   storeDesign: DesignConfig;
+  storedelivery: DeliveryStoreConnection;
   subcategories: Array<SubCategory>;
-  subcategory?: Maybe<SubCategory>;
-  suborders: PaginatedSubOrders;
-  subordersByEnterpriseID: PaginatedSubOrders;
-  subordersByPartnerID: PaginatedSubOrders;
-  variants: Array<Variant>;
+  suborder: SuborderReport;
+  suborders: SuborderConnection;
+  subordersResume: Array<CountStatus>;
 };
 
 
-export type QueryAvailableOffersArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  brandName?: InputMaybe<Scalars['String']['input']>;
-  campaign?: InputMaybe<Scalars['String']['input']>;
-  categoryName?: InputMaybe<Scalars['String']['input']>;
-  deliveryMethod?: InputMaybe<Scalars['String']['input']>;
-  departmentName?: InputMaybe<Scalars['String']['input']>;
-  excludedId?: InputMaybe<Scalars['ID']['input']>;
-  featured?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  maxPrice?: InputMaybe<Scalars['Float']['input']>;
-  minPrice?: InputMaybe<Scalars['Float']['input']>;
-  offerSearch?: InputMaybe<Scalars['String']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-  subcategoryName?: InputMaybe<Scalars['String']['input']>;
+export type QueryAdflyBrandsArgs = {
+  filter?: InputMaybe<BrandFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<BrandSortInput>;
 };
 
 
-export type QueryBillingDataByBusinessArgs = {
-  businessId: Scalars['ID']['input'];
+export type QueryAdflyCampaignsArgs = {
+  filter?: InputMaybe<CampaignFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<CampaignSortInput>;
+};
+
+
+export type QueryAdflyCategoriesArgs = {
+  filter?: InputMaybe<CategoryFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<CategorySortInput>;
+};
+
+
+export type QueryAdflyDepartmentsArgs = {
+  filter?: InputMaybe<DepartmentFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<DepartmentSortInput>;
+};
+
+
+export type QueryAdflyPromotionsArgs = {
+  filter?: InputMaybe<PromotionFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<PromotionSortInput>;
+};
+
+
+export type QueryAdflySubcategoriesArgs = {
+  filter?: InputMaybe<SubCategoryFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<SubCategorySortInput>;
+};
+
+
+export type QueryBenefitArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryBenefitsArgs = {
+  filter?: InputMaybe<BenefitFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<BenefitSortInput>;
 };
 
 
@@ -1081,18 +1782,17 @@ export type QueryBillingInfoByOrderIdArgs = {
 };
 
 
-export type QueryBusinessAdminByIdArgs = {
-  id: Scalars['ID']['input'];
+export type QueryBusinessArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
-export type QueryBusinessAdminsByBusinessArgs = {
-  businessId: Scalars['ID']['input'];
-};
-
-
-export type QueryBusinessByIdArgs = {
+export type QueryBusinessAdminsArgs = {
+  filter?: InputMaybe<BusinessAdminFilterInput>;
   id: Scalars['ID']['input'];
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<BusinessAdminSortInput>;
 };
 
 
@@ -1108,31 +1808,27 @@ export type QueryBusinessOffersByCampaignArgs = {
 
 
 export type QueryBusinessStarsArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  businessId: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<BusinessStarFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<BusinessStarSortInput>;
 };
 
 
-export type QueryCategoriesByDepartmentArgs = {
-  departmentId: Scalars['ID']['input'];
+export type QueryBusinessesArgs = {
+  filter?: InputMaybe<BusinessFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<BusinessSortInput>;
 };
 
 
-export type QueryCategoryArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryCollaboratorAccessRequestByBusinessArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  businessId: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
+export type QueryCollaboratorAccessRequestsArgs = {
+  filter?: InputMaybe<CollaboratorAccessRequestFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<CollaboratorAccessRequestSortInput>;
 };
 
 
@@ -1171,79 +1867,18 @@ export type QueryCollaboratorStarsArgs = {
 
 
 export type QueryCollaboratorsArgs = {
-  active?: InputMaybe<Scalars['Boolean']['input']>;
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-  uuidbusiness: Scalars['ID']['input'];
+  filter?: InputMaybe<CollaboratorFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<CollaboratorSortInput>;
 };
 
 
-export type QueryContactInfoByBusinessArgs = {
-  businessId: Scalars['ID']['input'];
-};
-
-
-export type QueryCouponReportArgs = {
-  uuidcouponcollaboratorusage: Scalars['ID']['input'];
-};
-
-
-export type QueryDeliveryHomeByBusinessArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  businessId: Scalars['ID']['input'];
-  department?: InputMaybe<Scalars['String']['input']>;
-  district?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  province?: InputMaybe<Scalars['String']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryDeliveryMethodsByBusinessArgs = {
-  businessId: Scalars['ID']['input'];
-};
-
-
-export type QueryDeliveryStoreByBusinessArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  businessId: Scalars['ID']['input'];
-  department?: InputMaybe<Scalars['String']['input']>;
-  district?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  province?: InputMaybe<Scalars['String']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryDepartmentArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryGetAllCampaignsArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  onlyAccepted?: InputMaybe<Scalars['Boolean']['input']>;
-  onlyAvailable?: InputMaybe<Scalars['Boolean']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryGetAllCouponsArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
+export type QueryCouponsArgs = {
+  filter?: InputMaybe<CouponFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<CouponSortInput>;
 };
 
 
@@ -1267,53 +1902,21 @@ export type QueryGetCampaignArgs = {
 };
 
 
-export type QueryGetCouponsByBusinessArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-  uuidbusiness: Scalars['ID']['input'];
-};
-
-
 export type QueryGetOfferCampaignArgs = {
   id: Scalars['ID']['input'];
 };
 
 
-export type QueryGetOrderArgs = {
-  uuidorder: Scalars['ID']['input'];
+export type QueryHomedeliveryArgs = {
+  filter?: InputMaybe<DeliveryHomeFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<DeliveryHomeSortInput>;
 };
 
 
-export type QueryGetOrderReportArgs = {
-  uuidorder: Scalars['ID']['input'];
-};
-
-
-export type QueryGetSuborderArgs = {
-  uuidSuborder: Scalars['ID']['input'];
-};
-
-
-export type QueryGetSuborderReportArgs = {
-  uuidSuborder: Scalars['ID']['input'];
-};
-
-
-export type QueryHomeDesignArgs = {
-  uuidcollaborator: Scalars['ID']['input'];
-};
-
-
-export type QueryLoginDesignArgs = {
-  subdomain: Scalars['String']['input'];
-};
-
-
-export type QueryMarketDesignArgs = {
-  uuidbusiness: Scalars['ID']['input'];
+export type QueryMarketdesignArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
@@ -1328,39 +1931,12 @@ export type QueryOfferForCollaboratorArgs = {
 
 
 export type QueryOffersArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  featured?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  onlyAccepted?: InputMaybe<Scalars['Boolean']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
+  campaignId?: InputMaybe<Scalars['ID']['input']>;
+  filter?: InputMaybe<OfferFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<OfferSortInput>;
   type?: InputMaybe<OfferType>;
-  withCount?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-
-export type QueryOffersByBusinessArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  onlyAccepted?: InputMaybe<Scalars['Boolean']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-  uuidBusiness: Scalars['ID']['input'];
-};
-
-
-export type QueryOffersByBusinessAdminArgs = {
-  brandName?: InputMaybe<Scalars['String']['input']>;
-  categoryName?: InputMaybe<Scalars['String']['input']>;
-  departmentName?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offerSearch?: InputMaybe<Scalars['String']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-  subcategoryName?: InputMaybe<Scalars['String']['input']>;
-  uuidUser: Scalars['ID']['input'];
 };
 
 
@@ -1375,102 +1951,11 @@ export type QueryOffersByCampaignArgs = {
 };
 
 
-export type QueryOffersByCategoryArgs = {
-  categoryId: Scalars['ID']['input'];
-};
-
-
-export type QueryOffersByDepartmentArgs = {
-  departmentId: Scalars['ID']['input'];
-};
-
-
-export type QueryOffersBySubCategoryArgs = {
-  subcategoryId: Scalars['ID']['input'];
-};
-
-
 export type QueryOrdersArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryPaginatedBrandsArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryPaginatedBusinessAdminsArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  businessId: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryPaginatedBusinessesArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<BusinessType>;
-};
-
-
-export type QueryPaginatedCategoriesArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryPaginatedDepartmentsArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryPaginatedMarketWorkplacesArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  businessId: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryPaginatedSubcategoriesArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryPromotionsArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<OrderFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<OrderSortInput>;
 };
 
 
@@ -1479,47 +1964,34 @@ export type QueryReceiverInfoByOrderIdArgs = {
 };
 
 
+export type QueryStoreCollaboratorArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type QueryStoreDesignArgs = {
   subdomain: Scalars['String']['input'];
 };
 
 
-export type QuerySubcategoryArgs = {
+export type QueryStoredeliveryArgs = {
+  filter?: InputMaybe<DeliveryStoreFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<DeliveryStoreSortInput>;
+};
+
+
+export type QuerySuborderArgs = {
   id: Scalars['ID']['input'];
 };
 
 
 export type QuerySubordersArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QuerySubordersByEnterpriseIdArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  businessID: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QuerySubordersByPartnerIdArgs = {
-  asc?: InputMaybe<Scalars['Boolean']['input']>;
-  businessID: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  searchBy?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryVariantsArgs = {
-  offerId: Scalars['ID']['input'];
+  filter?: InputMaybe<SuborderFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<SuborderSortInput>;
 };
 
 export type Region = {
@@ -1591,6 +2063,13 @@ export enum SortDirection {
   Desc = 'DESC'
 }
 
+export type StarsResume = {
+  __typename?: 'StarsResume';
+  StarsAssigned: Scalars['Float']['output'];
+  StarsUsed: Scalars['Float']['output'];
+  TotalStars: Scalars['Float']['output'];
+};
+
 export type SubCategory = {
   __typename?: 'SubCategory';
   active: Scalars['Boolean']['output'];
@@ -1602,6 +2081,42 @@ export type SubCategory = {
   uuidCategory: Scalars['ID']['output'];
   uuidSubCategory: Scalars['ID']['output'];
   visible: Scalars['Boolean']['output'];
+};
+
+export type SubCategoryConnection = {
+  __typename?: 'SubCategoryConnection';
+  edges: Array<SubCategoryEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type SubCategoryEdge = {
+  __typename?: 'SubCategoryEdge';
+  node: SubCategory;
+};
+
+export type SubCategoryFilterInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  categoryname?: InputMaybe<Scalars['String']['input']>;
+  creationdate?: InputMaybe<DateRangeInput>;
+  departmentname?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  section?: InputMaybe<Scalars['String']['input']>;
+  updatedate?: InputMaybe<DateRangeInput>;
+};
+
+export enum SubCategorySortField {
+  Categoryname = 'categoryname',
+  Creationdate = 'creationdate',
+  Departmentname = 'departmentname',
+  Name = 'name',
+  Section = 'section',
+  Updatedate = 'updatedate'
+}
+
+export type SubCategorySortInput = {
+  direction: SortDirection;
+  field: SubCategorySortField;
 };
 
 export type SubOrderDetails = {
@@ -1637,6 +2152,29 @@ export type Suborder = {
   uuidSuborder: Scalars['ID']['output'];
 };
 
+export type SuborderConnection = {
+  __typename?: 'SuborderConnection';
+  edges: Array<SuborderEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type SuborderEdge = {
+  __typename?: 'SuborderEdge';
+  node: Suborder;
+};
+
+export type SuborderFilterInput = {
+  businessname?: InputMaybe<Scalars['String']['input']>;
+  commercialname?: InputMaybe<Scalars['String']['input']>;
+  creationdate?: InputMaybe<DateRangeInput>;
+  purchasenumber?: InputMaybe<Scalars['String']['input']>;
+  sellername?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  total?: InputMaybe<FloatInput>;
+  updatedate?: InputMaybe<DateRangeInput>;
+};
+
 export type SuborderItem = {
   __typename?: 'SuborderItem';
   details?: Maybe<ItemDetails>;
@@ -1651,6 +2189,21 @@ export type SuborderReport = {
   __typename?: 'SuborderReport';
   collaborator: Collaborator;
   suborder: Suborder;
+};
+
+export enum SuborderSortField {
+  Businessname = 'businessname',
+  Commercialname = 'commercialname',
+  Creationdate = 'creationdate',
+  Purchasenumber = 'purchasenumber',
+  Sellername = 'sellername',
+  Total = 'total',
+  Updatedate = 'updatedate'
+}
+
+export type SuborderSortInput = {
+  direction: SortDirection;
+  field: SuborderSortField;
 };
 
 export type Variant = {
@@ -1747,7 +2300,7 @@ export type StoreDesignQueryVariables = Exact<{
 }>;
 
 
-export type StoreDesignQuery = { __typename?: 'Query', storeDesign: { __typename?: 'DesignConfig', ispremium?: boolean | null, fontcolor: string, backcolor: string, logourl: string, bannerurl: string, commercialname?: string | null, href?: string | null } };
+export type StoreDesignQuery = { __typename?: 'Query', storeDesign: { __typename?: 'DesignConfig', ispremium?: boolean | null, fontcolor: string, backcolor: string, logourl: string, bannerurl: string, commercialname?: string | null, href?: string | null, offerLimitations: Array<{ __typename?: 'OfferLimitation', id: string, algoliaExp: string, dbExp: string, type: string }>, sections?: { __typename?: 'BusinessSections', coupons?: boolean | null, marketplace?: boolean | null, products?: boolean | null, internalbenefits?: boolean | null } | null } };
 
 export type BannersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1804,6 +2357,28 @@ export type ProductQueryVariables = Exact<{
 
 
 export type ProductQuery = { __typename?: 'Query', offerForCollaborator?: { __typename?: 'OfferForCollaborator', totalLastPeriod?: number | null, lastcoupon?: string | null, offer: { __typename?: 'Offer', uuidOffer: string, offerName: string, description: string, principalSku?: string | null, type: OfferType, creationDate: any, updateDate: any, tags: Array<string>, rejectionComment?: string | null, status?: string | null, termConditions?: string | null, brand: { __typename?: 'Brand', name: string }, offerAttributes: Array<{ __typename?: 'OfferAttribute', attributeName: string, attribute: { __typename?: 'Attribute', attributeName: string, values: Array<string> } }>, department: { __typename?: 'Department', name: string }, category: { __typename?: 'Category', name: string }, subCategory: { __typename?: 'SubCategory', name: string }, business: { __typename?: 'Business', uuidbusiness: string, businessname: string, commercialname: string, deliveryMethods?: { __typename?: 'DeliveryMethods', deliveryonline: boolean, deliveryonhome: boolean, deliveryonstore: boolean } | null }, variant: Array<{ __typename?: 'Variant', uuidVariant: string, currency: string, stock: number, refPrice: number, adflyPrice: number, offerPrice?: number | null, maxQuantity?: number | null, purchasePeriod?: string | null, imageURL: string, additionalimages: Array<string>, variantSku?: string | null, attributes: Array<{ __typename?: 'VariantAttribute', attributeName: string, value: string }>, product?: { __typename?: 'Product', specification?: string | null, condition: string, conditionDetails?: string | null, productWarranty?: string | null, sellerWarranty?: string | null, included?: string | null, width?: number | null, height?: number | null, weight?: number | null, length?: number | null } | null, coupon?: { __typename?: 'Coupon', initialDate: any, expirationDate: any, initialPurchaseDate: any, expirationPurchaseDate: any, couponUsage: string, couponContent: string, discountType: string, discount: number } | null, service?: { __typename?: 'Service', initialDate: any, expirationDate: any, initialPurchaseDate: any, expirationPurchaseDate: any, accessService: string, contentService: string } | null }> } } | null };
+
+export type BenefitCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BenefitCategoriesQuery = { __typename?: 'Query', benefitCategories: Array<{ __typename?: 'BenefitCategory', id: string, name: string, active: boolean, description?: string | null }> };
+
+export type BenefitsQueryVariables = Exact<{
+  page: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+  filter?: InputMaybe<BenefitFilterInput>;
+  sort?: InputMaybe<BenefitSortInput>;
+}>;
+
+
+export type BenefitsQuery = { __typename?: 'Query', benefits: { __typename?: 'BenefitConnection', totalCount: number, edges: Array<{ __typename?: 'BenefitEdge', node: { __typename?: 'Benefit', id: string, creationdate: any, updatedate: any, name: string, uuidCategory: string, outstanding: boolean, description: string, accessBenefit?: string | null, conditions?: string | null, additionalInformation?: string | null, departments: Array<string>, nextSteps?: string | null, images: Array<string>, additionalFiles?: string | null, active: boolean, category?: { __typename?: 'BenefitCategory', id: string, name: string, active: boolean, description?: string | null } | null } }>, pageInfo: { __typename?: 'PageInfo', currentPage: number, totalPages: number } } };
+
+export type BenefitQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type BenefitQuery = { __typename?: 'Query', benefit: { __typename?: 'Benefit', id: string, name: string, uuidCategory: string, creationdate: any, updatedate: any, outstanding: boolean, description: string, accessBenefit?: string | null, conditions?: string | null, additionalInformation?: string | null, departments: Array<string>, nextSteps?: string | null, images: Array<string>, additionalFiles?: string | null, active: boolean, category?: { __typename?: 'BenefitCategory', id: string, name: string, active: boolean, description?: string | null } | null } };
 
 export type GetCollaboratorQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2460,7 +3035,18 @@ export const StoreDesignDocument = gql`
     bannerurl
     commercialname
     href
-    ispremium
+    offerLimitations {
+      id
+      algoliaExp
+      dbExp
+      type
+    }
+    sections {
+      coupons
+      marketplace
+      products
+      internalbenefits
+    }
   }
 }
     `;
@@ -3159,6 +3745,180 @@ export type ProductQueryHookResult = ReturnType<typeof useProductQuery>;
 export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
 export type ProductSuspenseQueryHookResult = ReturnType<typeof useProductSuspenseQuery>;
 export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
+export const BenefitCategoriesDocument = gql`
+    query benefitCategories {
+  benefitCategories {
+    id
+    name
+    active
+    description
+  }
+}
+    `;
+
+/**
+ * __useBenefitCategoriesQuery__
+ *
+ * To run a query within a React component, call `useBenefitCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBenefitCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBenefitCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBenefitCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<BenefitCategoriesQuery, BenefitCategoriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BenefitCategoriesQuery, BenefitCategoriesQueryVariables>(BenefitCategoriesDocument, options);
+      }
+export function useBenefitCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BenefitCategoriesQuery, BenefitCategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BenefitCategoriesQuery, BenefitCategoriesQueryVariables>(BenefitCategoriesDocument, options);
+        }
+export function useBenefitCategoriesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<BenefitCategoriesQuery, BenefitCategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<BenefitCategoriesQuery, BenefitCategoriesQueryVariables>(BenefitCategoriesDocument, options);
+        }
+export type BenefitCategoriesQueryHookResult = ReturnType<typeof useBenefitCategoriesQuery>;
+export type BenefitCategoriesLazyQueryHookResult = ReturnType<typeof useBenefitCategoriesLazyQuery>;
+export type BenefitCategoriesSuspenseQueryHookResult = ReturnType<typeof useBenefitCategoriesSuspenseQuery>;
+export type BenefitCategoriesQueryResult = Apollo.QueryResult<BenefitCategoriesQuery, BenefitCategoriesQueryVariables>;
+export const BenefitsDocument = gql`
+    query benefits($page: Int!, $limit: Int!, $filter: BenefitFilterInput, $sort: BenefitSortInput) {
+  benefits(page: $page, limit: $limit, filter: $filter, sort: $sort) {
+    totalCount
+    edges {
+      node {
+        id
+        creationdate
+        updatedate
+        name
+        uuidCategory
+        outstanding
+        description
+        accessBenefit
+        conditions
+        additionalInformation
+        departments
+        nextSteps
+        images
+        additionalFiles
+        active
+        category {
+          id
+          name
+          active
+          description
+        }
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+    `;
+
+/**
+ * __useBenefitsQuery__
+ *
+ * To run a query within a React component, call `useBenefitsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBenefitsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBenefitsQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
+ *      filter: // value for 'filter'
+ *      sort: // value for 'sort'
+ *   },
+ * });
+ */
+export function useBenefitsQuery(baseOptions: Apollo.QueryHookOptions<BenefitsQuery, BenefitsQueryVariables> & ({ variables: BenefitsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BenefitsQuery, BenefitsQueryVariables>(BenefitsDocument, options);
+      }
+export function useBenefitsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BenefitsQuery, BenefitsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BenefitsQuery, BenefitsQueryVariables>(BenefitsDocument, options);
+        }
+export function useBenefitsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<BenefitsQuery, BenefitsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<BenefitsQuery, BenefitsQueryVariables>(BenefitsDocument, options);
+        }
+export type BenefitsQueryHookResult = ReturnType<typeof useBenefitsQuery>;
+export type BenefitsLazyQueryHookResult = ReturnType<typeof useBenefitsLazyQuery>;
+export type BenefitsSuspenseQueryHookResult = ReturnType<typeof useBenefitsSuspenseQuery>;
+export type BenefitsQueryResult = Apollo.QueryResult<BenefitsQuery, BenefitsQueryVariables>;
+export const BenefitDocument = gql`
+    query benefit($id: ID!) {
+  benefit(id: $id) {
+    id
+    name
+    uuidCategory
+    creationdate
+    updatedate
+    outstanding
+    description
+    accessBenefit
+    conditions
+    additionalInformation
+    departments
+    nextSteps
+    images
+    additionalFiles
+    active
+    category {
+      id
+      name
+      active
+      description
+    }
+  }
+}
+    `;
+
+/**
+ * __useBenefitQuery__
+ *
+ * To run a query within a React component, call `useBenefitQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBenefitQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBenefitQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useBenefitQuery(baseOptions: Apollo.QueryHookOptions<BenefitQuery, BenefitQueryVariables> & ({ variables: BenefitQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BenefitQuery, BenefitQueryVariables>(BenefitDocument, options);
+      }
+export function useBenefitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BenefitQuery, BenefitQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BenefitQuery, BenefitQueryVariables>(BenefitDocument, options);
+        }
+export function useBenefitSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<BenefitQuery, BenefitQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<BenefitQuery, BenefitQueryVariables>(BenefitDocument, options);
+        }
+export type BenefitQueryHookResult = ReturnType<typeof useBenefitQuery>;
+export type BenefitLazyQueryHookResult = ReturnType<typeof useBenefitLazyQuery>;
+export type BenefitSuspenseQueryHookResult = ReturnType<typeof useBenefitSuspenseQuery>;
+export type BenefitQueryResult = Apollo.QueryResult<BenefitQuery, BenefitQueryVariables>;
 export const GetCollaboratorDocument = gql`
     query getCollaborator {
   collaborator {

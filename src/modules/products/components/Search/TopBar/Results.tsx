@@ -1,3 +1,4 @@
+import { useBenefitFilters } from "@modules/products/context/BenefitContext";
 import { Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import React from "react";
@@ -34,7 +35,42 @@ const TotalResults = () => {
         {type === "coupon" ? "Cupones" : "Tienda"}
       </Typography>
       <Typography variant="subtitle2">
-        {totalHits ? `(Resultados: ${totalHits})` : "Cargando..."}
+        {totalHits !== undefined ? `(Resultados: ${totalHits})` : "Cargando..."}
+      </Typography>
+    </Stack>
+  );
+};
+
+export const BenfitTotalResults = () => {
+  const { result } = useBenefitFilters();
+  const totalHits = result?.benefits.totalCount;
+
+  return (
+    <Stack
+      direction="row"
+      justifyContent="flex-end"
+      sx={(theme) => ({
+        [theme.breakpoints.down("md")]: {
+          justifyContent: "space-between",
+          padding: "0 20px",
+        },
+      })}
+    >
+      <Typography
+        variant="subtitle1"
+        fontSize={13}
+        fontWeight={700}
+        sx={(theme) => ({
+          textDecoration: "underline",
+          [theme.breakpoints.up("md")]: {
+            display: "none",
+          },
+        })}
+      >
+        Beneficios
+      </Typography>
+      <Typography variant="subtitle2">
+        {totalHits !== undefined ? `(Resultados: ${totalHits})` : "Cargando..."}
       </Typography>
     </Stack>
   );

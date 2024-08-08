@@ -93,3 +93,78 @@ query Product($uuidproduct: ID!) {
     lastcoupon
   }
 }
+
+query benefitCategories {
+  benefitCategories {
+    id
+    name
+    active
+    description
+  }
+}
+
+query benefits(
+  $page: Int!
+  $limit: Int!
+  $filter: BenefitFilterInput
+  $sort: BenefitSortInput
+) {
+  benefits(page: $page, limit: $limit, filter: $filter, sort: $sort) {
+    totalCount
+    edges {
+      node {
+        id
+        creationdate
+        updatedate
+        name
+        uuidCategory
+        outstanding
+        description
+        accessBenefit
+        conditions
+        additionalInformation
+        departments
+        nextSteps
+        images
+        additionalFiles
+        active
+        category {
+          id
+          name
+          active
+          description
+        }
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+
+query benefit($id: ID!) {
+  benefit(id: $id) {
+    id
+    name
+    uuidCategory
+    creationdate
+    updatedate
+    outstanding
+    description
+    accessBenefit
+    conditions
+    additionalInformation
+    departments
+    nextSteps
+    images
+    additionalFiles
+    active
+    category {
+      id
+      name
+      active
+      description
+    }
+  }
+}

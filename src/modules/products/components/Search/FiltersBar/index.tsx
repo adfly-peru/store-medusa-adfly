@@ -1,5 +1,5 @@
 import { FiltersProvider } from "@modules/products/context/FiltersContext";
-import Departments from "./Departments";
+import Departments, { BenefitCategories } from "./Departments";
 import Filters from "./Filters";
 import { Stack } from "@mui/material";
 import QueryDetails from "./QueryDetails";
@@ -20,6 +20,22 @@ const AlgoliaSideBar = () => {
       <FiltersProvider>
         <Filters />
       </FiltersProvider>
+    </Stack>
+  );
+};
+
+export const BenefitsSideBar = () => {
+  return (
+    <Stack
+      spacing={3}
+      sx={(theme) => ({
+        [theme.breakpoints.down("md")]: {
+          display: "none",
+        },
+        width: 250,
+      })}
+    >
+      <BenefitCategories />
     </Stack>
   );
 };
