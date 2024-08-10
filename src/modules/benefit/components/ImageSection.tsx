@@ -10,10 +10,10 @@ export function BenefitImages({ product: { images } }: { product: Benefit }) {
         maxWidth: "90%",
         boxShadow: "0px 0 5px -1px rgba(0,0,0,0.2)",
         paddingTop: "10px",
-        paddingBottom: images.length > 1 ? "30px" : 0,
+        paddingBottom: (images?.length ?? 0) > 1 ? "30px" : 0,
       }}
     >
-      <ImageSlider images={images} />
+      {images && <ImageSlider images={images} />}
     </Box>
   );
 }

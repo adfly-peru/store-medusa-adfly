@@ -1,6 +1,9 @@
 import CustomRefinementList from "@modules/products/components/Search/FiltersBar/RefinementList";
 import { Divider, List } from "@mui/material";
 import React from "react";
+import { MarketplacePricesFilter } from "../FiltersBar/MarketplacePrices";
+import { MarketplaceStatusFilter } from "../FiltersBar/MarketplaceStatus";
+import { MarketplaceZonesFilter } from "../FiltersBar/MarketplaceZones";
 
 const Filters = () => {
   return (
@@ -28,6 +31,34 @@ const Filters = () => {
         sx={(theme) => ({
           fontWeight: 600,
           fontSize: 16,
+          border: `1px solid ${theme.palette.grey[200]}`,
+          margin: "10px 15px",
+        })}
+      />
+    </List>
+  );
+};
+
+export const MarketplaceDrawerFilters = () => {
+  return (
+    <List sx={{ width: "100%" }}>
+      <MarketplacePricesFilter />
+      <Divider
+        sx={(theme) => ({
+          border: `1px solid ${theme.palette.grey[200]}`,
+          margin: "10px 15px",
+        })}
+      />
+      <MarketplaceStatusFilter />
+      <Divider
+        sx={(theme) => ({
+          border: `1px solid ${theme.palette.grey[200]}`,
+          margin: "10px 15px",
+        })}
+      />
+      <MarketplaceZonesFilter />
+      <Divider
+        sx={(theme) => ({
           border: `1px solid ${theme.palette.grey[200]}`,
           margin: "10px 15px",
         })}

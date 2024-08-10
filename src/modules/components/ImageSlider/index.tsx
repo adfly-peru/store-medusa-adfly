@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { NavigateNext, NavigateBefore } from "@mui/icons-material";
 import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import Slider from "react-slick";
@@ -49,9 +50,10 @@ function SamplePrevArrow(props: any) {
 
 interface ImageSliderProps {
   images: string[];
+  maxWidth?: number;
 }
 
-export default function ImageSlider({ images }: ImageSliderProps) {
+export default function ImageSlider({ images, maxWidth }: ImageSliderProps) {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down(610));
 
@@ -82,8 +84,8 @@ export default function ImageSlider({ images }: ImageSliderProps) {
             key={index}
             sx={{
               position: "relative",
-              width: matches ? "90%" : 340,
-              height: matches ? "auto" : 340,
+              width: matches ? "90%" : maxWidth ? maxWidth - 50 : 340,
+              height: matches ? "auto" : maxWidth ? maxWidth - 50 : 340,
               paddingBottom: "100%",
               overflow: "hidden",
               margin: "0 auto",
@@ -109,8 +111,8 @@ export default function ImageSlider({ images }: ImageSliderProps) {
     <Box
       sx={{
         position: "relative",
-        width: matches ? "90%" : 390,
-        height: matches ? "auto" : 390,
+        width: matches ? "90%" : maxWidth ?? 390,
+        height: matches ? "auto" : maxWidth ?? 390,
         paddingBottom: "100%",
         paddingTop: undefined,
         overflow: "hidden",

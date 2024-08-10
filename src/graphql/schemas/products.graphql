@@ -94,8 +94,8 @@ query Product($uuidproduct: ID!) {
   }
 }
 
-query benefitCategories {
-  benefitCategories {
+query benefitCategories($id: ID!) {
+  benefitCategories(id: $id) {
     id
     name
     active
@@ -104,12 +104,13 @@ query benefitCategories {
 }
 
 query benefits(
+  $id: ID!
   $page: Int!
   $limit: Int!
   $filter: BenefitFilterInput
   $sort: BenefitSortInput
 ) {
-  benefits(page: $page, limit: $limit, filter: $filter, sort: $sort) {
+  benefits(id: $id, page: $page, limit: $limit, filter: $filter, sort: $sort) {
     totalCount
     edges {
       node {
@@ -143,8 +144,8 @@ query benefits(
   }
 }
 
-query benefit($id: ID!) {
-  benefit(id: $id) {
+query benefit($uuidbusiness: ID!, $id: ID!) {
+  benefit(id: $id, uuidbusiness: $uuidbusiness) {
     id
     name
     uuidCategory
@@ -166,5 +167,139 @@ query benefit($id: ID!) {
       active
       description
     }
+  }
+}
+
+query marketplaceWorkplaces($id: ID!) {
+  marketplaceWorkplaces(id: $id) {
+    uuidbusiness
+    uuidworkplace
+    name
+    address
+    district
+    province
+    department
+    country
+    creationdate
+    updatedate
+    marketplaceavailable
+  }
+}
+
+query marketplaceItems(
+  $id: ID!
+  $page: Int!
+  $limit: Int!
+  $filter: MarketplaceItemFilterInput
+  $sort: MarketplaceItemSortInput
+) {
+  marketplaceItems(
+    id: $id
+    page: $page
+    limit: $limit
+    filter: $filter
+    sort: $sort
+  ) {
+    totalCount
+    edges {
+      node {
+        uuidmarketplaceitem
+        uuidbusiness
+        uuidcollaborator
+        title
+        price
+        brand
+        status
+        description
+        country
+        department
+        shippingmethod
+        workplacedelivery
+        paymentmethod
+        otherpaymentmethod
+        validperiod
+        uuidimages
+        images
+        itemstatus
+        creationdate
+        updatedate
+        collaborator
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+
+query collaboratorMarketplaceItems(
+  $page: Int!
+  $limit: Int!
+  $filter: MarketplaceItemFilterInput
+  $sort: MarketplaceItemSortInput
+) {
+  collaboratorMarketplaceItems(
+    page: $page
+    limit: $limit
+    filter: $filter
+    sort: $sort
+  ) {
+    totalCount
+    edges {
+      node {
+        uuidmarketplaceitem
+        uuidbusiness
+        uuidcollaborator
+        title
+        price
+        brand
+        status
+        description
+        country
+        department
+        shippingmethod
+        workplacedelivery
+        paymentmethod
+        otherpaymentmethod
+        validperiod
+        uuidimages
+        images
+        itemstatus
+        creationdate
+        updatedate
+        collaborator
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+
+query marketplaceItem($uuidbusiness: ID!, $id: ID!) {
+  marketplaceItem(id: $id, uuidbusiness: $uuidbusiness) {
+    uuidmarketplaceitem
+    uuidbusiness
+    uuidcollaborator
+    title
+    price
+    brand
+    status
+    description
+    country
+    department
+    shippingmethod
+    workplacedelivery
+    paymentmethod
+    otherpaymentmethod
+    validperiod
+    uuidimages
+    images
+    itemstatus
+    creationdate
+    updatedate
+    collaborator
   }
 }

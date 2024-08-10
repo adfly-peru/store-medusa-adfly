@@ -55,7 +55,7 @@ export type Benefit = {
   departments: Array<Scalars['String']['output']>;
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  images: Array<Scalars['String']['output']>;
+  images?: Maybe<Array<Scalars['String']['output']>>;
   name: Scalars['String']['output'];
   nextSteps?: Maybe<Scalars['String']['output']>;
   outstanding: Scalars['Boolean']['output'];
@@ -89,6 +89,7 @@ export type BenefitFilterInput = {
   creationdate?: InputMaybe<DateRangeInput>;
   name?: InputMaybe<Scalars['String']['input']>;
   updatedate?: InputMaybe<DateRangeInput>;
+  zones?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export enum BenefitSortField {
@@ -1164,11 +1165,73 @@ export type MarketWorkplace = {
   creationdate: Scalars['DateTime']['output'];
   department: Scalars['String']['output'];
   district: Scalars['String']['output'];
+  marketplaceavailable?: Maybe<Scalars['ID']['output']>;
   name: Scalars['String']['output'];
   province: Scalars['String']['output'];
   updatedate: Scalars['DateTime']['output'];
   uuidbusiness: Scalars['ID']['output'];
   uuidworkplace: Scalars['ID']['output'];
+};
+
+export type MarketplaceItem = {
+  __typename?: 'MarketplaceItem';
+  brand?: Maybe<Scalars['String']['output']>;
+  collaborator?: Maybe<Scalars['String']['output']>;
+  country?: Maybe<Scalars['String']['output']>;
+  creationdate?: Maybe<Scalars['DateTime']['output']>;
+  department?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  images?: Maybe<Array<Scalars['String']['output']>>;
+  itemstatus?: Maybe<Scalars['String']['output']>;
+  otherpaymentmethod?: Maybe<Scalars['String']['output']>;
+  paymentmethod?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  shippingmethod?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+  updatedate?: Maybe<Scalars['DateTime']['output']>;
+  uuidbusiness: Scalars['ID']['output'];
+  uuidcollaborator: Scalars['ID']['output'];
+  uuidimages?: Maybe<Scalars['String']['output']>;
+  uuidmarketplaceitem: Scalars['ID']['output'];
+  validperiod?: Maybe<Scalars['DateTime']['output']>;
+  workplacedelivery?: Maybe<Scalars['String']['output']>;
+};
+
+export type MarketplaceItemConnection = {
+  __typename?: 'MarketplaceItemConnection';
+  edges: Array<MarketplaceItemEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type MarketplaceItemEdge = {
+  __typename?: 'MarketplaceItemEdge';
+  node: MarketplaceItem;
+};
+
+export type MarketplaceItemFilterInput = {
+  creationdate?: InputMaybe<DateRangeInput>;
+  itemstatus?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<FloatInput>;
+  shippingmethod?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  updatedate?: InputMaybe<DateRangeInput>;
+  zones?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export enum MarketplaceItemSortField {
+  Brand = 'brand',
+  Creationdate = 'creationdate',
+  Price = 'price',
+  Title = 'title',
+  Updatedate = 'updatedate'
+}
+
+export type MarketplaceItemSortInput = {
+  direction: SortDirection;
+  field: MarketplaceItemSortField;
 };
 
 export type Offer = {
@@ -1491,12 +1554,6 @@ export type PaginatedHomeLists = {
   total: Scalars['Int']['output'];
 };
 
-export type PaginatedMarketWorkplaces = {
-  __typename?: 'PaginatedMarketWorkplaces';
-  marketWorkplaces: Array<MarketWorkplace>;
-  total: Scalars['Int']['output'];
-};
-
 export type PaginatedOfferCampaigns = {
   __typename?: 'PaginatedOfferCampaigns';
   offers: Array<OfferCampaign>;
@@ -1678,6 +1735,7 @@ export type Query = {
   collaboratorAccessRequests: CollaboratorAccessRequestConnection;
   collaboratorCouponUsage?: Maybe<CouponUsage>;
   collaboratorCoupons: CollaboratorCouponConnection;
+  collaboratorMarketplaceItems: MarketplaceItemConnection;
   collaboratorOrder?: Maybe<OrderReport>;
   collaboratorOrders: CollaboratorOrderConnection;
   collaboratorStars: CollaboratorStarsConnection;
@@ -1695,7 +1753,11 @@ export type Query = {
   homeLists: Array<HomeList>;
   homedelivery: DeliveryHomeConnection;
   legalInfo: Array<LegalInfo>;
+  marketWorkplaces: Array<MarketWorkplace>;
   marketdesign?: Maybe<MarketDesign>;
+  marketplaceItem: MarketplaceItem;
+  marketplaceItems: MarketplaceItemConnection;
+  marketplaceWorkplaces: Array<MarketWorkplace>;
   offer: Offer;
   offerForCollaborator?: Maybe<OfferForCollaborator>;
   offerLimitations: Array<OfferLimitation>;
@@ -1766,11 +1828,18 @@ export type QueryAdflySubcategoriesArgs = {
 
 export type QueryBenefitArgs = {
   id: Scalars['ID']['input'];
+  uuidbusiness?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryBenefitCategoriesArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
 export type QueryBenefitsArgs = {
   filter?: InputMaybe<BenefitFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
   limit: Scalars['Int']['input'];
   page: Scalars['Int']['input'];
   sort?: InputMaybe<BenefitSortInput>;
@@ -1845,6 +1914,14 @@ export type QueryCollaboratorCouponsArgs = {
 };
 
 
+export type QueryCollaboratorMarketplaceItemsArgs = {
+  filter?: InputMaybe<MarketplaceItemFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<MarketplaceItemSortInput>;
+};
+
+
 export type QueryCollaboratorOrderArgs = {
   uuidorder: Scalars['ID']['input'];
 };
@@ -1916,6 +1993,26 @@ export type QueryHomedeliveryArgs = {
 
 
 export type QueryMarketdesignArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryMarketplaceItemArgs = {
+  id: Scalars['ID']['input'];
+  uuidbusiness?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryMarketplaceItemsArgs = {
+  filter?: InputMaybe<MarketplaceItemFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<MarketplaceItemSortInput>;
+};
+
+
+export type QueryMarketplaceWorkplacesArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -2358,12 +2455,15 @@ export type ProductQueryVariables = Exact<{
 
 export type ProductQuery = { __typename?: 'Query', offerForCollaborator?: { __typename?: 'OfferForCollaborator', totalLastPeriod?: number | null, lastcoupon?: string | null, offer: { __typename?: 'Offer', uuidOffer: string, offerName: string, description: string, principalSku?: string | null, type: OfferType, creationDate: any, updateDate: any, tags: Array<string>, rejectionComment?: string | null, status?: string | null, termConditions?: string | null, brand: { __typename?: 'Brand', name: string }, offerAttributes: Array<{ __typename?: 'OfferAttribute', attributeName: string, attribute: { __typename?: 'Attribute', attributeName: string, values: Array<string> } }>, department: { __typename?: 'Department', name: string }, category: { __typename?: 'Category', name: string }, subCategory: { __typename?: 'SubCategory', name: string }, business: { __typename?: 'Business', uuidbusiness: string, businessname: string, commercialname: string, deliveryMethods?: { __typename?: 'DeliveryMethods', deliveryonline: boolean, deliveryonhome: boolean, deliveryonstore: boolean } | null }, variant: Array<{ __typename?: 'Variant', uuidVariant: string, currency: string, stock: number, refPrice: number, adflyPrice: number, offerPrice?: number | null, maxQuantity?: number | null, purchasePeriod?: string | null, imageURL: string, additionalimages: Array<string>, variantSku?: string | null, attributes: Array<{ __typename?: 'VariantAttribute', attributeName: string, value: string }>, product?: { __typename?: 'Product', specification?: string | null, condition: string, conditionDetails?: string | null, productWarranty?: string | null, sellerWarranty?: string | null, included?: string | null, width?: number | null, height?: number | null, weight?: number | null, length?: number | null } | null, coupon?: { __typename?: 'Coupon', initialDate: any, expirationDate: any, initialPurchaseDate: any, expirationPurchaseDate: any, couponUsage: string, couponContent: string, discountType: string, discount: number } | null, service?: { __typename?: 'Service', initialDate: any, expirationDate: any, initialPurchaseDate: any, expirationPurchaseDate: any, accessService: string, contentService: string } | null }> } } | null };
 
-export type BenefitCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+export type BenefitCategoriesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
 
 
 export type BenefitCategoriesQuery = { __typename?: 'Query', benefitCategories: Array<{ __typename?: 'BenefitCategory', id: string, name: string, active: boolean, description?: string | null }> };
 
 export type BenefitsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
   page: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
   filter?: InputMaybe<BenefitFilterInput>;
@@ -2371,14 +2471,51 @@ export type BenefitsQueryVariables = Exact<{
 }>;
 
 
-export type BenefitsQuery = { __typename?: 'Query', benefits: { __typename?: 'BenefitConnection', totalCount: number, edges: Array<{ __typename?: 'BenefitEdge', node: { __typename?: 'Benefit', id: string, creationdate: any, updatedate: any, name: string, uuidCategory: string, outstanding: boolean, description: string, accessBenefit?: string | null, conditions?: string | null, additionalInformation?: string | null, departments: Array<string>, nextSteps?: string | null, images: Array<string>, additionalFiles?: string | null, active: boolean, category?: { __typename?: 'BenefitCategory', id: string, name: string, active: boolean, description?: string | null } | null } }>, pageInfo: { __typename?: 'PageInfo', currentPage: number, totalPages: number } } };
+export type BenefitsQuery = { __typename?: 'Query', benefits: { __typename?: 'BenefitConnection', totalCount: number, edges: Array<{ __typename?: 'BenefitEdge', node: { __typename?: 'Benefit', id: string, creationdate: any, updatedate: any, name: string, uuidCategory: string, outstanding: boolean, description: string, accessBenefit?: string | null, conditions?: string | null, additionalInformation?: string | null, departments: Array<string>, nextSteps?: string | null, images?: Array<string> | null, additionalFiles?: string | null, active: boolean, category?: { __typename?: 'BenefitCategory', id: string, name: string, active: boolean, description?: string | null } | null } }>, pageInfo: { __typename?: 'PageInfo', currentPage: number, totalPages: number } } };
 
 export type BenefitQueryVariables = Exact<{
+  uuidbusiness: Scalars['ID']['input'];
   id: Scalars['ID']['input'];
 }>;
 
 
-export type BenefitQuery = { __typename?: 'Query', benefit: { __typename?: 'Benefit', id: string, name: string, uuidCategory: string, creationdate: any, updatedate: any, outstanding: boolean, description: string, accessBenefit?: string | null, conditions?: string | null, additionalInformation?: string | null, departments: Array<string>, nextSteps?: string | null, images: Array<string>, additionalFiles?: string | null, active: boolean, category?: { __typename?: 'BenefitCategory', id: string, name: string, active: boolean, description?: string | null } | null } };
+export type BenefitQuery = { __typename?: 'Query', benefit: { __typename?: 'Benefit', id: string, name: string, uuidCategory: string, creationdate: any, updatedate: any, outstanding: boolean, description: string, accessBenefit?: string | null, conditions?: string | null, additionalInformation?: string | null, departments: Array<string>, nextSteps?: string | null, images?: Array<string> | null, additionalFiles?: string | null, active: boolean, category?: { __typename?: 'BenefitCategory', id: string, name: string, active: boolean, description?: string | null } | null } };
+
+export type MarketplaceWorkplacesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type MarketplaceWorkplacesQuery = { __typename?: 'Query', marketplaceWorkplaces: Array<{ __typename?: 'MarketWorkplace', uuidbusiness: string, uuidworkplace: string, name: string, address: string, district: string, province: string, department: string, country: string, creationdate: any, updatedate: any, marketplaceavailable?: string | null }> };
+
+export type MarketplaceItemsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  page: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+  filter?: InputMaybe<MarketplaceItemFilterInput>;
+  sort?: InputMaybe<MarketplaceItemSortInput>;
+}>;
+
+
+export type MarketplaceItemsQuery = { __typename?: 'Query', marketplaceItems: { __typename?: 'MarketplaceItemConnection', totalCount: number, edges: Array<{ __typename?: 'MarketplaceItemEdge', node: { __typename?: 'MarketplaceItem', uuidmarketplaceitem: string, uuidbusiness: string, uuidcollaborator: string, title?: string | null, price?: number | null, brand?: string | null, status?: string | null, description?: string | null, country?: string | null, department?: string | null, shippingmethod?: string | null, workplacedelivery?: string | null, paymentmethod?: string | null, otherpaymentmethod?: string | null, validperiod?: any | null, uuidimages?: string | null, images?: Array<string> | null, itemstatus?: string | null, creationdate?: any | null, updatedate?: any | null, collaborator?: string | null } }>, pageInfo: { __typename?: 'PageInfo', currentPage: number, totalPages: number } } };
+
+export type CollaboratorMarketplaceItemsQueryVariables = Exact<{
+  page: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+  filter?: InputMaybe<MarketplaceItemFilterInput>;
+  sort?: InputMaybe<MarketplaceItemSortInput>;
+}>;
+
+
+export type CollaboratorMarketplaceItemsQuery = { __typename?: 'Query', collaboratorMarketplaceItems: { __typename?: 'MarketplaceItemConnection', totalCount: number, edges: Array<{ __typename?: 'MarketplaceItemEdge', node: { __typename?: 'MarketplaceItem', uuidmarketplaceitem: string, uuidbusiness: string, uuidcollaborator: string, title?: string | null, price?: number | null, brand?: string | null, status?: string | null, description?: string | null, country?: string | null, department?: string | null, shippingmethod?: string | null, workplacedelivery?: string | null, paymentmethod?: string | null, otherpaymentmethod?: string | null, validperiod?: any | null, uuidimages?: string | null, images?: Array<string> | null, itemstatus?: string | null, creationdate?: any | null, updatedate?: any | null, collaborator?: string | null } }>, pageInfo: { __typename?: 'PageInfo', currentPage: number, totalPages: number } } };
+
+export type MarketplaceItemQueryVariables = Exact<{
+  uuidbusiness: Scalars['ID']['input'];
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type MarketplaceItemQuery = { __typename?: 'Query', marketplaceItem: { __typename?: 'MarketplaceItem', uuidmarketplaceitem: string, uuidbusiness: string, uuidcollaborator: string, title?: string | null, price?: number | null, brand?: string | null, status?: string | null, description?: string | null, country?: string | null, department?: string | null, shippingmethod?: string | null, workplacedelivery?: string | null, paymentmethod?: string | null, otherpaymentmethod?: string | null, validperiod?: any | null, uuidimages?: string | null, images?: Array<string> | null, itemstatus?: string | null, creationdate?: any | null, updatedate?: any | null, collaborator?: string | null } };
 
 export type GetCollaboratorQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3746,8 +3883,8 @@ export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
 export type ProductSuspenseQueryHookResult = ReturnType<typeof useProductSuspenseQuery>;
 export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
 export const BenefitCategoriesDocument = gql`
-    query benefitCategories {
-  benefitCategories {
+    query benefitCategories($id: ID!) {
+  benefitCategories(id: $id) {
     id
     name
     active
@@ -3768,10 +3905,11 @@ export const BenefitCategoriesDocument = gql`
  * @example
  * const { data, loading, error } = useBenefitCategoriesQuery({
  *   variables: {
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useBenefitCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<BenefitCategoriesQuery, BenefitCategoriesQueryVariables>) {
+export function useBenefitCategoriesQuery(baseOptions: Apollo.QueryHookOptions<BenefitCategoriesQuery, BenefitCategoriesQueryVariables> & ({ variables: BenefitCategoriesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<BenefitCategoriesQuery, BenefitCategoriesQueryVariables>(BenefitCategoriesDocument, options);
       }
@@ -3788,8 +3926,8 @@ export type BenefitCategoriesLazyQueryHookResult = ReturnType<typeof useBenefitC
 export type BenefitCategoriesSuspenseQueryHookResult = ReturnType<typeof useBenefitCategoriesSuspenseQuery>;
 export type BenefitCategoriesQueryResult = Apollo.QueryResult<BenefitCategoriesQuery, BenefitCategoriesQueryVariables>;
 export const BenefitsDocument = gql`
-    query benefits($page: Int!, $limit: Int!, $filter: BenefitFilterInput, $sort: BenefitSortInput) {
-  benefits(page: $page, limit: $limit, filter: $filter, sort: $sort) {
+    query benefits($id: ID!, $page: Int!, $limit: Int!, $filter: BenefitFilterInput, $sort: BenefitSortInput) {
+  benefits(id: $id, page: $page, limit: $limit, filter: $filter, sort: $sort) {
     totalCount
     edges {
       node {
@@ -3836,6 +3974,7 @@ export const BenefitsDocument = gql`
  * @example
  * const { data, loading, error } = useBenefitsQuery({
  *   variables: {
+ *      id: // value for 'id'
  *      page: // value for 'page'
  *      limit: // value for 'limit'
  *      filter: // value for 'filter'
@@ -3860,8 +3999,8 @@ export type BenefitsLazyQueryHookResult = ReturnType<typeof useBenefitsLazyQuery
 export type BenefitsSuspenseQueryHookResult = ReturnType<typeof useBenefitsSuspenseQuery>;
 export type BenefitsQueryResult = Apollo.QueryResult<BenefitsQuery, BenefitsQueryVariables>;
 export const BenefitDocument = gql`
-    query benefit($id: ID!) {
-  benefit(id: $id) {
+    query benefit($uuidbusiness: ID!, $id: ID!) {
+  benefit(id: $id, uuidbusiness: $uuidbusiness) {
     id
     name
     uuidCategory
@@ -3899,6 +4038,7 @@ export const BenefitDocument = gql`
  * @example
  * const { data, loading, error } = useBenefitQuery({
  *   variables: {
+ *      uuidbusiness: // value for 'uuidbusiness'
  *      id: // value for 'id'
  *   },
  * });
@@ -3919,6 +4059,273 @@ export type BenefitQueryHookResult = ReturnType<typeof useBenefitQuery>;
 export type BenefitLazyQueryHookResult = ReturnType<typeof useBenefitLazyQuery>;
 export type BenefitSuspenseQueryHookResult = ReturnType<typeof useBenefitSuspenseQuery>;
 export type BenefitQueryResult = Apollo.QueryResult<BenefitQuery, BenefitQueryVariables>;
+export const MarketplaceWorkplacesDocument = gql`
+    query marketplaceWorkplaces($id: ID!) {
+  marketplaceWorkplaces(id: $id) {
+    uuidbusiness
+    uuidworkplace
+    name
+    address
+    district
+    province
+    department
+    country
+    creationdate
+    updatedate
+    marketplaceavailable
+  }
+}
+    `;
+
+/**
+ * __useMarketplaceWorkplacesQuery__
+ *
+ * To run a query within a React component, call `useMarketplaceWorkplacesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMarketplaceWorkplacesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMarketplaceWorkplacesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMarketplaceWorkplacesQuery(baseOptions: Apollo.QueryHookOptions<MarketplaceWorkplacesQuery, MarketplaceWorkplacesQueryVariables> & ({ variables: MarketplaceWorkplacesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MarketplaceWorkplacesQuery, MarketplaceWorkplacesQueryVariables>(MarketplaceWorkplacesDocument, options);
+      }
+export function useMarketplaceWorkplacesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MarketplaceWorkplacesQuery, MarketplaceWorkplacesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MarketplaceWorkplacesQuery, MarketplaceWorkplacesQueryVariables>(MarketplaceWorkplacesDocument, options);
+        }
+export function useMarketplaceWorkplacesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MarketplaceWorkplacesQuery, MarketplaceWorkplacesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MarketplaceWorkplacesQuery, MarketplaceWorkplacesQueryVariables>(MarketplaceWorkplacesDocument, options);
+        }
+export type MarketplaceWorkplacesQueryHookResult = ReturnType<typeof useMarketplaceWorkplacesQuery>;
+export type MarketplaceWorkplacesLazyQueryHookResult = ReturnType<typeof useMarketplaceWorkplacesLazyQuery>;
+export type MarketplaceWorkplacesSuspenseQueryHookResult = ReturnType<typeof useMarketplaceWorkplacesSuspenseQuery>;
+export type MarketplaceWorkplacesQueryResult = Apollo.QueryResult<MarketplaceWorkplacesQuery, MarketplaceWorkplacesQueryVariables>;
+export const MarketplaceItemsDocument = gql`
+    query marketplaceItems($id: ID!, $page: Int!, $limit: Int!, $filter: MarketplaceItemFilterInput, $sort: MarketplaceItemSortInput) {
+  marketplaceItems(
+    id: $id
+    page: $page
+    limit: $limit
+    filter: $filter
+    sort: $sort
+  ) {
+    totalCount
+    edges {
+      node {
+        uuidmarketplaceitem
+        uuidbusiness
+        uuidcollaborator
+        title
+        price
+        brand
+        status
+        description
+        country
+        department
+        shippingmethod
+        workplacedelivery
+        paymentmethod
+        otherpaymentmethod
+        validperiod
+        uuidimages
+        images
+        itemstatus
+        creationdate
+        updatedate
+        collaborator
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+    `;
+
+/**
+ * __useMarketplaceItemsQuery__
+ *
+ * To run a query within a React component, call `useMarketplaceItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMarketplaceItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMarketplaceItemsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
+ *      filter: // value for 'filter'
+ *      sort: // value for 'sort'
+ *   },
+ * });
+ */
+export function useMarketplaceItemsQuery(baseOptions: Apollo.QueryHookOptions<MarketplaceItemsQuery, MarketplaceItemsQueryVariables> & ({ variables: MarketplaceItemsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MarketplaceItemsQuery, MarketplaceItemsQueryVariables>(MarketplaceItemsDocument, options);
+      }
+export function useMarketplaceItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MarketplaceItemsQuery, MarketplaceItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MarketplaceItemsQuery, MarketplaceItemsQueryVariables>(MarketplaceItemsDocument, options);
+        }
+export function useMarketplaceItemsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MarketplaceItemsQuery, MarketplaceItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MarketplaceItemsQuery, MarketplaceItemsQueryVariables>(MarketplaceItemsDocument, options);
+        }
+export type MarketplaceItemsQueryHookResult = ReturnType<typeof useMarketplaceItemsQuery>;
+export type MarketplaceItemsLazyQueryHookResult = ReturnType<typeof useMarketplaceItemsLazyQuery>;
+export type MarketplaceItemsSuspenseQueryHookResult = ReturnType<typeof useMarketplaceItemsSuspenseQuery>;
+export type MarketplaceItemsQueryResult = Apollo.QueryResult<MarketplaceItemsQuery, MarketplaceItemsQueryVariables>;
+export const CollaboratorMarketplaceItemsDocument = gql`
+    query collaboratorMarketplaceItems($page: Int!, $limit: Int!, $filter: MarketplaceItemFilterInput, $sort: MarketplaceItemSortInput) {
+  collaboratorMarketplaceItems(
+    page: $page
+    limit: $limit
+    filter: $filter
+    sort: $sort
+  ) {
+    totalCount
+    edges {
+      node {
+        uuidmarketplaceitem
+        uuidbusiness
+        uuidcollaborator
+        title
+        price
+        brand
+        status
+        description
+        country
+        department
+        shippingmethod
+        workplacedelivery
+        paymentmethod
+        otherpaymentmethod
+        validperiod
+        uuidimages
+        images
+        itemstatus
+        creationdate
+        updatedate
+        collaborator
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+    `;
+
+/**
+ * __useCollaboratorMarketplaceItemsQuery__
+ *
+ * To run a query within a React component, call `useCollaboratorMarketplaceItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCollaboratorMarketplaceItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCollaboratorMarketplaceItemsQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
+ *      filter: // value for 'filter'
+ *      sort: // value for 'sort'
+ *   },
+ * });
+ */
+export function useCollaboratorMarketplaceItemsQuery(baseOptions: Apollo.QueryHookOptions<CollaboratorMarketplaceItemsQuery, CollaboratorMarketplaceItemsQueryVariables> & ({ variables: CollaboratorMarketplaceItemsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CollaboratorMarketplaceItemsQuery, CollaboratorMarketplaceItemsQueryVariables>(CollaboratorMarketplaceItemsDocument, options);
+      }
+export function useCollaboratorMarketplaceItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CollaboratorMarketplaceItemsQuery, CollaboratorMarketplaceItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CollaboratorMarketplaceItemsQuery, CollaboratorMarketplaceItemsQueryVariables>(CollaboratorMarketplaceItemsDocument, options);
+        }
+export function useCollaboratorMarketplaceItemsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CollaboratorMarketplaceItemsQuery, CollaboratorMarketplaceItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CollaboratorMarketplaceItemsQuery, CollaboratorMarketplaceItemsQueryVariables>(CollaboratorMarketplaceItemsDocument, options);
+        }
+export type CollaboratorMarketplaceItemsQueryHookResult = ReturnType<typeof useCollaboratorMarketplaceItemsQuery>;
+export type CollaboratorMarketplaceItemsLazyQueryHookResult = ReturnType<typeof useCollaboratorMarketplaceItemsLazyQuery>;
+export type CollaboratorMarketplaceItemsSuspenseQueryHookResult = ReturnType<typeof useCollaboratorMarketplaceItemsSuspenseQuery>;
+export type CollaboratorMarketplaceItemsQueryResult = Apollo.QueryResult<CollaboratorMarketplaceItemsQuery, CollaboratorMarketplaceItemsQueryVariables>;
+export const MarketplaceItemDocument = gql`
+    query marketplaceItem($uuidbusiness: ID!, $id: ID!) {
+  marketplaceItem(id: $id, uuidbusiness: $uuidbusiness) {
+    uuidmarketplaceitem
+    uuidbusiness
+    uuidcollaborator
+    title
+    price
+    brand
+    status
+    description
+    country
+    department
+    shippingmethod
+    workplacedelivery
+    paymentmethod
+    otherpaymentmethod
+    validperiod
+    uuidimages
+    images
+    itemstatus
+    creationdate
+    updatedate
+    collaborator
+  }
+}
+    `;
+
+/**
+ * __useMarketplaceItemQuery__
+ *
+ * To run a query within a React component, call `useMarketplaceItemQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMarketplaceItemQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMarketplaceItemQuery({
+ *   variables: {
+ *      uuidbusiness: // value for 'uuidbusiness'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMarketplaceItemQuery(baseOptions: Apollo.QueryHookOptions<MarketplaceItemQuery, MarketplaceItemQueryVariables> & ({ variables: MarketplaceItemQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MarketplaceItemQuery, MarketplaceItemQueryVariables>(MarketplaceItemDocument, options);
+      }
+export function useMarketplaceItemLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MarketplaceItemQuery, MarketplaceItemQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MarketplaceItemQuery, MarketplaceItemQueryVariables>(MarketplaceItemDocument, options);
+        }
+export function useMarketplaceItemSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MarketplaceItemQuery, MarketplaceItemQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MarketplaceItemQuery, MarketplaceItemQueryVariables>(MarketplaceItemDocument, options);
+        }
+export type MarketplaceItemQueryHookResult = ReturnType<typeof useMarketplaceItemQuery>;
+export type MarketplaceItemLazyQueryHookResult = ReturnType<typeof useMarketplaceItemLazyQuery>;
+export type MarketplaceItemSuspenseQueryHookResult = ReturnType<typeof useMarketplaceItemSuspenseQuery>;
+export type MarketplaceItemQueryResult = Apollo.QueryResult<MarketplaceItemQuery, MarketplaceItemQueryVariables>;
 export const GetCollaboratorDocument = gql`
     query getCollaborator {
   collaborator {

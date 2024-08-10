@@ -15,12 +15,15 @@ import Loader from "@modules/components/LoadingScreen/Loader";
 import { BenefitBreadcumbsSection } from "./components/BreadcumbsSection";
 import { BenefitImages } from "./components/ImageSection";
 import { BenefitDetails } from "./components/DetailsSection";
+import { useSession } from "next-auth/react";
 
 const DetailedBenefit = () => {
   const router = useRouter();
+  const { data: sessionData } = useSession();
   const id = router.query.benefit as string;
   const { data, loading } = useBenefitQuery({
     variables: {
+      uuidbusiness: sessionData?.user?.uuidbusiness ?? "",
       id,
     },
   });

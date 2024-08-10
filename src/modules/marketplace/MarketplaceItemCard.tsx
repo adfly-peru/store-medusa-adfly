@@ -7,10 +7,16 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Benefit } from "generated/graphql";
+import { Benefit, MarketplaceItemQuery } from "generated/graphql";
 import { useRouter } from "next/router";
 
-const BenefitCard = ({ product }: { product: Benefit }) => {
+const MarketplaceItemCard = ({
+  product,
+  action,
+}: {
+  product: MarketplaceItemQuery["marketplaceItem"];
+  action?: boolean;
+}) => {
   const router = useRouter();
   return (
     <Card
@@ -26,7 +32,11 @@ const BenefitCard = ({ product }: { product: Benefit }) => {
       })}
     >
       <CardActionArea
-        onClick={() => router.push(`/benefit/${product.id}`)}
+        onClick={() =>
+          action
+            ? router.push(`/marketplace/${product.uuidmarketplaceitem}`)
+            : null
+        }
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -40,7 +50,7 @@ const BenefitCard = ({ product }: { product: Benefit }) => {
           image={
             !product.images?.at(0) ? "/Logo Adfly.svg" : product.images.at(0)
           }
-          alt={product.name}
+          alt={product.title ?? ""}
           sx={(theme) => ({
             objectFit: "contain",
             [theme.breakpoints.down("md")]: {
@@ -60,6 +70,22 @@ const BenefitCard = ({ product }: { product: Benefit }) => {
           {/* Title */}
           <Stack sx={{ gap: "10px" }}>
             <Typography
+              variant="h4"
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "-webkit-box",
+                WebkitLineClamp: "1",
+                WebkitBoxOrient: "vertical",
+                fontWeight: 600,
+                fontSize: "14px",
+                lineHeight: "20px",
+                color: "black",
+              }}
+            >
+              S/.{product.price}
+            </Typography>
+            <Typography
               variant="h3"
               fontSize={13}
               fontWeight={500}
@@ -75,8 +101,21 @@ const BenefitCard = ({ product }: { product: Benefit }) => {
                 lineHeight: "normal",
               }}
             >
-              {product.name}
+              {product.title}
             </Typography>
+            <Stack gap="4px" mt="10px">
+              <Typography
+                variant="body2"
+                color="#8F959B"
+                fontSize={10}
+                fontWeight={600}
+              >
+                Vendido por:
+              </Typography>
+              <Typography variant="body1" fontSize={12} fontWeight={400}>
+                {product.collaborator ?? "-"}
+              </Typography>
+            </Stack>
           </Stack>
           {/* Button */}
           <Box
@@ -94,7 +133,7 @@ const BenefitCard = ({ product }: { product: Benefit }) => {
               paddingTop: "2px",
             })}
           >
-            Ver detalle
+            Ver producto
           </Box>
         </CardContent>
       </CardActionArea>
@@ -102,4 +141,4 @@ const BenefitCard = ({ product }: { product: Benefit }) => {
   );
 };
 
-export default BenefitCard;
+export default MarketplaceItemCard;

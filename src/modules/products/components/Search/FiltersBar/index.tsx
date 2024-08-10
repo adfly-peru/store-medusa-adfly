@@ -1,8 +1,9 @@
 import { FiltersProvider } from "@modules/products/context/FiltersContext";
 import Departments, { BenefitCategories } from "./Departments";
-import Filters from "./Filters";
-import { Stack } from "@mui/material";
+import Filters, { BenefitsFilters, MarketplaceFilters } from "./Filters";
+import { Button, Stack } from "@mui/material";
 import QueryDetails from "./QueryDetails";
+import { ArrowCircleRightOutlined } from "@mui/icons-material";
 
 const AlgoliaSideBar = () => {
   return (
@@ -36,6 +37,26 @@ export const BenefitsSideBar = () => {
       })}
     >
       <BenefitCategories />
+      <BenefitsFilters />
+    </Stack>
+  );
+};
+
+export const MarketplaceSideBar = () => {
+  return (
+    <Stack
+      spacing={3}
+      sx={(theme) => ({
+        [theme.breakpoints.down("md")]: {
+          display: "none",
+        },
+        width: 250,
+      })}
+    >
+      <Button variant="outlined" endIcon={<ArrowCircleRightOutlined />}>
+        Vender aquí
+      </Button>
+      <MarketplaceFilters />
     </Stack>
   );
 };

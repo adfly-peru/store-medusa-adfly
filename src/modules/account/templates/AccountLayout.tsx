@@ -54,6 +54,20 @@ const AccountCard = () => {
               path: "/account/addresses",
             },
             {
+              name: "Mi Marketplace",
+              path: "/account/marketplace",
+              subRoutes: [
+                {
+                  name: "Administrar mis ofertas",
+                  path: "/account/marketplace/admin",
+                },
+                {
+                  name: "Solicitudes",
+                  path: "/account/marketplace/requests",
+                },
+              ],
+            },
+            {
               name: "Mis Compras",
               path: "/account/orders",
             },

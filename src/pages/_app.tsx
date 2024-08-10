@@ -20,6 +20,7 @@ import { WhatsApp } from "@mui/icons-material";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@lib/apollo-config";
 import { Global } from "@emotion/react";
+import { DialogProvider } from "@context/DialogContext";
 
 const googleMapsLibraries = ["places"];
 interface MyAppProps extends AppProps {
@@ -65,29 +66,31 @@ export default function App(props: MyAppProps) {
                         }}
                       />
                       <LoadingScreen />
-                      <Authentication>
-                        <AppHeader />
-                        <div
-                          style={{
-                            minHeight: "1200px",
-                          }}
-                        >
-                          <Component {...pageProps} />
-                        </div>
-                        <Fab
-                          color="primary"
-                          aria-label="whatsapp"
-                          onClick={() =>
-                            window.open(
-                              "https://wa.me/51970802065?text=Hola,%20tengo%20una%20consulta"
-                            )
-                          }
-                          sx={{ position: "fixed", bottom: 16, right: 16 }}
-                        >
-                          <WhatsApp />
-                        </Fab>
-                        <AppFooter />
-                      </Authentication>
+                      <DialogProvider>
+                        <Authentication>
+                          <AppHeader />
+                          <div
+                            style={{
+                              minHeight: "1200px",
+                            }}
+                          >
+                            <Component {...pageProps} />
+                          </div>
+                          <Fab
+                            color="primary"
+                            aria-label="whatsapp"
+                            onClick={() =>
+                              window.open(
+                                "https://wa.me/51970802065?text=Hola,%20tengo%20una%20consulta"
+                              )
+                            }
+                            sx={{ position: "fixed", bottom: 16, right: 16 }}
+                          >
+                            <WhatsApp />
+                          </Fab>
+                          <AppFooter />
+                        </Authentication>
+                      </DialogProvider>
                     </LoadScript>
                   </CategoriesProvider>
                 </DesignContainer>

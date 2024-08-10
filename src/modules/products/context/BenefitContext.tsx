@@ -1,3 +1,4 @@
+import { useCategories } from "@context/categories-context";
 import {
   BenefitCategory,
   BenefitSortField,
@@ -8,6 +9,7 @@ import {
   useBenefitsLazyQuery,
   useBenefitsQuery,
 } from "generated/graphql";
+import { useSession } from "next-auth/react";
 import {
   Dispatch,
   SetStateAction,
@@ -45,7 +47,8 @@ export const BenefitFiltersProvider = ({
 }: {
   children?: React.ReactNode;
 }) => {
-  const { data } = useBenefitCategoriesQuery();
+  const { data: sessionData } = useSession();
+  const { benefitcategories: data } = useCategories();
   const [currentCategory, setCurrentCategory] = useState("");
   const [selectedDepartments, setSelectedDepartments] = useState<UbigeoEntry[]>(
     []
@@ -56,8 +59,10 @@ export const BenefitFiltersProvider = ({
   const [fetch, { data: result }] = useBenefitsLazyQuery();
 
   useEffect(() => {
+    if (!sessionData?.user?.uuidbusiness) return;
     fetch({
       variables: {
+        id: sessionData.user.uuidbusiness,
         page,
         limit: 12,
         filter: {
@@ -75,12 +80,19 @@ export const BenefitFiltersProvider = ({
               },
       },
     });
-  }, [currentCategory, selectedDepartments, page, sort, fetch]);
+  }, [
+    currentCategory,
+    selectedDepartments,
+    page,
+    sort,
+    fetch,
+    sessionData?.user?.uuidbusiness,
+  ]);
 
   return (
     <BenefitFiltersContext.Provider
       value={{
-        categories: data?.benefitCategories ?? [],
+        categories: data,
         currentCategory,
         setCurrentCategory,
         selectedDepartments,

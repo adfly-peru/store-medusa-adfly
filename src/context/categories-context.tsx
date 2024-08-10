@@ -1,17 +1,22 @@
 import {
   AvailablePromotionsQuery,
+  BenefitCategoriesQuery,
   BrandsQuery,
   CampaignsQuery,
   CategoriesQuery,
   DepartmentsQuery,
+  MarketplaceWorkplacesQuery,
   SubcategoriesQuery,
   useAvailablePromotionsQuery,
+  useBenefitCategoriesQuery,
   useBrandsQuery,
   useCampaignsQuery,
   useCategoriesQuery,
   useDepartmentsQuery,
+  useMarketplaceWorkplacesQuery,
   useSubcategoriesQuery,
 } from "generated/graphql";
+import { useSession } from "next-auth/react";
 import { createContext, useContext } from "react";
 
 interface CategoriesContext {
@@ -21,6 +26,8 @@ interface CategoriesContext {
   brands: BrandsQuery["brands"];
   campaigns: CampaignsQuery["campaigns"];
   promotions: AvailablePromotionsQuery["availablePromotions"];
+  benefitcategories: BenefitCategoriesQuery["benefitCategories"];
+  marketplaceworkplaces: MarketplaceWorkplacesQuery["marketplaceWorkplaces"];
 }
 
 const CategoriesContext = createContext<CategoriesContext | null>(null);
@@ -30,6 +37,7 @@ interface CategoriesProviderProps {
 }
 
 export const CategoriesProvider = ({ children }: CategoriesProviderProps) => {
+  const { data: sessionData } = useSession();
   const { data: departmentsResult } = useDepartmentsQuery({
     defaultOptions: {
       fetchPolicy: "cache-first",
@@ -60,6 +68,24 @@ export const CategoriesProvider = ({ children }: CategoriesProviderProps) => {
       fetchPolicy: "cache-first",
     },
   });
+  const { data: benefitCategories } = useBenefitCategoriesQuery({
+    skip: !sessionData?.user?.uuidbusiness,
+    variables: {
+      id: sessionData?.user?.uuidbusiness ?? "",
+    },
+    defaultOptions: {
+      fetchPolicy: "cache-first",
+    },
+  });
+  const { data: marketplaceworkplaces } = useMarketplaceWorkplacesQuery({
+    skip: !sessionData?.user?.uuidbusiness,
+    variables: {
+      id: sessionData?.user?.uuidbusiness ?? "",
+    },
+    defaultOptions: {
+      fetchPolicy: "cache-first",
+    },
+  });
 
   return (
     <CategoriesContext.Provider
@@ -70,6 +96,9 @@ export const CategoriesProvider = ({ children }: CategoriesProviderProps) => {
         brands: brandsResult?.brands ?? [],
         campaigns: campaignsResult?.campaigns ?? [],
         promotions: promotionsResult?.availablePromotions ?? [],
+        benefitcategories: benefitCategories?.benefitCategories ?? [],
+        marketplaceworkplaces:
+          marketplaceworkplaces?.marketplaceWorkplaces ?? [],
       }}
     >
       {children}

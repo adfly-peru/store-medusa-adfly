@@ -4,22 +4,33 @@ import { InstantSearch } from "react-instantsearch";
 import FilterSection from "../components/Search/Filters";
 import FilteredAlgoliaProducts, {
   FilteredBenefits,
+  FilteredMarketplace,
 } from "../components/Search/Results";
-import AlgoliaTopBar, { BenefitsTopBar } from "../components/Search/TopBar";
+import AlgoliaTopBar, {
+  BenefitsTopBar,
+  MarketplaceTopBar,
+} from "../components/Search/TopBar";
 import TotalResults, {
   BenfitTotalResults,
+  MarketplaceTotalResults,
 } from "../components/Search/TopBar/Results";
 import CustomPagination, {
   BenefitsPagination,
+  MarketplacePagination,
 } from "../components/Search/TopBar/Pagination";
 import SectionDetails from "../components/Search/SectionDetails";
 import { useRouter } from "next/router";
 import { BenefitFiltersProvider } from "../context/BenefitContext";
-import { BenefitsSideBar } from "../components/Search/FiltersBar";
+import {
+  BenefitsSideBar,
+  MarketplaceSideBar,
+} from "../components/Search/FiltersBar";
+import { MarketplaceFiltersProvider } from "../context/MarketplaceContext";
 
 const SearchProducts = () => {
   const router = useRouter();
   const { type } = router.query;
+
   if (type === "benefits")
     return (
       <Box
@@ -69,6 +80,57 @@ const SearchProducts = () => {
         </BenefitFiltersProvider>
       </Box>
     );
+
+  if (type === "marketplace")
+    return (
+      <Box
+        sx={(theme) => ({
+          paddingLeft: "0",
+          paddingRight: "0",
+          [theme.breakpoints.up("md")]: {
+            paddingLeft: "27px",
+            paddingRight: "27px",
+          },
+          [theme.breakpoints.up("lg")]: {
+            paddingLeft: "117px",
+            paddingRight: "117px",
+          },
+          marginBottom: 15,
+        })}
+      >
+        <MarketplaceFiltersProvider>
+          <SectionDetails />
+          <MarketplaceTotalResults />
+          <Stack
+            sx={{
+              width: "100%",
+            }}
+            justifyContent="space-between"
+            spacing={{ xs: 0, md: 3 }}
+            direction="row"
+          >
+            <MarketplaceSideBar />
+            <Stack
+              spacing={1}
+              sx={{
+                width: "100%",
+              }}
+            >
+              <MarketplaceTopBar />
+              <FilteredMarketplace />
+              <div
+                style={{
+                  alignSelf: "center",
+                }}
+              >
+                <MarketplacePagination />
+              </div>
+            </Stack>
+          </Stack>
+        </MarketplaceFiltersProvider>
+      </Box>
+    );
+
   return (
     <Box
       sx={(theme) => ({

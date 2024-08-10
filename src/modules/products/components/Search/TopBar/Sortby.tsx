@@ -2,6 +2,7 @@ import {
   benefitSortItems,
   useBenefitFilters,
 } from "@modules/products/context/BenefitContext";
+import { useMarketplaceFilters } from "@modules/products/context/MarketplaceContext";
 import { Box, MenuItem, Select, Typography } from "@mui/material";
 import { useSortBy } from "react-instantsearch";
 
@@ -81,6 +82,43 @@ export const BenefitsSortBy = () => {
             setSort(event.target.value);
           }}
         >
+          {benefitSortItems.map((item) => (
+            <MenuItem value={item.value} key={item.value}>
+              {item.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
+    </>
+  );
+};
+
+export const MarketplaceSortBy = () => {
+  const { sort, setSort } = useMarketplaceFilters();
+  return (
+    <>
+      <Box
+        sx={(theme) => ({
+          display: "flex",
+          direction: "row",
+          alignItems: "center",
+          gap: "20px",
+          [theme.breakpoints.down("xs")]: {
+            display: "none",
+          },
+        })}
+      >
+        <Typography variant="body1">Ordenar por</Typography>
+        <Select
+          variant="standard"
+          label=""
+          value={sort}
+          autoFocus={false}
+          onChange={(event) => {
+            setSort(event.target.value);
+          }}
+        >
+          {/* TODO: Change  */}
           {benefitSortItems.map((item) => (
             <MenuItem value={item.value} key={item.value}>
               {item.label}
