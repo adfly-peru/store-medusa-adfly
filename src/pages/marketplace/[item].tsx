@@ -37,7 +37,7 @@ export default function ProductPage() {
         },
       })}
     >
-      <DetailedMarketplaceItem item={product} />
+      <DetailedMarketplaceItem item={product} action />
     </Box>
   );
 }

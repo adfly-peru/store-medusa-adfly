@@ -303,3 +303,90 @@ query marketplaceItem($uuidbusiness: ID!, $id: ID!) {
     collaborator
   }
 }
+
+query marketplacerequests(
+  $page: Int!
+  $limit: Int!
+  $filter: MarketplaceRequestFilterInput
+  $sort: MarketplaceRequestSortInput
+) {
+  marketplacerequests(
+    page: $page
+    limit: $limit
+    filter: $filter
+    sort: $sort
+  ) {
+    totalCount
+    edges {
+      node {
+        id
+        fullname
+        offer {
+          uuidmarketplaceitem
+          uuidbusiness
+          uuidcollaborator
+          title
+          price
+          brand
+          status
+          description
+          country
+          department
+          shippingmethod
+          workplacedelivery
+          paymentmethod
+          otherpaymentmethod
+          validperiod
+          uuidimages
+          images
+          itemstatus
+          creationdate
+          updatedate
+          collaborator
+        }
+        email
+        phone
+        message
+        creationdate
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+
+query marketplacerequest($id: ID!) {
+  marketplacerequest(id: $id) {
+    id
+    fullname
+    offer {
+      uuidmarketplaceitem
+      uuidbusiness
+      uuidcollaborator
+      title
+      price
+      brand
+      status
+      description
+      country
+      department
+      shippingmethod
+      workplacedelivery
+      paymentmethod
+      otherpaymentmethod
+      validperiod
+      uuidimages
+      images
+      itemstatus
+      creationdate
+      updatedate
+      collaborator
+    }
+    email
+    phone
+    message
+    creationdate
+  }
+}

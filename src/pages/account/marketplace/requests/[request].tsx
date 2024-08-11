@@ -1,9 +1,10 @@
 import AccountLayout from "@modules/account/templates/AccountLayout";
+import SimpleRequest from "@modules/marketplace/SimpleRequest";
 
 const Page = () => {
   return (
     <AccountLayout>
-      <div></div>
+      <SimpleRequest />
     </AccountLayout>
   );
 };

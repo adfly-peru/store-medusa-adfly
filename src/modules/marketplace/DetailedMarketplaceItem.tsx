@@ -28,6 +28,8 @@ import {
 import ImageSlider from "@modules/components/ImageSlider";
 import BasicTabs from "@modules/components/TabPanel";
 import { Icon } from "@iconify/react";
+import { useDialog } from "@context/DialogContext";
+import ContactSeller from "./components/ContactSeller";
 
 const Delivery = ({
   product,
@@ -218,30 +220,22 @@ const Delivery = ({
 
 const DetailedMarketplaceItem = ({
   item,
+  action,
 }: {
   item: MarketplaceItemQuery["marketplaceItem"];
+  action?: boolean;
 }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down(1121));
-  //   const router = useRouter();
-  //   const { data: sessionData } = useSession();
-  //   const id = router.query.benefit as string;
-  //   const { data, loading } = useMarketplaceItemQuery({
-  //     variables: {
-  //       uuidbusiness: sessionData?.user?.uuidbusiness ?? "",
-  //       id,
-  //     },
-  //   });
+  const { openDialog, closeDialog } = useDialog();
 
-  //   const product = item.marketplaceItem
-
-  //   if (loading) {
-  //     return <Loader />;
-  //   }
-
-  //   if (!product) {
-  //     return <div>Benefit not found</div>;
-  //   }
+  const handleContact = () => {
+    openDialog({
+      title: "Contactar anunciante",
+      closable: true,
+      content: <ContactSeller id={item.uuidmarketplaceitem} />,
+    });
+  };
 
   return (
     <Box
@@ -397,7 +391,12 @@ const DetailedMarketplaceItem = ({
             </Stack>
 
             <Divider />
-            <Button variant="contained" fullWidth size="small">
+            <Button
+              variant="contained"
+              fullWidth
+              size="small"
+              onClick={() => (action ? handleContact() : null)}
+            >
               Contactar anunciante
             </Button>
           </Stack>

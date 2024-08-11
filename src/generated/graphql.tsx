@@ -1234,6 +1234,44 @@ export type MarketplaceItemSortInput = {
   field: MarketplaceItemSortField;
 };
 
+export type MarketplaceRequest = {
+  __typename?: 'MarketplaceRequest';
+  creationdate?: Maybe<Scalars['DateTime']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  fullname?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  message?: Maybe<Scalars['String']['output']>;
+  offer?: Maybe<MarketplaceItem>;
+  phone?: Maybe<Scalars['String']['output']>;
+};
+
+export type MarketplaceRequestConnection = {
+  __typename?: 'MarketplaceRequestConnection';
+  edges: Array<MarketplaceRequestEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type MarketplaceRequestEdge = {
+  __typename?: 'MarketplaceRequestEdge';
+  node: MarketplaceRequest;
+};
+
+export type MarketplaceRequestFilterInput = {
+  creationdate?: InputMaybe<DateRangeInput>;
+  fullname?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum MarketplaceRequestSortField {
+  Creationdate = 'creationdate',
+  Fullname = 'fullname'
+}
+
+export type MarketplaceRequestSortInput = {
+  direction: SortDirection;
+  field: MarketplaceRequestSortField;
+};
+
 export type Offer = {
   __typename?: 'Offer';
   brand: Brand;
@@ -1758,6 +1796,8 @@ export type Query = {
   marketplaceItem: MarketplaceItem;
   marketplaceItems: MarketplaceItemConnection;
   marketplaceWorkplaces: Array<MarketWorkplace>;
+  marketplacerequest: MarketplaceRequest;
+  marketplacerequests: MarketplaceRequestConnection;
   offer: Offer;
   offerForCollaborator?: Maybe<OfferForCollaborator>;
   offerLimitations: Array<OfferLimitation>;
@@ -2014,6 +2054,19 @@ export type QueryMarketplaceItemsArgs = {
 
 export type QueryMarketplaceWorkplacesArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryMarketplacerequestArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryMarketplacerequestsArgs = {
+  filter?: InputMaybe<MarketplaceRequestFilterInput>;
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+  sort?: InputMaybe<MarketplaceRequestSortInput>;
 };
 
 
@@ -2516,6 +2569,23 @@ export type MarketplaceItemQueryVariables = Exact<{
 
 
 export type MarketplaceItemQuery = { __typename?: 'Query', marketplaceItem: { __typename?: 'MarketplaceItem', uuidmarketplaceitem: string, uuidbusiness: string, uuidcollaborator: string, title?: string | null, price?: number | null, brand?: string | null, status?: string | null, description?: string | null, country?: string | null, department?: string | null, shippingmethod?: string | null, workplacedelivery?: string | null, paymentmethod?: string | null, otherpaymentmethod?: string | null, validperiod?: any | null, uuidimages?: string | null, images?: Array<string> | null, itemstatus?: string | null, creationdate?: any | null, updatedate?: any | null, collaborator?: string | null } };
+
+export type MarketplacerequestsQueryVariables = Exact<{
+  page: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+  filter?: InputMaybe<MarketplaceRequestFilterInput>;
+  sort?: InputMaybe<MarketplaceRequestSortInput>;
+}>;
+
+
+export type MarketplacerequestsQuery = { __typename?: 'Query', marketplacerequests: { __typename?: 'MarketplaceRequestConnection', totalCount: number, edges: Array<{ __typename?: 'MarketplaceRequestEdge', node: { __typename?: 'MarketplaceRequest', id: string, fullname?: string | null, email?: string | null, phone?: string | null, message?: string | null, creationdate?: any | null, offer?: { __typename?: 'MarketplaceItem', uuidmarketplaceitem: string, uuidbusiness: string, uuidcollaborator: string, title?: string | null, price?: number | null, brand?: string | null, status?: string | null, description?: string | null, country?: string | null, department?: string | null, shippingmethod?: string | null, workplacedelivery?: string | null, paymentmethod?: string | null, otherpaymentmethod?: string | null, validperiod?: any | null, uuidimages?: string | null, images?: Array<string> | null, itemstatus?: string | null, creationdate?: any | null, updatedate?: any | null, collaborator?: string | null } | null } }>, pageInfo: { __typename?: 'PageInfo', currentPage: number, totalPages: number } } };
+
+export type MarketplacerequestQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type MarketplacerequestQuery = { __typename?: 'Query', marketplacerequest: { __typename?: 'MarketplaceRequest', id: string, fullname?: string | null, email?: string | null, phone?: string | null, message?: string | null, creationdate?: any | null, offer?: { __typename?: 'MarketplaceItem', uuidmarketplaceitem: string, uuidbusiness: string, uuidcollaborator: string, title?: string | null, price?: number | null, brand?: string | null, status?: string | null, description?: string | null, country?: string | null, department?: string | null, shippingmethod?: string | null, workplacedelivery?: string | null, paymentmethod?: string | null, otherpaymentmethod?: string | null, validperiod?: any | null, uuidimages?: string | null, images?: Array<string> | null, itemstatus?: string | null, creationdate?: any | null, updatedate?: any | null, collaborator?: string | null } | null } };
 
 export type GetCollaboratorQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4326,6 +4396,154 @@ export type MarketplaceItemQueryHookResult = ReturnType<typeof useMarketplaceIte
 export type MarketplaceItemLazyQueryHookResult = ReturnType<typeof useMarketplaceItemLazyQuery>;
 export type MarketplaceItemSuspenseQueryHookResult = ReturnType<typeof useMarketplaceItemSuspenseQuery>;
 export type MarketplaceItemQueryResult = Apollo.QueryResult<MarketplaceItemQuery, MarketplaceItemQueryVariables>;
+export const MarketplacerequestsDocument = gql`
+    query marketplacerequests($page: Int!, $limit: Int!, $filter: MarketplaceRequestFilterInput, $sort: MarketplaceRequestSortInput) {
+  marketplacerequests(page: $page, limit: $limit, filter: $filter, sort: $sort) {
+    totalCount
+    edges {
+      node {
+        id
+        fullname
+        offer {
+          uuidmarketplaceitem
+          uuidbusiness
+          uuidcollaborator
+          title
+          price
+          brand
+          status
+          description
+          country
+          department
+          shippingmethod
+          workplacedelivery
+          paymentmethod
+          otherpaymentmethod
+          validperiod
+          uuidimages
+          images
+          itemstatus
+          creationdate
+          updatedate
+          collaborator
+        }
+        email
+        phone
+        message
+        creationdate
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+    `;
+
+/**
+ * __useMarketplacerequestsQuery__
+ *
+ * To run a query within a React component, call `useMarketplacerequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMarketplacerequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMarketplacerequestsQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
+ *      filter: // value for 'filter'
+ *      sort: // value for 'sort'
+ *   },
+ * });
+ */
+export function useMarketplacerequestsQuery(baseOptions: Apollo.QueryHookOptions<MarketplacerequestsQuery, MarketplacerequestsQueryVariables> & ({ variables: MarketplacerequestsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MarketplacerequestsQuery, MarketplacerequestsQueryVariables>(MarketplacerequestsDocument, options);
+      }
+export function useMarketplacerequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MarketplacerequestsQuery, MarketplacerequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MarketplacerequestsQuery, MarketplacerequestsQueryVariables>(MarketplacerequestsDocument, options);
+        }
+export function useMarketplacerequestsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MarketplacerequestsQuery, MarketplacerequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MarketplacerequestsQuery, MarketplacerequestsQueryVariables>(MarketplacerequestsDocument, options);
+        }
+export type MarketplacerequestsQueryHookResult = ReturnType<typeof useMarketplacerequestsQuery>;
+export type MarketplacerequestsLazyQueryHookResult = ReturnType<typeof useMarketplacerequestsLazyQuery>;
+export type MarketplacerequestsSuspenseQueryHookResult = ReturnType<typeof useMarketplacerequestsSuspenseQuery>;
+export type MarketplacerequestsQueryResult = Apollo.QueryResult<MarketplacerequestsQuery, MarketplacerequestsQueryVariables>;
+export const MarketplacerequestDocument = gql`
+    query marketplacerequest($id: ID!) {
+  marketplacerequest(id: $id) {
+    id
+    fullname
+    offer {
+      uuidmarketplaceitem
+      uuidbusiness
+      uuidcollaborator
+      title
+      price
+      brand
+      status
+      description
+      country
+      department
+      shippingmethod
+      workplacedelivery
+      paymentmethod
+      otherpaymentmethod
+      validperiod
+      uuidimages
+      images
+      itemstatus
+      creationdate
+      updatedate
+      collaborator
+    }
+    email
+    phone
+    message
+    creationdate
+  }
+}
+    `;
+
+/**
+ * __useMarketplacerequestQuery__
+ *
+ * To run a query within a React component, call `useMarketplacerequestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMarketplacerequestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMarketplacerequestQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMarketplacerequestQuery(baseOptions: Apollo.QueryHookOptions<MarketplacerequestQuery, MarketplacerequestQueryVariables> & ({ variables: MarketplacerequestQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MarketplacerequestQuery, MarketplacerequestQueryVariables>(MarketplacerequestDocument, options);
+      }
+export function useMarketplacerequestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MarketplacerequestQuery, MarketplacerequestQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MarketplacerequestQuery, MarketplacerequestQueryVariables>(MarketplacerequestDocument, options);
+        }
+export function useMarketplacerequestSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MarketplacerequestQuery, MarketplacerequestQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MarketplacerequestQuery, MarketplacerequestQueryVariables>(MarketplacerequestDocument, options);
+        }
+export type MarketplacerequestQueryHookResult = ReturnType<typeof useMarketplacerequestQuery>;
+export type MarketplacerequestLazyQueryHookResult = ReturnType<typeof useMarketplacerequestLazyQuery>;
+export type MarketplacerequestSuspenseQueryHookResult = ReturnType<typeof useMarketplacerequestSuspenseQuery>;
+export type MarketplacerequestQueryResult = Apollo.QueryResult<MarketplacerequestQuery, MarketplacerequestQueryVariables>;
 export const GetCollaboratorDocument = gql`
     query getCollaborator {
   collaborator {

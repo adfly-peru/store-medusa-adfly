@@ -2,6 +2,31 @@ import axios from "axios";
 import { getExtension, uploadImage } from "./commons";
 import { MarketPlaceItemForm } from "@modules/marketplace/Creation";
 
+export const requestMarketplaceItem = async (
+  token: string,
+  payload: {
+    uuid_business: string;
+    uuid_marketplace_item: string;
+    name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+    include_phone: boolean;
+    message: string;
+  }
+) => {
+  await axios.post(
+    `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/marketplace/request`,
+    payload,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    }
+  );
+};
+
 export const createMarketplace = async (
   token: string,
   uuid_business: string,
