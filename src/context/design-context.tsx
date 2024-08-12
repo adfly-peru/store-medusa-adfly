@@ -36,7 +36,6 @@ export const DesignProvider = ({ children }: DesignProviderProps) => {
       const { hostname } = window.location;
       const partes = hostname.split(".");
       if (partes.length > 2) setSubdomain(partes[0]);
-      setSubdomain("core-dev");
     };
     obtenerSubDominio();
   }, []);
