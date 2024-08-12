@@ -14,6 +14,9 @@ export function BenefitBreadcumbsSection({ product }: { product: Benefit }) {
       <Link underline="hover" color="inherit" href={`/search?type=benefit`}>
         Beneficios Internos
       </Link>
+      <Link underline="hover" color="inherit" href={`/search?type=benefit`}>
+        {product.category?.name}
+      </Link>
       <Typography color="text.primary">{product.name}</Typography>
     </Breadcrumbs>
   );
