@@ -30,19 +30,53 @@ export function Attributes() {
               color="primary"
               value={attributeSelections[attr.attribute.attributeName] || ""}
               exclusive
-              onChange={(_, val) =>
-                handleAttributeSelection(
-                  attr.attribute.attributeName,
-                  val ?? ""
-                )
-              }
+              onChange={(_, val) => {
+                if (!val) return;
+                const validVariants = product.variant.filter((variant) =>
+                  variant.attributes.every((a) =>
+                    a.attributeName === attr.attribute.attributeName
+                      ? a.value === val
+                      : attributeSelections[a.attributeName] === a.value
+                  )
+                );
+                if (validVariants.length)
+                  handleAttributeSelection(
+                    attr.attribute.attributeName,
+                    val ?? ""
+                  );
+                else {
+                  product.variant
+                    .find((v) =>
+                      v.attributes.some(
+                        (a) =>
+                          a.attributeName === attr.attribute.attributeName &&
+                          a.value === val
+                      )
+                    )
+                    ?.attributes.forEach((a) =>
+                      handleAttributeSelection(a.attributeName, a.value ?? "")
+                    );
+                }
+              }}
               sx={{
                 marginTop: "10px",
                 marginBottom: "15px",
               }}
             >
               {attr.attribute.values.map((value) => (
-                <ToggleButton key={value} value={value}>
+                <ToggleButton
+                  key={value}
+                  value={value}
+                  disabled={
+                    !product.variant.filter((v) =>
+                      v.attributes.some(
+                        (a) =>
+                          a.attributeName === attr.attributeName &&
+                          a.value === value
+                      )
+                    ).length
+                  }
+                >
                   {value}
                 </ToggleButton>
               ))}
