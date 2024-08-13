@@ -16,6 +16,8 @@ import { BenefitBreadcumbsSection } from "./components/BreadcumbsSection";
 import { BenefitImages } from "./components/ImageSection";
 import { BenefitDetails } from "./components/DetailsSection";
 import { useSession } from "next-auth/react";
+import { useDialog } from "@context/DialogContext";
+import TextFieldInput from "@modules/components/TextFieldInput";
 
 const DetailedBenefit = () => {
   const router = useRouter();
@@ -27,6 +29,41 @@ const DetailedBenefit = () => {
       id,
     },
   });
+  const { openDialog, closeDialog } = useDialog();
+  const handleOpen = () => {
+    openDialog({
+      title: "Sigue los siguientes pasos para acceder al beneficio",
+      titleSize: 16,
+      centeredTitle: true,
+      content: (
+        <TextFieldInput
+          label=""
+          value={data?.benefit.nextSteps ?? "-"}
+          multiline
+          rows={5}
+          disabled
+        />
+      ),
+      actions: [
+        <Button
+          size="small"
+          variant="outlined"
+          key="close"
+          onClick={closeDialog}
+        >
+          Volver
+        </Button>,
+        <Button
+          size="small"
+          variant="contained"
+          key="close"
+          onClick={closeDialog}
+        >
+          Continuar
+        </Button>,
+      ],
+    });
+  };
 
   const product = data?.benefit;
 
@@ -114,7 +151,12 @@ const DetailedBenefit = () => {
               <CardContent>{product.description}</CardContent>
             </Card>
             <Divider />
-            <Button variant="contained" fullWidth size="small">
+            <Button
+              variant="contained"
+              fullWidth
+              size="small"
+              onClick={handleOpen}
+            >
               ¡Lo quiero!
             </Button>
           </Stack>

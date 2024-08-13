@@ -11,15 +11,29 @@ import {
 } from "@mui/material";
 import { Benefit } from "generated/graphql";
 import { useMemo } from "react";
+import ubigeo from "ubigeo-peru";
 
 export function BenefitDetails({ product }: { product: Benefit }) {
   const details = useMemo(() => {
     const newDetails: { name: string; value: string }[] = [];
+    const departments = product.departments
+      .map(
+        (d) =>
+          ubigeo.reniec.find(
+            (u) =>
+              u.departamento === d &&
+              u.distrito === "00" &&
+              u.provincia === "00"
+          )?.nombre ?? ""
+      )
+      .filter((d) => d !== "");
     newDetails.push(
       ...[
         {
           name: "Alcance",
-          value: product.departments.length.toString(),
+          value: departments.length
+            ? departments.join(", ")
+            : "Sin limite definido",
         },
         {
           name: "¿Cómo acceder al beneficio?",
