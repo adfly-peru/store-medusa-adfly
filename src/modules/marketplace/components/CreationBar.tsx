@@ -321,7 +321,7 @@ const CreationBar = ({
                 renderOption={(props, option, { selected }) => {
                   const { ...optionProps } = props;
                   return (
-                    <li key={option.departamento} {...optionProps}>
+                    <li {...optionProps} key={option.departamento}>
                       <Checkbox
                         icon={<CheckBoxOutlineBlank fontSize="small" />}
                         checkedIcon={<CheckBox fontSize="small" />}
@@ -348,7 +348,7 @@ const CreationBar = ({
                 {departmentFields.map((dep, id) => (
                   <Chip
                     sx={{ margin: "3px" }}
-                    key={dep.departamento}
+                    key={id}
                     label={dep.nombre}
                     variant="outlined"
                     onDelete={() => removeDepartment(id)}
