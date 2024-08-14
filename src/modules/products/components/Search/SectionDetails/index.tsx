@@ -19,8 +19,12 @@ const SectionDetails = () => {
       <img
         src={
           type === "coupon"
-            ? "/sections/Foto Cupones.svg"
-            : "/sections/Foto Compras Online.svg"
+            ? "/sections/fondo_cupones.svg"
+            : type === "benefits"
+            ? "/sections/fondo_benefits.svg"
+            : type === "marketplace"
+            ? "/sections/fondo_marketplace.svg"
+            : "/sections/fondo_store.svg"
         }
         alt={"Cupones"}
         width={10}

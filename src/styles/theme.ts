@@ -83,6 +83,14 @@ const baseTheme = (theme: Theme) => {
           ".slick-image-products-slider": {
             marginBottom: "30px",
           },
+          ".slick-sections": {
+            ".slick-track": {
+              gap: "160px",
+              [theme.breakpoints.down("lg")]: { gap: "120px" },
+              [theme.breakpoints.down(1261)]: { gap: "70px" },
+              [theme.breakpoints.down(1121)]: { gap: "20px" },
+            },
+          },
           ".slick-products-slider": {
             width: "100%",
             display: "flex !important",
