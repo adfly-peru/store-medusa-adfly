@@ -1,5 +1,6 @@
 import { useAccount } from "@context/account-context";
 import { useCategories } from "@context/categories-context";
+import { useDesign } from "@context/design-context";
 import { Icon } from "@iconify/react";
 import { ArrowBack, Close } from "@mui/icons-material";
 import {
@@ -22,6 +23,7 @@ import { useState } from "react";
 
 const CategoriesDrawer = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
+  const { storeDesign } = useDesign();
   const { departments } = useCategories();
   const { collaborator } = useAccount();
   const [section, setSection] = useState<"" | "cupon" | "tienda">("");
@@ -134,6 +136,68 @@ const CategoriesDrawer = ({ onClose }: { onClose: () => void }) => {
               </ListItemIcon>
             </ListItemButton>
           </ListItem>
+          {storeDesign?.ispremium && storeDesign.sections?.internalbenefits && (
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  router.push({
+                    pathname: "/search",
+                    query: {
+                      type: "benefits",
+                    },
+                  });
+                  onClose();
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    paddingRight: 2,
+                  }}
+                >
+                  <Icon icon="material-symbols:stars-outline" />
+                </ListItemIcon>
+                <ListItemText primary="Beneficios Internos" />
+                <ListItemIcon
+                  sx={{
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <Icon icon="ep:arrow-right-bold" />
+                </ListItemIcon>
+              </ListItemButton>
+            </ListItem>
+          )}
+          {storeDesign?.ispremium && storeDesign.sections?.marketplace && (
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  router.push({
+                    pathname: "/search",
+                    query: {
+                      type: "marketplace",
+                    },
+                  });
+                  onClose();
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    paddingRight: 2,
+                  }}
+                >
+                  <Icon icon="mdi:hand-coin-outline" />
+                </ListItemIcon>
+                <ListItemText primary="Marketplace" />
+                <ListItemIcon
+                  sx={{
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <Icon icon="ep:arrow-right-bold" />
+                </ListItemIcon>
+              </ListItemButton>
+            </ListItem>
+          )}
         </List>
       </Slide>
       <Slide

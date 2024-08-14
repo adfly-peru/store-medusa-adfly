@@ -93,3 +93,300 @@ query Product($uuidproduct: ID!) {
     lastcoupon
   }
 }
+
+query benefitCategories($id: ID!) {
+  benefitCategories(id: $id) {
+    id
+    name
+    active
+    description
+  }
+}
+
+query benefits(
+  $id: ID!
+  $page: Int!
+  $limit: Int!
+  $filter: BenefitFilterInput
+  $sort: BenefitSortInput
+) {
+  benefits(id: $id, page: $page, limit: $limit, filter: $filter, sort: $sort) {
+    totalCount
+    edges {
+      node {
+        id
+        creationdate
+        updatedate
+        name
+        uuidCategory
+        outstanding
+        description
+        accessBenefit
+        conditions
+        additionalInformation
+        departments
+        nextSteps
+        images
+        additionalFiles
+        active
+        category {
+          id
+          name
+          active
+          description
+        }
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+
+query benefit($uuidbusiness: ID!, $id: ID!) {
+  benefit(id: $id, uuidbusiness: $uuidbusiness) {
+    id
+    name
+    uuidCategory
+    creationdate
+    updatedate
+    outstanding
+    description
+    accessBenefit
+    conditions
+    additionalInformation
+    departments
+    nextSteps
+    images
+    additionalFiles
+    active
+    category {
+      id
+      name
+      active
+      description
+    }
+  }
+}
+
+query marketplaceWorkplaces($id: ID!) {
+  marketplaceWorkplaces(id: $id) {
+    uuidbusiness
+    uuidworkplace
+    name
+    address
+    district
+    province
+    department
+    country
+    creationdate
+    updatedate
+    marketplaceavailable
+  }
+}
+
+query marketplaceItems(
+  $id: ID!
+  $page: Int!
+  $limit: Int!
+  $filter: MarketplaceItemFilterInput
+  $sort: MarketplaceItemSortInput
+) {
+  marketplaceItems(
+    id: $id
+    page: $page
+    limit: $limit
+    filter: $filter
+    sort: $sort
+  ) {
+    totalCount
+    edges {
+      node {
+        uuidmarketplaceitem
+        uuidbusiness
+        uuidcollaborator
+        title
+        price
+        brand
+        status
+        description
+        country
+        department
+        shippingmethod
+        workplacedelivery
+        paymentmethod
+        otherpaymentmethod
+        validperiod
+        uuidimages
+        images
+        itemstatus
+        creationdate
+        updatedate
+        collaborator
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+
+query collaboratorMarketplaceItems(
+  $page: Int!
+  $limit: Int!
+  $filter: MarketplaceItemFilterInput
+  $sort: MarketplaceItemSortInput
+) {
+  collaboratorMarketplaceItems(
+    page: $page
+    limit: $limit
+    filter: $filter
+    sort: $sort
+  ) {
+    totalCount
+    edges {
+      node {
+        uuidmarketplaceitem
+        uuidbusiness
+        uuidcollaborator
+        title
+        price
+        brand
+        status
+        description
+        country
+        department
+        shippingmethod
+        workplacedelivery
+        paymentmethod
+        otherpaymentmethod
+        validperiod
+        uuidimages
+        images
+        itemstatus
+        creationdate
+        updatedate
+        collaborator
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+
+query marketplaceItem($uuidbusiness: ID!, $id: ID!) {
+  marketplaceItem(id: $id, uuidbusiness: $uuidbusiness) {
+    uuidmarketplaceitem
+    uuidbusiness
+    uuidcollaborator
+    title
+    price
+    brand
+    status
+    description
+    country
+    department
+    shippingmethod
+    workplacedelivery
+    paymentmethod
+    otherpaymentmethod
+    validperiod
+    uuidimages
+    images
+    itemstatus
+    creationdate
+    updatedate
+    collaborator
+  }
+}
+
+query marketplacerequests(
+  $page: Int!
+  $limit: Int!
+  $filter: MarketplaceRequestFilterInput
+  $sort: MarketplaceRequestSortInput
+) {
+  marketplacerequests(
+    page: $page
+    limit: $limit
+    filter: $filter
+    sort: $sort
+  ) {
+    totalCount
+    edges {
+      node {
+        id
+        fullname
+        offer {
+          uuidmarketplaceitem
+          uuidbusiness
+          uuidcollaborator
+          title
+          price
+          brand
+          status
+          description
+          country
+          department
+          shippingmethod
+          workplacedelivery
+          paymentmethod
+          otherpaymentmethod
+          validperiod
+          uuidimages
+          images
+          itemstatus
+          creationdate
+          updatedate
+          collaborator
+        }
+        email
+        phone
+        message
+        creationdate
+      }
+    }
+    pageInfo {
+      currentPage
+      totalPages
+    }
+  }
+}
+
+query marketplacerequest($id: ID!) {
+  marketplacerequest(id: $id) {
+    id
+    fullname
+    offer {
+      uuidmarketplaceitem
+      uuidbusiness
+      uuidcollaborator
+      title
+      price
+      brand
+      status
+      description
+      country
+      department
+      shippingmethod
+      workplacedelivery
+      paymentmethod
+      otherpaymentmethod
+      validperiod
+      uuidimages
+      images
+      itemstatus
+      creationdate
+      updatedate
+      collaborator
+    }
+    email
+    phone
+    message
+    creationdate
+  }
+}

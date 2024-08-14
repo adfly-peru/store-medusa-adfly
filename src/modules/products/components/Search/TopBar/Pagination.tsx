@@ -1,3 +1,5 @@
+import { useBenefitFilters } from "@modules/products/context/BenefitContext";
+import { useMarketplaceFilters } from "@modules/products/context/MarketplaceContext";
 import { Pagination } from "@mui/material";
 import React from "react";
 import { usePagination } from "react-instantsearch";
@@ -18,6 +20,42 @@ const CustomPagination = () => {
     <Pagination
       count={nbPages}
       page={currentRefinement + 1}
+      boundaryCount={1}
+      siblingCount={1}
+      onChange={handlePageChange}
+    />
+  );
+};
+
+export const BenefitsPagination = () => {
+  const { result, setPage } = useBenefitFilters();
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
+  return (
+    <Pagination
+      count={result?.benefits.pageInfo.totalPages}
+      page={result?.benefits.pageInfo.currentPage ?? 0}
+      boundaryCount={1}
+      siblingCount={1}
+      onChange={handlePageChange}
+    />
+  );
+};
+
+export const MarketplacePagination = () => {
+  const { result, setPage } = useMarketplaceFilters();
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
+  return (
+    <Pagination
+      count={result?.marketplaceItems.pageInfo.totalPages}
+      page={result?.marketplaceItems.pageInfo.currentPage ?? 0}
       boundaryCount={1}
       siblingCount={1}
       onChange={handlePageChange}

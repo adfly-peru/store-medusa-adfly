@@ -40,20 +40,6 @@ export function Details() {
               selectedVariant.coupon?.expirationDate
             ).toLocaleString("es-ES", dateOptions),
           });
-        if (selectedVariant.coupon?.initialPurchaseDate)
-          newDetails.push({
-            name: "Fecha Inicio Compra",
-            value: new Date(
-              selectedVariant.coupon?.initialPurchaseDate
-            ).toLocaleString("es-ES", dateOptions),
-          });
-        if (selectedVariant.coupon?.expirationPurchaseDate)
-          newDetails.push({
-            name: "Fecha Vencimiento Compra",
-            value: new Date(
-              selectedVariant.coupon?.expirationPurchaseDate
-            ).toLocaleString("es-ES", dateOptions),
-          });
         if (selectedVariant.coupon?.couponUsage)
           newDetails.push({
             name: "¿Cómo usar el cupón?",
@@ -83,20 +69,6 @@ export function Details() {
             name: "Fecha Vencimiento Uso",
             value: new Date(
               selectedVariant.service?.expirationDate
-            ).toLocaleString("es-ES", dateOptions),
-          });
-        if (selectedVariant.service?.initialPurchaseDate)
-          newDetails.push({
-            name: "Fecha Inicio Compra",
-            value: new Date(
-              selectedVariant.service?.initialPurchaseDate
-            ).toLocaleString("es-ES", dateOptions),
-          });
-        if (selectedVariant.service?.expirationPurchaseDate)
-          newDetails.push({
-            name: "Fecha Vencimiento Compra",
-            value: new Date(
-              selectedVariant.service?.expirationPurchaseDate
             ).toLocaleString("es-ES", dateOptions),
           });
         if (selectedVariant.service?.accessService)

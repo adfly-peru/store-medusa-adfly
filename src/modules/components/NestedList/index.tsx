@@ -94,6 +94,7 @@ export default function NestedList({ routes }: { routes: IRoute[] }) {
                     key={subRoute.name}
                     sx={{ pl: 4 }}
                     selected={router.pathname === subRoute.path}
+                    onClick={() => router.push(subRoute.path)}
                   >
                     <ListItemText
                       primary={subRoute.name}

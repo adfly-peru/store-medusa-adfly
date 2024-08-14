@@ -48,21 +48,6 @@ const CouponDetailModal = ({
           dateOptions
         ),
       });
-    if (coupon.couponData?.initialPurchaseDate)
-      newDetails.push({
-        name: "Fecha Inicio Compra",
-        value: new Date(coupon.couponData?.initialPurchaseDate).toLocaleString(
-          "es-ES",
-          dateOptions
-        ),
-      });
-    if (coupon.couponData?.expirationPurchaseDate)
-      newDetails.push({
-        name: "Fecha Vencimiento Compra",
-        value: new Date(
-          coupon.couponData?.expirationPurchaseDate
-        ).toLocaleString("es-ES", dateOptions),
-      });
     if (coupon.couponData?.couponUsage)
       newDetails.push({
         name: "¿Cómo usar el cupón?",

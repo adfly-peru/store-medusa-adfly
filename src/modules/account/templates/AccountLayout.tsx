@@ -50,8 +50,22 @@ const AccountCard = () => {
               path: "/account/profile",
             },
             {
-              name: "Mis Direciones",
+              name: "Mis Direcciones",
               path: "/account/addresses",
+            },
+            {
+              name: "Mi Marketplace",
+              path: "/account/marketplace",
+              subRoutes: [
+                {
+                  name: "Administrar mis ofertas",
+                  path: "/account/marketplace/admin",
+                },
+                {
+                  name: "Solicitudes",
+                  path: "/account/marketplace/requests",
+                },
+              ],
             },
             {
               name: "Mis Compras",
@@ -103,8 +117,22 @@ const AccountBar = () => {
             path: "/account/profile",
           },
           {
-            name: "Mis Direciones",
+            name: "Mis Direcciones",
             path: "/account/addresses",
+          },
+          {
+            name: "Mi Marketplace",
+            path: "/account/marketplace",
+            subRoutes: [
+              {
+                name: "Administrar mis ofertas",
+                path: "/account/marketplace/admin",
+              },
+              {
+                name: "Solicitudes",
+                path: "/account/marketplace/requests",
+              },
+            ],
           },
           {
             name: "Mis Compras",

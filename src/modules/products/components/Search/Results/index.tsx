@@ -4,6 +4,10 @@ import { Box, Grid, Typography } from "@mui/material";
 import { Offer } from "generated/graphql";
 import Loader from "@modules/components/LoadingScreen/Loader";
 import { useMemo } from "react";
+import { useBenefitFilters } from "@modules/products/context/BenefitContext";
+import BenefitCard from "@modules/benefit/BenefitCard";
+import { useMarketplaceFilters } from "@modules/products/context/MarketplaceContext";
+import MarketplaceItemCard from "@modules/marketplace/MarketplaceItemCard";
 
 type AlgoliaHit = {
   [key: string]: any;
@@ -134,6 +138,95 @@ const FilteredAlgoliaProducts = () => {
                   } as any as Offer
                 }
               />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </Box>
+  );
+};
+
+export const FilteredBenefits = () => {
+  const { result } = useBenefitFilters();
+
+  return (
+    <Box
+      sx={(theme) => ({
+        width: "100%",
+        [theme.breakpoints.down("md")]: {
+          paddingLeft: "20px",
+          paddingRight: "20px",
+        },
+      })}
+    >
+      {(result?.benefits.edges.length ?? 0) === 0 ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="200px"
+        >
+          <Typography variant="h6">No se encontraron resultados</Typography>
+        </Box>
+      ) : (
+        <Grid
+          container
+          justifyContent="space-around"
+          sx={{
+            margin: 0,
+            width: "100%",
+          }}
+          rowGap="40px"
+          columnGap="30px"
+        >
+          {result?.benefits.edges.map((hit) => (
+            <Grid item xs="auto" key={hit.node.id}>
+              <BenefitCard product={hit.node} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </Box>
+  );
+};
+
+export const FilteredMarketplace = () => {
+  const { result } = useMarketplaceFilters();
+  // TODO: Change
+
+  return (
+    <Box
+      sx={(theme) => ({
+        width: "100%",
+        [theme.breakpoints.down("md")]: {
+          paddingLeft: "20px",
+          paddingRight: "20px",
+        },
+      })}
+    >
+      {(result?.marketplaceItems.edges.length ?? 0) === 0 ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="200px"
+        >
+          <Typography variant="h6">No se encontraron resultados</Typography>
+        </Box>
+      ) : (
+        <Grid
+          container
+          justifyContent="space-around"
+          sx={{
+            margin: 0,
+            width: "100%",
+          }}
+          rowGap="40px"
+          columnGap="30px"
+        >
+          {result?.marketplaceItems.edges.map((hit) => (
+            <Grid item xs="auto" key={hit.node.uuidmarketplaceitem}>
+              <MarketplaceItemCard product={hit.node} action />
             </Grid>
           ))}
         </Grid>

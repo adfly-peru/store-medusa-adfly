@@ -6,13 +6,12 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import { useRouter } from "next/router";
 
 const SectionDetails = () => {
   const router = useRouter();
+  const { storeDesign } = useDesign();
   const { type, query } = router.query;
 
   return (
@@ -20,8 +19,12 @@ const SectionDetails = () => {
       <img
         src={
           type === "coupon"
-            ? "/sections/Foto Cupones.svg"
-            : "/sections/Foto Compras Online.svg"
+            ? "/sections/fondo_cupones.svg"
+            : type === "benefits"
+            ? "/sections/fondo_benefits.svg"
+            : type === "marketplace"
+            ? "/sections/fondo_marketplace.svg"
+            : "/sections/fondo_store.svg"
         }
         alt={"Cupones"}
         width={10}
@@ -47,6 +50,7 @@ const SectionDetails = () => {
           value={type || ""}
           exclusive
           onChange={(_, val) => {
+            if (!val) return;
             router.push(
               {
                 pathname: "/search",
@@ -161,8 +165,8 @@ const SectionDetails = () => {
               </Typography>
             </Stack>
           </ToggleButton>
-          {/* {storeDesign?.ispremium && (
-            <ToggleButton key="marketplace" value="marketplace" disabled>
+          {storeDesign?.ispremium && storeDesign.sections?.marketplace && (
+            <ToggleButton key="marketplace" value="marketplace">
               <Stack
                 alignItems="center"
                 spacing={2}
@@ -195,8 +199,8 @@ const SectionDetails = () => {
               </Stack>
             </ToggleButton>
           )}
-          {storeDesign?.ispremium && (
-            <ToggleButton key="benefits" value="benefits" disabled>
+          {storeDesign?.ispremium && storeDesign.sections?.internalbenefits && (
+            <ToggleButton key="benefits" value="benefits">
               <Stack
                 alignItems="center"
                 spacing={2}
@@ -231,7 +235,7 @@ const SectionDetails = () => {
                 </Typography>
               </Stack>
             </ToggleButton>
-          )} */}
+          )}
         </ToggleButtonGroup>
       </Stack>
     </Stack>
