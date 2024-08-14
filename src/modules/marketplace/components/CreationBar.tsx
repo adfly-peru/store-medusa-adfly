@@ -415,7 +415,7 @@ const CreationBar = ({
                       renderOption={(props, option, { selected }) => {
                         const { ...optionProps } = props;
                         return (
-                          <li key={option.uuidworkplace} {...optionProps}>
+                          <li {...optionProps} key={option.uuidworkplace}>
                             <Checkbox
                               icon={<CheckBoxOutlineBlank fontSize="small" />}
                               checkedIcon={<CheckBox fontSize="small" />}
