@@ -76,7 +76,7 @@ export const BenefitZonesFilter = () => {
             renderOption={(props, option, { selected }) => {
               const { ...optionProps } = props;
               return (
-                <li key={option.departamento} {...optionProps}>
+                <li {...optionProps} key={option.departamento}>
                   <Checkbox
                     icon={icon}
                     checkedIcon={checkedIcon}
