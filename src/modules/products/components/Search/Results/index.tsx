@@ -104,12 +104,24 @@ const FilteredAlgoliaProducts = () => {
                     updateDate: hit.update_date,
                     tags: hit.product_tags,
                     details: {
-                      refPrice: hit.ref_price,
-                      adflyPrice: hit.adfly_price,
-                      offerPrice: hit.offer_price,
+                      refPrice:
+                        typeof hit.ref_price === "string"
+                          ? Number(hit.ref_price)
+                          : hit.ref_price,
+                      adflyPrice:
+                        typeof hit.adfly_price === "string"
+                          ? Number(hit.adfly_price)
+                          : hit.adfly_price,
+                      offerPrice:
+                        typeof hit.offer_price === "string"
+                          ? Number(hit.offer_price)
+                          : hit.offer_price,
                       imageURL: hit.image_url,
                       discountType: hit.coupon_type,
-                      discount: hit.coupon_discount,
+                      discount:
+                        typeof hit.coupon_discount === "string"
+                          ? Number(hit.coupon_discount)
+                          : hit.coupon_discount,
                     },
                     variant: [],
                     brand: {
