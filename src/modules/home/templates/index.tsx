@@ -15,6 +15,7 @@ import SectionsView from "../components/SectionsView";
 import { useDesign } from "@context/design-context";
 import { useRouter } from "next/router";
 import RecoveryModal from "@modules/authentication/components/login/RecoveryPassword";
+import { signIn } from "next-auth/react";
 
 export enum ListType {
   BANNER = "BANNER",
@@ -23,7 +24,7 @@ export enum ListType {
 
 const Home = () => {
   const router = useRouter();
-  const { recoverytoken } = router.query;
+  const { recoverytoken, token: verifyToken } = router.query;
   const { data: homeListData, loading: loading1 } = useHomeListsQuery();
   const { data: bannersListData, loading: loading2 } = useBannersListsQuery();
   const { storeDesign } = useDesign();
@@ -58,6 +59,17 @@ const Home = () => {
     response.sort((a, b) => a.data.pos - b.data.pos);
     return response;
   }, [bannersListData?.activeBannersLists, homeListData?.activeHomeLists]);
+
+  useEffect(() => {
+    if (!!verifyToken) {
+      signIn("credentials", {
+        redirect: false,
+        callbackUrl: "/",
+        mode: "token",
+        token: verifyToken as string,
+      });
+    }
+  }, [verifyToken]);
 
   if (
     !homeListData ||
