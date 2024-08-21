@@ -4,6 +4,8 @@ import Filters, { BenefitsFilters, MarketplaceFilters } from "./Filters";
 import { Button, Stack } from "@mui/material";
 import QueryDetails from "./QueryDetails";
 import { ArrowCircleRightOutlined } from "@mui/icons-material";
+import { useAccount } from "@context/account-context";
+import { useRouter } from "next/router";
 
 const AlgoliaSideBar = () => {
   return (
@@ -43,6 +45,8 @@ export const BenefitsSideBar = () => {
 };
 
 export const MarketplaceSideBar = () => {
+  const { collaborator, handleAuthentication } = useAccount();
+  const { push } = useRouter();
   return (
     <Stack
       spacing={3}
@@ -53,7 +57,17 @@ export const MarketplaceSideBar = () => {
         width: 250,
       })}
     >
-      <Button variant="outlined" endIcon={<ArrowCircleRightOutlined />}>
+      <Button
+        variant="outlined"
+        endIcon={<ArrowCircleRightOutlined />}
+        onClick={() => {
+          if (!collaborator) {
+            handleAuthentication();
+            return;
+          }
+          push("/account/marketplace/requests/new");
+        }}
+      >
         Vender aquí
       </Button>
       <MarketplaceFilters />
