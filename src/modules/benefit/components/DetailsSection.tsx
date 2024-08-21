@@ -1,4 +1,5 @@
 import BasicTabs from "@modules/components/TabPanel";
+import { Description, Download } from "@mui/icons-material";
 import {
   Typography,
   TableContainer,
@@ -8,6 +9,8 @@ import {
   TableRow,
   TableCell,
   Stack,
+  Box,
+  Button,
 } from "@mui/material";
 import { Benefit } from "generated/graphql";
 import { useMemo } from "react";
@@ -90,6 +93,18 @@ export function BenefitDetails({ product }: { product: Benefit }) {
               <Typography variant="body2">
                 Descarga los archivos adjuntos que te guiarán en tu compra.
               </Typography>
+              <Box mt={1}>
+                <Button
+                  startIcon={<Description />}
+                  endIcon={<Download />}
+                  variant="outlined"
+                  component="a"
+                  href={product.additionalFiles ?? undefined}
+                  download={product.additionalFiles?.split("/").at(-1)}
+                >
+                  {product.additionalFiles?.split("/").at(-1)}
+                </Button>
+              </Box>
             </Stack>
           ),
         },

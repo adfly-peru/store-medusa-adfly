@@ -66,6 +66,7 @@ export const BenefitFiltersProvider = ({
         page,
         limit: 12,
         filter: {
+          zones: selectedDepartments.map((s) => s.departamento),
           categoryName: currentCategory,
         },
         sort:

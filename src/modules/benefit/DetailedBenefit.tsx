@@ -18,9 +18,11 @@ import { BenefitDetails } from "./components/DetailsSection";
 import { useSession } from "next-auth/react";
 import { useDialog } from "@context/DialogContext";
 import TextFieldInput from "@modules/components/TextFieldInput";
+import { useAccount } from "@context/account-context";
 
 const DetailedBenefit = () => {
   const router = useRouter();
+  const { collaborator, handleAuthentication } = useAccount();
   const { data: sessionData } = useSession();
   const id = router.query.benefit as string;
   const { data, loading } = useBenefitQuery({
@@ -31,6 +33,10 @@ const DetailedBenefit = () => {
   });
   const { openDialog, closeDialog } = useDialog();
   const handleOpen = () => {
+    if (!collaborator) {
+      handleAuthentication();
+      return;
+    }
     openDialog({
       title: "Sigue los siguientes pasos para acceder al beneficio",
       titleSize: 16,
@@ -161,7 +167,7 @@ const DetailedBenefit = () => {
             </Button>
           </Stack>
         </Stack>
-        <BenefitDetails product={product} />
+        {!!collaborator && <BenefitDetails product={product} />}
       </Box>
     </Box>
   );
