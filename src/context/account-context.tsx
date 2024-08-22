@@ -86,10 +86,10 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
 
   useEffect(() => {
     if (session?.user) {
-      client.refetchQueries({
-        include: "all",
-      });
-      // refetch().then((data) => setCollaborator(data.data.collaborator));
+      // client.refetchQueries({
+      //   include: "all",
+      // });
+      refetch().then((data) => setCollaborator(data.data.collaborator));
     } else {
       client.clearStore();
       setCollaborator(undefined);
