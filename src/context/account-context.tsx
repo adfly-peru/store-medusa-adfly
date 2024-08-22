@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client";
 import { Preferences } from "@interfaces/collaborator";
 import { surveyQuery } from "api/auth";
 import axios from "axios";
@@ -28,6 +29,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   const [collaborator, setCollaborator] =
     useState<GetCollaboratorQuery["collaborator"]>();
   const { data: session } = useSession();
+  const client = useApolloClient();
   const { data: collaboratorData, refetch } = useGetCollaboratorQuery({
     onCompleted(data) {
       setCollaborator(data.collaborator);
@@ -36,6 +38,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       if (error.message === "access denied: user not authenticated")
         setCollaborator(undefined);
     },
+    skip: !session?.user?.accessToken,
   });
 
   const [isOpenSignIn, setIsOpenSignIn] = useState(false);
@@ -82,12 +85,16 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   };
 
   useEffect(() => {
-    if (session?.user?.accessToken) {
-      refetch().then((data) => setCollaborator(data.data.collaborator));
+    if (session?.user) {
+      client.refetchQueries({
+        include: "all",
+      });
+      // refetch().then((data) => setCollaborator(data.data.collaborator));
     } else {
+      client.clearStore();
       setCollaborator(undefined);
     }
-  }, [session?.user?.accessToken, refetch]);
+  }, [session?.user, refetch, client]);
 
   useEffect(() => {
     const verifySession = async () => {

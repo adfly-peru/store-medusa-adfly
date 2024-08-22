@@ -37,6 +37,7 @@ type CheckboxesInputProps = {
     label: string;
     value: string;
     description?: string;
+    disabled?: boolean;
   }[];
   value?: string[];
   onChange?: (v: string[]) => void;
@@ -74,6 +75,7 @@ const CheckboxesInput: React.FC<CheckboxesInputProps> = ({
                     )
                   : field.onChange([...field.value, option.value])
               }
+              disabled={option.disabled}
               name={option.value}
             />
           }

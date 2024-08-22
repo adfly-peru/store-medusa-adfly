@@ -7,5 +7,5 @@ export default function Home() {
   useEffect(() => {
     router.push("/home");
   });
-  return <Loader />;
+  return <div></div>;
 }

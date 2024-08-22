@@ -65,7 +65,7 @@ export const MarketplaceSideBar = () => {
             handleAuthentication();
             return;
           }
-          push("/account/marketplace/requests/new");
+          push("/account/marketplace/new");
         }}
       >
         Vender aquí

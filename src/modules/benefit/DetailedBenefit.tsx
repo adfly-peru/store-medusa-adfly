@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Divider,
   Stack,
   Typography,
@@ -74,7 +75,7 @@ const DetailedBenefit = () => {
   const product = data?.benefit;
 
   if (loading) {
-    return <Loader />;
+    return <CircularProgress />;
   }
 
   if (!product) {

@@ -30,6 +30,8 @@ import BasicTabs from "@modules/components/TabPanel";
 import { Icon } from "@iconify/react";
 import { useDialog } from "@context/DialogContext";
 import ContactSeller from "./components/ContactSeller";
+import ubigeoPeru from "ubigeo-peru";
+import { PAYMENTMETHODSOPTIONS } from "./components/CreationBar";
 
 const Delivery = ({
   product,
@@ -37,6 +39,7 @@ const Delivery = ({
   product: MarketplaceItemQuery["marketplaceItem"];
 }) => {
   const theme = useTheme();
+  const { openDialog, closeDialog } = useDialog();
   const matches = useMediaQuery(theme.breakpoints.down(1121));
   const shipmentsmethods = product.shippingmethod?.split(",") ?? [];
   return (
@@ -210,7 +213,106 @@ const Delivery = ({
                 Métodos de pago:
               </Typography>
             )}
-            {!matches && <Link>Ver todos</Link>}
+            {!matches && (
+              <Link
+                onClick={() =>
+                  openDialog({
+                    centeredTitle: true,
+                    title: "Métodos de pago",
+                    content: (
+                      <Stack
+                        alignItems="center"
+                        justifyContent="center"
+                        spacing={1}
+                      >
+                        <Typography variant="caption" fontSize={15}>
+                          Estos son lo métodos de pago que acepta el
+                          colaborador:
+                        </Typography>
+                        {product.paymentmethod
+                          ?.split(",")
+                          .filter((pm) => pm !== "other")
+                          .map((pm, index) => (
+                            <Box
+                              key={index}
+                              borderRadius="8px"
+                              width="100%"
+                              sx={(theme) => ({
+                                border: `1px solid ${theme.palette.divider}`,
+                              })}
+                              p={1}
+                              display="flex"
+                              flexDirection="column"
+                              gap="6px"
+                            >
+                              <Typography fontWeight={600} fontSize={16}>
+                                {
+                                  PAYMENTMETHODSOPTIONS.find(
+                                    (p) => p.value === pm
+                                  )?.label
+                                }
+                              </Typography>
+                              <Typography
+                                variant="caption"
+                                fontWeight={600}
+                                fontSize={14}
+                              >
+                                {
+                                  PAYMENTMETHODSOPTIONS.find(
+                                    (p) => p.value === pm
+                                  )?.description
+                                }
+                              </Typography>
+                            </Box>
+                          ))}
+                        {!!product.otherpaymentmethod && (
+                          <Box
+                            borderRadius="8px"
+                            width="100%"
+                            sx={(theme) => ({
+                              border: `1px solid ${theme.palette.divider}`,
+                            })}
+                            p={1}
+                            display="flex"
+                            flexDirection="column"
+                            gap="6px"
+                          >
+                            <Typography fontWeight={600} fontSize={16}>
+                              Otros:
+                            </Typography>
+                            <Typography
+                              variant="caption"
+                              fontWeight={600}
+                              fontSize={14}
+                            >
+                              {product.otherpaymentmethod}
+                            </Typography>
+                          </Box>
+                        )}
+                        <Divider
+                          sx={(theme) => ({
+                            width: "100%",
+                            borderColor: `${theme.palette.divider}`,
+                          })}
+                        />
+                      </Stack>
+                    ),
+                    actions: [
+                      <Button
+                        key="close-action"
+                        variant="contained"
+                        onClick={() => closeDialog()}
+                        size="small"
+                      >
+                        Entendido
+                      </Button>,
+                    ],
+                  })
+                }
+              >
+                Ver todos
+              </Link>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -384,6 +486,62 @@ const DetailedMarketplaceItem = ({
                   sx={{
                     textDecoration: "underline",
                   }}
+                  onClick={() =>
+                    openDialog({
+                      centeredTitle: true,
+                      title: "Alcance del producto",
+                      content: (
+                        <Stack
+                          alignItems="center"
+                          justifyContent="center"
+                          spacing={2}
+                        >
+                          <Typography variant="caption" fontSize={16}>
+                            Departamentos que cubre el colaborador
+                          </Typography>
+                          <Box
+                            borderRadius="8px"
+                            width="100%"
+                            sx={(theme) => ({
+                              border: `1px solid ${theme.palette.divider}`,
+                            })}
+                            py={2}
+                            px={1}
+                          >
+                            <Typography fontWeight={600} fontSize={16}>
+                              {item.department
+                                ?.split(",")
+                                .map(
+                                  (d) =>
+                                    ubigeoPeru.reniec.find(
+                                      (u) =>
+                                        u.departamento === d &&
+                                        u.distrito === "00" &&
+                                        u.provincia === "00"
+                                    )?.nombre
+                                )}
+                            </Typography>
+                          </Box>
+                          <Divider
+                            sx={(theme) => ({
+                              width: "100%",
+                              borderColor: `${theme.palette.divider}`,
+                            })}
+                          />
+                        </Stack>
+                      ),
+                      actions: [
+                        <Button
+                          key="close-action"
+                          variant="contained"
+                          onClick={() => closeDialog()}
+                          size="small"
+                        >
+                          Entendido
+                        </Button>,
+                      ],
+                    })
+                  }
                 >
                   Ver todo
                 </Typography>

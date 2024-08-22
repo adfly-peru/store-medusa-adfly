@@ -1,6 +1,5 @@
-import Loader from "@modules/components/LoadingScreen/Loader";
 import DetailedMarketplaceItem from "@modules/marketplace/DetailedMarketplaceItem";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { useMarketplaceItemQuery } from "generated/graphql";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -20,7 +19,7 @@ export default function ProductPage() {
   const product = data?.marketplaceItem;
 
   if (loading) {
-    return <Loader />;
+    return <CircularProgress />;
   }
 
   if (!product) {

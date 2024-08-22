@@ -52,7 +52,7 @@ export const createMarketplace = async (
       valid_period: new Date(
         Date.now() + Number(payload.valid_period?.value) * 24 * 60 * 60 * 1000
       ).toISOString(),
-      number_images: 0,
+      number_images: payload.images.length,
       extension_images: getExtension(payload.images[0].type),
     },
     {
@@ -66,9 +66,8 @@ export const createMarketplace = async (
   if (status == 201 || status == 200) {
     // Put image
     if (response.data) {
-      console.log({ response: response.data });
       const { images: imgUrls } = response.data.data.data;
-      for (let i = 0; i < imgUrls.length; i++) {
+      for (let i = 0; i < (imgUrls as string[]).length; i++) {
         const imgurl = imgUrls[i] as string;
         if (imgurl && payload.images[i]) {
           const responseImg = await uploadImage(imgurl, payload.images[i]);

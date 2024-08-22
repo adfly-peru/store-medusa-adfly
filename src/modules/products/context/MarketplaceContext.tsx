@@ -27,6 +27,7 @@ interface IMarketplaceFiltersContext {
   setCondition: Dispatch<SetStateAction<string>>;
   rangePrices: { from: number; to: number };
   setRangePrices: Dispatch<SetStateAction<{ from: number; to: number }>>;
+  loading: boolean;
 }
 
 export const benefitSortItems = [
@@ -54,13 +55,15 @@ export const MarketplaceFiltersProvider = ({
     []
   );
 
-  const [fetch, { data: result }] = useMarketplaceItemsLazyQuery();
+  const [fetch, { data: result, loading }] = useMarketplaceItemsLazyQuery();
 
   useEffect(() => {
     if (!sessionData?.user?.uuidbusiness) return;
+    if (!sessionData?.user?.id) return;
     fetch({
       variables: {
         id: sessionData.user.uuidbusiness,
+        uuidcollaboratorignore: sessionData.user.id,
         page,
         limit: 12,
         filter: {
@@ -85,7 +88,7 @@ export const MarketplaceFiltersProvider = ({
     page,
     sort,
     fetch,
-    sessionData?.user?.uuidbusiness,
+    sessionData?.user,
     condition,
     rangePrices,
   ]);
@@ -104,6 +107,7 @@ export const MarketplaceFiltersProvider = ({
         setRangePrices,
         condition,
         setCondition,
+        loading,
       }}
     >
       {children}

@@ -2,7 +2,7 @@ import * as amplitude from "@amplitude/analytics-browser";
 import { useProductQuery } from "generated/graphql";
 import React from "react";
 import { useRouter } from "next/router";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { DetailedProduct } from "../components/DetailedProduct";
 import { DetailedProductProvider } from "../context/DetailedProductContext";
 import Loader from "@modules/components/LoadingScreen/Loader";
@@ -19,7 +19,7 @@ const ProductInfo = () => {
   const product = data?.offerForCollaborator;
 
   if (loading) {
-    return <Loader />;
+    return <CircularProgress />;
   }
 
   if (!product) {

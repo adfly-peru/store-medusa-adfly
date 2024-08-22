@@ -140,10 +140,7 @@ export const MarketplacePricesFilter = () => {
           <Button
             variant="contained"
             fullWidth
-            onClick={
-              () => null
-              //   pricesRange ? refine([pricesRange.min, pricesRange.max]) : null
-            }
+            onClick={() => setFilter(rangePrices)}
             size="small"
           >
             Aplicar

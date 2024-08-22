@@ -21,6 +21,7 @@ const MarketplaceRequests = () => {
       creationdate: new Date(edge.node.creationdate),
       id: edge.node.id,
       item: edge.node,
+      name: edge.node.offer?.title ?? "-",
     }));
   };
   const getTotalCount = (data: MarketplacerequestsQuery): number => {
@@ -38,8 +39,8 @@ const MarketplaceRequests = () => {
         variables={{}}
         columns={[
           {
-            field: "offer.title",
-            headerName: "Nombre",
+            field: "name",
+            headerName: "Oferta",
             width: 350,
             renderCell: (params) => (
               <Stack

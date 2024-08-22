@@ -1,5 +1,11 @@
 import { useAccount } from "@context/account-context";
-import { ArrowBack, CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
+import {
+  ArrowBack,
+  CheckBox,
+  CheckBoxOutlineBlank,
+  Close,
+  Delete,
+} from "@mui/icons-material";
 import {
   Paper,
   List,
@@ -18,6 +24,9 @@ import {
   FormControl,
   FormHelperText,
   Button,
+  IconButton,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import DropImages from "./DropImages";
@@ -33,6 +42,29 @@ import { useSession } from "next-auth/react";
 import { createMarketplace } from "api/marketplace";
 import { useDialog } from "@context/DialogContext";
 import { AxiosError } from "axios";
+
+export const PAYMENTMETHODSOPTIONS = [
+  {
+    value: "digital_wallet",
+    label: "Billetera Digital",
+    description: "Métodos de pago como Yape, Plin, Agora PAY, Agora.",
+  },
+  {
+    value: "cash",
+    label: "Efectivo",
+    description: "Pago en efectivo al encontrarse",
+  },
+  {
+    value: "credit_card",
+    label: "Transferencia/Deposito",
+    description: "Aceptas el pago por deposito bancario",
+  },
+  {
+    value: "other",
+    label: "Otros",
+    description: "Agrega otro método de pago",
+  },
+];
 
 const CreationBar = ({
   methods,
@@ -216,9 +248,50 @@ const CreationBar = ({
               Publicación market place
             </Typography>
           </Typography>
-          <DropImages
-            onImageUpload={(imgs) => methods.setValue("images", imgs)}
-          />
+          <Stack spacing="5px">
+            <DropImages
+              onImageUpload={(imgs) =>
+                methods.setValue(
+                  "images",
+                  [...imgs, ...methods.watch("images")].slice(0, 5)
+                )
+              }
+            />
+            {methods.watch("images").map((img, index) => (
+              <Box
+                key={index}
+                display="flex"
+                sx={(theme) => ({
+                  pl: 1,
+                  borderRadius: 1.25,
+                  justifyContent: "space-between",
+                  height: 35,
+                  width: "100%",
+                  alignItems: "center",
+                  border: (theme) => `solid 1px ${theme.palette.divider}`,
+                })}
+              >
+                <Typography
+                  sx={{ overflow: "hidden" }}
+                  variant="caption"
+                  fontSize={12}
+                >
+                  {img.name}
+                </Typography>
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    methods.setValue("images", [
+                      ...methods.watch("images").slice(0, index),
+                      ...methods.watch("images").slice(index + 1),
+                    ]);
+                  }}
+                >
+                  <Close />
+                </IconButton>
+              </Box>
+            ))}
+          </Stack>
           <TextFieldInput
             label="Título"
             required
@@ -390,53 +463,48 @@ const CreationBar = ({
                   value: "workplace_delivery",
                   label: "Encuentro lugar de trabajo",
                   description: "Encuentro en un lugar de trabajo",
+                  disabled: !marketplaceworkplaces.length,
                 },
               ]}
             />
             {watch("shipping_method").includes("workplace_delivery") && (
               <div>
-                <Controller
-                  name="workplace_delivery"
-                  control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      multiple
-                      id="checkboxes-tags-demo"
-                      value={field.value}
-                      onChange={(_, v) => field.onChange(v)}
-                      options={marketplaceworkplaces}
-                      disableCloseOnSelect
-                      getOptionLabel={(option) =>
-                        typeof option === "string" ? option : option.name || ""
-                      }
-                      isOptionEqualToValue={(option, value) =>
-                        option.uuidworkplace === value.uuidworkplace
-                      }
-                      renderOption={(props, option, { selected }) => {
-                        const { ...optionProps } = props;
-                        return (
-                          <li {...optionProps} key={option.uuidworkplace}>
-                            <Checkbox
-                              icon={<CheckBoxOutlineBlank fontSize="small" />}
-                              checkedIcon={<CheckBox fontSize="small" />}
-                              style={{ marginRight: 8 }}
-                              checked={selected}
-                            />
-                            {option.name}
-                          </li>
-                        );
-                      }}
-                      renderTags={() => null}
-                      disableClearable
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          size="small"
-                          label="Escoger sede"
-                          placeholder="Escoger sede"
-                          sx={{ mb: 1 }}
+                <Autocomplete
+                  multiple
+                  id="checkboxes-tags-demo"
+                  options={marketplaceworkplaces}
+                  value={wDeliveryFields}
+                  onChange={(_, val) => setValue("workplace_delivery", val)}
+                  disableCloseOnSelect
+                  getOptionLabel={(option) =>
+                    typeof option === "string" ? option : option.name || ""
+                  }
+                  isOptionEqualToValue={(option, value) =>
+                    option.uuidworkplace === value.uuidworkplace
+                  }
+                  renderOption={(props, option, { selected }) => {
+                    const { ...optionProps } = props;
+                    return (
+                      <li {...optionProps} key={option.uuidworkplace}>
+                        <Checkbox
+                          icon={<CheckBoxOutlineBlank fontSize="small" />}
+                          checkedIcon={<CheckBox fontSize="small" />}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
                         />
-                      )}
+                        {option.name}
+                      </li>
+                    );
+                  }}
+                  renderTags={() => null}
+                  disableClearable
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      size="small"
+                      label="Escoger sede"
+                      placeholder="Escoger sede"
+                      sx={{ mb: 1 }}
                     />
                   )}
                 />
@@ -466,29 +534,7 @@ const CreationBar = ({
               name="payment_method"
               required
               description="Escoge como se podrá recibir el producto."
-              options={[
-                {
-                  value: "digital_wallet",
-                  label: "Billetera Digital",
-                  description:
-                    "Métodos de pago como Yape, Plin, Agora PAY, Agora.",
-                },
-                {
-                  value: "cash",
-                  label: "Efectivo",
-                  description: "Pago en efectivo al encontrarse",
-                },
-                {
-                  value: "credit_card",
-                  label: "Transferencia/Deposito",
-                  description: "Aceptas el pago por deposito bancario",
-                },
-                {
-                  value: "other",
-                  label: "Otros",
-                  description: "Agrega otro método de pago",
-                },
-              ]}
+              options={PAYMENTMETHODSOPTIONS}
             />
             {watch("payment_method").includes("other") && (
               <TextFieldInput

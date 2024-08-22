@@ -188,6 +188,7 @@ query marketplaceWorkplaces($id: ID!) {
 
 query marketplaceItems(
   $id: ID!
+  $uuidcollaboratorignore: ID!
   $page: Int!
   $limit: Int!
   $filter: MarketplaceItemFilterInput
@@ -199,6 +200,7 @@ query marketplaceItems(
     limit: $limit
     filter: $filter
     sort: $sort
+    uuidcollaboratorignore: $uuidcollaboratorignore
   ) {
     totalCount
     edges {

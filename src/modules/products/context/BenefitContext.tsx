@@ -31,6 +31,7 @@ interface IBenefitFiltersContext {
   setPage: Dispatch<SetStateAction<number>>;
   sort: string;
   setSort: Dispatch<SetStateAction<string>>;
+  loading: boolean;
 }
 
 export const benefitSortItems = [
@@ -56,7 +57,7 @@ export const BenefitFiltersProvider = ({
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState<string>("name:asc");
 
-  const [fetch, { data: result }] = useBenefitsLazyQuery();
+  const [fetch, { data: result, loading }] = useBenefitsLazyQuery();
 
   useEffect(() => {
     if (!sessionData?.user?.uuidbusiness) return;
@@ -103,6 +104,7 @@ export const BenefitFiltersProvider = ({
         result,
         sort,
         setSort,
+        loading,
       }}
     >
       {children}

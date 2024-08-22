@@ -48,7 +48,12 @@ const MarketplaceItemResume = ({ item }: { item: MarketplaceItem }) => {
           multiline
           rows={4}
         />
-        <Divider />
+        <Divider
+          sx={(theme) => ({
+            borderColor: theme.palette.divider,
+            my: 1,
+          })}
+        />
       </Grid>
     </Grid>
   );

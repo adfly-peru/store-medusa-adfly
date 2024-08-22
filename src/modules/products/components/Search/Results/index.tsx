@@ -1,6 +1,6 @@
 import { useHits, useInstantSearch } from "react-instantsearch";
 import ProductCard from "../../ProductCard";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { Offer } from "generated/graphql";
 import Loader from "@modules/components/LoadingScreen/Loader";
 import { useMemo } from "react";
@@ -159,7 +159,26 @@ const FilteredAlgoliaProducts = () => {
 };
 
 export const FilteredBenefits = () => {
-  const { result } = useBenefitFilters();
+  const { result, loading } = useBenefitFilters();
+
+  if (loading)
+    return (
+      <Box
+        sx={(theme) => ({
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: 400,
+          [theme.breakpoints.down("md")]: {
+            paddingLeft: "20px",
+            paddingRight: "20px",
+          },
+        })}
+      >
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <Box
@@ -203,8 +222,26 @@ export const FilteredBenefits = () => {
 };
 
 export const FilteredMarketplace = () => {
-  const { result } = useMarketplaceFilters();
-  // TODO: Change
+  const { result, loading } = useMarketplaceFilters();
+
+  if (loading)
+    return (
+      <Box
+        sx={(theme) => ({
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: 400,
+          [theme.breakpoints.down("md")]: {
+            paddingLeft: "20px",
+            paddingRight: "20px",
+          },
+        })}
+      >
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <Box

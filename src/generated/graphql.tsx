@@ -178,6 +178,9 @@ export type Business = {
   deliveryMethods?: Maybe<DeliveryMethods>;
   fiscaladdress: Scalars['String']['output'];
   ispremium?: Maybe<Scalars['Boolean']['output']>;
+  logourl?: Maybe<Scalars['String']['output']>;
+  maxusers?: Maybe<Scalars['Int']['output']>;
+  partnerApproved?: Maybe<Scalars['Boolean']['output']>;
   platform: Scalars['String']['output'];
   relationtype: Scalars['String']['output'];
   ruc: Scalars['String']['output'];
@@ -1177,6 +1180,7 @@ export type MarketplaceItem = {
   __typename?: 'MarketplaceItem';
   brand?: Maybe<Scalars['String']['output']>;
   collaborator?: Maybe<Scalars['String']['output']>;
+  collaboratorData?: Maybe<Collaborator>;
   country?: Maybe<Scalars['String']['output']>;
   creationdate?: Maybe<Scalars['DateTime']['output']>;
   department?: Maybe<Scalars['String']['output']>;
@@ -2049,6 +2053,7 @@ export type QueryMarketplaceItemsArgs = {
   limit: Scalars['Int']['input'];
   page: Scalars['Int']['input'];
   sort?: InputMaybe<MarketplaceItemSortInput>;
+  uuidcollaboratorignore?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
@@ -2543,6 +2548,7 @@ export type MarketplaceWorkplacesQuery = { __typename?: 'Query', marketplaceWork
 
 export type MarketplaceItemsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
+  uuidcollaboratorignore: Scalars['ID']['input'];
   page: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
   filter?: InputMaybe<MarketplaceItemFilterInput>;
@@ -4180,13 +4186,14 @@ export type MarketplaceWorkplacesLazyQueryHookResult = ReturnType<typeof useMark
 export type MarketplaceWorkplacesSuspenseQueryHookResult = ReturnType<typeof useMarketplaceWorkplacesSuspenseQuery>;
 export type MarketplaceWorkplacesQueryResult = Apollo.QueryResult<MarketplaceWorkplacesQuery, MarketplaceWorkplacesQueryVariables>;
 export const MarketplaceItemsDocument = gql`
-    query marketplaceItems($id: ID!, $page: Int!, $limit: Int!, $filter: MarketplaceItemFilterInput, $sort: MarketplaceItemSortInput) {
+    query marketplaceItems($id: ID!, $uuidcollaboratorignore: ID!, $page: Int!, $limit: Int!, $filter: MarketplaceItemFilterInput, $sort: MarketplaceItemSortInput) {
   marketplaceItems(
     id: $id
     page: $page
     limit: $limit
     filter: $filter
     sort: $sort
+    uuidcollaboratorignore: $uuidcollaboratorignore
   ) {
     totalCount
     edges {
@@ -4235,6 +4242,7 @@ export const MarketplaceItemsDocument = gql`
  * const { data, loading, error } = useMarketplaceItemsQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      uuidcollaboratorignore: // value for 'uuidcollaboratorignore'
  *      page: // value for 'page'
  *      limit: // value for 'limit'
  *      filter: // value for 'filter'

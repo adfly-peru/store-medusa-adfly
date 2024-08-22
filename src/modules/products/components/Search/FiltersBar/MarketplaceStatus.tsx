@@ -62,7 +62,7 @@ export const MarketplaceStatusFilter = () => {
         >
           {[
             { label: "Nuevo", value: "new" },
-            { label: "Usado", value: "old" },
+            { label: "Usado", value: "used" },
           ].map((item) => {
             return (
               <ListItemButton
@@ -71,7 +71,11 @@ export const MarketplaceStatusFilter = () => {
                   padding: "3px 25px",
                 }}
                 role={undefined}
-                onClick={() => setCondition(item.value)}
+                onClick={() =>
+                  setCondition((prev) =>
+                    prev === item.value ? "" : item.value
+                  )
+                }
                 dense
               >
                 <ListItemIcon>

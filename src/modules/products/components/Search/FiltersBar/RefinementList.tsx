@@ -23,6 +23,7 @@ const CustomRefinementList = React.forwardRef<
   const [searchValue, setSearchValue] = React.useState("");
   const { items, refine } = useRefinementList({
     attribute: props.attribute,
+    limit: 40,
   });
 
   const filteredItems = items.filter((item) =>

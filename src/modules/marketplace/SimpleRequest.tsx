@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  CircularProgress,
   Divider,
   Grid,
   Paper,
@@ -29,7 +30,7 @@ const SimpleRequest = () => {
   const product = data?.marketplacerequest;
 
   if (loading) {
-    return <Loader />;
+    return <CircularProgress />;
   }
 
   if (!product) {
