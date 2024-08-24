@@ -85,7 +85,7 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   };
 
   useEffect(() => {
-    if (session?.user) {
+    if (session?.user?.accessToken) {
       // client.refetchQueries({
       //   include: "all",
       // });

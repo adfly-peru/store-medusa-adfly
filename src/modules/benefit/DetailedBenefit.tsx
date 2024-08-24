@@ -168,7 +168,7 @@ const DetailedBenefit = () => {
             </Button>
           </Stack>
         </Stack>
-        {!!collaborator && <BenefitDetails product={product} />}
+        <BenefitDetails product={product} />
       </Box>
     </Box>
   );

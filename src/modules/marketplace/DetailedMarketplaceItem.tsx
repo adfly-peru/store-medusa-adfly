@@ -32,6 +32,7 @@ import { useDialog } from "@context/DialogContext";
 import ContactSeller from "./components/ContactSeller";
 import ubigeoPeru from "ubigeo-peru";
 import { PAYMENTMETHODSOPTIONS } from "./components/CreationBar";
+import { useAccount } from "@context/account-context";
 
 const Delivery = ({
   product,
@@ -328,10 +329,15 @@ const DetailedMarketplaceItem = ({
   action?: boolean;
 }) => {
   const theme = useTheme();
+  const { collaborator, handleAuthentication } = useAccount();
   const matches = useMediaQuery(theme.breakpoints.down(1121));
   const { openDialog, closeDialog } = useDialog();
 
   const handleContact = () => {
+    if (!collaborator) {
+      handleAuthentication();
+      return;
+    }
     openDialog({
       title: "Contactar anunciante",
       closable: true,

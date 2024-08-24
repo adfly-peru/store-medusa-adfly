@@ -10,7 +10,10 @@ import {
   Alert,
   AlertTitle,
   CircularProgress,
-  Autocomplete,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormHelperText,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -200,35 +203,38 @@ const LoginModal = React.forwardRef<
                   {loginError}
                 </Alert>
               )}
-              <FormControl fullWidth size="small">
+              <FormControl fullWidth size="small" error={!!errors.docType}>
+                <InputLabel htmlFor="docType">Tipo de documento </InputLabel>
                 <Controller
                   name="docType"
                   control={control}
                   defaultValue={null}
                   rules={{ required: "Este campo es requerido" }}
                   render={({ field }) => (
-                    <Autocomplete
+                    <Select
                       {...field}
-                      options={documentTypes}
-                      getOptionLabel={(option) => option.label}
-                      isOptionEqualToValue={(option, value) =>
-                        option.value === value.value
+                      value={field.value?.value ?? ""}
+                      onChange={(event) =>
+                        field.onChange(
+                          documentTypes.find(
+                            (d) => d.value === event.target.value
+                          ) ?? null
+                        )
                       }
-                      onChange={(event, value) => field.onChange(value)}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Tipo de documento"
-                          error={!!errors.docType}
-                          size="small"
-                          helperText={
-                            errors.docType ? "Este campo es requerido" : ""
-                          }
-                        />
-                      )}
-                    />
+                      size="small"
+                      label="Tipo de documento"
+                    >
+                      {documentTypes.map((d, i) => (
+                        <MenuItem key={i} value={d.value}>
+                          {d.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
                   )}
                 />
+                <FormHelperText>
+                  {errors.docType ? "Este campo es requerido" : ""}
+                </FormHelperText>
               </FormControl>
               <TextField
                 label="Número de documento"
