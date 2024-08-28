@@ -16,6 +16,7 @@ import { useDesign } from "@context/design-context";
 import { useRouter } from "next/router";
 import RecoveryModal from "@modules/authentication/components/login/RecoveryPassword";
 import { signIn } from "next-auth/react";
+import jwtDecode from "jwt-decode";
 
 export enum ListType {
   BANNER = "BANNER",
@@ -62,11 +63,13 @@ const Home = () => {
 
   useEffect(() => {
     if (!!verifyToken) {
+      const decodedToken = jwtDecode(verifyToken as string);
       signIn("credentials", {
         redirect: false,
         callbackUrl: "/",
         mode: "token",
         token: verifyToken as string,
+        docType: (decodedToken as any)?.document_type ?? "",
       });
     }
   }, [verifyToken]);

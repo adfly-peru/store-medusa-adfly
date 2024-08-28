@@ -55,6 +55,7 @@ export const RegisterProvider = ({
         credential: form.document_number,
         mode: form.mode,
         token: form.token,
+        docType: session?.user?.documenttype ?? "",
       });
       if (result?.ok) onClose();
     }

@@ -55,6 +55,7 @@ const ProviderModal = React.forwardRef<
         credential: session?.user?.dni ?? "",
         mode: "google",
         token: tokenResponse.access_token,
+        docType: session?.user?.documenttype ?? "",
       })
         .then((result) => {
           if (!result?.ok)
@@ -77,6 +78,7 @@ const ProviderModal = React.forwardRef<
       callbackUrl: "/",
       ...data,
       mode: "password",
+      docType: session?.user?.documenttype ?? "",
     })
       .then((result) => {
         if (!result?.ok)

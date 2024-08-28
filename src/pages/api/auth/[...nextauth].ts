@@ -37,6 +37,7 @@ export default NextAuth({
             `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/checkaccess`,
             {
               documenttype: credentials?.docType,
+              document_type: credentials?.docType,
               documentnumber: credentials?.doc,
               sub_domain: subdomain,
             }
@@ -76,6 +77,9 @@ export default NextAuth({
       id: "credentials",
       name: "Credentials",
       credentials: {
+        docType: {
+          type: "text",
+        },
         credential: {
           label: "credential",
           type: "text",
@@ -109,6 +113,7 @@ export default NextAuth({
             `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/auth/signin`,
             {
               credential: credentials?.credential,
+              document_type: credentials?.docType,
               password: credentials?.password,
               sub_domain: subdomain,
               mode: credentials?.mode,
