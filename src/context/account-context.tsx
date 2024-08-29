@@ -91,7 +91,6 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
       // });
       refetch().then((data) => setCollaborator(data.data.collaborator));
     } else {
-      client.clearStore();
       setCollaborator(undefined);
     }
   }, [session?.user, refetch, client]);
