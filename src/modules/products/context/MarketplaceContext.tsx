@@ -88,7 +88,8 @@ export const MarketplaceFiltersProvider = ({
     page,
     sort,
     fetch,
-    sessionData?.user,
+    sessionData?.user?.id,
+    sessionData?.user?.uuidbusiness,
     condition,
     rangePrices,
   ]);
