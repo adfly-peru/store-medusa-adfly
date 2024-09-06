@@ -6,6 +6,7 @@ import { Box, Modal, Typography } from "@mui/material";
 import { signIn, useSession } from "next-auth/react";
 import Loader from "@modules/components/LoadingScreen/Loader";
 import { useDesign } from "@context/design-context";
+import ModalsManager from "@modules/modals";
 
 const AuthenticationModal = React.forwardRef<
   HTMLDivElement,
@@ -200,6 +201,7 @@ const Authentication: React.FC<{ children?: React.ReactNode }> = ({
 
   return (
     <div>
+      {status === "authenticated" && <ModalsManager />}
       <Modal
         open={isModalOpen}
         onClose={() => null}
