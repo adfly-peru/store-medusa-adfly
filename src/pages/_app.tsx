@@ -21,6 +21,7 @@ import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@lib/apollo-config";
 import { Global } from "@emotion/react";
 import { DialogProvider } from "@context/DialogContext";
+import FreshDeskWidget from "@modules/common/components/FreshDeskWidget";
 
 const googleMapsLibraries = ["places"];
 interface MyAppProps extends AppProps {
@@ -36,6 +37,9 @@ export default function App(props: MyAppProps) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       amplitude.init("17d5496d832d039b1eb6e91b0ac04b78");
+      window.fwSettings = {
+        widget_id: Number(process.env.NEXT_PUBLIC_FRESH_WIDGET_ID),
+      };
     }
   }, []);
   return (
@@ -68,6 +72,7 @@ export default function App(props: MyAppProps) {
                       <LoadingScreen />
                       <DialogProvider>
                         <Authentication>
+                          <FreshDeskWidget />
                           <AppHeader />
                           <div
                             style={{
@@ -76,7 +81,7 @@ export default function App(props: MyAppProps) {
                           >
                             <Component {...pageProps} />
                           </div>
-                          <Fab
+                          {/* <Fab
                             color="primary"
                             aria-label="whatsapp"
                             onClick={() =>
@@ -87,7 +92,7 @@ export default function App(props: MyAppProps) {
                             sx={{ position: "fixed", bottom: 16, right: 16 }}
                           >
                             <WhatsApp />
-                          </Fab>
+                          </Fab> */}
                           <AppFooter />
                         </Authentication>
                       </DialogProvider>

@@ -13,6 +13,7 @@ const nextConfig = {
     NEXT_PUBLIC_ALGOLIA_INDEX_NAME: process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME,
     NEXT_GOOGLE_CLIENT_ID: process.env.NEXT_GOOGLE_CLIENT_ID,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+    NEXT_PUBLIC_FRESH_WIDGET_ID: process.env.NEXT_PUBLIC_FRESH_WIDGET_ID,
   },
   reactStrictMode: true,
   swcMinify: true,
