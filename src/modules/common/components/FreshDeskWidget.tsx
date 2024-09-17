@@ -33,6 +33,8 @@ const FreshDeskWidget = () => {
   useEffect(() => {
     if (!window.FreshworksWidget || !ready || !storeDesign?.commercialname)
       return;
+    window.FreshworksWidget("destroy");
+    window.FreshworksWidget("boot");
 
     let name = "";
     let email = "";
@@ -53,6 +55,15 @@ const FreshDeskWidget = () => {
       cf_documento = collaborator.documentnumber;
       cf_celular = collaborator.phonenumber ?? "";
     }
+
+    window.FreshworksWidget("enable", "ticketForm", [
+      "name",
+      "email",
+      "custom_fields.cf_tipo_de_documento",
+      "custom_fields.cf_documento",
+      "custom_fields.cf_empresa",
+      "custom_fields.cf_celular",
+    ]);
 
     window.FreshworksWidget("prefill", "ticketForm", {
       name,
@@ -99,6 +110,7 @@ const FreshDeskWidget = () => {
         "custom_fields.cf_tipo_de_documento",
         "custom_fields.cf_documento",
         "custom_fields.cf_empresa",
+        "custom_fields.cf_celular",
       ]);
     }
   }, [
