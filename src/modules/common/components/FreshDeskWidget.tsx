@@ -44,7 +44,6 @@ const FreshDeskWidget = () => {
     let cf_celular = "";
     if (session?.user) {
       name = `${session.user.name ?? ""} ${session.user.lastname ?? ""}`;
-      email = session.user.email ?? "";
       cf_tipo_de_documento = session.user.documenttype ?? "";
       cf_documento = session.user.dni ?? "";
     }
@@ -100,7 +99,6 @@ const FreshDeskWidget = () => {
       // Caso: Registrado pero no ha iniciado sesión
       window.FreshworksWidget("disable", "ticketForm", [
         "name",
-        "email",
         "custom_fields.cf_tipo_de_documento",
         "custom_fields.cf_documento",
         "custom_fields.cf_empresa",
