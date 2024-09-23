@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import {
   Box,
   Divider,
@@ -75,7 +76,7 @@ const RequestModal = React.forwardRef<
         name: data.name,
         lastname: data.lastname,
         documenttype: data.documenttype?.value!,
-        documentnumber: data.documentnumber,
+        documentnumber: data.documentnumber.trim(),
         termsconditions: data.termsconditions,
         sub_domain: domain[0],
         email: data.email,
