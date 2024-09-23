@@ -76,7 +76,10 @@ const FreshDeskWidget = () => {
       },
     });
 
-    window.FreshworksWidget("hide", "ticketForm", ["product_id"]);
+    window.FreshworksWidget("hide", "ticketForm", [
+      "product_id",
+      "custom_fields.cf_empresa",
+    ]);
 
     if (!session?.user) {
       window.FreshworksWidget("disable", "ticketForm", [
