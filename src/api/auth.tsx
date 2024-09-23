@@ -51,6 +51,7 @@ export const requestAccessQuery = async ({
       name,
       lastname,
       documenttype,
+      document_type: documenttype,
       documentnumber,
       termsconditions,
       sub_domain,
