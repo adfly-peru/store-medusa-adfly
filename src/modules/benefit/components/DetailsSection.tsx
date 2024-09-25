@@ -38,20 +38,23 @@ export function BenefitDetails({ product }: { product: Benefit }) {
             ? departments.join(", ")
             : "Sin limite definido",
         },
-        {
-          name: "¿Cómo acceder al beneficio?",
-          value: product.accessBenefit ?? "",
-        },
-        {
-          name: "Condiciones de uso del beneficio",
-          value: product.conditions ?? "",
-        },
-        {
-          name: "Información adicional",
-          value: product.additionalInformation ?? "",
-        },
       ]
     );
+    if (product.accessBenefit)
+      newDetails.push({
+        name: "¿Cómo acceder al beneficio?",
+        value: product.accessBenefit,
+      });
+    if (product.conditions)
+      newDetails.push({
+        name: "Condiciones de uso del beneficio",
+        value: product.conditions,
+      });
+    if (product.additionalInformation)
+      newDetails.push({
+        name: "Información adicional",
+        value: product.additionalInformation,
+      });
     return newDetails;
   }, [product]);
   return (

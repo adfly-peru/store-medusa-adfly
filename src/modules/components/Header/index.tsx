@@ -71,7 +71,13 @@ const AppHeader = () => {
           Inicio
         </Link>,
         <Link underline="hover" key="2" color="inherit">
-          {type === "coupon" ? "Cupones" : "Tienda"}
+          {type === "coupon"
+            ? "Cupones"
+            : type === "benefits"
+            ? "Beneficios Internos"
+            : type === "marketplace"
+            ? "Marketplace"
+            : "Tienda"}
         </Link>,
       ];
 

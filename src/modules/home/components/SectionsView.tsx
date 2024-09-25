@@ -37,10 +37,10 @@ const getData = (section: string) => {
       };
     case "benefits":
       return {
-        title: "Beneficios Internos",
+        title: "B. Internos",
         subtitle: "Beneficios especiales para ti",
         icon: "material-symbols:stars-outline",
-        button: "Comprar ahora",
+        button: "Ver beneficios",
       };
     case "marketplace":
       return {
@@ -89,6 +89,7 @@ const SectionCard = ({
         paddingLeft: inverse ? "0px" : "20px",
         alignItems: "stretch",
         flexDirection: inverse ? "row" : "row-reverse",
+        mb: 1,
         //     gap: "160px",
         //     [theme.breakpoints.down("lg")]: { gap: "120px" },
         //     [theme.breakpoints.down(1261)]: { gap: "70px" },

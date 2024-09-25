@@ -26,7 +26,7 @@ const SectionDetails = () => {
             ? "/sections/fondo_marketplace.svg"
             : "/sections/fondo_store.svg"
         }
-        alt={"Cupones"}
+        alt={"Section Background"}
         width={10}
         height={10}
         style={{
