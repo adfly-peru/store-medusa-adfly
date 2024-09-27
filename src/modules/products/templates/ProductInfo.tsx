@@ -1,6 +1,6 @@
 import * as amplitude from "@amplitude/analytics-browser";
 import { useProductQuery } from "generated/graphql";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Box, CircularProgress } from "@mui/material";
 import { DetailedProduct } from "../components/DetailedProduct";
@@ -17,6 +17,11 @@ const ProductInfo = () => {
   });
 
   const product = data?.offerForCollaborator;
+
+  useEffect(() => {
+    if (data?.offerForCollaborator)
+      amplitude.track("Detailed Product", { data: data.offerForCollaborator });
+  }, [data]);
 
   if (loading) {
     return <CircularProgress />;

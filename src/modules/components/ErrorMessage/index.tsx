@@ -1,5 +1,7 @@
 import { SentimentDissatisfied } from "@mui/icons-material";
 import { Container, Stack, Typography } from "@mui/material";
+import * as amplitude from "@amplitude/analytics-browser";
+import { useEffect } from "react";
 
 function formatarFecha(fechaStr: string): string {
   if (fechaStr.length !== 12) {
@@ -25,15 +27,17 @@ function formatarFecha(fechaStr: string): string {
   return fecha.toLocaleString();
 }
 
-const ErrorMessage = ({
-  purchase,
-  message,
-  orderData,
-}: {
+const ErrorMessage = (props: {
   purchase: string[] | string | undefined;
   message: string[] | string | undefined;
   orderData: any;
 }) => {
+  const { purchase, message, orderData } = props;
+
+  useEffect(() => {
+    amplitude.track("Error on order process", { ...props });
+  }, [props]);
+
   return (
     <Container>
       <Stack alignItems="center" fontSize={30}>

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext } from "react";
 import {
   createCartRequest,
   editBillingInfo,
@@ -9,15 +9,13 @@ import {
 import {
   CartItem,
   CartQuery,
-  ResumeCartItem,
-  SimpleCartQuery,
   VariantAttribute,
   useCartQuery,
-  useSimpleCartQuery,
 } from "generated/graphql";
 import { useSession } from "next-auth/react";
 import { BillingForm } from "@interfaces/billing";
 import { AddressInfoForm } from "@interfaces/address-interface";
+import * as amplitude from "@amplitude/analytics-browser";
 
 function areVariantAttributesEqual(
   list1: VariantAttribute[],
@@ -164,6 +162,11 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       quantity: 0,
       operation: "remove",
     });
+
+    amplitude.track("Product removed", {
+      uuidcartitem,
+      uuidcartsuborder,
+    });
     await refetch();
   };
 
@@ -190,6 +193,11 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         uuidbusiness: data.cart.suborders[subOrderIndex].uuidbusiness,
         quantity: quantity - cartitem.quantity,
         operation: "update",
+      });
+      amplitude.track("Product update", {
+        cartitem,
+        uuidcartsuborder,
+        quantity,
       });
       await refetch();
     } catch (error) {

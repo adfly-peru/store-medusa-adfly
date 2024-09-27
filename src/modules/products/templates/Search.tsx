@@ -26,10 +26,16 @@ import {
   MarketplaceSideBar,
 } from "../components/Search/FiltersBar";
 import { MarketplaceFiltersProvider } from "../context/MarketplaceContext";
+import { useEffect } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const SearchProducts = () => {
   const router = useRouter();
   const { type } = router.query;
+
+  useEffect(() => {
+    amplitude.track("Search Page", { type });
+  }, [type]);
 
   if (type === "benefits")
     return (

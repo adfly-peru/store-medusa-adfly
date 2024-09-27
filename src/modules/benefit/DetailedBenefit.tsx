@@ -1,6 +1,6 @@
 import * as amplitude from "@amplitude/analytics-browser";
 import { useBenefitQuery } from "generated/graphql";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   Box,
@@ -12,7 +12,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import Loader from "@modules/components/LoadingScreen/Loader";
 import { BenefitBreadcumbsSection } from "./components/BreadcumbsSection";
 import { BenefitImages } from "./components/ImageSection";
 import { BenefitDetails } from "./components/DetailsSection";
@@ -38,6 +37,7 @@ const DetailedBenefit = () => {
       handleAuthentication();
       return;
     }
+    amplitude.track("Benefit clicked", { data: product });
     openDialog({
       title: "Sigue los siguientes pasos para acceder al beneficio",
       titleSize: 16,
@@ -73,6 +73,10 @@ const DetailedBenefit = () => {
   };
 
   const product = data?.benefit;
+
+  useEffect(() => {
+    if (product) amplitude.track("Detailed Benefit", { data: product });
+  }, [product]);
 
   if (loading) {
     return <CircularProgress />;

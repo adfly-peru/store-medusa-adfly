@@ -338,6 +338,7 @@ const DetailedMarketplaceItem = ({
       handleAuthentication();
       return;
     }
+    amplitude.track("Marketplace button clicked", { data: item });
     openDialog({
       title: "Contactar anunciante",
       closable: true,

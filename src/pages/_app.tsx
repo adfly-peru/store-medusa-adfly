@@ -16,7 +16,6 @@ import AppFooter from "@modules/components/Footer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import LoadingScreen from "@modules/components/LoadingScreen";
 import { DesignContainer, DesignProvider } from "@context/design-context";
-import { WhatsApp } from "@mui/icons-material";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@lib/apollo-config";
 import { Global } from "@emotion/react";

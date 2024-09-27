@@ -10,6 +10,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 interface DesignContextProps {
   storeDesign?: StoreDesignQuery["storeDesign"];
@@ -36,6 +37,7 @@ export const DesignProvider = ({ children }: DesignProviderProps) => {
       const { hostname } = window.location;
       const partes = hostname.split(".");
       if (partes.length > 2) setSubdomain(partes[0]);
+      amplitude.setGroup("tienda", partes[0]);
     };
     obtenerSubDominio();
   }, []);

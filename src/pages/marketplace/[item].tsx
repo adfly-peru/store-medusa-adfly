@@ -3,7 +3,8 @@ import { Box, CircularProgress } from "@mui/material";
 import { useMarketplaceItemQuery } from "generated/graphql";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 export default function ProductPage() {
   const router = useRouter();
@@ -17,6 +18,11 @@ export default function ProductPage() {
   });
 
   const product = data?.marketplaceItem;
+
+  useEffect(() => {
+    if (product)
+      amplitude.track("Detailed Marketplace Item", { data: product });
+  }, [product]);
 
   if (loading) {
     return <CircularProgress />;

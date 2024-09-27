@@ -7,6 +7,7 @@ import { signIn, useSession } from "next-auth/react";
 import Loader from "@modules/components/LoadingScreen/Loader";
 import { useDesign } from "@context/design-context";
 import ModalsManager from "@modules/modals";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const AuthenticationModal = React.forwardRef<
   HTMLDivElement,
@@ -37,7 +38,10 @@ const AuthenticationModal = React.forwardRef<
       return (
         <LoginModal
           closeModal={props.closeModal}
-          goRequest={() => setStep("request")}
+          goRequest={() => {
+            amplitude.track("User Go To Send Request");
+            setStep("request");
+          }}
         />
       );
     case "request":

@@ -3,11 +3,12 @@ import ProductCard from "../../ProductCard";
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { Offer } from "generated/graphql";
 import Loader from "@modules/components/LoadingScreen/Loader";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useBenefitFilters } from "@modules/products/context/BenefitContext";
 import BenefitCard from "@modules/benefit/BenefitCard";
 import { useMarketplaceFilters } from "@modules/products/context/MarketplaceContext";
 import MarketplaceItemCard from "@modules/marketplace/MarketplaceItemCard";
+import * as amplitude from "@amplitude/analytics-browser";
 
 type AlgoliaHit = {
   [key: string]: any;
@@ -44,7 +45,17 @@ const FilteredAlgoliaProducts = () => {
     [dirtyHits]
   );
 
-  console.log({ hits });
+  useEffect(() => {
+    amplitude.track("Algolia: hits getted", { dirtyHits });
+  }, [dirtyHits]);
+
+  useEffect(() => {
+    amplitude.track("Algolia: status", { status });
+  }, [status]);
+
+  useEffect(() => {
+    amplitude.track("Algolia: results", { results });
+  }, [results]);
 
   return (
     <Box
@@ -161,6 +172,10 @@ const FilteredAlgoliaProducts = () => {
 export const FilteredBenefits = () => {
   const { result, loading } = useBenefitFilters();
 
+  useEffect(() => {
+    amplitude.track("DB Benefits: result", { result });
+  }, [result]);
+
   if (loading)
     return (
       <Box
@@ -223,6 +238,10 @@ export const FilteredBenefits = () => {
 
 export const FilteredMarketplace = () => {
   const { result, loading } = useMarketplaceFilters();
+
+  useEffect(() => {
+    amplitude.track("DB marketplace: result", { result });
+  }, [result]);
 
   if (loading)
     return (

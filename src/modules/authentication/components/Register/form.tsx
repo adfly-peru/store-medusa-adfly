@@ -24,6 +24,7 @@ import CustomPhoneInput from "@modules/components/PhoneInput";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { CountryCode, parsePhoneNumberFromString } from "libphonenumber-js/min";
 import { requirements } from "../login/RecoveryPassword";
+import * as amplitude from "@amplitude/analytics-browser";
 
 interface FormValues {
   email: string;
@@ -80,7 +81,19 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
               ?.number ?? ""
           : "",
       });
-    } catch {
+      amplitude.track("Register form sended with data", {
+        ...registerForm,
+        email: data.email,
+        new_password: data.password,
+        newsletters: data.newsletters,
+        terms: data.terms,
+        phone: !!data.phone.number
+          ? parsePhoneNumberFromString(data.phone.number, data.phone.code)
+              ?.number ?? ""
+          : "",
+      });
+    } catch (error) {
+      amplitude.track("Error on register form", { error });
       setLoginError("Hubo un error desconocido en el servicio");
     }
     setLoading(false);

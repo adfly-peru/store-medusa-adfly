@@ -4,8 +4,6 @@ import {
   Divider,
   FormControl,
   InputLabel,
-  MenuItem,
-  Select,
   Button,
   Stack,
   TextField,
@@ -20,13 +18,14 @@ import {
   FormHelperText,
   CircularProgress,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ArrowBack } from "@mui/icons-material";
 import { documentTypes } from "./login";
 import { requestAccessQuery } from "api/auth";
 import { AxiosError } from "axios";
 import { useDesign } from "@context/design-context";
+import * as amplitude from "@amplitude/analytics-browser";
 
 interface FormValues {
   name: string;
@@ -81,9 +80,13 @@ const RequestModal = React.forwardRef<
         sub_domain: domain[0],
         email: data.email,
       });
+      amplitude.track("Request Sended");
       props.goNext("success", data);
     } catch (error) {
       const message = (error as AxiosError<any>).response?.data?.error;
+      amplitude.track("Error while sending request", {
+        message,
+      });
       if (message === "collaborator already requested")
         props.goNext("pending", data);
       else if (

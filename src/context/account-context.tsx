@@ -8,6 +8,7 @@ import {
 } from "generated/graphql";
 import { signIn, useSession } from "next-auth/react";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 interface AccountContext {
   collaborator: GetCollaboratorQuery["collaborator"] | undefined;
@@ -85,12 +86,38 @@ export const AccountProvider = ({ children }: AccountProviderProps) => {
   };
 
   useEffect(() => {
+    if (collaborator) {
+      const identify = new amplitude.Identify();
+      identify.set("id", collaborator.uuidcollaborator);
+      identify.set("dni", collaborator.documentnumber);
+      identify.set("email", collaborator.email ?? "No Email");
+      identify.set("status", "Identificado con correo");
+      amplitude.identify(identify);
+      amplitude.track("User Logged In");
+    }
+  }, [collaborator]);
+
+  useEffect(() => {
     if (session?.user?.accessToken) {
       // client.refetchQueries({
       //   include: "all",
       // });
       refetch().then((data) => setCollaborator(data.data.collaborator));
     } else {
+      if (session?.user) {
+        const identify = new amplitude.Identify();
+        identify.set("id", session.user.id ?? "");
+        identify.set("dni", session.user.dni ?? "");
+        identify.set("email", session.user.email ?? "");
+        if (session.user.completeregistration)
+          identify.set("status", "idenficado con dni (registro completo)");
+        else
+          identify.set("status", "idenficado con dni (registro por completar)");
+        amplitude.identify(identify);
+      } else {
+        const identify = new amplitude.Identify();
+        amplitude.identify(identify);
+      }
       setCollaborator(undefined);
     }
   }, [session?.user, refetch, client]);

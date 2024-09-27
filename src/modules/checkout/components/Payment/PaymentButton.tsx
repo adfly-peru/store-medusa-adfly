@@ -8,6 +8,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const createSessionToken = async (
   productAmount: number,
@@ -88,9 +89,10 @@ const PaymentButton = () => {
       0
     );
     if (!sessionToken) return;
-    // amplitude.track("Boton de Pago Clickeado", {
-    //   purchaseNumber: cart.purchaseNumber,
-    // })
+    amplitude.track("Boton de Pago Clickeado", {
+      purchaseNumber: cart.purchaseNumber,
+    });
+
     (window as any).VisanetCheckout.configure({
       sessiontoken: `${sessionToken}`,
       channel: "web",

@@ -18,6 +18,7 @@ import { requestMarketplaceItem } from "api/marketplace";
 import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const ContactSeller = ({ id }: { id: string }) => {
   const { collaborator } = useAccount();
@@ -38,6 +39,7 @@ const ContactSeller = ({ id }: { id: string }) => {
         include_phone: cell,
         message,
       });
+      amplitude.track("Marketplace item, message sended", { id });
       openDialog({
         title: "¡Mensaje enviado con éxito!",
         content: (

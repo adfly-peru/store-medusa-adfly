@@ -3,7 +3,7 @@ import { Configure } from "react-instantsearch";
 import { useRouter } from "next/router";
 import AlgoliaSideBar from "../FiltersBar";
 import { Stack } from "@mui/material";
-import { useFilters } from "@modules/products/context/FiltersContext";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const FilterSection = () => {
   const router = useRouter();
@@ -43,6 +43,8 @@ const FilterSection = () => {
     if (type) {
       filtersArray.push(`product_type:"${type}"`);
     }
+
+    amplitude.track("Algolia: generate filter", { filtersArray });
 
     return filtersArray.join(" AND ");
   }, [router.query, type]);

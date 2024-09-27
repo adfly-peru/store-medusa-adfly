@@ -2,8 +2,8 @@ import { useAccount } from "@context/account-context";
 import * as amplitude from "@amplitude/analytics-browser";
 import { Button, Container, Paper, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import OrderReport from "@modules/account/components/Orders/DetailedOrder";
 import { ChevronLeft, LocationCity } from "@mui/icons-material";
+import { useEffect } from "react";
 
 function formatarFecha(fechaStr: string): string {
   if (fechaStr?.length !== 12) {
@@ -29,21 +29,18 @@ function formatarFecha(fechaStr: string): string {
   return fecha.toLocaleString();
 }
 
-const SuccessMessage = ({
-  number,
-  id,
-  niubizData,
-}: {
+const SuccessMessage = (props: {
   number: string[] | string | undefined;
   id: string[] | string | undefined;
   niubizData: any;
 }) => {
   const router = useRouter();
+  const { number, id, niubizData } = props;
   const { collaborator } = useAccount();
-  // useEffect(() => {
-  //   getOrderReport();
-  //   amplitude.track("Order Procesada");
-  // }, []);
+
+  useEffect(() => {
+    amplitude.track("Order procesada page", { ...props });
+  }, [props]);
 
   return (
     <Container>

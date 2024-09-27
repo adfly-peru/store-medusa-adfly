@@ -127,6 +127,9 @@ const SearchComponent = () => {
           filters: 'product_status:"accepted"',
         })
         .then(({ hits }) => {
+          amplitude.track("Algolia: search bar results", {
+            data: hits,
+          });
           setItems([
             {
               value: query,

@@ -111,7 +111,6 @@ const FreshDeskWidget = () => {
         "custom_fields.cf_tipo_de_documento",
         "custom_fields.cf_documento",
         "custom_fields.cf_empresa",
-        "custom_fields.cf_celular",
       ]);
     }
   }, [

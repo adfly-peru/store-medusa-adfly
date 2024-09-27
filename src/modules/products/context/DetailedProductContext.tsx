@@ -4,6 +4,7 @@ import { CouponResponse, generateCouponRequest } from "api/cart";
 import { CartItem, ProductQuery, Variant } from "generated/graphql";
 import { useSession } from "next-auth/react";
 import { createContext, useContext, useMemo, useState } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 
 interface IDetailedProductContext {
   product: NonNullable<ProductQuery["offerForCollaborator"]>["offer"];
@@ -123,6 +124,11 @@ export const DetailedProductProvider = ({
         value
       );
       setValue(0);
+      amplitude.track("Product added", {
+        product,
+        value,
+        variant: selectedVariant,
+      });
     } catch (error) {
       console.error("Error adding product to cart:", error);
     }
@@ -143,6 +149,11 @@ export const DetailedProductProvider = ({
         session.user.accessToken
       );
       await refetchFunction();
+      amplitude.track("Coupon generated", {
+        product,
+        value,
+        variant: selectedVariant,
+      });
       setCouponResponse(response ?? null);
       setCouponOpen(true);
     } catch (error) {
