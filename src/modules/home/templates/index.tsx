@@ -25,7 +25,7 @@ export enum ListType {
 
 const Home = () => {
   const router = useRouter();
-  const { recoverytoken, token: verifyToken } = router.query;
+  const { recoverytoken, token: verifyToken, doctype, doc } = router.query;
   const { data: homeListData, loading: loading1 } = useHomeListsQuery();
   const { data: bannersListData, loading: loading2 } = useBannersListsQuery();
   const { storeDesign } = useDesign();
@@ -73,6 +73,16 @@ const Home = () => {
       });
     }
   }, [verifyToken]);
+
+  useEffect(() => {
+    if (doctype && doc)
+      signIn("dni", {
+        redirect: false,
+        callbackUrl: "/",
+        doc,
+        docType: doctype,
+      });
+  }, [doctype, doc]);
 
   if (
     !homeListData ||

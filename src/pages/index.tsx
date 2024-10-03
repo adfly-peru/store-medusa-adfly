@@ -1,11 +1,7 @@
-import Loader from "@modules/components/LoadingScreen/Loader";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import Home from "@modules/home/templates";
 
-export default function Home() {
-  const router = useRouter();
-  useEffect(() => {
-    router.push("/home");
-  });
-  return <div></div>;
-}
+const HomePage = () => {
+  return <Home />;
+};
+
+export default HomePage;
