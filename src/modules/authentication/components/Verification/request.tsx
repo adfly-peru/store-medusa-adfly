@@ -307,6 +307,11 @@ const RequestModal = React.forwardRef<
                   sx={{
                     marginTop: "10px",
                   }}
+                  inputProps={{
+                    style: {
+                      textTransform: "lowercase",
+                    },
+                  }}
                   InputLabelProps={{
                     shrink: true,
                   }}
