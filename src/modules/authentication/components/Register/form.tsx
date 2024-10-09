@@ -159,6 +159,11 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
             variant="outlined"
             fullWidth
             size="small"
+            inputProps={{
+              style: {
+                textTransform: "lowercase",
+              },
+            }}
             InputLabelProps={{
               shrink: true,
             }}
