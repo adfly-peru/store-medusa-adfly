@@ -25,6 +25,11 @@ import { isValidPhoneNumber } from "react-phone-number-input";
 import { CountryCode, parsePhoneNumberFromString } from "libphonenumber-js/min";
 import { requirements } from "../login/RecoveryPassword";
 import * as amplitude from "@amplitude/analytics-browser";
+import { AxiosError } from "axios";
+
+interface AdflyResponse {
+  message: string;
+}
 
 interface FormValues {
   email: string;
@@ -93,8 +98,13 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
           : "",
       });
     } catch (error) {
-      amplitude.track("Error on register form", { error });
-      setLoginError("Hubo un error desconocido en el servicio");
+      let errorMessage = (error as AxiosError<AdflyResponse>).message;
+      amplitude.track("Error on register form", {
+        error: errorMessage ?? error,
+      });
+      if (errorMessage === "email already exists")
+        errorMessage = "Ya existe una cuenta con este correo";
+      setLoginError(errorMessage ?? "Hubo un error desconocido en el servicio");
     }
     setLoading(false);
   };
@@ -115,7 +125,7 @@ const FormModal = React.forwardRef<HTMLDivElement>(() => {
                 },
               }}
             >
-              <AlertTitle>Error al ingresar</AlertTitle>
+              <AlertTitle>Error al registrarse</AlertTitle>
               {loginError}
             </Alert>
           )}

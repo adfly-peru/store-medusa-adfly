@@ -197,6 +197,7 @@ const Authentication: React.FC<{ children?: React.ReactNode }> = ({
   useEffect(() => {
     if (status === "loading") return;
     if (status === "unauthenticated") setIsModalOpen(true);
+    if (status === "authenticated") setIsModalOpen(false);
   }, [status]);
 
   if (status === "loading") {

@@ -74,6 +74,25 @@ export default NextAuth({
       },
     }),
     Credentials({
+      id: "token",
+      name: "Token",
+      credentials: {
+        token: {
+          type: "text",
+        },
+      },
+      authorize: async (credentials, req) => {
+        if (!credentials) throw new Error("Credentials are necessary");
+        const decodedToken: IToken = jwtDecode(credentials.token);
+        console.log("Mode token", { decodedToken });
+        return {
+          accessToken: credentials.token,
+          id: decodedToken.uuid_collaborator,
+          uuidbusiness: decodedToken.uuid_business,
+        };
+      },
+    }),
+    Credentials({
       id: "credentials",
       name: "Credentials",
       credentials: {
@@ -100,14 +119,6 @@ export default NextAuth({
       authorize: async (credentials, req) => {
         const host = req.headers?.host;
         const subdomain = (host as string).split(".")[0];
-        if (credentials?.mode === "token") {
-          const decodedToken: IToken = jwtDecode(credentials.token);
-          return {
-            accessToken: credentials.credential,
-            id: decodedToken.uuid_collaborator,
-            uuidbusiness: decodedToken.uuid_business,
-          };
-        }
         try {
           const response = await axios.post(
             `${process.env.NEXT_PUBLIC_BACKEND_API}/collaborators/auth/signin`,
