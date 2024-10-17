@@ -15,7 +15,7 @@ import SectionsView from "../components/SectionsView";
 import { useDesign } from "@context/design-context";
 import { useRouter } from "next/router";
 import RecoveryModal from "@modules/authentication/components/login/RecoveryPassword";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import jwtDecode from "jwt-decode";
 
 export enum ListType {
@@ -62,13 +62,23 @@ const Home = () => {
   }, [bannersListData?.activeBannersLists, homeListData?.activeHomeLists]);
 
   useEffect(() => {
-    if (!!verifyToken) {
-      signIn("token", {
-        redirect: false,
-        callbackUrl: "/",
-        token: verifyToken as string,
-      });
+    let isMounted = true;
+
+    if (!!verifyToken && isMounted) {
+      signOut({ redirect: false })
+        .then(() =>
+          signIn("token", {
+            redirect: false,
+            callbackUrl: "/",
+            token: verifyToken as string,
+          })
+        )
+        .catch((error) => console.log({ error }));
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [verifyToken]);
 
   useEffect(() => {
