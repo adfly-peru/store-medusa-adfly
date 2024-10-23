@@ -31,6 +31,10 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
             rel="stylesheet"
           />
+          <meta
+            name="description"
+            content={`Bienvenido a tu tienda de beneficios`}
+          />
         </Head>
         <body>
           <Main />
