@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import * as amplitude from "@amplitude/analytics-browser";
+import LoadingButton from "@modules/components/LoadingButton";
 
 const createSessionToken = async (
   productAmount: number,
@@ -125,17 +126,17 @@ const PaymentButton = () => {
   }, []);
 
   return (
-    <Button
+    <LoadingButton
       variant="contained"
       fullWidth
       disabled={!isActive}
-      onClick={handlerPayment}
+      asyncFunction={handlerPayment}
       sx={{
         fontSize: 16,
       }}
     >
       Pagar S/. {(finalPrice - (useStars ? starsDiscount : 0)).toFixed(2)}
-    </Button>
+    </LoadingButton>
   );
 };
 
